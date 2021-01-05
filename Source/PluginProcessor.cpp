@@ -22,6 +22,8 @@ KadenzeAudioPluginAudioProcessor::KadenzeAudioPluginAudioProcessor()
                        )
 #endif
 {
+    // Initialise DSP modules
+    initisaliseDSP();
 }
 
 KadenzeAudioPluginAudioProcessor::~KadenzeAudioPluginAudioProcessor()
