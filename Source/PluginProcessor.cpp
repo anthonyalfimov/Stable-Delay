@@ -150,9 +150,13 @@ void KadenzeAudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& b
     // interleaved by keeping the same state.
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
-        auto* channelData = buffer.getWritePointer (channel);
-
-        // ..do something to the data...
+        float* channelData = buffer.getWritePointer (channel);
+        
+        // TODO: Using the same buffer to read and write - is there a better approach?
+        // TODO: Stereo processing hardcoded. This will fail for >2 channels, will it for mono?
+        // TODO: Magic number is used for gain - make adjustable
+        // TODO: Why can't we use one KAP::Gain object for both channels?!
+        mGain[channel]->process (channelData, 0.5, channelData, buffer.getNumSamples());
     }
 }
 
@@ -179,6 +183,14 @@ void KadenzeAudioPluginAudioProcessor::setStateInformation (const void* data, in
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+}
+
+void KadenzeAudioPluginAudioProcessor::initisaliseDSP()
+{
+    // Initialise the DSP Gain modules
+    // TODO: hardcoding stereo processing here. Refactor!
+    for (int channel = 0; channel < 2; ++channel)
+        mGain[channel] = std::make_unique<KAP::Gain>();
 }
 
 //==============================================================================

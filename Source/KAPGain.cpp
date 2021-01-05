@@ -9,3 +9,26 @@
 */
 
 #include "KAPGain.h"
+
+namespace KAP
+{
+
+    Gain::Gain()
+    {
+        
+    }
+    
+    Gain::~Gain()
+    {
+        
+    }
+    
+    void Gain::process (float* inAudioBuffer,
+                        float inGain,
+                        float* outAudioBuffer,
+                        int inNumSamplesToRender)
+    {
+        for (int sample = 0; sample < inNumSamplesToRender; ++sample)
+            outAudioBuffer[sample] = inAudioBuffer[sample] * inGain;
+    }
+}

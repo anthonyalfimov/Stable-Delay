@@ -9,3 +9,21 @@
 */
 
 #pragma once
+
+namespace KAP
+{
+    class Gain
+    {
+    public:
+        Gain();
+        ~Gain();
+        
+        // TODO: using raw pointers for audio buffers here.. is it safe? is there a better way?
+        void process (float* inAudioBuffer,
+                      float inGain,
+                      float* outAudioBuffer,
+                      int inNumSamplesToRender);
+        
+    private:
+    };
+}
