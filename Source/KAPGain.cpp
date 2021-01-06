@@ -8,6 +8,7 @@
   ==============================================================================
 */
 
+#include <JuceHeader.h>
 #include "KAPGain.h"
 
 namespace KAP
@@ -28,7 +29,12 @@ namespace KAP
                         float* outAudioBuffer,
                         int inNumSamplesToRender)
     {
+        // Map inGain [0, 1] to the new [-24dB, +24dB] range
+        float gainMapped = jmap (inGain, 0.0f, 1.0f, -24.0f, 24.0f);
+        // Convert decibels to gain
+        gainMapped = Decibels::decibelsToGain (gainMapped, -24.0f);
+        
         for (int sample = 0; sample < inNumSamplesToRender; ++sample)
-            outAudioBuffer[sample] = inAudioBuffer[sample] * inGain;
+            outAudioBuffer[sample] = inAudioBuffer[sample] * gainMapped;
     }
 }
