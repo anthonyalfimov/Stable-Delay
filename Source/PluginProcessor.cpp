@@ -158,6 +158,7 @@ void KadenzeAudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& b
         // TODO: Stereo processing hardcoded. This will fail for >2 channels, will it for mono?
         // TODO: Magic number is used for gain - make adjustable
         // TODO: Why can't we use one KAP::Gain object for both channels?!
+        // NB: Calling this when mGain[] unique_ptrs are not initialised is UB!
         mGain[channel]->process (channelData, 0.5, channelData, buffer.getNumSamples());
     }
 }
