@@ -25,7 +25,7 @@ namespace KAP
         
     }
     
-    void Gain::process (float* inAudioBuffer,
+    void Gain::process (const float* inAudioBuffer,
                         float inGain,
                         float* outAudioBuffer,
                         int inNumSamplesToRender)

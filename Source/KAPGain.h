@@ -19,7 +19,7 @@ namespace KAP
         ~Gain();
         
         // TODO: using raw pointers for audio buffers here.. is it safe? is there a better way?
-        void process (float* inAudioBuffer,
+        void process (const float* inAudioBuffer,
                       float inGain,
                       float* outAudioBuffer,
                       int inNumSamplesToRender);
