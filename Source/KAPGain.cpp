@@ -11,31 +11,29 @@
 #include <JuceHeader.h>
 #include "KAPGain.h"
 
-namespace KAP
-{
-    // TODO: DSP module base class
+// TODO: DSP module base class
 
-    Gain::Gain()
-    {
-        
-    }
+KAPGain::KAPGain()
+{
     
-    Gain::~Gain()
-    {
-        
-    }
-    
-    void Gain::process (const float* inAudioBuffer,
-                        float inGain,
-                        float* outAudioBuffer,
-                        int inNumSamplesToRender)
-    {
-        // Map inGain [0, 1] to the new [-24dB, +24dB] range
-        float gainMapped = jmap (inGain, 0.0f, 1.0f, -24.0f, 24.0f);
-        // Convert decibels to gain
-        gainMapped = Decibels::decibelsToGain (gainMapped, -24.0f);
-        
-        for (int sample = 0; sample < inNumSamplesToRender; ++sample)
-            outAudioBuffer[sample] = inAudioBuffer[sample] * gainMapped;
-    }
 }
+
+KAPGain::~KAPGain()
+{
+    
+}
+
+void KAPGain::process (const float* inAudio,
+                       float inGain,
+                       float* outAudio,
+                       int inNumSamplesToRender)
+{
+    // Map inGain [0, 1] to the new [-24dB, +24dB] range
+    float gainMapped = jmap (inGain, 0.0f, 1.0f, -24.0f, 24.0f);
+    // Convert decibels to gain
+    gainMapped = Decibels::decibelsToGain (gainMapped, -24.0f);
+    
+    for (int i = 0; i < inNumSamplesToRender; ++i)
+        outAudio[i] = inAudio[i] * gainMapped;
+}
+

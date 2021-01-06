@@ -23,7 +23,7 @@ KadenzeAudioPluginAudioProcessor::KadenzeAudioPluginAudioProcessor()
 #endif
 {
     // Initialise DSP modules
-    initisaliseDSP();
+    initisalizeDSP();
 }
 
 KadenzeAudioPluginAudioProcessor::~KadenzeAudioPluginAudioProcessor()
@@ -188,12 +188,12 @@ void KadenzeAudioPluginAudioProcessor::setStateInformation (const void* data, in
     // whose contents will have been created by the getStateInformation() call.
 }
 
-void KadenzeAudioPluginAudioProcessor::initisaliseDSP()
+void KadenzeAudioPluginAudioProcessor::initisalizeDSP()
 {
     // Initialise the DSP Gain modules
     // TODO: hardcoding stereo processing here. Refactor!
     for (int channel = 0; channel < 2; ++channel)
-        mGain[channel] = std::make_unique<KAP::Gain>();
+        mGain[channel] = std::make_unique<KAPGain>();
 }
 
 //==============================================================================
