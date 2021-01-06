@@ -13,6 +13,7 @@
 
 namespace KAP
 {
+    // TODO: DSP module base class
 
     Gain::Gain()
     {
