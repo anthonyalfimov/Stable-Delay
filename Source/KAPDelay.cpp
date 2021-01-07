@@ -11,7 +11,7 @@
 #include <JuceHeader.h>
 #include "KAPDelay.h"
 
-KAPDelay::KAPDelay() : mSampleRate(-1.0), mFeedbackSampe(0.0f), mDelayIndex(0)
+KAPDelay::KAPDelay() : mSampleRate (-1.0), mFeedbackSample (0.0f), mDelayIndex (0)
 {
     reset();
 }
@@ -49,9 +49,9 @@ void KAPDelay::process (const float* inAudio,
         const float sample = getInterpolatedSample (delayTimeInSamples);
         
         // Write to the buffer: mix of input audio and feedback signal
-        mBuffer[mDelayIndex] = inAudio[i] + mFeedbackSampe * feedbackMapped;
+        mBuffer[mDelayIndex] = inAudio[i] + mFeedbackSample * feedbackMapped;
         // Update feedback sample
-        mFeedbackSampe = sample;
+        mFeedbackSample = sample;
         // Write output audio
         outAudio[i] = inAudio[i] * dry + sample * wet;
         // Advance the read head

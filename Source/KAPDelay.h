@@ -31,7 +31,7 @@ private:
     float getInterpolatedSample (double inDelayTimeInSamples) const;
     
     double mSampleRate;
-    float mFeedbackSampe;
+    float mFeedbackSample;
     float mBuffer[KAP::bufferSize];   // TODO: make buffer dynamic
     
     int mDelayIndex;
