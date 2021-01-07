@@ -38,6 +38,7 @@ void KAPDelay::process (const float* inAudio,
                         float inTime,
                         float inFeedback,
                         float inWetDry,
+                        const float* inModulationBuffer,
                         float* outAudio,
                         int inNumSamplesToRender)
 {
@@ -47,7 +48,8 @@ void KAPDelay::process (const float* inAudio,
     
     for (int i = 0; i < inNumSamplesToRender; ++i)
     {
-        const double delayTimeInSamples = inTime * mSampleRate; // inside the loop for dynamic delay time
+        const double delayTimeModulation = 0.003 + 0.002 * inModulationBuffer[i];
+        const double delayTimeInSamples = inTime * delayTimeModulation * mSampleRate; // inside the loop for dynamic delay time
         const float sample = getInterpolatedSample (delayTimeInSamples);
         
         // Write to the buffer: mix of input audio and feedback signal
