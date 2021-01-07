@@ -9,7 +9,6 @@
 */
 
 #include <JuceHeader.h>
-#include "KAPAudioHelpers.h"
 #include "KAPDelay.h"
 
 KAPDelay::KAPDelay() : mSampleRate(-1.0), mFeedbackSampe(0.0f), mDelayIndex(0)
@@ -30,7 +29,7 @@ void KAPDelay::setSampleRate (double inSampleRate)
 void KAPDelay::reset()
 {
     // Clear the delay buffer
-    zeromem (mBuffer, sizeof (float) * maxBufferDelaySize);
+    zeromem (mBuffer, sizeof (float) * KAP::bufferSize);
 }
 
 void KAPDelay::process (const float* inAudio,
@@ -56,7 +55,7 @@ void KAPDelay::process (const float* inAudio,
         // Write output audio
         outAudio[i] = inAudio[i] * dry + sample * wet;
         // Advance the read head
-        mDelayIndex = (mDelayIndex + 1) % maxBufferDelaySize;
+        mDelayIndex = (mDelayIndex + 1) % KAP::bufferSize;
     }
 }
 
@@ -65,10 +64,10 @@ float KAPDelay::getInterpolatedSample (double inDelayTimeInSamples) const
     double readPosition = static_cast<double> (mDelayIndex) - inDelayTimeInSamples;
     
     if (readPosition < 0.0)
-        readPosition += maxBufferDelaySize;
+        readPosition += KAP::bufferSize;
     
     const int readPositionIndex0 = static_cast<int> (readPosition);
-    const int readPositionIndex1 = (readPositionIndex0 + 1) % maxBufferDelaySize;
+    const int readPositionIndex1 = (readPositionIndex0 + 1) % KAP::bufferSize;
     
     const float readSample0 = mBuffer[readPositionIndex0];
     const float readSample1 = mBuffer[readPositionIndex1];

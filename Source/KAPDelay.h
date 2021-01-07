@@ -10,7 +10,7 @@
 
 #pragma once
 
-const int maxBufferDelaySize = 192000;
+#include "KAPAudioHelpers.h"
 
 class KAPDelay
 {
@@ -32,7 +32,7 @@ private:
     
     double mSampleRate;
     float mFeedbackSampe;
-    float mBuffer[maxBufferDelaySize];   // TODO: make buffer dynamic
+    float mBuffer[KAP::bufferSize];   // TODO: make buffer dynamic
     
     int mDelayIndex;
 };
