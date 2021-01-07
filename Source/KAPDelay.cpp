@@ -28,6 +28,8 @@ void KAPDelay::setSampleRate (double inSampleRate)
 
 void KAPDelay::reset()
 {
+    // Clear the feedback sample
+    mFeedbackSample = 0.0;
     // Clear the delay buffer
     zeromem (mBuffer, sizeof (float) * KAP::bufferSize);
 }
