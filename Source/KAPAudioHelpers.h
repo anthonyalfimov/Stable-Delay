@@ -9,3 +9,11 @@
 */
 
 #pragma once
+
+namespace KAP
+{
+    inline float linearInterp (float value0, float value1, double fractionalPosition)
+    {
+        return (1.0 - fractionalPosition) * value0 + fractionalPosition * value1;
+    }
+}
