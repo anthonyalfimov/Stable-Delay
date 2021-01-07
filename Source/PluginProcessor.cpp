@@ -97,12 +97,16 @@ void KadenzeAudioPluginAudioProcessor::prepareToPlay (double sampleRate, int sam
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+    for (int channel = 0; channel < 2; ++channel)
+        mDelay[channel]->setSampleRate (sampleRate);
 }
 
 void KadenzeAudioPluginAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
+    for (int channel = 0; channel < 2; ++channel)
+        mDelay[channel]->reset();
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -160,6 +164,7 @@ void KadenzeAudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& b
         // TODO: Why can't we use one KAP::Gain object for both channels?!
         // NB: Calling this when mGain[] unique_ptrs are not initialised is UB!
         mGain[channel]->process (channelData, 0.5, channelData, buffer.getNumSamples());
+        mDelay[channel]->process (channelData, 0.25, 0.5, 0.35, channelData, buffer.getNumSamples());
     }
 }
 
@@ -193,7 +198,10 @@ void KadenzeAudioPluginAudioProcessor::initisalizeDSP()
     // Initialise the DSP Gain modules
     // TODO: hardcoding stereo processing here. Refactor!
     for (int channel = 0; channel < 2; ++channel)
+    {
         mGain[channel] = std::make_unique<KAPGain>();
+        mDelay[channel] = std::make_unique<KAPDelay>();
+    }
 }
 
 //==============================================================================

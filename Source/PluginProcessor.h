@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "KAPGain.h"
+#include "KAPDelay.h"
 
 //==============================================================================
 /**
@@ -59,6 +60,7 @@ private:
     
     // TODO: hardcoding stereo signal here - independent gain for left and right channels. Refactor!
     std::unique_ptr<KAPGain> mGain[2];
+    std::unique_ptr<KAPDelay> mDelay[2];
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (KadenzeAudioPluginAudioProcessor)
