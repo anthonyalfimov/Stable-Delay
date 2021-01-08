@@ -170,18 +170,18 @@ void KadenzeAudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& b
         // TODO: Why can't we use one KAP::Gain object for both channels?!
         // NB: Calling this when mGain[] unique_ptrs are not initialised is UB!
         mGain[channel]->process (channelData,                   // inAudio
-                                 0.5,                           // inGain
+                                 0.5f,                          // inGain
                                  channelData,                   // outAudio
                                  buffer.getNumSamples());       // inNumSamplesToRender
         
-        mLfo[channel]->process (0.25,                           // inRate
-                                0.5,                            // inDepth
+        mLfo[channel]->process (0.25f,                          // inRate
+                                0.5f,                           // inDepth
                                 buffer.getNumSamples());        // inNumSamplesToRender
         
         mDelay[channel]->process (channelData,                  // inAudio
-                                  0.25,                         // inTime
-                                  0.5,                          // inFeedback
-                                  0.35,                         // inWetDry
+                                  0.25f,                        // inTime
+                                  0.5f,                         // inFeedback
+                                  1.0f,                         // inWetDry
                                   mLfo[channel]->getBuffer(),   // inModulationBuffer
                                   channelData,                  // outAudio
                                   buffer.getNumSamples());      // inNumSamplesToRender
