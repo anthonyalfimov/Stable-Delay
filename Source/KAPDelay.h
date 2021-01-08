@@ -31,6 +31,7 @@ public:
 private:
     float getInterpolatedSample (double inDelayTimeInSamples) const;
     
+    double mTimeSmoothed = 0.0; // Use member variable to maintain consistent smoothing between blocks
     double mSampleRate = -1.0;
     float mFeedbackSample = 0.0f;
     float mBuffer[KAP::bufferSize];   // TODO: make buffer dynamic

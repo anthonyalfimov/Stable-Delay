@@ -12,8 +12,13 @@
 
 namespace KAP
 {
+//  Constants
     const static int bufferSize = 192000;  // global const is static by default, reinforce intent
     
+    const static double paramSmoothingCoefGeneric = 0.04;
+    const static double paramSmoothingCoefFine = 0.004;
+    
+// Helper functions
     inline float linearInterp (float value0, float value1, double fractionalPosition)
     {
         return (1.0 - fractionalPosition) * value0 + fractionalPosition * value1;

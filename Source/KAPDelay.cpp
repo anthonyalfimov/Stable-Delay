@@ -48,8 +48,12 @@ void KAPDelay::process (const float* inAudio,
     
     for (int i = 0; i < inNumSamplesToRender; ++i)
     {
-        const double delayTimeModulation = 0.003 + 0.002 * inModulationBuffer[i];
-        const double delayTimeInSamples = inTime * delayTimeModulation * mSampleRate; // inside the loop for dynamic delay time
+        const double delayTimeModulated = inTime + 0.002 * inModulationBuffer[i];
+        
+        // Use member variable to maintain consistent smoothing between blocks
+        mTimeSmoothed = mTimeSmoothed - KAP::paramSmoothingCoefFine * (mTimeSmoothed - delayTimeModulated);
+        
+        const double delayTimeInSamples = mTimeSmoothed * mSampleRate;
         const float sample = getInterpolatedSample (delayTimeInSamples);
         
         // Write to the buffer: mix of input audio and feedback signal
