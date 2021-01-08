@@ -11,7 +11,7 @@
 #include <JuceHeader.h>
 #include "KAPDelay.h"
 
-KAPDelay::KAPDelay() : mSampleRate (-1.0), mFeedbackSample (0.0f), mDelayIndex (0)
+KAPDelay::KAPDelay()
 {
     reset();
 }
@@ -29,7 +29,7 @@ void KAPDelay::setSampleRate (double inSampleRate)
 void KAPDelay::reset()
 {
     // Clear the feedback sample
-    mFeedbackSample = 0.0;
+    mFeedbackSample = 0.0f;
     // Clear the delay buffer
     zeromem (mBuffer, sizeof (float) * KAP::bufferSize);
 }

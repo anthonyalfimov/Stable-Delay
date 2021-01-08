@@ -27,7 +27,7 @@ public:
     const float* getBuffer() const;
     
 private:
-    double mSampleRate;
-    float mPhase;
+    double mSampleRate = -1.0;
+    float mPhase = 0.0f;
     float mBuffer[KAP::bufferSize];     // TODO: dynamically allocate the buffer
 };

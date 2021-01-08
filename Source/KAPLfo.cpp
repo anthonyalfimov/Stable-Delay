@@ -11,7 +11,7 @@
 #include <JuceHeader.h>
 #include "KAPLfo.h"
 
-KAPLfo::KAPLfo() : mSampleRate (-1.0), mPhase (0.0f)
+KAPLfo::KAPLfo()
 {
     reset();
 }
