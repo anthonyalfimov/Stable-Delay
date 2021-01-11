@@ -13,6 +13,8 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 
+// TODO: turn into an abstract base class
+
 class KAPPanelBase  : public Component
 {
 public:
