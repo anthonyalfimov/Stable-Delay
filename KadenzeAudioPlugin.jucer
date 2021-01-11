@@ -7,6 +7,8 @@
     <GROUP id="{5289F700-E4EF-5ABA-1C4B-03009BE23305}" name="Helpers">
       <FILE id="H6hnWb" name="KAPAudioHelpers.h" compile="0" resource="0"
             file="Source/KAPAudioHelpers.h"/>
+      <FILE id="FJ9rx4" name="KAPInterfaceDefines.h" compile="0" resource="0"
+            file="Source/KAPInterfaceDefines.h"/>
     </GROUP>
     <GROUP id="{B55B2190-C0A4-3B41-2D50-0A81E5CC3764}" name="Panels">
       <FILE id="CLsfpr" name="KAPPanelBase.cpp" compile="1" resource="0"
