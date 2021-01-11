@@ -11,6 +11,7 @@
 #pragma once
 
 #include "KAPPanelBase.h"
+#include "KAPTopPanel.h"
 
 class KAPMainPanel  : public KAPPanelBase
 {
@@ -19,5 +20,5 @@ public:
     ~KAPMainPanel();
     
 private:
-    
+    std::unique_ptr<KAPTopPanel> mTopPanel;
 };
