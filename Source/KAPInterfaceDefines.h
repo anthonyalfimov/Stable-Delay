@@ -10,7 +10,7 @@
 
 #pragma once
 
-// TODO: replace with typed constants (in a namespace?)
+// TODO: replace with typed constants - int (in a namespace?)
 
 #define MAIN_PANEL_WIDTH        700
 #define MAIN_PANEL_HEIGHT       300
