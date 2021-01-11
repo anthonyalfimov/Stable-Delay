@@ -11,6 +11,8 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 
+#include "KAPMainPanel.h"
+
 //==============================================================================
 /**
 */
@@ -25,6 +27,8 @@ public:
     void resized() override;
 
 private:
+    std::unique_ptr<KAPMainPanel> mMainPanel;
+    
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     KadenzeAudioPluginAudioProcessor& audioProcessor;
