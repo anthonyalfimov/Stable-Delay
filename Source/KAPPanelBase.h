@@ -12,6 +12,7 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "KAPInterfaceDefines.h"
 
 // TODO: turn into an abstract base class
 
