@@ -13,6 +13,7 @@
 #include "KAPPanelBase.h"
 #include "KAPTopPanel.h"
 #include "KAPGainPanel.h"
+#include "KAPCenterPanel.h"
 
 class KAPMainPanel  : public KAPPanelBase
 {
@@ -24,4 +25,5 @@ private:
     std::unique_ptr<KAPTopPanel> mTopPanel;
     std::unique_ptr<KAPGainPanel> mInputGainPanel;
     std::unique_ptr<KAPGainPanel> mOutputGainPanel;
+    std::unique_ptr<KAPCenterPanel> mCenterPanel;
 };

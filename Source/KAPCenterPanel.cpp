@@ -9,3 +9,15 @@
 */
 
 #include "KAPCenterPanel.h"
+
+KAPCenterPanel::KAPCenterPanel (KadenzeAudioPluginAudioProcessor* inProcessor)
+    : KAPPanelBase (inProcessor)
+{
+    setSize (CENTER_PANEL_WIDTH, CENTER_PANEL_HEIGHT);
+    setName ("CenterPanel");
+}
+
+KAPCenterPanel::~KAPCenterPanel()
+{
+    
+}
