@@ -14,6 +14,7 @@ KAPTopPanel::KAPTopPanel (KadenzeAudioPluginAudioProcessor* inProcessor)
     : KAPPanelBase (inProcessor)
 {
     setSize (TOP_PANEL_WIDTH, TOP_PANEL_HEIGHT);
+    setName ("MainMenu");
 }
 
 KAPTopPanel::~KAPTopPanel()
@@ -25,6 +26,6 @@ void KAPTopPanel::paint (Graphics& g)
 {
     KAPPanelBase::paint (g);
 
-    g.setFont (Font ("Gill Sans", 16.0f, Font::plain));
-    g.drawFittedText ("KADENZE AUDIO PLUGIN", getBounds().withTrimmedRight (10), Justification::centredRight, 1);
+//    g.setFont (Font ("Gill Sans", 16.0f, Font::plain));
+//    g.drawFittedText ("KADENZE AUDIO PLUGIN", getBounds().withTrimmedRight (10), Justification::centredRight, 1);
 }

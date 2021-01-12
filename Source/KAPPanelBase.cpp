@@ -28,4 +28,6 @@ void KAPPanelBase::paint (Graphics& g)
     
     g.setColour (Colours::black);
     g.drawRect (0, 0, getWidth(), getHeight(), 2);
+    
+    g.drawFittedText (getName(), getLocalBounds(), Justification::centred, 1);
 }
