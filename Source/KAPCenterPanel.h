@@ -12,6 +12,7 @@
 
 #include "KAPPanelBase.h"
 #include "KAPCenterPanelMenuBar.h"
+#include "KAPFxPanel.h"
 
 class KAPCenterPanel  : public KAPPanelBase
 {
@@ -21,4 +22,5 @@ public:
     
 private:
     std::unique_ptr<KAPCenterPanelMenuBar> mMenuBar;
+    std::unique_ptr<KAPFxPanel> mFxPanel;
 };
