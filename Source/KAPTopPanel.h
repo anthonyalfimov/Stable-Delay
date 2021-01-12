@@ -15,7 +15,7 @@
 class KAPTopPanel  : public KAPPanelBase
 {
 public:
-    KAPTopPanel (KadenzeAudioPluginAudioProcessor*);
+    KAPTopPanel (KadenzeAudioPluginAudioProcessor* inProcessor);
     ~KAPTopPanel();
     
     void paint (Graphics&) override;

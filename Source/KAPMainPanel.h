@@ -18,7 +18,7 @@
 class KAPMainPanel  : public KAPPanelBase
 {
 public:
-    KAPMainPanel (KadenzeAudioPluginAudioProcessor*);
+    KAPMainPanel (KadenzeAudioPluginAudioProcessor* inProcessor);
     ~KAPMainPanel();
     
 private:
