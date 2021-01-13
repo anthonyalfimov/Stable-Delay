@@ -8,6 +8,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "KAPParameters.h"
 
 //==============================================================================
 KadenzeAudioPluginAudioProcessor::KadenzeAudioPluginAudioProcessor()
@@ -19,9 +20,14 @@ KadenzeAudioPluginAudioProcessor::KadenzeAudioPluginAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),
+    // TODO: initialising inside #ifndef - source of potential problems?
+    parameters (*this /** reference to processor */,
+                nullptr /** null pointer to undoManager (optional) */)
 #endif
 {
+    // Initialise plugin parameters
+    initializeParameters();
     // Initialise DSP modules
     initializeDSP();
 }
@@ -168,25 +174,26 @@ void KadenzeAudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& b
         // TODO: Stereo processing hardcoded. This will fail for >2 channels, will it for mono?
         // TODO: Magic number is used for gain - make adjustable
         // TODO: Why can't we use one KAP::Gain object for both channels?!
+        // TODO: using deprecated method of parameter access! Update to modern JUCE
         // NB: Calling this when mGain[] unique_ptrs are not initialised is UB!
-        mGain[channel]->process (channelData,                   // inAudio
-                                 0.5f,                          // inGain
-                                 channelData,                   // outAudio
-                                 buffer.getNumSamples());       // inNumSamplesToRender
+        mGain[channel]->process (channelData,                               // inAudio
+                                 getParameter (kParameter_InputGain),       // inGain
+                                 channelData,                               // outAudio
+                                 buffer.getNumSamples());                   // inNumSamplesToRender
         
-        float rate = (channel == 0) ? 0 : 0.25f;
+        float rate = (channel == 0) ? 0 : getParameter (kParameter_ModulationRate);
         
-        mLfo[channel]->process (rate,                           // inRate
-                                0.5f,                           // inDepth
-                                buffer.getNumSamples());        // inNumSamplesToRender
+        mLfo[channel]->process (rate,                                       // inRate
+                                getParameter (kParameter_ModulationDepth),  // inDepth
+                                buffer.getNumSamples());                    // inNumSamplesToRender
         
-        mDelay[channel]->process (channelData,                  // inAudio
-                                  0.25f,                        // inTime
-                                  0.5f,                         // inFeedback
-                                  0.35f,                        // inWetDry
-                                  mLfo[channel]->getBuffer(),   // inModulationBuffer
-                                  channelData,                  // outAudio
-                                  buffer.getNumSamples());      // inNumSamplesToRender
+        mDelay[channel]->process (channelData,                              // inAudio
+                                  getParameter (kParameter_DelayTime),      // inTime
+                                  getParameter (kParameter_DelayFeedback),  // inFeedback
+                                  getParameter (kParameter_DelayWetDry),    // inWetDry
+                                  mLfo[channel]->getBuffer(),               // inModulationBuffer
+                                  channelData,                              // outAudio
+                                  buffer.getNumSamples());                  // inNumSamplesToRender
     }
 }
 
@@ -213,6 +220,25 @@ void KadenzeAudioPluginAudioProcessor::setStateInformation (const void* data, in
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+}
+
+void KadenzeAudioPluginAudioProcessor::initializeParameters()
+{
+    // TODO: using deprecated method of parameter creation! Update to modern JUCE
+    // TODO: NormalisableRange takes care of parameter range mapping, why map in the processor?
+    for (int i = 0; i < kParameter_TotalNumParameters; ++i)
+        parameters.createAndAddParameter (KAPParameterID[i],
+                                          KAPParameterID[i],
+                                          KAPParameterID[i],
+                                          NormalisableRange<float> (0.0f, 1.0f),
+                                          0.5f,
+                                          nullptr,
+                                          nullptr);
+    
+    // Workaround due to using deprecated AudioProcessorValueTreeState constructor
+    // An identifier used to initialise the internal must be passed!
+    // TODO: remove after switching to the modern JUCE AudioProcessorValueTreeState ctor
+    parameters.state = ValueTree (Identifier ("KAP"));
 }
 
 void KadenzeAudioPluginAudioProcessor::initializeDSP()

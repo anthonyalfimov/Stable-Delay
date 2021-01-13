@@ -55,8 +55,17 @@ public:
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+    
+    /**
+     This class contains a ValueTree that is used to manage an AudioProcessor's entire state.
+     It has its own internal class of parameter object that is linked to values within its ValueTree,
+     and which are each identified by a string ID.
+    */
+    AudioProcessorValueTreeState parameters;
 
 private:
+    // TODO: switch to British spelling
+    void initializeParameters();
     void initializeDSP();
     
     // TODO: hardcoding stereo signal here - independent gain for left and right channels. Refactor!
