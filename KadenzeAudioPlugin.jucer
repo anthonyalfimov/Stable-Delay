@@ -15,6 +15,14 @@
       <FILE id="CLsfpr" name="KAPPanelBase.cpp" compile="1" resource="0"
             file="Source/KAPPanelBase.cpp"/>
       <FILE id="qCxFj2" name="KAPPanelBase.h" compile="0" resource="0" file="Source/KAPPanelBase.h"/>
+      <FILE id="bKu8kC" name="KAPMainPanel.cpp" compile="1" resource="0"
+            file="Source/KAPMainPanel.cpp"/>
+      <FILE id="QigLtG" name="KAPMainPanel.h" compile="0" resource="0" file="Source/KAPMainPanel.h"/>
+      <FILE id="VWxUmE" name="KAPTopPanel.cpp" compile="1" resource="0" file="Source/KAPTopPanel.cpp"/>
+      <FILE id="g9X9uf" name="KAPTopPanel.h" compile="0" resource="0" file="Source/KAPTopPanel.h"/>
+      <FILE id="sy0sG4" name="KAPGainPanel.cpp" compile="1" resource="0"
+            file="Source/KAPGainPanel.cpp"/>
+      <FILE id="Z4WLtd" name="KAPGainPanel.h" compile="0" resource="0" file="Source/KAPGainPanel.h"/>
       <FILE id="FILMYm" name="KAPCenterPanel.cpp" compile="1" resource="0"
             file="Source/KAPCenterPanel.cpp"/>
       <FILE id="MzBUkA" name="KAPCenterPanel.h" compile="0" resource="0"
@@ -25,14 +33,6 @@
             file="Source/KAPCenterPanelMenuBar.h"/>
       <FILE id="bTPdDn" name="KAPFxPanel.cpp" compile="1" resource="0" file="Source/KAPFxPanel.cpp"/>
       <FILE id="vazdPS" name="KAPFxPanel.h" compile="0" resource="0" file="Source/KAPFxPanel.h"/>
-      <FILE id="sy0sG4" name="KAPGainPanel.cpp" compile="1" resource="0"
-            file="Source/KAPGainPanel.cpp"/>
-      <FILE id="Z4WLtd" name="KAPGainPanel.h" compile="0" resource="0" file="Source/KAPGainPanel.h"/>
-      <FILE id="bKu8kC" name="KAPMainPanel.cpp" compile="1" resource="0"
-            file="Source/KAPMainPanel.cpp"/>
-      <FILE id="QigLtG" name="KAPMainPanel.h" compile="0" resource="0" file="Source/KAPMainPanel.h"/>
-      <FILE id="VWxUmE" name="KAPTopPanel.cpp" compile="1" resource="0" file="Source/KAPTopPanel.cpp"/>
-      <FILE id="g9X9uf" name="KAPTopPanel.h" compile="0" resource="0" file="Source/KAPTopPanel.h"/>
     </GROUP>
     <GROUP id="{195656B5-0487-FECC-6F4E-58DC537044AA}" name="Parameter Control">
       <FILE id="SWzc8U" name="KAPParameterComboBox.cpp" compile="1" resource="0"
