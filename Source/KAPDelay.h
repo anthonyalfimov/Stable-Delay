@@ -37,5 +37,8 @@ private:
     float mBuffer[KAP::bufferSize];   // TODO: make buffer dynamic
     
     int mDelayIndex = 0;
+    
+    // TODO: JUCE DSP modules don't use the Leak Detector. Should I?
+    // JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (KAPDelay)
 };
 

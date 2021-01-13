@@ -26,4 +26,6 @@ private:
     std::unique_ptr<KAPGainPanel> mInputGainPanel;
     std::unique_ptr<KAPGainPanel> mOutputGainPanel;
     std::unique_ptr<KAPCenterPanel> mCenterPanel;
+    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (KAPMainPanel)
 };

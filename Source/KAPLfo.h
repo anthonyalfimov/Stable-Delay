@@ -30,4 +30,7 @@ private:
     double mSampleRate = -1.0;
     float mPhase = 0.0f;
     float mBuffer[KAP::bufferSize];     // TODO: dynamically allocate the buffer
+    
+    // TODO: JUCE DSP modules don't use the Leak Detector. Should I?
+    // JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (KAPLfo)
 };

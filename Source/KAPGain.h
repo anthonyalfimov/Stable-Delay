@@ -23,5 +23,8 @@ public:
                   int inNumSamplesToRender);
     
 private:
+    
+    // TODO: JUCE DSP modules don't use the Leak Detector. Should I?
+    // JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (KAPGain)
 };
 
