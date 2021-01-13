@@ -23,7 +23,7 @@ KadenzeAudioPluginAudioProcessor::KadenzeAudioPluginAudioProcessor()
 #endif
 {
     // Initialise DSP modules
-    initisalizeDSP();
+    initializeDSP();
 }
 
 KadenzeAudioPluginAudioProcessor::~KadenzeAudioPluginAudioProcessor()
@@ -215,7 +215,7 @@ void KadenzeAudioPluginAudioProcessor::setStateInformation (const void* data, in
     // whose contents will have been created by the getStateInformation() call.
 }
 
-void KadenzeAudioPluginAudioProcessor::initisalizeDSP()
+void KadenzeAudioPluginAudioProcessor::initializeDSP()
 {
     // Initialise the DSP Gain modules
     // TODO: hardcoding stereo processing here. Refactor!

@@ -57,7 +57,7 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
-    void initisalizeDSP();
+    void initializeDSP();
     
     // TODO: hardcoding stereo signal here - independent gain for left and right channels. Refactor!
     std::unique_ptr<KAPGain> mGain[2];
