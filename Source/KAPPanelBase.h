@@ -22,7 +22,7 @@ public:
     KAPPanelBase (KadenzeAudioPluginAudioProcessor* inProcessor);
     ~KAPPanelBase();
     
-    void paint (Graphics&) override;
+    void paint (Graphics& g) override;
     
 protected:
     KadenzeAudioPluginAudioProcessor* mProcessor;
