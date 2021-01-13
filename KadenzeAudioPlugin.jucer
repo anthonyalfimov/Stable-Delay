@@ -34,6 +34,16 @@
       <FILE id="VWxUmE" name="KAPTopPanel.cpp" compile="1" resource="0" file="Source/KAPTopPanel.cpp"/>
       <FILE id="g9X9uf" name="KAPTopPanel.h" compile="0" resource="0" file="Source/KAPTopPanel.h"/>
     </GROUP>
+    <GROUP id="{195656B5-0487-FECC-6F4E-58DC537044AA}" name="Parameter Control">
+      <FILE id="SWzc8U" name="KAPParameterComboBox.cpp" compile="1" resource="0"
+            file="Source/KAPParameterComboBox.cpp"/>
+      <FILE id="PWCrOy" name="KAPParameterComboBox.h" compile="0" resource="0"
+            file="Source/KAPParameterComboBox.h"/>
+      <FILE id="EO4I3l" name="KAPParameterSlider.cpp" compile="1" resource="0"
+            file="Source/KAPParameterSlider.cpp"/>
+      <FILE id="j10A24" name="KAPParameterSlider.h" compile="0" resource="0"
+            file="Source/KAPParameterSlider.h"/>
+    </GROUP>
     <GROUP id="{0EB6A607-778D-EA62-AAC3-98B7C537EEED}" name="DSP">
       <FILE id="yrs5AZ" name="KAPDelay.cpp" compile="1" resource="0" file="Source/KAPDelay.cpp"/>
       <FILE id="Hz1C1r" name="KAPDelay.h" compile="0" resource="0" file="Source/KAPDelay.h"/>
