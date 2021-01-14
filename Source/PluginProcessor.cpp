@@ -173,7 +173,10 @@ void KadenzeAudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& b
         // TODO: Using the same buffer to read and write - is there a better approach?
         // TODO: Stereo processing hardcoded. This will fail for >2 channels, will it for mono?
         // TODO: Magic number is used for gain - make adjustable
-        // TODO: Why can't we use one KAP::Gain object for both channels?!
+        /* Q: Why can't we use one KAP::Gain object for both channels?
+           A: If we have parameter smoothing, it must remain continuos between blocks. DSP module
+              acquires memory in this case, and this memory needs to be per-channel
+        */
         // TODO: using deprecated method of parameter access! Update to modern JUCE
         // NB: Calling this when mGain[] unique_ptrs are not initialised is UB!
         mGain[channel]->process (channelData,                               // inAudio
