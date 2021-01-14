@@ -10,6 +10,7 @@
 
 #include "KAPFxPanel.h"
 #include "KAPParameters.h"
+#include "KAPUiHelpers.h"
 
 KAPFxPanel::KAPFxPanel (KadenzeAudioPluginAudioProcessor* inProcessor)
     : KAPPanelBase (inProcessor)
@@ -22,6 +23,14 @@ KAPFxPanel::KAPFxPanel (KadenzeAudioPluginAudioProcessor* inProcessor)
 KAPFxPanel::~KAPFxPanel()
 {
     
+}
+
+void KAPFxPanel::paint (Graphics& g)
+{
+    KAPPanelBase::paint (g);
+    
+    for (auto slider : mSliders)
+        paintComponentLabel (g, slider);
 }
     
 void KAPFxPanel::setFxPanelStyle (KAPFxPanelStyle inStyle)
@@ -76,6 +85,6 @@ void KAPFxPanel::setFxPanelStyle (KAPFxPanelStyle inStyle)
     mSliders[2]->setBounds (getLocalBounds().withSizeKeepingCentre (sliderSize, sliderSize)
                             .translated (2 * sliderSize, 0));
     
-    for (auto element : mSliders)
-        addAndMakeVisible (element);
+    for (auto slider : mSliders)
+        addAndMakeVisible (slider);
 }
