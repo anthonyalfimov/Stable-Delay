@@ -11,6 +11,7 @@
 #pragma once
 
 #include "KAPPanelBase.h"
+#include "KAPParameterSlider.h"
 
 // TODO: switch to an enum class, put the enum inside the class
 
@@ -30,9 +31,8 @@ public:
     void setFxPanelStyle (KAPFxPanelStyle inStyle);
     
 private:
-    void updateName();
-    
-    KAPFxPanelStyle mStyle = kKAPFxPanelStyle_Delay;
+    KAPFxPanelStyle mStyle;
+    OwnedArray<KAPParameterSlider> mSliders;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (KAPFxPanel)
 };

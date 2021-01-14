@@ -9,12 +9,13 @@
 */
 
 #include "KAPFxPanel.h"
+#include "KAPParameters.h"
 
 KAPFxPanel::KAPFxPanel (KadenzeAudioPluginAudioProcessor* inProcessor)
     : KAPPanelBase (inProcessor)
 {
     setSize (FX_PANEL_WIDTH, FX_PANEL_HEIGHT);
-    updateName();
+    setFxPanelStyle (kKAPFxPanelStyle_Chorus);
 }
 
 
@@ -26,25 +27,55 @@ KAPFxPanel::~KAPFxPanel()
 void KAPFxPanel::setFxPanelStyle (KAPFxPanelStyle inStyle)
 {
     mStyle = inStyle;
-    updateName();
-}
+    mSliders.clear();
     
-void KAPFxPanel::updateName()
-{
+    const int sliderSize = 56;
+    
+    // TODO: Can this be better implemented using std::unique_ptr or move semantics?
+    
     switch (mStyle)
     {
         case kKAPFxPanelStyle_Delay:
             setName ("DelayPanel");
-            break;
             
+            mSliders.add (new KAPParameterSlider (mProcessor->parameters,
+                                                  KAPParameterID[kParameter_DelayTime]));
+            
+            mSliders.add (new KAPParameterSlider (mProcessor->parameters,
+                                                  KAPParameterID[kParameter_DelayFeedback]));
+            
+            mSliders.add (new KAPParameterSlider (mProcessor->parameters,
+                                                  KAPParameterID[kParameter_DelayWetDry]));
+            break;
         case kKAPFxPanelStyle_Chorus:
             setName ("ChorusPanel");
+            
+            mSliders.add (new KAPParameterSlider (mProcessor->parameters,
+                                                  KAPParameterID[kParameter_ModulationRate]));
+            
+            mSliders.add (new KAPParameterSlider (mProcessor->parameters,
+                                                  KAPParameterID[kParameter_ModulationDepth]));
+            
+            mSliders.add (new KAPParameterSlider (mProcessor->parameters,
+                                                  KAPParameterID[kParameter_DelayWetDry]));
             break;
             
         default:
-            // This should never be reached
             setName ("ERROR");
             jassertfalse;
             break;
     }
+    
+    // TODO: Assuming there are always only 3 sliders - perhaps generalise?
+    if (mSliders.size() != 3)
+        jassertfalse;           // array must contain 3 sliders to continue
+    
+    mSliders[0]->setBounds (getLocalBounds().withSizeKeepingCentre (sliderSize, sliderSize)
+                            .translated (-2 * sliderSize, 0));
+    mSliders[1]->setBounds (getLocalBounds().withSizeKeepingCentre (sliderSize, sliderSize));
+    mSliders[2]->setBounds (getLocalBounds().withSizeKeepingCentre (sliderSize, sliderSize)
+                            .translated (2 * sliderSize, 0));
+    
+    for (auto element : mSliders)
+        addAndMakeVisible (element);
 }
