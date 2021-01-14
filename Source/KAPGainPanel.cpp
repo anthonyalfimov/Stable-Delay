@@ -21,3 +21,14 @@ KAPGainPanel::~KAPGainPanel()
 {
     
 }
+
+void KAPGainPanel::setParameterID (KAPParameter inParameter)
+{
+    mSlider = std::make_unique<KAPParameterSlider> (mProcessor->parameters,
+                                                    KAPParameterID[inParameter]);
+    
+    const int sliderSize = 54;
+    mSlider->setBounds (getLocalBounds().withSizeKeepingCentre (sliderSize, sliderSize));
+    
+    addAndMakeVisible (mSlider.get());
+}

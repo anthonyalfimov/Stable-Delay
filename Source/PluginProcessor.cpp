@@ -179,10 +179,10 @@ void KadenzeAudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& b
         */
         // TODO: using deprecated method of parameter access! Update to modern JUCE
         // NB: Calling this when mGain[] unique_ptrs are not initialised is UB!
-        mGain[channel]->process (channelData,                               // inAudio
-                                 getParameter (kParameter_InputGain),       // inGain
-                                 channelData,                               // outAudio
-                                 buffer.getNumSamples());                   // inNumSamplesToRender
+        mInputGain[channel]->process (channelData,                          // inAudio
+                                      getParameter (kParameter_InputGain),  // inGain
+                                      channelData,                          // outAudio
+                                      buffer.getNumSamples());              // inNumSamplesToRender
         
         float rate = (channel == 0) ? 0 : getParameter (kParameter_ModulationRate);
         
@@ -197,6 +197,11 @@ void KadenzeAudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& b
                                   mLfo[channel]->getBuffer(),               // inModulationBuffer
                                   channelData,                              // outAudio
                                   buffer.getNumSamples());                  // inNumSamplesToRender
+        
+        mOutputGain[channel]->process (channelData,                         // inAudio
+                                       getParameter (kParameter_OutputGain),// inGain
+                                       channelData,                         // outAudio
+                                       buffer.getNumSamples());             // inNumSamplesToRender
     }
 }
 
@@ -250,7 +255,8 @@ void KadenzeAudioPluginAudioProcessor::initializeDSP()
     // TODO: hardcoding stereo processing here. Refactor!
     for (int channel = 0; channel < 2; ++channel)
     {
-        mGain[channel] = std::make_unique<KAPGain>();
+        mInputGain[channel] = std::make_unique<KAPGain>();
+        mOutputGain[channel] = std::make_unique<KAPGain>();
         mLfo[channel] = std::make_unique<KAPLfo>();
         mDelay[channel] = std::make_unique<KAPDelay>();
     }
