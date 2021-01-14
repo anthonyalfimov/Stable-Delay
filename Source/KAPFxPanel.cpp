@@ -66,7 +66,7 @@ void KAPFxPanel::setFxPanelStyle (KAPFxPanelStyle inStyle)
             break;
     }
     
-    // TODO: Assuming there are always only 3 sliders - perhaps generalise?
+    // TODO: Positioning the sliders assumes there are always 3. Perhaps, generalise?
     if (mSliders.size() != 3)
         jassertfalse;           // array must contain 3 sliders to continue
     
