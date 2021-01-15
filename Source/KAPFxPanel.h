@@ -13,6 +13,7 @@
 #include "KAPPanelBase.h"
 #include "KAPParameterSlider.h"
 
+// TODO: Clean up usage of KAPFxPanelStyle, ComboBox index and ID
 // TODO: switch to an enum class, put the enum inside the class
 
 enum KAPFxPanelStyle
@@ -22,7 +23,7 @@ enum KAPFxPanelStyle
     kKAPFxPanelStyle_TotalNumStyles
 };
 
-class KAPFxPanel  : public KAPPanelBase
+class KAPFxPanel  : public KAPPanelBase, public ComboBox::Listener
 {
 public:
     KAPFxPanel (KadenzeAudioPluginAudioProcessor* inProcessor);
@@ -31,6 +32,8 @@ public:
     void paint (Graphics& g) override;
     
     void setFxPanelStyle (KAPFxPanelStyle inStyle);
+    
+    void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
     
 private:
     KAPFxPanelStyle mStyle;
