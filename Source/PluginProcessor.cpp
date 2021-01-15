@@ -179,6 +179,7 @@ void KadenzeAudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& b
         */
         // TODO: using deprecated method of parameter access! Update to modern JUCE
         // NB: Calling this when mGain[] unique_ptrs are not initialised is UB!
+        // TODO: add smoothing for all parameters
         mInputGain[channel]->process (channelData,                          // inAudio
                                       getParameter (kParameter_InputGain),  // inGain
                                       channelData,                          // outAudio
