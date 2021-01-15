@@ -12,6 +12,14 @@
 
 #include "KAPAudioHelpers.h"
 
+// TODO: unite this with KAPFxPanelStyle, ComboBox index and ID
+// TODO: convert to en enum class
+enum KAPDelayType
+{
+    kKAPDelayType_Delay = 0,
+    kKAPDelayType_Chorus
+};
+
 class KAPDelay
 {
 public:
@@ -24,6 +32,7 @@ public:
                   float inTime,
                   float inFeedback,
                   float inWetDry,
+                  float inType,
                   const float* inModulationBuffer,
                   float* outAudio,
                   int inNumSamplesToRender);

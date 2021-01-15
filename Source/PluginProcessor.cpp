@@ -195,6 +195,7 @@ void KadenzeAudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& b
                                   getParameter (kParameter_DelayTime),      // inTime
                                   getParameter (kParameter_DelayFeedback),  // inFeedback
                                   getParameter (kParameter_DelayWetDry),    // inWetDry
+                                  getParameter (kParameter_DelayType),      // inType
                                   mLfo[channel]->getBuffer(),               // inModulationBuffer
                                   channelData,                              // outAudio
                                   buffer.getNumSamples());                  // inNumSamplesToRender

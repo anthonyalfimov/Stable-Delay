@@ -38,20 +38,35 @@ void KAPDelay::process (const float* inAudio,
                         float inTime,
                         float inFeedback,
                         float inWetDry,
+                        float inType,
                         const float* inModulationBuffer,
                         float* outAudio,
                         int inNumSamplesToRender)
 {
     const float wet = inWetDry;
     const float dry = 1.0f - wet;
-    const float feedbackMapped = jmap (inFeedback, 0.0f, 1.0f, 0.0f, 0.95f);
+    /*const*/ float feedbackMapped = jmap (inFeedback, 0.0f, 1.0f, 0.0f, 0.95f);
     
     for (int i = 0; i < inNumSamplesToRender; ++i)
     {
-        const double delayTimeModulated = inTime + 0.002 * inModulationBuffer[i];
+        // TODO: does this need to be done on sample level? Maybe better to set type on block level?
         
-        // Use member variable to maintain consistent smoothing between blocks
-        mTimeSmoothed = mTimeSmoothed - KAP::paramSmoothingCoefFine * (mTimeSmoothed - delayTimeModulated);
+        if (static_cast<KAPDelayType> (inType) == kKAPDelayType_Delay)
+        {
+            // Use member variable to maintain consistent smoothing between blocks
+            mTimeSmoothed = mTimeSmoothed - KAP::paramSmoothingCoefFine * (mTimeSmoothed - inTime);
+        }
+        else
+        {
+            const double delayTimeModulated = 0.003 + 0.002 * inModulationBuffer[i];
+            
+            // Use member variable to maintain consistent smoothing between blocks
+            mTimeSmoothed = mTimeSmoothed - KAP::paramSmoothingCoefFine * (mTimeSmoothed - delayTimeModulated);
+            
+            // TODO: better feedback reset - currently it has audible trail before disappearing
+            // Reset feedback to 0
+            feedbackMapped = 0.0f;
+        }
         
         const double delayTimeInSamples = mTimeSmoothed * mSampleRate;
         const float sample = getInterpolatedSample (delayTimeInSamples);
