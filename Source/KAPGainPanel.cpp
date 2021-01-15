@@ -9,6 +9,7 @@
 */
 
 #include "KAPGainPanel.h"
+#include "KAPUiHelpers.h"
 
 KAPGainPanel::KAPGainPanel (KadenzeAudioPluginAudioProcessor* inProcessor)
     : KAPPanelBase (inProcessor)
@@ -36,4 +37,10 @@ void KAPGainPanel::setParameterID (KAPParameter inParameter)
     mSlider->setBounds (getLocalBounds().withSizeKeepingCentre (sliderSize, sliderSize));
     
     addAndMakeVisible (mSlider.get());
+}
+
+void KAPGainPanel::paint (Graphics& g)
+{
+    KAPPanelBase::paint(g);
+    paintComponentLabel (g, mSlider.get());
 }

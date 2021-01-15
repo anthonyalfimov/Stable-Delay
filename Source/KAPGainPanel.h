@@ -22,6 +22,8 @@ public:
     
     void setParameterID (KAPParameter inParameter);
     
+    void paint (Graphics& g) override;
+    
 private:
     std::unique_ptr<KAPParameterSlider> mSlider;
     
