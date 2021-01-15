@@ -42,5 +42,7 @@ void KAPGainPanel::setParameterID (KAPParameter inParameter)
 void KAPGainPanel::paint (Graphics& g)
 {
     KAPPanelBase::paint(g);
-    paintComponentLabel (g, mSlider.get());
+    
+    if (mSlider != nullptr)
+        paintComponentLabel (g, mSlider.get());     // only paint label if slider exists
 }
