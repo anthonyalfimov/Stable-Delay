@@ -12,6 +12,12 @@
       <FILE id="fjYt20" name="KAPParameters.h" compile="0" resource="0" file="Source/KAPParameters.h"/>
       <FILE id="lU6RIO" name="KAPUiHelpers.h" compile="0" resource="0" file="Source/KAPUiHelpers.h"/>
     </GROUP>
+    <GROUP id="{6FDFCE5E-A25F-B71C-4766-D652B9DE2C74}" name="Managers">
+      <FILE id="Qr8RHf" name="KAPPresetManager.cpp" compile="1" resource="0"
+            file="Source/KAPPresetManager.cpp"/>
+      <FILE id="agqbzc" name="KAPPresetManager.h" compile="0" resource="0"
+            file="Source/KAPPresetManager.h"/>
+    </GROUP>
     <GROUP id="{B55B2190-C0A4-3B41-2D50-0A81E5CC3764}" name="Panels">
       <FILE id="CLsfpr" name="KAPPanelBase.cpp" compile="1" resource="0"
             file="Source/KAPPanelBase.cpp"/>
