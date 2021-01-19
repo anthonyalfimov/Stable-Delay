@@ -30,6 +30,8 @@ KadenzeAudioPluginAudioProcessor::KadenzeAudioPluginAudioProcessor()
     initializeParameters();
     // Initialise DSP modules
     initializeDSP();
+    // Create the preset manager
+    mPresetManager = std::make_unique<KAPPresetManager> (this);
 }
 
 KadenzeAudioPluginAudioProcessor::~KadenzeAudioPluginAudioProcessor()
@@ -224,12 +226,40 @@ void KadenzeAudioPluginAudioProcessor::getStateInformation (juce::MemoryBlock& d
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+    
+    // TODO: Why do we need a separate child for the preset body?
+    //       Can't we just use one XML element on the stack?
+    
+    XmlElement preset ("KAP_StateInfo");
+    
+    auto presetBody = std::make_unique<XmlElement> ("KAP_Preset");
+    mPresetManager->getXmlForPreset (presetBody.get());
+    
+    // TODO: does this transfer ownership of the object? Should we use `get()` or `release()` here?
+    preset.addChildElement (presetBody.release());
+    
+    copyXmlToBinary (preset, destData);
 }
 
 void KadenzeAudioPluginAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+    
+    std::unique_ptr<XmlElement> xmlState = getXmlFromBinary (data, sizeInBytes);
+    
+    if (xmlState.get() != nullptr)
+    {
+        forEachXmlChildElement (*xmlState, subChild)
+        {
+            mPresetManager->loadPresetForXml (subChild);
+        }
+    }
+    else
+    {
+    // TODO: nullptr can be returned if data is corrupted, so it should send an error in prod code
+        jassertfalse;
+    }
 }
 
 void KadenzeAudioPluginAudioProcessor::initializeParameters()
