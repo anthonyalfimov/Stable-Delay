@@ -19,6 +19,7 @@
 class KAPPanelBase  : public Component
 {
 public:
+    // TODO: switch to passing Processor by reference for consistency with JUCE
     KAPPanelBase (KadenzeAudioPluginAudioProcessor* inProcessor);
     ~KAPPanelBase();
     
