@@ -235,9 +235,7 @@ void KadenzeAudioPluginAudioProcessor::getStateInformation (juce::MemoryBlock& d
     auto presetBody = std::make_unique<XmlElement> ("KAP_Preset");
     mPresetManager->getXmlForPreset (presetBody.get());
     
-    // TODO: does this transfer ownership of the object? Should we use `get()` or `release()` here?
-    preset.addChildElement (presetBody.release());
-    
+    preset.addChildElement (presetBody.release());  // this transfers the ownership of `presetBody`
     copyXmlToBinary (preset, destData);
 }
 
