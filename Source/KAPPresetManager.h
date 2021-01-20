@@ -12,6 +12,14 @@
 
 #include <JuceHeader.h>
 
+// TODO: can we move these to the .cpp file? Or does it need to be globally available if needed?
+namespace KAP
+{
+    // TODO: Should we use StringRef instead here?
+    const static String presetFileExtention = ".kpf";
+    const static String untitledPresetName = "Untitled";
+}
+
 // TODO: should this class be a singleton, or do we not care?
 
 class KAPPresetManager
@@ -24,7 +32,26 @@ public:
     void getXmlForPreset (XmlElement* outElement);
     void loadPresetForXml (XmlElement* inElement);
     
+    int getNumberOfPresets() const;
+    String getPresetName (int inPresetIndex) const;
+    
+    void createNewPreset();
+    void savePreset();
+    void saveAsPreset (String inPresetName);
+    void loadPreset (int inPresetIndex);
+    bool isCurrentPresetSaved() const;
+    String getCurrentPresetName() const;
+    
 private:
-    AudioProcessor* mProcessor;
+    void storeLocalPresets();
+    
+    bool mIsCurrentPresetSaved = false;
+    String mCurrentPresetName = KAP::untitledPresetName;
+    File mCurrentlyLoadedPreset;
+    
+    String mPresetDirectory;
+    Array<File> mLocalPresets;
+    
     XmlElement* mCurrentPresetXml;
+    AudioProcessor* mProcessor;
 };
