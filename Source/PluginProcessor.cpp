@@ -264,6 +264,8 @@ void KadenzeAudioPluginAudioProcessor::initializeParameters()
 {
     // TODO: using deprecated method of parameter creation! Update to modern JUCE
     // TODO: NormalisableRange takes care of parameter range mapping, why map in the processor?
+    // TODO: Add proper default values
+    // TODO: Add proper labels
     for (int i = 0; i < kParameter_TotalNumParameters; ++i)
         parameters.createAndAddParameter (KAPParameterID[i],
                                           KAPParameterID[i],

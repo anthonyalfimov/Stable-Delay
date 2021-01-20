@@ -14,6 +14,8 @@
 #include "KAPLfo.h"
 #include "KAPPresetManager.h"
 
+// TODO: PROJECT LEVEL - check what methods can be made const
+
 //==============================================================================
 /**
 */
