@@ -155,8 +155,6 @@ void KAPPresetManager::storeLocalPresets()
                                                          "*" + KAP::presetFileExtention,
                                                          File::TypesOfFileToFind::findFiles))
     {
-        File preset = entry.getFile();
-        
-        mLocalPresets.add (preset);
+        mLocalPresets.add (entry.getFile());
     }
 }
