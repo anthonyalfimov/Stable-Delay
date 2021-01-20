@@ -65,6 +65,9 @@ public:
      and which are each identified by a string ID.
     */
     AudioProcessorValueTreeState parameters;
+    
+    // TODO: should we return a unique_ptr reference or something like that instead here?
+    KAPPresetManager* getPresetManager() const { return mPresetManager.get(); }
 
 private:
     // TODO: switch to British spelling
