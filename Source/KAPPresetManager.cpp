@@ -91,6 +91,7 @@ void KAPPresetManager::createNewPreset()
 }
 
 /** Should only be called when the preset was already created via Save As */
+// FIXME: pressing Save when preset wasn't saved before is not handled right now!
 void KAPPresetManager::savePreset()
 {
     MemoryBlock destinationData;
