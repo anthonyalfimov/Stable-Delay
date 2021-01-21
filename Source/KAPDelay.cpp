@@ -34,6 +34,8 @@ void KAPDelay::reset()
     zeromem (mBuffer, sizeof (float) * KAP::bufferSize);
 }
 
+// FIXME: Delay behaves incorrectly when Time set to 0 - remap min Delay Time or fix behaviour
+
 void KAPDelay::process (const float* inAudio,
                         float inTime,
                         float inFeedback,
