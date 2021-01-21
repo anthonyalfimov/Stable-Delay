@@ -45,13 +45,13 @@ public:
 private:
     void storeLocalPresets();
     
-    bool mIsCurrentPresetSaved = false;
+    bool mIsCurrentPresetSaved = false; // TODO: shouldn't editing any parameter unset this?
     String mCurrentPresetName = KAP::untitledPresetName;
     File mCurrentlyLoadedPreset;
     
     String mPresetDirectory;
     Array<File> mLocalPresets;
     
-    XmlElement* mCurrentPresetXml;
+    XmlElement* mCurrentPresetXml;      // TODO: What is the point of this member?
     AudioProcessor* mProcessor;
 };
