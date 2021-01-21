@@ -45,14 +45,13 @@ public:
 private:
     void storeLocalPresets();
     
-    // FIXME: better variable name to reflect its meaning - it's about file existing
-    bool mIsCurrentPresetSaved = false; // does the preset file exist on the hard drive?
+    bool mIsCurrentPresetSaved = false;     // is current preset file saved to disk?
     String mCurrentPresetName = KAP::untitledPresetName;
     File mCurrentlyLoadedPreset;
     
     String mPresetDirectory;
     Array<File> mLocalPresets;
     
-    XmlElement* mCurrentPresetXml;      // TODO: What is the point of this member?
+    XmlElement* mCurrentPresetXml;          // TODO: What is the point of this member?
     AudioProcessor* mProcessor;
 };

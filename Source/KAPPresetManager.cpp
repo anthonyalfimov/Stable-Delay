@@ -90,15 +90,16 @@ void KAPPresetManager::createNewPreset()
     mCurrentPresetName = KAP::untitledPresetName;
 }
 
-/** Should only be called when the preset was already created via Save As */
 void KAPPresetManager::savePreset()
 {
+    /** Should only be called when the preset was already saved to disk via Save As */
+    if (! mIsCurrentPresetSaved)
+        jassertfalse;
+    
     MemoryBlock destinationData;
     mProcessor->getStateInformation (destinationData);
     
-    mCurrentlyLoadedPreset.replaceWithData (destinationData.getData(), destinationData.getSize());
-    
-    mIsCurrentPresetSaved = true;
+    mCurrentlyLoadedPreset.replaceWithData (destinationData.getData(), destinationData.getSize());    
 }
 
 void KAPPresetManager::saveAsPreset (String inPresetName)
