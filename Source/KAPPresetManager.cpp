@@ -103,8 +103,8 @@ void KAPPresetManager::savePreset()
 
 void KAPPresetManager::saveAsPreset (String inPresetName)
 {
-    // TODO: don't we need to add the file extention?
-    File presetFile (File::addTrailingSeparator (mPresetDirectory) + inPresetName);
+    File presetFile (File::addTrailingSeparator (mPresetDirectory) + inPresetName
+                     + KAP::presetFileExtention);
     
     MemoryBlock destinationData;
     mProcessor->getStateInformation (destinationData);
