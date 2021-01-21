@@ -17,7 +17,7 @@ KAPPresetManager::KAPPresetManager (AudioProcessor* inProcessor)
     
     // TODO: Swap preset location to a more sensible directory
     const String parentDirectory = (File::getSpecialLocation (File::userDesktopDirectory))
-                                    .getFullPathName();
+                                   .getFullPathName();
     mPresetDirectory = File::addTrailingSeparator (parentDirectory) + pluginName;
     
     if (! File (mPresetDirectory).exists())
