@@ -45,7 +45,8 @@ public:
 private:
     void storeLocalPresets();
     
-    bool mIsCurrentPresetSaved = false;
+    // FIXME: better variable name to reflect its meaning - it's about file existing
+    bool mIsCurrentPresetSaved = false; // does the preset file exist on the hard drive?
     String mCurrentPresetName = KAP::untitledPresetName;
     File mCurrentlyLoadedPreset;
     
