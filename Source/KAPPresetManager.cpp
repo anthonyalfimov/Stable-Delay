@@ -86,7 +86,7 @@ void KAPPresetManager::createNewPreset()
     for (int param = 0; param < numParameters; ++param)
         mProcessor->setParameterNotifyingHost (param, mProcessor->getParameterDefaultValue (param));
     
-    mIsCurrentPresetSaved = true;
+    mIsCurrentPresetSaved = false;
     mCurrentPresetName = KAP::untitledPresetName;
 }
 
