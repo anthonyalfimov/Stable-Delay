@@ -16,9 +16,9 @@ KAPPresetManager::KAPPresetManager (AudioProcessor* inProcessor)
     const auto pluginName = mProcessor->getName();
     
     // TODO: Swap preset location to a more sensible directory
-    // TODO: could `getFullPathName()` return path not terminated with separator?
-    mPresetDirectory = (File::getSpecialLocation (File::userDesktopDirectory)).getFullPathName()
-                        + pluginName;
+    const String parentDirectory = (File::getSpecialLocation (File::userDesktopDirectory))
+                                    .getFullPathName();
+    mPresetDirectory = File::addTrailingSeparator (parentDirectory) + pluginName;
     
     if (! File (mPresetDirectory).exists())
         File (mPresetDirectory).createDirectory();
