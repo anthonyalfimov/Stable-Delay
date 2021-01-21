@@ -79,8 +79,14 @@ void KAPTopPanel::buttonClicked (Button* buttonThatWasPressed)
     }
     else if (buttonThatWasPressed == mSavePreset.get())
     {
-        // FIXME: pressing Save when preset wasn't saved before is not handled right now!
-        presetManager->savePreset();
+        if (presetManager->isCurrentPresetSaved())
+        {
+            presetManager->savePreset();
+        }
+        else
+        {
+            displaySaveAsPopup();
+        }
     }
     else if (buttonThatWasPressed == mSaveAsPreset.get())
     {

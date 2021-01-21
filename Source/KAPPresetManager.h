@@ -45,7 +45,7 @@ public:
 private:
     void storeLocalPresets();
     
-    bool mIsCurrentPresetSaved = false; // TODO: shouldn't editing any parameter unset this?
+    bool mIsCurrentPresetSaved = false;
     String mCurrentPresetName = KAP::untitledPresetName;
     File mCurrentlyLoadedPreset;
     
