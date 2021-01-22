@@ -50,3 +50,15 @@ const static String KAPParameterLabel[kParameter_TotalNumParameters]
     "Modulation Rate",
     "Modulation Depth"
 };
+
+const static float KAPParameterDefaultValue[kParameter_TotalNumParameters]
+{
+    0.5f,   // Input Gain
+    0.5f,   // Time
+    0.35f,  // Feedback
+    0.35f,  // Dry Wet
+    0.0f,   // Type
+    0.5f,   // Output Gain
+    0.2f,   // Modulation Rate
+    0.35f   // Modulation Depth
+};
