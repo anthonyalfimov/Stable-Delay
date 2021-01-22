@@ -15,7 +15,7 @@ KAPParameterSlider::KAPParameterSlider (AudioProcessorValueTreeState& stateToCon
     : Slider (parameterID)
 {
     setSliderStyle (SliderStyle::RotaryHorizontalVerticalDrag);
-    setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+    setTextBoxStyle (Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
     
     setRange (0.0f, 1.0f, 0.001f);
     
