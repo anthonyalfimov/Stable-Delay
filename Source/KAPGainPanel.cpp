@@ -26,7 +26,8 @@ KAPGainPanel::~KAPGainPanel()
 void KAPGainPanel::setParameterID (KAPParameter inParameter)
 {
     mSlider = std::make_unique<KAPParameterSlider> (mProcessor->parameters,
-                                                    KAPParameterID[inParameter]);
+                                                    KAPParameterID[inParameter],
+                                                    KAPParameterLabel[inParameter]);
     
     const int sliderSize = 54;
     

@@ -51,25 +51,31 @@ void KAPFxPanel::setFxPanelStyle (KAPFxPanelStyle inStyle)
             setName ("DelayPanel");
             
             mSliders.add (new KAPParameterSlider (mProcessor->parameters,
-                                                  KAPParameterID[kParameter_DelayTime]));
+                                                  KAPParameterID[kParameter_DelayTime],
+                                                  KAPParameterLabel[kParameter_DelayTime]));
             
             mSliders.add (new KAPParameterSlider (mProcessor->parameters,
-                                                  KAPParameterID[kParameter_DelayFeedback]));
+                                                  KAPParameterID[kParameter_DelayFeedback],
+                                                  KAPParameterLabel[kParameter_DelayFeedback]));
             
             mSliders.add (new KAPParameterSlider (mProcessor->parameters,
-                                                  KAPParameterID[kParameter_DelayWetDry]));
+                                                  KAPParameterID[kParameter_DelayWetDry],
+                                                  KAPParameterLabel[kParameter_DelayWetDry]));
             break;
         case kKAPFxPanelStyle_Chorus:
             setName ("ChorusPanel");
             
             mSliders.add (new KAPParameterSlider (mProcessor->parameters,
-                                                  KAPParameterID[kParameter_ModulationRate]));
+                                                  KAPParameterID[kParameter_ModulationRate],
+                                                  KAPParameterLabel[kParameter_ModulationRate]));
             
             mSliders.add (new KAPParameterSlider (mProcessor->parameters,
-                                                  KAPParameterID[kParameter_ModulationDepth]));
+                                                  KAPParameterID[kParameter_ModulationDepth],
+                                                  KAPParameterLabel[kParameter_ModulationDepth]));
             
             mSliders.add (new KAPParameterSlider (mProcessor->parameters,
-                                                  KAPParameterID[kParameter_DelayWetDry]));
+                                                  KAPParameterID[kParameter_DelayWetDry],
+                                                  KAPParameterLabel[kParameter_DelayWetDry]));
             break;
             
         default:

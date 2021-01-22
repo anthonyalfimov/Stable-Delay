@@ -38,3 +38,15 @@ const static String KAPParameterID[kParameter_TotalNumParameters]
     "ModulationRate",
     "ModulationDepth"
 };
+
+const static String KAPParameterLabel[kParameter_TotalNumParameters]
+{
+    "Input Gain",
+    "Time",
+    "Feedback",
+    "Dry Wet",
+    "Type",
+    "Output Gain",
+    "Modulation Rate",
+    "Modulation Depth"
+};

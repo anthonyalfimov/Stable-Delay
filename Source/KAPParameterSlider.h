@@ -15,7 +15,10 @@
 class KAPParameterSlider  : public Slider
 {
 public:
-    KAPParameterSlider (AudioProcessorValueTreeState& stateToControl, const String& parameterID);
+    // TODO: we should be able to get the parameter label knowing its ID, without needing to pass it
+    KAPParameterSlider (AudioProcessorValueTreeState& stateToControl,
+                        const String& parameterID,
+                        const String& parameterLabel);
     ~KAPParameterSlider();
     
 private:

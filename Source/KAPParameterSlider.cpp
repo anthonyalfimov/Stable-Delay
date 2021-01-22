@@ -11,8 +11,9 @@
 #include "KAPParameterSlider.h"
 
 KAPParameterSlider::KAPParameterSlider (AudioProcessorValueTreeState& stateToControl,
-                                        const String& parameterID)
-    : Slider (parameterID)
+                                        const String& parameterID,
+                                        const String& parameterLabel)
+    : Slider (parameterLabel)
 {
     setSliderStyle (SliderStyle::RotaryHorizontalVerticalDrag);
     setTextBoxStyle (Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
