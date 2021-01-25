@@ -24,6 +24,8 @@ KAPPresetManager::KAPPresetManager (AudioProcessor* inProcessor)
         File (mPresetDirectory).createDirectory();
     
     storeLocalPresets();
+    
+    // FIXME: preset name / selection is not recalled as a part of plugin's state by the Host
 }
 
 KAPPresetManager::~KAPPresetManager()
