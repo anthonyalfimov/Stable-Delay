@@ -11,6 +11,8 @@
             file="Source/KAPInterfaceDefines.h"/>
       <FILE id="lU6RIO" name="KAPInterfaceHelpers.h" compile="0" resource="0"
             file="Source/KAPInterfaceHelpers.h"/>
+      <FILE id="GRKCGg" name="KAPLookAndFeel.h" compile="0" resource="0"
+            file="Source/KAPLookAndFeel.h"/>
       <FILE id="fjYt20" name="KAPParameters.h" compile="0" resource="0" file="Source/KAPParameters.h"/>
     </GROUP>
     <GROUP id="{6FDFCE5E-A25F-B71C-4766-D652B9DE2C74}" name="Managers">
