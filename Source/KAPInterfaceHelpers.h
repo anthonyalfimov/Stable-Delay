@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    KAPUiHelpers.h
+    KAPInterfaceHelpers.h
     Created: 14 Jan 2021 9:06:14pm
     Author:  Anthony
 

@@ -9,8 +9,9 @@
             file="Source/KAPAudioHelpers.h"/>
       <FILE id="FJ9rx4" name="KAPInterfaceDefines.h" compile="0" resource="0"
             file="Source/KAPInterfaceDefines.h"/>
+      <FILE id="lU6RIO" name="KAPInterfaceHelpers.h" compile="0" resource="0"
+            file="Source/KAPInterfaceHelpers.h"/>
       <FILE id="fjYt20" name="KAPParameters.h" compile="0" resource="0" file="Source/KAPParameters.h"/>
-      <FILE id="lU6RIO" name="KAPUiHelpers.h" compile="0" resource="0" file="Source/KAPUiHelpers.h"/>
     </GROUP>
     <GROUP id="{6FDFCE5E-A25F-B71C-4766-D652B9DE2C74}" name="Managers">
       <FILE id="Qr8RHf" name="KAPPresetManager.cpp" compile="1" resource="0"

@@ -10,7 +10,7 @@
 
 #include "KAPFxPanel.h"
 #include "KAPParameters.h"
-#include "KAPUiHelpers.h"
+#include "KAPInterfaceHelpers.h"
 
 KAPFxPanel::KAPFxPanel (KadenzeAudioPluginAudioProcessor* inProcessor)
     : KAPPanelBase (inProcessor)

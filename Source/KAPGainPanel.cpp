@@ -9,7 +9,7 @@
 */
 
 #include "KAPGainPanel.h"
-#include "KAPUiHelpers.h"
+#include "KAPInterfaceHelpers.h"
 
 KAPGainPanel::KAPGainPanel (KadenzeAudioPluginAudioProcessor* inProcessor)
     : KAPPanelBase (inProcessor)
