@@ -18,7 +18,11 @@ class KAPLookAndFeel  : public LookAndFeel_V4
 public:
     KAPLookAndFeel()
     {
-
+        // ComboBox colours
+        setColour (ComboBox::backgroundColourId, KAP::colour3);
+        setColour (ComboBox::outlineColourId, KAP::colour2);
+        setColour (ComboBox::arrowColourId, KAP::colour1);
+        setColour (ComboBox::textColourId, KAP::colour1);
         
         // TextButton colours
         setColour (TextButton::buttonColourId, KAP::colour1);
