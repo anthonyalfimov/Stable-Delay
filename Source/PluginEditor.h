@@ -10,8 +10,8 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
-
 #include "KAPMainPanel.h"
+#include "KAPLookAndFeel.h"
 
 //==============================================================================
 /**
@@ -28,6 +28,7 @@ public:
 
 private:
     std::unique_ptr<KAPMainPanel> mMainPanel;
+    std::unique_ptr<KAPLookAndFeel> mLookAndFeel;
     
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.

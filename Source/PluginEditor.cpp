@@ -8,7 +8,6 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-#include "KAPLookAndFeel.h"
 
 //==============================================================================
 KadenzeAudioPluginAudioProcessorEditor::KadenzeAudioPluginAudioProcessorEditor (KadenzeAudioPluginAudioProcessor& p)
@@ -16,12 +15,20 @@ KadenzeAudioPluginAudioProcessorEditor::KadenzeAudioPluginAudioProcessorEditor (
 {
     setSize (MAIN_PANEL_WIDTH, MAIN_PANEL_HEIGHT);
     
+    mLookAndFeel = std::make_unique<KAPLookAndFeel> ();
+    setLookAndFeel (mLookAndFeel.get());    // set Look And Feel for the editor and its children
+    // TODO: is this really needed?
+    LookAndFeel::setDefaultLookAndFeel (mLookAndFeel.get());    // set default for all components
+    
     mMainPanel = std::make_unique<KAPMainPanel> (&audioProcessor);
     addAndMakeVisible (mMainPanel.get());
 }
 
 KadenzeAudioPluginAudioProcessorEditor::~KadenzeAudioPluginAudioProcessorEditor()
 {
+    // Release the look and feel
+    setLookAndFeel (nullptr);
+    LookAndFeel::setDefaultLookAndFeel (nullptr);
 }
 
 //==============================================================================
