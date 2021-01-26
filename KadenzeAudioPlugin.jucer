@@ -71,6 +71,10 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="SYJ9T5" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
+    <GROUP id="{50661A6B-94AA-2449-36FB-1DE5138D33DA}" name="Assets">
+      <FILE id="ApFwfw" name="OpenSans-Bold.ttf" compile="0" resource="1"
+            file="Assets/OpenSans-Bold.ttf"/>
+    </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>

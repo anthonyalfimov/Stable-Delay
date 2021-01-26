@@ -46,9 +46,13 @@ namespace KAP
     const static Colour colour6 = Colour (0, 0, 0).withAlpha (0.8f);
     const static Colour colour7 = Colour (125, 125, 125);
     
-    // TODO: embed the font file as a binary into the plugis for cross-compatibility
-    // This accesses a system font:
-    const static Font font1 = Font ("Helvetica Neue", 12.0f, Font::bold);
-    const static Font font2 = Font ("Helvetica Neue", 22.0f, Font::bold);
-    const static Font font3 = Font ("Helvetica Neue", 48.0f, Font::bold);
+    // Font
+    const static Typeface::Ptr primaryFont
+        = Typeface::createSystemTypefaceFor (BinaryData::OpenSansBold_ttf,
+                                             BinaryData::OpenSansBold_ttfSize);
+
+    // Styles
+    const static Font font1 = Font (primaryFont).withPointHeight (11.0f);
+    const static Font font2 = Font (primaryFont).withPointHeight (22.0f);
+    const static Font font3 = Font (primaryFont).withPointHeight (48.0f);
 }
