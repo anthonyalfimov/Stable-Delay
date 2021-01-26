@@ -29,5 +29,5 @@ void KAPPanelBase::paint (Graphics& g)
     g.setColour (Colours::black);
     g.drawRoundedRectangle (0, 0, getWidth(), getHeight(), 4.0f, 2.0f);
     
-    g.drawFittedText (getName(), getLocalBounds().withTrimmedTop (10), Justification::centredTop, 1);
+    // g.drawFittedText (getName(), getLocalBounds().withTrimmedTop (10), Justification::centredTop, 1);
 }
