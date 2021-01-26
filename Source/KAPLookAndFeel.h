@@ -47,7 +47,7 @@ public:
                                bool shouldDrawButtonAsHighlighted,
                                bool shouldDrawButtonAsDown) override
     {
-        Colour fillColour;  // FIXME: shouldn't we initialise it to the non-highlighted, non-down colour?
+        Colour fillColour = KAP::colour2;
         
         if (shouldDrawButtonAsDown)
         {
