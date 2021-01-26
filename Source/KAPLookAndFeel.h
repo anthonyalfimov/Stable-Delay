@@ -115,9 +115,10 @@ public:
         arrow.lineTo (arrowBounds.getCentreX(), arrowBounds.getCentreY() + 2.0f);
         arrow.lineTo (arrowBounds.getRight() - 3.0f, arrowBounds.getCentreY() - 2.0f);
         
-        // TODO: what does the conditional here achieve? Comment or fix
+        // We're not disabling the comboBox anywhere, so it makes more sense to use different
+        //  shades when popup is active, rather than on enabled / disabled
         const Colour arrowColour = comboBox.findColour (ComboBox::arrowColourId)
-                                            .withAlpha (comboBox.isEnabled() ? 0.9f : 0.2f);
+                                            .withAlpha (comboBox.isPopupActive() ? 0.9f : 0.5f);
         g.setColour (arrowColour);
         g.strokePath (arrow, PathStrokeType (2.0f));
     }
