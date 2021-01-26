@@ -17,7 +17,6 @@ KadenzeAudioPluginAudioProcessorEditor::KadenzeAudioPluginAudioProcessorEditor (
     
     mLookAndFeel = std::make_unique<KAPLookAndFeel> ();
     setLookAndFeel (mLookAndFeel.get());    // set Look And Feel for the editor and its children
-    // TODO: is this really needed?
     LookAndFeel::setDefaultLookAndFeel (mLookAndFeel.get());    // set default for all components
     
     mMainPanel = std::make_unique<KAPMainPanel> (&audioProcessor);
