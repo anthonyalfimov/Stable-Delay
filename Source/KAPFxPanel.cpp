@@ -22,7 +22,6 @@ KAPFxPanel::KAPFxPanel (KadenzeAudioPluginAudioProcessor* inProcessor)
     setFxPanelStyle (selectedStyle);
 }
 
-
 KAPFxPanel::~KAPFxPanel()
 {
     
@@ -32,8 +31,9 @@ void KAPFxPanel::paint (Graphics& g)
 {
     KAPPanelBase::paint (g);
     
-    g.setColour (Colours::darkgrey);
-    g.drawFittedText (getName(), getLocalBounds().withTrimmedTop (10), Justification::centredTop, 1);
+    g.setColour (KAP::colour5);
+    g.setFont (KAP::font3);
+    g.drawText (getName(), getLocalBounds().withHeight (80), Justification::centred);
     
     for (auto slider : mSliders)
         paintComponentLabel (g, slider);
@@ -51,7 +51,7 @@ void KAPFxPanel::setFxPanelStyle (KAPFxPanelStyle inStyle)
     switch (mStyle)
     {
         case kKAPFxPanelStyle_Delay:
-            setName ("DelayPanel");
+            setName ("DELAY");
             
             mSliders.add (new KAPParameterSlider (mProcessor->parameters,
                                                   KAPParameterID[kParameter_DelayTime],
@@ -66,7 +66,7 @@ void KAPFxPanel::setFxPanelStyle (KAPFxPanelStyle inStyle)
                                                   KAPParameterLabel[kParameter_DelayWetDry]));
             break;
         case kKAPFxPanelStyle_Chorus:
-            setName ("ChorusPanel");
+            setName ("CHORUS");
             
             mSliders.add (new KAPParameterSlider (mProcessor->parameters,
                                                   KAPParameterID[kParameter_ModulationRate],
