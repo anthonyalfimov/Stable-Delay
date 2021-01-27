@@ -106,11 +106,10 @@ public:
                        int buttonX, int buttonY, int buttonW, int buttonH,
                        ComboBox& comboBox) override
     {
-        const float cornerSize = 3.0f;
         const Rectangle<float> comboBoxBounds (0.0f, 0.0f, width, height);
         
         g.setColour (KAP::colour3);
-        g.fillRoundedRectangle (comboBoxBounds, cornerSize);
+        g.fillRoundedRectangle (comboBoxBounds, KAP::defaultCornerSize);
         
         const Rectangle<float> arrowBounds (comboBoxBounds.withWidth (20.0f).withRightX (width - 10.0f));
         

@@ -47,8 +47,8 @@ const static String KAPParameterLabel[kParameter_TotalNumParameters]
     "Dry Wet",
     "Type",
     "Output Gain",
-    "Modulation Rate",
-    "Modulation Depth"
+    "Mod Rate",
+    "Mod Depth"
 };
 
 const static float KAPParameterDefaultValue[kParameter_TotalNumParameters]

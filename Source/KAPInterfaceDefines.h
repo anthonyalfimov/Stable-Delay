@@ -36,6 +36,9 @@
 
 namespace KAP
 {
+    // Standard rounded corner radius
+    const static float defaultCornerSize = 3.0f;
+    
     // TODO: descriptive colour names
     // const is static by default, explicitely state it to highlight intent
     const static Colour colour1 = Colour (105, 105, 105);
