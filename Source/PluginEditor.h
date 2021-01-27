@@ -30,6 +30,9 @@ private:
     std::unique_ptr<KAPMainPanel> mMainPanel;
     std::unique_ptr<KAPLookAndFeel> mLookAndFeel;
     
+    // TODO: why are we drawing it here and not in the MainPanel?
+    Image mBackgroundImage;
+    
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     KadenzeAudioPluginAudioProcessor& audioProcessor;

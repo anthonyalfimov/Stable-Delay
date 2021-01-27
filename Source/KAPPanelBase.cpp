@@ -23,11 +23,5 @@ KAPPanelBase::~KAPPanelBase()
 
 void KAPPanelBase::paint (Graphics& g)
 {
-    g.setColour (Colours::black);
-    g.fillAll();
-    
-    g.setColour (Colours::whitesmoke);
-    g.fillRoundedRectangle (getLocalBounds().toFloat().reduced (1.0f), 4.0f);
-    
-    // g.drawFittedText (getName(), getLocalBounds().withTrimmedTop (10), Justification::centredTop, 1);
+
 }
