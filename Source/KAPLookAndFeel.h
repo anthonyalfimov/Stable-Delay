@@ -56,11 +56,11 @@ public:
         
         if (shouldDrawButtonAsDown)
         {
-            fillColour = KAP::colour6;
+            fillColour = KAP::colour5;
         }
         else if (shouldDrawButtonAsHighlighted)
         {
-            fillColour = KAP::colour5;
+            fillColour = KAP::colour6;
         }
         
         const float cornerSize = 6.0f;
