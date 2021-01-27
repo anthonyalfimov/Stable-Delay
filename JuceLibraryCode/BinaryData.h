@@ -8,11 +8,17 @@
 
 namespace BinaryData
 {
+    extern const char*   kadenze_bg_png;
+    const int            kadenze_bg_pngSize = 124228;
+
+    extern const char*   kadenze_knob_png;
+    const int            kadenze_knob_pngSize = 56910;
+
     extern const char*   OpenSansBold_ttf;
     const int            OpenSansBold_ttfSize = 224592;
 
     // Number of elements in the namedResourceList and originalFileNames arrays.
-    const int namedResourceListSize = 1;
+    const int namedResourceListSize = 3;
 
     // Points to the start of a list of resource names.
     extern const char* namedResourceList[];
