@@ -138,7 +138,7 @@ public:
         const int diameter = jmin (width, height);
         auto bounds = Rectangle<int> (x, y, width, height).withSizeKeepingCentre (diameter, diameter);
         
-        g.setOpacity (1.0f); // Make sure the image is drawn opaque
+        g.setOpacity (1.0f);    // Make sure the image is drawn opaque
         g.drawImage (mSliderImage,  // Image
                      bounds.getX(), // Destination X
                      bounds.getY(), // Destination Y
