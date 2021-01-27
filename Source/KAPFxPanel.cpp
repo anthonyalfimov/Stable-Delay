@@ -32,6 +32,7 @@ void KAPFxPanel::paint (Graphics& g)
 {
     KAPPanelBase::paint (g);
     
+    g.setColour (Colours::darkgrey);
     g.drawFittedText (getName(), getLocalBounds().withTrimmedTop (10), Justification::centredTop, 1);
     
     for (auto slider : mSliders)
