@@ -23,6 +23,7 @@ inline void paintComponentLabel (Graphics& g, Component* inComponent)
     auto textBounds = inComponent->getBounds().withSizeKeepingCentre (width, height)
                                               .withY (yPosition);
     
+    // TODO: make the label colour change when hovering over "parent" component
     g.setColour (KAP::colour3);
     g.fillRoundedRectangle (textBounds.toFloat(), KAP::defaultCornerSize);
     
