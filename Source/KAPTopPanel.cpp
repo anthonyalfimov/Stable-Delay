@@ -63,9 +63,11 @@ KAPTopPanel::~KAPTopPanel()
 void KAPTopPanel::paint (Graphics& g)
 {
     KAPPanelBase::paint (g);
-
-//    g.setFont (Font ("Gill Sans", 16.0f, Font::plain));
-//    g.drawFittedText ("KADENZE AUDIO PLUGIN", getBounds().withTrimmedRight (10), Justification::centredRight, 1);
+    
+    g.setFont (KAP::font2);
+    g.setColour (KAP::colour1);
+    g.drawText ("Kadenze Audio Plugin", getLocalBounds().withTrimmedRight (10),
+                Justification::centredRight);
 }
 
 void KAPTopPanel::buttonClicked (Button* buttonThatWasPressed)

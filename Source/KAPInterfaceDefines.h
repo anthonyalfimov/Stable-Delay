@@ -56,6 +56,6 @@ namespace KAP
 
     // Styles
     const static Font font1 = Font (primaryFont).withPointHeight (11.0f);
-    const static Font font2 = Font (primaryFont).withPointHeight (22.0f);
+    const static Font font2 = Font (primaryFont).withPointHeight (18.0f);
     const static Font font3 = Font (primaryFont).withPointHeight (48.0f);
 }
