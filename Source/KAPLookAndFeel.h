@@ -52,15 +52,15 @@ public:
                                bool shouldDrawButtonAsHighlighted,
                                bool shouldDrawButtonAsDown) override
     {
-        Colour fillColour = KAP::colour2;
+        Colour fillColour = KAP::colour3;
         
         if (shouldDrawButtonAsDown)
         {
-            fillColour = KAP::colour5;
+            fillColour = KAP::colour6;
         }
         else if (shouldDrawButtonAsHighlighted)
         {
-            fillColour = KAP::colour3;
+            fillColour = KAP::colour5;
         }
         
         const float cornerSize = 6.0f;
