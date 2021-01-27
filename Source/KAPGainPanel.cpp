@@ -29,13 +29,13 @@ void KAPGainPanel::setParameterID (KAPParameter inParameter)
                                                     KAPParameterID[inParameter],
                                                     KAPParameterLabel[inParameter]);
     
-    const int sliderSize = 54;
+    const int sliderSize = 56;
     
     // TODO: is there a better way to position slider at the center of parent component?
     //    A: there's `centreWithSize()`, as well as the ability to set size and position separately,
     //       and set position relative to parent size. But I haven't found another way to set this
     //       up with a single line where you can modify the bounds freely.
-    mSlider->setBounds (getLocalBounds().withSizeKeepingCentre (sliderSize, sliderSize));
+    mSlider->setBounds (getLocalBounds().withSizeKeepingCentre (sliderSize, sliderSize).withY (25));
     
     addAndMakeVisible (mSlider.get());
 }
