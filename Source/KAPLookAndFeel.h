@@ -108,7 +108,9 @@ public:
     {
         const Rectangle<float> comboBoxBounds (0.0f, 0.0f, width, height);
         
-        g.setColour (KAP::colour3);
+        // TODO: Change highlight condition to mouseOver
+        const Colour comboBoxColour = comboBox.isPopupActive() ? KAP::colour6 : KAP::colour3;
+        g.setColour (comboBoxColour);
         g.fillRoundedRectangle (comboBoxBounds, KAP::defaultCornerSize);
         
         const Rectangle<float> arrowBounds (comboBoxBounds.withWidth (20.0f).withRightX (width - 10.0f));
