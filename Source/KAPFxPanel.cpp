@@ -20,6 +20,8 @@ KAPFxPanel::KAPFxPanel (KadenzeAudioPluginAudioProcessor* inProcessor)
     const KAPFxPanelStyle selectedStyle
         = static_cast<KAPFxPanelStyle> (mProcessor->getParameter (kParameter_DelayType));
     setFxPanelStyle (selectedStyle);
+    
+    setRepaintsOnMouseActivity (true);
 }
 
 KAPFxPanel::~KAPFxPanel()

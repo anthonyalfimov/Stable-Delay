@@ -16,6 +16,8 @@ KAPGainPanel::KAPGainPanel (KadenzeAudioPluginAudioProcessor* inProcessor)
 {
     setSize (GAIN_PANEL_WIDTH, GAIN_PANEL_HEIGHT);
     setName ("GainPanel");
+    
+    setRepaintsOnMouseActivity (true);
 }
 
 KAPGainPanel::~KAPGainPanel()

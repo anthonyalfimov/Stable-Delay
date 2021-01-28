@@ -24,7 +24,8 @@ inline void paintComponentLabel (Graphics& g, Component* inComponent)
                                               .withY (yPosition);
     
     // TODO: make the label colour change when hovering over "parent" component
-    g.setColour (KAP::colour3);
+    const Colour labelBgColour = inComponent->isMouseOver() ? KAP::colour6 : KAP::colour3;
+    g.setColour (labelBgColour);
     g.fillRoundedRectangle (textBounds.toFloat(), KAP::defaultCornerSize);
     
     const String label = inComponent->getName();
