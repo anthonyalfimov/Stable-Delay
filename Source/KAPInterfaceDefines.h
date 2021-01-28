@@ -48,6 +48,7 @@ namespace KAP
     const static Colour colour5 = Colour (105, 105, 105).withAlpha (0.3f);
     const static Colour colour6 = Colour (0, 0, 0).withAlpha (0.8f);
     const static Colour colour7 = Colour (125, 125, 125);
+    const static Colour colour8 = Colour (40, 40, 40);
     
     // Font
     const static Typeface::Ptr primaryFont

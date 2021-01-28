@@ -28,6 +28,7 @@ public:
         setColour (ComboBox::outlineColourId, KAP::colour2);
         setColour (ComboBox::arrowColourId, KAP::colour1);
         setColour (ComboBox::textColourId, KAP::colour1);
+        setColour (PopupMenu::backgroundColourId, KAP::colour8);    // ComboBox popup bg colour
         
         // TextButton colours
         setColour (TextButton::buttonColourId, KAP::colour1);
@@ -73,6 +74,8 @@ public:
     }
     
 //  COMBOBOXES
+    // TODO: Make the popup list transparent, with rounded corners
+    
     Font getLabelFont (Label& label) override
     {
         return KAP::font1;
