@@ -20,8 +20,6 @@ KAPFxPanel::KAPFxPanel (KadenzeAudioPluginAudioProcessor* inProcessor)
     const KAPFxPanelStyle selectedStyle
         = static_cast<KAPFxPanelStyle> (mProcessor->getParameter (kParameter_DelayType));
     setFxPanelStyle (selectedStyle);
-    
-    setRepaintsOnMouseActivity (true);
 }
 
 KAPFxPanel::~KAPFxPanel()
@@ -100,7 +98,16 @@ void KAPFxPanel::setFxPanelStyle (KAPFxPanelStyle inStyle)
                             .translated (2 * sliderSize, 0));
     
     for (auto slider : mSliders)
+    {
         addAndMakeVisible (slider);
+        
+        // TODO: Do we need to unregister when Sliders are destroyed?
+        //       List of listeners is stored in Slider object and destroyed with it - so no?
+        //
+        // Register as mouse listener for Sliders so we can repaint Slider labels when mouse
+        //  enters and exits Slider components
+        slider->addMouseListener (this, false);
+    }
     
     repaint();
 }
@@ -111,4 +118,14 @@ void KAPFxPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
     //       KAPFxPanelStyle <-> index <-> ID correspondense is not ensured!
     auto newStyle = static_cast<KAPFxPanelStyle> (comboBoxThatHasChanged->getSelectedItemIndex());
     setFxPanelStyle (newStyle);
+}
+
+void KAPFxPanel::mouseEnter (const MouseEvent& event)
+{
+    repaint();
+}
+
+void KAPFxPanel::mouseExit (const MouseEvent& event)
+{
+    repaint();
 }

@@ -16,8 +16,6 @@ KAPGainPanel::KAPGainPanel (KadenzeAudioPluginAudioProcessor* inProcessor)
 {
     setSize (GAIN_PANEL_WIDTH, GAIN_PANEL_HEIGHT);
     setName ("GainPanel");
-    
-    setRepaintsOnMouseActivity (true);
 }
 
 KAPGainPanel::~KAPGainPanel()
@@ -43,6 +41,10 @@ void KAPGainPanel::setParameterID (KAPParameter inParameter)
     mSlider->setBounds (getLocalBounds().withSizeKeepingCentre (sliderSize, sliderSize).withY (25));
     
     addAndMakeVisible (mSlider.get());
+    
+    // Register as mouse listener for Sliders so we can repaint Slider labels when mouse
+    //  enters and exits Slider components
+    mSlider->addMouseListener (this, false);
 }
 
 void KAPGainPanel::paint (Graphics& g)
@@ -51,4 +53,14 @@ void KAPGainPanel::paint (Graphics& g)
     
     if (mSlider != nullptr)
         paintComponentLabel (g, mSlider.get());     // only paint label if slider exists
+}
+
+void KAPGainPanel::mouseEnter (const MouseEvent& event)
+{
+    repaint();
+}
+
+void KAPGainPanel::mouseExit (const MouseEvent& event)
+{
+    repaint();
 }
