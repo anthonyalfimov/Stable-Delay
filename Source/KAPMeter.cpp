@@ -40,7 +40,7 @@ void KAPMeter::paint (Graphics& g)
     
     // Find the top Y coordinate of the meter fill, clamping it so it doesn't go negative
     const int ch0FillTop = jmax (0, static_cast<int> (getHeight() - (getHeight() * mCh0Level)));
-    const int ch1FillTop = jmax (0, static_cast<int> (getHeight() - (getHeight() * mCh0Level)));
+    const int ch1FillTop = jmax (0, static_cast<int> (getHeight() - (getHeight() * mCh1Level)));
     
     // Set bounds for meter fill
     ch0Bounds.setTop (ch0FillTop);
