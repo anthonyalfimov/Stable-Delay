@@ -20,6 +20,7 @@ public:
     KAPGainPanel (KadenzeAudioPluginAudioProcessor* inProcessor);
     ~KAPGainPanel();
     
+    // TODO: Consider setting parameter ID for GainPanel in its constructor
     void setParameterID (KAPParameter inParameter);
     
     void paint (Graphics& g) override;
