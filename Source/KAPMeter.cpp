@@ -29,13 +29,14 @@ void KAPMeter::paint (Graphics& g)
     
     // Split component width into 3 equal parts: left meter, gap, right meter
     const int meterWidth = getWidth() / 3;
+    // Define bounds as <int> for cleaner edges
     Rectangle<int> ch0Bounds = getLocalBounds().withWidth (meterWidth);
     Rectangle<int> ch1Bounds = ch0Bounds.withRightX (getWidth());
     
     // Fill meter background
     g.setColour (KAP::colour6);
-    g.fillRect (ch0Bounds);
-    g.fillRect (ch1Bounds);
+    g.fillRoundedRectangle (ch0Bounds.toFloat(), KAP::defaultCornerSize);
+    g.fillRoundedRectangle (ch1Bounds.toFloat(), KAP::defaultCornerSize);
     
     // Find the top Y coordinate of the meter fill, clamping it so it doesn't go negative
     const int ch0FillTop = jmax (0, static_cast<int> (getHeight() - (getHeight() * mCh0Level)));
@@ -47,8 +48,8 @@ void KAPMeter::paint (Graphics& g)
     
     // Fill meter fill
     g.setColour (KAP::colour7);
-    g.fillRect (ch0Bounds);
-    g.fillRect (ch1Bounds);
+    g.fillRoundedRectangle (ch0Bounds.reduced (1).toFloat(), KAP::defaultCornerSize);
+    g.fillRoundedRectangle (ch1Bounds.reduced (1).toFloat(), KAP::defaultCornerSize);
 }
 
 void KAPMeter::timerCallback()
