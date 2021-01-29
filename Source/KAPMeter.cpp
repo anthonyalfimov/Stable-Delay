@@ -48,8 +48,8 @@ void KAPMeter::paint (Graphics& g)
     
     // Fill meter fill
     g.setColour (KAP::colour7);
-    g.fillRoundedRectangle (ch0Bounds.reduced (1).toFloat(), KAP::defaultCornerSize);
-    g.fillRoundedRectangle (ch1Bounds.reduced (1).toFloat(), KAP::defaultCornerSize);
+    g.fillRoundedRectangle (ch0Bounds.reduced (2).toFloat(), KAP::defaultCornerSize);
+    g.fillRoundedRectangle (ch1Bounds.reduced (2).toFloat(), KAP::defaultCornerSize);
 }
 
 void KAPMeter::timerCallback()
