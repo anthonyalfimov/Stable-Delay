@@ -36,6 +36,9 @@
 
 namespace KAP
 {
+    // Labels
+    const static int labelHeight = 20;
+    
     // Standard rounded corner radius
     const static float defaultCornerSize = 3.0f;
     
