@@ -31,6 +31,10 @@
       <FILE id="j10A24" name="KAPParameterSlider.h" compile="0" resource="0"
             file="Source/KAPParameterSlider.h"/>
     </GROUP>
+    <GROUP id="{89B33AAD-A27F-7960-6038-74F7F39F53E0}" name="Components">
+      <FILE id="uEiEFY" name="KAPMeter.cpp" compile="1" resource="0" file="Source/KAPMeter.cpp"/>
+      <FILE id="KsheeB" name="KAPMeter.h" compile="0" resource="0" file="Source/KAPMeter.h"/>
+    </GROUP>
     <GROUP id="{B55B2190-C0A4-3B41-2D50-0A81E5CC3764}" name="Panels">
       <FILE id="CLsfpr" name="KAPPanelBase.cpp" compile="1" resource="0"
             file="Source/KAPPanelBase.cpp"/>
