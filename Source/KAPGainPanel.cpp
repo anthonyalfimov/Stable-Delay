@@ -25,6 +25,7 @@ KAPGainPanel::~KAPGainPanel()
 
 void KAPGainPanel::setParameterID (KAPParameter inParameter)
 {
+//  CREATE SLIDER
     mSlider = std::make_unique<KAPParameterSlider> (mProcessor->parameters,
                                                     KAPParameterID[inParameter],
                                                     KAPParameterLabel[inParameter]);
@@ -45,6 +46,20 @@ void KAPGainPanel::setParameterID (KAPParameter inParameter)
     // Register as mouse listener for Sliders so we can repaint Slider labels when mouse
     //  enters and exits Slider components
     mSlider->addMouseListener (this, false);
+    
+//  CREATE METER
+    mMeter = std::make_unique<KAPMeter> (inParameter, mProcessor);
+    
+    // Define meter bounds
+    const int meterWidth = sliderSize;
+    const int meterGap = 20;
+    Rectangle<int> meterBounds = mSlider->getBounds().withSizeKeepingCentre (meterWidth, 0);
+    meterBounds.setTop (mSlider->getBottom() + KAP::labelHeight + meterGap);
+    meterBounds.setBottom (getHeight() - meterGap);
+    
+    mMeter->setBounds (meterBounds);
+    
+    addAndMakeVisible (mMeter.get());
 }
 
 void KAPGainPanel::paint (Graphics& g)

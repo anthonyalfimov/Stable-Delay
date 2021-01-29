@@ -13,6 +13,7 @@
 #include "KAPPanelBase.h"
 #include "KAPParameters.h"
 #include "KAPParameterSlider.h"
+#include "KAPMeter.h"
 
 class KAPGainPanel  : public KAPPanelBase
 {
@@ -30,6 +31,7 @@ public:
     
 private:
     std::unique_ptr<KAPParameterSlider> mSlider;
+    std::unique_ptr<KAPMeter> mMeter;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (KAPGainPanel)
 };
