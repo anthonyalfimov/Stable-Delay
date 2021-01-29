@@ -9,10 +9,10 @@
 */
 
 #include "KAPMeter.h"
-#include "KAPParameters.h"
 #include "KAPAudioHelpers.h"
+#include "KAPInterfaceDefines.h"
 
-KAPMeter::KAPMeter (int inParameter, KadenzeAudioPluginAudioProcessor* inProcessor)
+KAPMeter::KAPMeter (KAPParameter inParameter, KadenzeAudioPluginAudioProcessor* inProcessor)
     : mParameter (inParameter), mProcessor (inProcessor)
 {
     startTimerHz (15);  // start the timer once we know which paremeter we're metering
@@ -68,6 +68,9 @@ void KAPMeter::timerCallback()
             // TODO: Fetch actual output level
             updatedCh0Level = 0.35f;
             updatedCh1Level = 0.3f;
+            break;
+        
+        default:
             break;
     }
     

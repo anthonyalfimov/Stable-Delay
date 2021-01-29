@@ -12,20 +12,20 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
-#include "KAPInterfaceDefines.h"
+#include "KAPParameters.h"
 
 class KAPMeter  : public Component,
                   public Timer
 {
 public:
-    KAPMeter (int inParameter, KadenzeAudioPluginAudioProcessor* inProcessor);
+    KAPMeter (KAPParameter inParameter, KadenzeAudioPluginAudioProcessor* inProcessor);
     ~KAPMeter();
     
     void paint (Graphics& g) override;
     void timerCallback() override;
         
 private:
-    const int mParameter;
+    const KAPParameter mParameter;
     
     // TODO: Programmatically handle channels to allow for different channel configurations
     //       E.g. mono, mono->stereo
