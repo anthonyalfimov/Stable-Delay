@@ -38,8 +38,8 @@ void KAPGain::process (const float* inAudio,
         outAudio[i] = inAudio[i] * gainMapped;
     
     // TODO: We're already smoothing audio level in KAPMeter. Do we need to smooth it twice?
-    // TODO: This metering depends on the buffer size, sample rate. Implement proper metering
-    //  Here we are not really averaging, and we can miss peaks. Look up real metering algorithms
+    // TODO: This metering depends on the buffer size, sample rate. Look up real metering algorithms
+    //  Here we are not really averaging, and we can miss peaks
     float absSampleValue = fabs (outAudio[0]);
     mLevelSmoothed = mLevelSmoothed - KAP::meterSmoothingCoef * (mLevelSmoothed - absSampleValue);
     //mLevelSmoothed = absSampleValue;
