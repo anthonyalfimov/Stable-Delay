@@ -43,6 +43,7 @@ void KAPMeter::paint (Graphics& g)
     g.fillRoundedRectangle (ch1Bounds.toFloat(), KAP::defaultCornerSize);
     
     // Find the top Y coordinate of the meter fill, clamping it so it doesn't go negative
+    // If mCh0/1Level is negative, we move the Top of the meter below the Bottom, making it height 0
     const int ch0FillTop = jmax (0, static_cast<int> (getHeight() - (getHeight() * mCh0Level)));
     const int ch1FillTop = jmax (0, static_cast<int> (getHeight() - (getHeight() * mCh1Level)));
     
@@ -77,6 +78,7 @@ void KAPMeter::timerCallback()
             break;
     }
     
+    // TODO: We're already smoothing the levels in KAPGain. Do we need to smooth it twice?
     // Immidiately update Channel Level if new Updated Level is higher than the stored value
     if (updatedCh0Level > mCh0Level)
     {
