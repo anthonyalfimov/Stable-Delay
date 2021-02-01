@@ -12,6 +12,8 @@
 #include "KAPAudioHelpers.h"
 #include "KAPInterfaceDefines.h"
 
+// FIXME: If minMeterDbLevel is smaller than 96,
+
 KAPMeter::KAPMeter (KAPParameter inParameter, KadenzeAudioPluginAudioProcessor* inProcessor)
     : mParameter (inParameter), mProcessor (inProcessor)
 {
@@ -26,6 +28,8 @@ KAPMeter::~KAPMeter()
 void KAPMeter::paint (Graphics& g)
 {
     // TODO: Programmatically draw meters for the given number of channels (at least 1 or 2)
+    // TODO: Add colour to the meters
+    // TODO: Add clipping indicators
     
     // Split component width into 3 equal parts: left meter, gap, right meter
     const int meterWidth = getWidth() / 3;
@@ -60,15 +64,13 @@ void KAPMeter::timerCallback()
     switch (mParameter)
     {
         case kParameter_InputGain:
-            // TODO: Fetch actual input level
-            updatedCh0Level = 0.75f;
-            updatedCh1Level = 0.7f;
+            updatedCh0Level = mProcessor->getInputMeterLevel (0);
+            updatedCh1Level = mProcessor->getInputMeterLevel (1);
             break;
     
         case kParameter_OutputGain:
-            // TODO: Fetch actual output level
-            updatedCh0Level = 0.35f;
-            updatedCh1Level = 0.3f;
+            updatedCh0Level = mProcessor->getOutputMeterLevel (0);
+            updatedCh1Level = mProcessor->getOutputMeterLevel (1);
             break;
         
         default:
@@ -97,12 +99,16 @@ void KAPMeter::timerCallback()
     // TODO: If we want no denormals there should be a better JUCE way to achieve this
     //       E.g. the Scoped NoDenormals object
     // TODO: If we want to ignore small values, the threshold can be higher
+    //  The threshold should then work well with the lowest displayed meter level - minMeterDbLevel
     
     mCh0Level = KAP::denormalise (mCh0Level);
     mCh1Level = KAP::denormalise (mCh1Level);
     
-    // TODO: What is the min value threshold when the meter becomes practically invisible?
-    // TODO: We could use here some approximate comparison function here
+    // TODO: Meter value threshold should relate with minMeterDbLevel and "floor" constant
+   
+    // FIXME: When minMeterDbLevel is higher than 96, level becomes negative and meter gets "stuck"
+    // Probably level becomes negative too quickly so that the meter stops being repainted
+    // Probalem actually gets fixed when forcing a repaint by hovering over a knob
     
     // Repaint only if values are worth painting (non-zero)
     if (mCh0Level > 0.0f && mCh1Level > 0.0f)

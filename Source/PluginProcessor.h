@@ -59,6 +59,10 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
+    //==============================================================================
+    float getInputMeterLevel (int inChannel) const;
+    float getOutputMeterLevel (int inChannel) const;
+    
     /**
      This class contains a ValueTree that is used to manage an AudioProcessor's entire state.
      It has its own internal class of parameter object that is linked to values within its ValueTree,

@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "KAPGain.h"
+#include "KAPAudioHelpers.h"
 
 // TODO: DSP module base class
 
@@ -35,5 +36,17 @@ void KAPGain::process (const float* inAudio,
     
     for (int i = 0; i < inNumSamplesToRender; ++i)
         outAudio[i] = inAudio[i] * gainMapped;
+    
+    // TODO: We're already smoothing audio level in KAPMeter. Do we need to smooth it twice?
+    // TODO: This metering depends on the buffer size, sample rate. Implement proper metering
+    //  Here we are not really averaging, and we can miss peaks. Look up real metering algorithms
+    float absSampleValue = fabs (outAudio[0]);
+    mLevelSmoothed = mLevelSmoothed - KAP::meterSmoothingCoef * (mLevelSmoothed - absSampleValue);
+    //mLevelSmoothed = absSampleValue;
+}
+
+float KAPGain::getMeterLevel() const
+{
+    return KAP::remappedMeterLevel (mLevelSmoothed);
 }
 

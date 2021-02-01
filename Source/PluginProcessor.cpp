@@ -260,6 +260,16 @@ void KadenzeAudioPluginAudioProcessor::setStateInformation (const void* data, in
     }
 }
 
+float KadenzeAudioPluginAudioProcessor::getInputMeterLevel (int inChannel) const
+{
+    return mInputGain[inChannel]->getMeterLevel();
+}
+
+float KadenzeAudioPluginAudioProcessor::getOutputMeterLevel (int inChannel) const
+{
+    return mOutputGain[inChannel]->getMeterLevel();
+}
+
 void KadenzeAudioPluginAudioProcessor::initializeParameters()
 {
     // TODO: using deprecated method of parameter creation! Update to modern JUCE
