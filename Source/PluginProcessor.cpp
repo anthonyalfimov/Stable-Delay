@@ -17,6 +17,7 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
 {
     // TODO: NormalisableRange takes care of parameter range mapping, why map in the processor?
     // TODO: Implement labels using JUCE's Label class
+    // TODO: (?) Change the type of the Delay Type parameter to eliminate the need for casts
     
     AudioProcessorValueTreeState::ParameterLayout layout;
 
