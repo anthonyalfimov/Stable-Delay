@@ -16,9 +16,10 @@ KAPFxPanel::KAPFxPanel (KadenzeAudioPluginAudioProcessor* inProcessor)
     : KAPPanelBase (inProcessor)
 {
     setSize (FX_PANEL_WIDTH, FX_PANEL_HEIGHT);
+    auto& parameters = mProcessor->getParameters();
     // TODO: check whether this works on Windows!
     const KAPFxPanelStyle selectedStyle
-        = static_cast<KAPFxPanelStyle> (mProcessor->getParameter (kParameter_DelayType));
+        = static_cast<KAPFxPanelStyle> (parameters[kParameter_DelayType]->getValue());
     setFxPanelStyle (selectedStyle);
 }
 

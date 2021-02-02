@@ -27,7 +27,9 @@ KAPCenterPanelMenuBar::KAPCenterPanelMenuBar (KadenzeAudioPluginAudioProcessor* 
     // NB: IDs are not the same as indices, and IDs must start with 1
     mFxTypeComboBox->addItem ("DELAY", 1);
     mFxTypeComboBox->addItem ("CHORUS", 2);
-    const int selectedItemIndex = static_cast<int> (mProcessor->getParameter (kParameter_DelayType));
+    auto& parameters = mProcessor->getParameters();
+    // getUnchecked() is faster, but doesn't check the passed index. This is UI, so why not?
+    const int selectedItemIndex = static_cast<int> (parameters[kParameter_DelayType]->getValue());
     mFxTypeComboBox->setSelectedItemIndex (selectedItemIndex, dontSendNotification);
     addAndMakeVisible (mFxTypeComboBox.get());
 }
