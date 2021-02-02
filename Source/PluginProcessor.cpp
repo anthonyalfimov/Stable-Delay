@@ -202,6 +202,7 @@ void KadenzeAudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& b
         */
         // NB: Calling this when mGain[] unique_ptrs are not initialised is UB!
         // TODO: add smoothing for all parameters
+        // TODO: is this the proper way of using modern JUCE parameter handling?
         // TODO: consider using std::atomic<float> for .process() functions of DSP modules!
         float inputGain = *(parameters.getRawParameterValue (KAPParameterID[kParameter_InputGain]));
         mInputGain[channel]->process (channelData,              // inAudio
