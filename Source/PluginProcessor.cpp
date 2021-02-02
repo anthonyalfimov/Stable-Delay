@@ -10,6 +10,27 @@
 #include "PluginEditor.h"
 #include "KAPParameters.h"
 
+// TODO: Is there a better location for this function? Parameter.h, perhaps?
+//==============================================================================
+// This creates the plugin parameter layout
+AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
+{
+    // TODO: NormalisableRange takes care of parameter range mapping, why map in the processor?
+    // TODO: Implement labels using JUCE's Label class
+    
+    AudioProcessorValueTreeState::ParameterLayout layout;
+
+    for (int i = 0; i < kParameter_TotalNumParameters; ++i)
+    {
+        layout.add (std::make_unique<AudioParameterFloat> (KAPParameterID[i],
+                                                           KAPParameterLabel[i],
+                                                           NormalisableRange<float> (0.0f, 1.0f),
+                                                           KAPParameterDefaultValue[i]));
+    }
+    
+    return layout;
+}
+
 //==============================================================================
 KadenzeAudioPluginAudioProcessor::KadenzeAudioPluginAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -22,12 +43,13 @@ KadenzeAudioPluginAudioProcessor::KadenzeAudioPluginAudioProcessor()
                      #endif
                        ),
     // TODO: initialising inside #ifndef - source of potential problems?
-    parameters (*this /** reference to processor */,
-                nullptr /** null pointer to undoManager (optional) */)
+    parameters (*this,                      // reference to processor
+                nullptr,                    // null pointer to undoManager
+                Identifier ("KAP"),         // valueTree indentifier
+                createParameterLayout())    // parameter layout
+                
 #endif
 {
-    // Initialise plugin parameters
-    initializeParameters();
     // Initialise DSP modules
     initializeDSP();
     // Create the preset manager
@@ -174,38 +196,53 @@ void KadenzeAudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& b
         
         // TODO: Using the same buffer to read and write - is there a better approach?
         // TODO: Stereo processing hardcoded. This will fail for >2 channels, will it for mono?
-        // TODO: Magic number is used for gain - make adjustable
         /* Q: Why can't we use one KAP::Gain object for both channels?
            A: If we have parameter smoothing, it must remain continuos between blocks. DSP module
               acquires memory in this case, and this memory needs to be per-channel
         */
-        // TODO: using deprecated method of parameter access! Update to modern JUCE
         // NB: Calling this when mGain[] unique_ptrs are not initialised is UB!
         // TODO: add smoothing for all parameters
-        mInputGain[channel]->process (channelData,                          // inAudio
-                                      getParameter (kParameter_InputGain),  // inGain
-                                      channelData,                          // outAudio
-                                      buffer.getNumSamples());              // inNumSamplesToRender
+        // TODO: consider using std::atomic<float> for .process() functions of DSP modules!
+        float inputGain = *(parameters.getRawParameterValue (KAPParameterID[kParameter_InputGain]));
+        mInputGain[channel]->process (channelData,              // inAudio
+                                      inputGain,                // inGain
+                                      channelData,              // outAudio
+                                      buffer.getNumSamples());  // inNumSamplesToRender
         
-        float rate = (channel == 0) ? 0 : getParameter (kParameter_ModulationRate);
+        float modulationRate = *(parameters
+                                 .getRawParameterValue (KAPParameterID[kParameter_ModulationRate]));
+        if (channel == 0)
+            modulationRate = 0.0f;
         
-        mLfo[channel]->process (rate,                                       // inRate
-                                getParameter (kParameter_ModulationDepth),  // inDepth
-                                buffer.getNumSamples());                    // inNumSamplesToRender
+        float modulationDepth = *(parameters
+                                  .getRawParameterValue (KAPParameterID[kParameter_ModulationDepth]));
         
-        mDelay[channel]->process (channelData,                              // inAudio
-                                  getParameter (kParameter_DelayTime),      // inTime
-                                  getParameter (kParameter_DelayFeedback),  // inFeedback
-                                  getParameter (kParameter_DelayWetDry),    // inWetDry
-                                  getParameter (kParameter_DelayType),      // inType
-                                  mLfo[channel]->getBuffer(),               // inModulationBuffer
-                                  channelData,                              // outAudio
-                                  buffer.getNumSamples());                  // inNumSamplesToRender
+        mLfo[channel]->process (modulationRate,             // inRate
+                                modulationDepth,            // inDepth
+                                buffer.getNumSamples());    // inNumSamplesToRender
         
-        mOutputGain[channel]->process (channelData,                         // inAudio
-                                       getParameter (kParameter_OutputGain),// inGain
-                                       channelData,                         // outAudio
-                                       buffer.getNumSamples());             // inNumSamplesToRender
+        float delayTime = *(parameters.getRawParameterValue (KAPParameterID[kParameter_DelayTime]));
+        float delayFeedback = *(parameters
+                                .getRawParameterValue (KAPParameterID[kParameter_DelayFeedback]));
+        float delayWetDry = *(parameters
+                              .getRawParameterValue (KAPParameterID[kParameter_DelayWetDry]));
+        float delayType = *(parameters.getRawParameterValue (KAPParameterID[kParameter_DelayTime]));
+        
+        mDelay[channel]->process (channelData,                  // inAudio
+                                  delayTime,                    // inTime
+                                  delayFeedback,                // inFeedback
+                                  delayWetDry,                  // inWetDry
+                                  delayType,                    // inType
+                                  mLfo[channel]->getBuffer(),   // inModulationBuffer
+                                  channelData,                  // outAudio
+                                  buffer.getNumSamples());      // inNumSamplesToRender
+        
+        float outputGain = *(parameters.getRawParameterValue (KAPParameterID[kParameter_OutputGain]));
+        
+        mOutputGain[channel]->process (channelData,             // inAudio
+                                       outputGain,              // inGain
+                                       channelData,             // outAudio
+                                       buffer.getNumSamples()); // inNumSamplesToRender
     }
 }
 
@@ -268,26 +305,6 @@ float KadenzeAudioPluginAudioProcessor::getInputMeterLevel (int inChannel) const
 float KadenzeAudioPluginAudioProcessor::getOutputMeterLevel (int inChannel) const
 {
     return mOutputGain[inChannel]->getMeterLevel();
-}
-
-void KadenzeAudioPluginAudioProcessor::initializeParameters()
-{
-    // TODO: using deprecated method of parameter creation! Update to modern JUCE
-    // TODO: NormalisableRange takes care of parameter range mapping, why map in the processor?
-    // TODO: Implement labels using JUCE's Label class
-    for (int i = 0; i < kParameter_TotalNumParameters; ++i)
-        parameters.createAndAddParameter (KAPParameterID[i],
-                                          KAPParameterID[i],
-                                          KAPParameterLabel[i],
-                                          NormalisableRange<float> (0.0f, 1.0f),
-                                          KAPParameterDefaultValue[i],
-                                          nullptr,
-                                          nullptr);
-    
-    // Workaround due to using deprecated AudioProcessorValueTreeState constructor
-    // An identifier used to initialise the internal must be passed!
-    // TODO: remove after switching to the modern JUCE AudioProcessorValueTreeState ctor
-    parameters.state = ValueTree (Identifier ("KAP"));
 }
 
 void KadenzeAudioPluginAudioProcessor::initializeDSP()

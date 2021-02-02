@@ -75,7 +75,6 @@ public:
 
 private:
     // TODO: switch to British spelling
-    void initializeParameters();
     void initializeDSP();
     
     // TODO: hardcoding stereo signal here - independent gain for left and right channels. Refactor!
