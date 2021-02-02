@@ -14,7 +14,6 @@
 #include "KAPParameterSlider.h"
 
 // TODO: Clean up usage of KAPFxPanelStyle, ComboBox index and ID
-// TODO: switch to an enum class, put the enum inside the class
 
 enum KAPFxPanelStyle
 {
