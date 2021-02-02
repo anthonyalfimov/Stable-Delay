@@ -35,7 +35,8 @@ KAPPresetManager::~KAPPresetManager()
 
 void KAPPresetManager::getXmlForPreset (XmlElement* outElement)
 {
-    // TODO: Could we get a tree of parameters (getParameterTree()) instead of the flat list here?
+    // Note: we can't access mProcessor->parameters here because mProcessor is a base class pointer
+    //       and current scope is not aware of KadenzeAudioPluginAudioProcessor
     auto& parameters = mProcessor->getParameters();
     
     for (auto* parameter : parameters)
