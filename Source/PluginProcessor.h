@@ -63,15 +63,16 @@ public:
     float getInputMeterLevel (int inChannel) const;
     float getOutputMeterLevel (int inChannel) const;
     
+    // TODO: Should we return a unique_ptr reference or something like that instead here?
+    KAPPresetManager* getPresetManager() const { return mPresetManager.get(); }
+    
+    // TODO: Do we need this member to be public? What's the common practice?
     /**
      This class contains a ValueTree that is used to manage an AudioProcessor's entire state.
      It has its own internal class of parameter object that is linked to values within its ValueTree,
      and which are each identified by a string ID.
     */
     AudioProcessorValueTreeState parameters;
-    
-    // TODO: should we return a unique_ptr reference or something like that instead here?
-    KAPPresetManager* getPresetManager() const { return mPresetManager.get(); }
 
 private:
     // TODO: switch to British spelling
