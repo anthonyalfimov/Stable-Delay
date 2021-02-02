@@ -35,12 +35,19 @@ KAPPresetManager::~KAPPresetManager()
 
 void KAPPresetManager::getXmlForPreset (XmlElement* outElement)
 {
-    const int numParameters = mProcessor->getNumParameters();
+    // TODO: Could we get a tree of parameters (getParameterTree()) instead of the flat list here?
+    auto& parameters = mProcessor->getParameters();
     
-    for (int param = 0; param < numParameters; ++param)
+    for (auto* parameter : parameters)
     {
-        outElement->setAttribute (mProcessor->getParameterName (param),
-                                  mProcessor->getParameter (param));
+        // Downcast parameter pointer to AudioProcessorParameterWithID ptr to access its ID
+        auto* parameterWithID = dynamic_cast<AudioProcessorParameterWithID*> (parameter);
+        
+        // Handle failed downcast
+        if (parameterWithID == nullptr)
+            break;
+        
+        outElement->setAttribute (parameterWithID->paramID, parameterWithID->getValue());
     }
 }
 
@@ -54,18 +61,25 @@ void KAPPresetManager::loadPresetForXml (XmlElement* inElement)
     // TODO: Why store current preset XML in the manager object?
     mCurrentPresetXml = inElement;
     
+    auto& parameters = mProcessor->getParameters();
     const int numAttributes = mCurrentPresetXml->getNumAttributes();
-    const int numParameters = mProcessor->getNumParameters();
     
     for (int attr = 0; attr < numAttributes; ++attr)
     {
         const String name = mCurrentPresetXml->getAttributeName (attr);
         const float value = mCurrentPresetXml->getDoubleAttribute (name);
         
-        for (int param = 0; param < numParameters; ++param)
+        for (auto* parameter : parameters)
         {
-            if (name == mProcessor->getParameterName (param))
-                mProcessor->setParameterNotifyingHost (param, value);
+            // Downcast parameter pointer to AudioProcessorParameterWithID ptr to access its ID
+            auto* parameterWithID = dynamic_cast<AudioProcessorParameterWithID*> (parameter);
+            
+            // Handle failed downcast
+            if (parameterWithID == nullptr)
+                break;
+            
+            if (name == parameterWithID->paramID)
+                parameterWithID->setValueNotifyingHost (value);
         }
     }
 }
@@ -82,11 +96,11 @@ String KAPPresetManager::getPresetName (int inPresetIndex) const
 
 void KAPPresetManager::createNewPreset()
 {
-    const int numParameters = mProcessor->getNumParameters();
+    auto& parameters = mProcessor->getParameters();
     
     // Reset all parameters to default values
-    for (int param = 0; param < numParameters; ++param)
-        mProcessor->setParameterNotifyingHost (param, mProcessor->getParameterDefaultValue (param));
+    for (auto* parameter : parameters)
+        parameter->setValueNotifyingHost (parameter->getDefaultValue());
     
     mIsCurrentPresetSaved = false;
     mCurrentPresetName = KAP::untitledPresetName;
