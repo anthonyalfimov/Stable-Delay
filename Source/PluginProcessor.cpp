@@ -211,23 +211,24 @@ void ReallyBasicDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
                                       channelData,              // outAudio
                                       buffer.getNumSamples());  // inNumSamplesToRender
         
-        float modulationRate = *(parameters
-                                 .getRawParameterValue (RBDParameterID[kParameter_ModulationRate]));
+        float modulationRate
+            = *(parameters.getRawParameterValue (RBDParameterID[kParameter_ModulationRate]));
+        
         if (channel == 0)
             modulationRate = 0.0f;
         
-        float modulationDepth = *(parameters
-                                  .getRawParameterValue (RBDParameterID[kParameter_ModulationDepth]));
+        float modulationDepth
+            = *(parameters.getRawParameterValue (RBDParameterID[kParameter_ModulationDepth]));
         
         mLfo[channel]->process (modulationRate,             // inRate
                                 modulationDepth,            // inDepth
                                 buffer.getNumSamples());    // inNumSamplesToRender
         
         float delayTime = *(parameters.getRawParameterValue (RBDParameterID[kParameter_DelayTime]));
-        float delayFeedback = *(parameters
-                                .getRawParameterValue (RBDParameterID[kParameter_DelayFeedback]));
-        float delayWetDry = *(parameters
-                              .getRawParameterValue (RBDParameterID[kParameter_DelayWetDry]));
+        float delayFeedback
+            = *(parameters.getRawParameterValue (RBDParameterID[kParameter_DelayFeedback]));
+        float delayWetDry
+            = *(parameters.getRawParameterValue (RBDParameterID[kParameter_DelayWetDry]));
         float delayType = *(parameters.getRawParameterValue (RBDParameterID[kParameter_DelayType]));
         
         mDelay[channel]->process (channelData,                  // inAudio
@@ -239,7 +240,8 @@ void ReallyBasicDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
                                   channelData,                  // outAudio
                                   buffer.getNumSamples());      // inNumSamplesToRender
         
-        float outputGain = *(parameters.getRawParameterValue (RBDParameterID[kParameter_OutputGain]));
+        float outputGain
+            = *(parameters.getRawParameterValue (RBDParameterID[kParameter_OutputGain]));
         
         mOutputGain[channel]->process (channelData,             // inAudio
                                        outputGain,              // inGain
