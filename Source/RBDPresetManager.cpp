@@ -37,6 +37,10 @@ void RBDPresetManager::getXmlForPreset (XmlElement* outElement)
 {
     // Note: we can't access mProcessor->parameters here because mProcessor is a base class pointer
     //       and current scope is not aware of ReallyBasicDelayAudioProcessor
+    
+    // TODO: In Meter we include PluginProcessor.h to have access to ReallyBasicDelayAudioProcessor
+    // TODO: Why shouldn't we go the same here? 
+    
     auto& parameters = mProcessor->getParameters();
     
     for (auto* parameter : parameters)
