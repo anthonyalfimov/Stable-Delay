@@ -228,7 +228,7 @@ void ReallyBasicDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
                                 .getRawParameterValue (RBDParameterID[kParameter_DelayFeedback]));
         float delayWetDry = *(parameters
                               .getRawParameterValue (RBDParameterID[kParameter_DelayWetDry]));
-        float delayType = *(parameters.getRawParameterValue (RBDParameterID[kParameter_DelayTime]));
+        float delayType = *(parameters.getRawParameterValue (RBDParameterID[kParameter_DelayType]));
         
         mDelay[channel]->process (channelData,                  // inAudio
                                   delayTime,                    // inTime
