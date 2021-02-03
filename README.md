@@ -1,8 +1,6 @@
 # Really Basic Delay
 
-This project started as coursework for "Advanced Audio Plugin Development" course by Output:
-
-https://www.kadenze.com/courses/advanced-audio-plugin-development
+This project has started as coursework for the "[Advanced Audio Plugin Development](https://www.kadenze.com/courses/advanced-audio-plugin-development)" course by [Output](https://output.com).
 
 ---
 
