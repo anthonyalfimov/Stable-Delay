@@ -9,22 +9,22 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "KAPGain.h"
-#include "KAPDelay.h"
-#include "KAPLfo.h"
-#include "KAPPresetManager.h"
+#include "RBDGain.h"
+#include "RBDDelay.h"
+#include "RBDLfo.h"
+#include "RBDPresetManager.h"
 
 // TODO: PROJECT LEVEL - check what methods can be made const
 
 //==============================================================================
 /**
 */
-class KadenzeAudioPluginAudioProcessor  : public juce::AudioProcessor
+class ReallyBasicDelayAudioProcessor  : public juce::AudioProcessor
 {
 public:
     //==============================================================================
-    KadenzeAudioPluginAudioProcessor();
-    ~KadenzeAudioPluginAudioProcessor() override;
+    ReallyBasicDelayAudioProcessor();
+    ~ReallyBasicDelayAudioProcessor() override;
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
@@ -64,7 +64,7 @@ public:
     float getOutputMeterLevel (int inChannel) const;
     
     // TODO: Should we return a unique_ptr reference or something like that instead here?
-    KAPPresetManager* getPresetManager() const { return mPresetManager.get(); }
+    RBDPresetManager* getPresetManager() const { return mPresetManager.get(); }
     
     // TODO: Do we need this member to be public? What's the common practice?
     /**
@@ -79,13 +79,13 @@ private:
     void initializeDSP();
     
     // TODO: hardcoding stereo signal here - independent gain for left and right channels. Refactor!
-    std::unique_ptr<KAPGain> mInputGain[2];
-    std::unique_ptr<KAPGain> mOutputGain[2];
-    std::unique_ptr<KAPLfo> mLfo[2];
-    std::unique_ptr<KAPDelay> mDelay[2];
+    std::unique_ptr<RBDGain> mInputGain[2];
+    std::unique_ptr<RBDGain> mOutputGain[2];
+    std::unique_ptr<RBDLfo> mLfo[2];
+    std::unique_ptr<RBDDelay> mDelay[2];
     
-    std::unique_ptr<KAPPresetManager> mPresetManager;
+    std::unique_ptr<RBDPresetManager> mPresetManager;
     
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (KadenzeAudioPluginAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReallyBasicDelayAudioProcessor)
 };

@@ -10,23 +10,23 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-KadenzeAudioPluginAudioProcessorEditor::KadenzeAudioPluginAudioProcessorEditor (KadenzeAudioPluginAudioProcessor& p)
+ReallyBasicDelayAudioProcessorEditor::ReallyBasicDelayAudioProcessorEditor (ReallyBasicDelayAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
     setSize (MAIN_PANEL_WIDTH, MAIN_PANEL_HEIGHT);
     
-    mLookAndFeel = std::make_unique<KAPLookAndFeel> ();
+    mLookAndFeel = std::make_unique<RBDLookAndFeel> ();
     setLookAndFeel (mLookAndFeel.get());    // set Look And Feel for the editor and its children
     LookAndFeel::setDefaultLookAndFeel (mLookAndFeel.get());    // set default for all components
     
-    mMainPanel = std::make_unique<KAPMainPanel> (&audioProcessor);
+    mMainPanel = std::make_unique<RBDMainPanel> (&audioProcessor);
     addAndMakeVisible (mMainPanel.get());
     
     mBackgroundImage = ImageCache::getFromMemory (BinaryData::kadenze_bg_png,
                                                   BinaryData::kadenze_bg_pngSize);
 }
 
-KadenzeAudioPluginAudioProcessorEditor::~KadenzeAudioPluginAudioProcessorEditor()
+ReallyBasicDelayAudioProcessorEditor::~ReallyBasicDelayAudioProcessorEditor()
 {
     // Release the look and feel
     setLookAndFeel (nullptr);
@@ -34,13 +34,13 @@ KadenzeAudioPluginAudioProcessorEditor::~KadenzeAudioPluginAudioProcessorEditor(
 }
 
 //==============================================================================
-void KadenzeAudioPluginAudioProcessorEditor::paint (juce::Graphics& g)
+void ReallyBasicDelayAudioProcessorEditor::paint (juce::Graphics& g)
 {
     g.setOpacity (1.0f);    // Make sure the image is drawn opaque
     g.drawImage (mBackgroundImage, getLocalBounds().toFloat());
 }
 
-void KadenzeAudioPluginAudioProcessorEditor::resized()
+void ReallyBasicDelayAudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
