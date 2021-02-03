@@ -1,6 +1,6 @@
-# Advanced Audio Plugin Development
+# Really Basic Delay
 
-This repository contains coursework for "Advanced Audio Plugin Development" course by Output:
+This project started as coursework for "Advanced Audio Plugin Development" course by Output:
 
 https://www.kadenze.com/courses/advanced-audio-plugin-development
 
