@@ -10,7 +10,7 @@
 
 #include "RBDPresetManager.h"
 
-RBDPresetManager::RBDPresetManager (AudioProcessor* inProcessor)
+PresetManager::PresetManager (AudioProcessor* inProcessor)
     : mProcessor (inProcessor)
 {
     const auto pluginName = mProcessor->getName();
@@ -28,12 +28,12 @@ RBDPresetManager::RBDPresetManager (AudioProcessor* inProcessor)
     // FIXME: preset name / selection is not recalled as a part of plugin's state by the Host
 }
 
-RBDPresetManager::~RBDPresetManager()
+PresetManager::~PresetManager()
 {
     
 }
 
-void RBDPresetManager::getXmlForPreset (XmlElement* outElement)
+void PresetManager::getXmlForPreset (XmlElement* outElement)
 {
     // Note: we can't access mProcessor->parameters here because mProcessor is a base class pointer
     //       and current scope is not aware of ReallyBasicDelayAudioProcessor
@@ -61,7 +61,7 @@ void RBDPresetManager::getXmlForPreset (XmlElement* outElement)
  better reliability and backwards compatibility
 */
 
-void RBDPresetManager::loadPresetForXml (XmlElement* inElement)
+void PresetManager::loadPresetForXml (XmlElement* inElement)
 {
     // TODO: Why store current preset XML in the manager object? Currently, no reason.
     // Usually, these are leftovers from what was planned for the course and they have a reason
@@ -92,17 +92,17 @@ void RBDPresetManager::loadPresetForXml (XmlElement* inElement)
     }
 }
 
-int RBDPresetManager::getNumberOfPresets() const
+int PresetManager::getNumberOfPresets() const
 {
     return mLocalPresets.size();
 }
 
-String RBDPresetManager::getPresetName (int inPresetIndex) const
+String PresetManager::getPresetName (int inPresetIndex) const
 {
     return mLocalPresets[inPresetIndex].getFileNameWithoutExtension();
 }
 
-void RBDPresetManager::createNewPreset()
+void PresetManager::createNewPreset()
 {
     auto& parameters = mProcessor->getParameters();
     
@@ -114,7 +114,7 @@ void RBDPresetManager::createNewPreset()
     mCurrentPresetName = RBD::untitledPresetName;
 }
 
-void RBDPresetManager::savePreset()
+void PresetManager::savePreset()
 {
     /** Should only be called when the preset was already saved to disk via Save As */
     if (! mIsCurrentPresetSaved)
@@ -126,7 +126,7 @@ void RBDPresetManager::savePreset()
     mCurrentlyLoadedPreset.replaceWithData (destinationData.getData(), destinationData.getSize());    
 }
 
-void RBDPresetManager::saveAsPreset (String inPresetName)
+void PresetManager::saveAsPreset (String inPresetName)
 {
     File presetFile (File::addTrailingSeparator (mPresetDirectory) + inPresetName
                      + RBD::presetFileExtention);
@@ -144,7 +144,7 @@ void RBDPresetManager::saveAsPreset (String inPresetName)
     storeLocalPresets();
 }
 
-void RBDPresetManager::loadPreset (int inPresetIndex)
+void PresetManager::loadPreset (int inPresetIndex)
 {
     mCurrentlyLoadedPreset = mLocalPresets[inPresetIndex];
     
@@ -159,17 +159,17 @@ void RBDPresetManager::loadPreset (int inPresetIndex)
     }
 }
 
-bool RBDPresetManager::isCurrentPresetSaved() const
+bool PresetManager::isCurrentPresetSaved() const
 {
     return mIsCurrentPresetSaved;
 }
 
-String RBDPresetManager::getCurrentPresetName() const
+String PresetManager::getCurrentPresetName() const
 {
     return mCurrentPresetName;
 }
 
-void RBDPresetManager::storeLocalPresets()
+void PresetManager::storeLocalPresets()
 {
     // TODO: Should we use `clearQuick()` here to reduce allocations / deallocations?
     mLocalPresets.clear();

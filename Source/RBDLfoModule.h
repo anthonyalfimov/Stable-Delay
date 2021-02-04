@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    RBDLfo.h
+    RBDLfoModule.h
     Created: 5 Jan 2021 4:58:17pm
     Author:  Anthony
 
@@ -12,11 +12,11 @@
 
 #include "RBDAudioConstants.h"
 
-class RBDLfo
+class LfoModule
 {
 public:
-    RBDLfo();
-    ~RBDLfo();
+    LfoModule();
+    ~LfoModule();
     
     void setSampleRate (double inSampleRate);
     void reset();

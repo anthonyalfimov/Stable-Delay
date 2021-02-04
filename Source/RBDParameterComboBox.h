@@ -12,14 +12,14 @@
 
 #include <JuceHeader.h>
 
-class RBDParameterComboBox  : public ComboBox
+class ParameterComboBox  : public ComboBox
 {
 public:
-    RBDParameterComboBox (AudioProcessorValueTreeState& stateToControl, const String& parameterID);
-    ~RBDParameterComboBox();
+    ParameterComboBox (AudioProcessorValueTreeState& stateToControl, const String& parameterID);
+    ~ParameterComboBox();
     
 private:
     std::unique_ptr<AudioProcessorValueTreeState::ComboBoxAttachment> mAttachment;
     
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RBDParameterComboBox)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ParameterComboBox)
 };

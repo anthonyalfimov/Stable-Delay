@@ -10,9 +10,9 @@
 
 #include "RBDParameterSlider.h"
 
-RBDParameterSlider::RBDParameterSlider (AudioProcessorValueTreeState& stateToControl,
-                                        const String& parameterID,
-                                        const String& parameterLabel)
+ParameterSlider::ParameterSlider (AudioProcessorValueTreeState& stateToControl,
+                                  const String& parameterID,
+                                  const String& parameterLabel)
     : Slider (parameterLabel)
 {
     setSliderStyle (SliderStyle::RotaryHorizontalVerticalDrag);
@@ -25,7 +25,7 @@ RBDParameterSlider::RBDParameterSlider (AudioProcessorValueTreeState& stateToCon
                                                                                     *this);
 }
 
-RBDParameterSlider::~RBDParameterSlider()
+ParameterSlider::~ParameterSlider()
 {
     
 }

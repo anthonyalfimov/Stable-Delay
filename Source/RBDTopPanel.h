@@ -10,15 +10,15 @@
 
 #pragma once
 
-#include "RBDPanelBase.h"
+#include "RBDInterfacePanel.h"
 
-class RBDTopPanel  : public RBDPanelBase,
-                     public Button::Listener,
-                     public ComboBox::Listener
+class TopPanel  : public InterfacePanel,
+                  public Button::Listener,
+                  public ComboBox::Listener
 {
 public:
-    RBDTopPanel (ReallyBasicDelayAudioProcessor* inProcessor);
-    ~RBDTopPanel();
+    TopPanel (ReallyBasicDelayAudioProcessor* inProcessor);
+    ~TopPanel();
     
     void paint (Graphics&) override;
     
@@ -33,5 +33,5 @@ private:
     std::unique_ptr<ComboBox> mPresetList;
     std::unique_ptr<TextButton> mNewPreset, mSavePreset, mSaveAsPreset;
     
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RBDTopPanel)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TopPanel)
 };

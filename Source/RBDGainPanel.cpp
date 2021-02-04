@@ -11,22 +11,22 @@
 #include "RBDGainPanel.h"
 #include "RBDInterfaceUtilities.h"
 
-RBDGainPanel::RBDGainPanel (ReallyBasicDelayAudioProcessor* inProcessor)
-    : RBDPanelBase (inProcessor)
+GainPanel::GainPanel (ReallyBasicDelayAudioProcessor* inProcessor)
+    : InterfacePanel (inProcessor)
 {
     setSize (RBD::gainPanelWidth, RBD::gainPanelHeight);
     setName ("GainPanel");
 }
 
-RBDGainPanel::~RBDGainPanel()
+GainPanel::~GainPanel()
 {
     
 }
 
-void RBDGainPanel::setParameterID (RBDParameter inParameter)
+void GainPanel::setParameterID (RBDParameter inParameter)
 {
 //  CREATE SLIDER
-    mSlider = std::make_unique<RBDParameterSlider> (mProcessor->parameters,
+    mSlider = std::make_unique<ParameterSlider> (mProcessor->parameters,
                                                     RBDParameterID[inParameter],
                                                     RBDParameterLabel[inParameter]);
     
@@ -48,7 +48,7 @@ void RBDGainPanel::setParameterID (RBDParameter inParameter)
     mSlider->addMouseListener (this, false);
     
 //  CREATE METER
-    mMeter = std::make_unique<RBDMeter> (inParameter, mProcessor);
+    mMeter = std::make_unique<LevelMeter> (inParameter, mProcessor);
     
     // Define meter bounds
     const int meterWidth = sliderSize;
@@ -62,20 +62,20 @@ void RBDGainPanel::setParameterID (RBDParameter inParameter)
     addAndMakeVisible (mMeter.get());
 }
 
-void RBDGainPanel::paint (Graphics& g)
+void GainPanel::paint (Graphics& g)
 {
-    RBDPanelBase::paint(g);
+    InterfacePanel::paint(g);
     
     if (mSlider != nullptr)
         paintComponentLabel (g, mSlider.get());     // only paint label if slider exists
 }
 
-void RBDGainPanel::mouseEnter (const MouseEvent& event)
+void GainPanel::mouseEnter (const MouseEvent& event)
 {
     repaint();
 }
 
-void RBDGainPanel::mouseExit (const MouseEvent& event)
+void GainPanel::mouseExit (const MouseEvent& event)
 {
     repaint();
 }

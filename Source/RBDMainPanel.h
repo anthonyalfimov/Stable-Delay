@@ -10,22 +10,22 @@
 
 #pragma once
 
-#include "RBDPanelBase.h"
+#include "RBDInterfacePanel.h"
 #include "RBDTopPanel.h"
 #include "RBDGainPanel.h"
 #include "RBDCentrePanel.h"
 
-class RBDMainPanel  : public RBDPanelBase
+class MainPanel  : public InterfacePanel
 {
 public:
-    RBDMainPanel (ReallyBasicDelayAudioProcessor* inProcessor);
-    ~RBDMainPanel();
+    MainPanel (ReallyBasicDelayAudioProcessor* inProcessor);
+    ~MainPanel();
     
 private:
-    std::unique_ptr<RBDTopPanel> mTopPanel;
-    std::unique_ptr<RBDGainPanel> mInputGainPanel;
-    std::unique_ptr<RBDGainPanel> mOutputGainPanel;
-    std::unique_ptr<RBDCentrePanel> mCentrePanel;
+    std::unique_ptr<TopPanel> mTopPanel;
+    std::unique_ptr<GainPanel> mInputGainPanel;
+    std::unique_ptr<GainPanel> mOutputGainPanel;
+    std::unique_ptr<CentrePanel> mCentrePanel;
     
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RBDMainPanel)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainPanel)
 };

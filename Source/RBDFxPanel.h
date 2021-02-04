@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "RBDPanelBase.h"
+#include "RBDInterfacePanel.h"
 #include "RBDParameterSlider.h"
 
 // TODO: Clean up usage of RBDFxPanelStyle, ComboBox index and ID
@@ -22,12 +22,12 @@ enum RBDFxPanelStyle
     kRBDFxPanelStyle_TotalNumStyles
 };
 
-class RBDFxPanel  : public RBDPanelBase,
+class FxPanel  : public InterfacePanel,
                     public ComboBox::Listener
 {
 public:
-    RBDFxPanel (ReallyBasicDelayAudioProcessor* inProcessor);
-    ~RBDFxPanel();
+    FxPanel (ReallyBasicDelayAudioProcessor* inProcessor);
+    ~FxPanel();
     
     void paint (Graphics& g) override;
     
@@ -44,7 +44,7 @@ private:
     // TODO: Why use pointers here? Why not create an array of Slider objects?
     //       Objects of this class are dynamically allocated anyway. Perhaps, polymorphism?
     //       Note: some JUCE examples show Sliders, etc, contained as objects, not ptrs.
-    OwnedArray<RBDParameterSlider> mSliders;
+    OwnedArray<ParameterSlider> mSliders;
     
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RBDFxPanel)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FxPanel)
 };

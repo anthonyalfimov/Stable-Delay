@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    RBDDelay.cpp
+    RBDDelayModule.cpp
     Created: 5 Jan 2021 4:58:02pm
     Author:  Anthony
 
@@ -9,25 +9,25 @@
 */
 
 #include <JuceHeader.h>
-#include "RBDDelay.h"
+#include "RBDDelayModule.h"
 #include "RBDAudioUtilities.h"
 
-RBDDelay::RBDDelay()
+DelayModule::DelayModule()
 {
     reset();
 }
 
-RBDDelay::~RBDDelay()
+DelayModule::~DelayModule()
 {
     
 }
 
-void RBDDelay::setSampleRate (double inSampleRate)
+void DelayModule::setSampleRate (double inSampleRate)
 {
     mSampleRate = inSampleRate;
 }
 
-void RBDDelay::reset()
+void DelayModule::reset()
 {
     // Clear the feedback sample
     mFeedbackSample = 0.0f;
@@ -37,7 +37,7 @@ void RBDDelay::reset()
 
 // FIXME: Delay behaves incorrectly when Time set to 0 - remap min Delay Time or fix behaviour
 
-void RBDDelay::process (const float* inAudio,
+void DelayModule::process (const float* inAudio,
                         float inTime,
                         float inFeedback,
                         float inWetDry,
@@ -85,7 +85,7 @@ void RBDDelay::process (const float* inAudio,
     }
 }
 
-float RBDDelay::getInterpolatedSample (double inDelayTimeInSamples) const
+float DelayModule::getInterpolatedSample (double inDelayTimeInSamples) const
 {
     double readPosition = static_cast<double> (mDelayIndex) - inDelayTimeInSamples;
     

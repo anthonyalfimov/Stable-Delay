@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    RBDLfo.cpp
+    RBDLfoModule.cpp
     Created: 5 Jan 2021 4:58:17pm
     Author:  Anthony
 
@@ -9,24 +9,24 @@
 */
 
 #include <JuceHeader.h>
-#include "RBDLfo.h"
+#include "RBDLfoModule.h"
 
-RBDLfo::RBDLfo()
+LfoModule::LfoModule()
 {
     reset();
 }
 
-RBDLfo::~RBDLfo()
+LfoModule::~LfoModule()
 {
     
 }
 
-void RBDLfo::setSampleRate (double inSampleRate)
+void LfoModule::setSampleRate (double inSampleRate)
 {
     mSampleRate = inSampleRate;
 }
 
-void RBDLfo::reset()
+void LfoModule::reset()
 {
     // Reset the phase
     mPhase = 0.0f;
@@ -34,7 +34,7 @@ void RBDLfo::reset()
     zeromem (mBuffer, sizeof (float) * RBD::bufferSize);
 }
 
-void RBDLfo::process(float inRate,
+void LfoModule::process(float inRate,
                      float inDepth,
                      int inNumSamplesToRender)
 {
@@ -54,7 +54,7 @@ void RBDLfo::process(float inRate,
     }
 }
 
-const float* RBDLfo::getBuffer() const
+const float* LfoModule::getBuffer() const
 {
     return mBuffer;
 }

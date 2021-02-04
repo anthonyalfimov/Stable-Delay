@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    RBDGain.cpp
+    RBDGainModule.cpp
     Created: 5 Jan 2021 4:57:54pm
     Author:  Anthony
 
@@ -9,23 +9,23 @@
 */
 
 #include <JuceHeader.h>
-#include "RBDGain.h"
+#include "RBDGainModule.h"
 #include "RBDAudioConstants.h"
 #include "RBDAudioUtilities.h"
 
 // TODO: DSP module base class
 
-RBDGain::RBDGain()
+GainModule::GainModule()
 {
     
 }
 
-RBDGain::~RBDGain()
+GainModule::~GainModule()
 {
     
 }
 
-void RBDGain::process (const float* inAudio,
+void GainModule::process (const float* inAudio,
                        float inGain,
                        float* outAudio,
                        int inNumSamplesToRender)
@@ -46,7 +46,7 @@ void RBDGain::process (const float* inAudio,
     //mLevelSmoothed = absSampleValue;
 }
 
-float RBDGain::getMeterLevel() const
+float GainModule::getMeterLevel() const
 {
     return RBD::remappedMeterLevel (mLevelSmoothed);
 }

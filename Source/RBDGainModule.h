@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    RBDGain.h
+    RBDGainModule.h
     Created: 5 Jan 2021 4:57:54pm
     Author:  Anthony
 
@@ -10,11 +10,11 @@
 
 #pragma once
 
-class RBDGain
+class GainModule
 {
 public:
-    RBDGain();
-    ~RBDGain();
+    GainModule();
+    ~GainModule();
     
     // TODO: using raw pointers for audio buffers here.. is it safe? is there a better way?
     void process (const float* inAudio,

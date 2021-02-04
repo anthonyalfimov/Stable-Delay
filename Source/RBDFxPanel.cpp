@@ -12,8 +12,8 @@
 #include "RBDParameters.h"
 #include "RBDInterfaceUtilities.h"
 
-RBDFxPanel::RBDFxPanel (ReallyBasicDelayAudioProcessor* inProcessor)
-    : RBDPanelBase (inProcessor)
+FxPanel::FxPanel (ReallyBasicDelayAudioProcessor* inProcessor)
+    : InterfacePanel (inProcessor)
 {
     setSize (RBD::fxPanelWidth, RBD::fxPanelHeight);
     auto& parameters = mProcessor->getParameters();
@@ -23,14 +23,14 @@ RBDFxPanel::RBDFxPanel (ReallyBasicDelayAudioProcessor* inProcessor)
     setFxPanelStyle (selectedStyle);
 }
 
-RBDFxPanel::~RBDFxPanel()
+FxPanel::~FxPanel()
 {
     
 }
 
-void RBDFxPanel::paint (Graphics& g)
+void FxPanel::paint (Graphics& g)
 {
-    RBDPanelBase::paint (g);
+    InterfacePanel::paint (g);
     
     g.setColour (RBD::colour5);
     g.setFont (RBD::font3);
@@ -40,7 +40,7 @@ void RBDFxPanel::paint (Graphics& g)
         paintComponentLabel (g, slider);
 }
     
-void RBDFxPanel::setFxPanelStyle (RBDFxPanelStyle inStyle)
+void FxPanel::setFxPanelStyle (RBDFxPanelStyle inStyle)
 {
     mStyle = inStyle;
     mSliders.clear();
@@ -54,30 +54,30 @@ void RBDFxPanel::setFxPanelStyle (RBDFxPanelStyle inStyle)
         case kRBDFxPanelStyle_Delay:
             setName ("DELAY");
             
-            mSliders.add (new RBDParameterSlider (mProcessor->parameters,
+            mSliders.add (new ParameterSlider (mProcessor->parameters,
                                                   RBDParameterID[kParameter_DelayTime],
                                                   RBDParameterLabel[kParameter_DelayTime]));
             
-            mSliders.add (new RBDParameterSlider (mProcessor->parameters,
+            mSliders.add (new ParameterSlider (mProcessor->parameters,
                                                   RBDParameterID[kParameter_DelayFeedback],
                                                   RBDParameterLabel[kParameter_DelayFeedback]));
             
-            mSliders.add (new RBDParameterSlider (mProcessor->parameters,
+            mSliders.add (new ParameterSlider (mProcessor->parameters,
                                                   RBDParameterID[kParameter_DelayWetDry],
                                                   RBDParameterLabel[kParameter_DelayWetDry]));
             break;
         case kRBDFxPanelStyle_Chorus:
             setName ("CHORUS");
             
-            mSliders.add (new RBDParameterSlider (mProcessor->parameters,
+            mSliders.add (new ParameterSlider (mProcessor->parameters,
                                                   RBDParameterID[kParameter_ModulationRate],
                                                   RBDParameterLabel[kParameter_ModulationRate]));
             
-            mSliders.add (new RBDParameterSlider (mProcessor->parameters,
+            mSliders.add (new ParameterSlider (mProcessor->parameters,
                                                   RBDParameterID[kParameter_ModulationDepth],
                                                   RBDParameterLabel[kParameter_ModulationDepth]));
             
-            mSliders.add (new RBDParameterSlider (mProcessor->parameters,
+            mSliders.add (new ParameterSlider (mProcessor->parameters,
                                                   RBDParameterID[kParameter_DelayWetDry],
                                                   RBDParameterLabel[kParameter_DelayWetDry]));
             break;
@@ -113,7 +113,7 @@ void RBDFxPanel::setFxPanelStyle (RBDFxPanelStyle inStyle)
     repaint();
 }
 
-void RBDFxPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
+void FxPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
 {
     // TODO: Clean up usage of RBDFxPanelStyle, ComboBox index and ID:
     //       RBDFxPanelStyle <-> index <-> ID correspondense is not ensured!
@@ -121,12 +121,12 @@ void RBDFxPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
     setFxPanelStyle (newStyle);
 }
 
-void RBDFxPanel::mouseEnter (const MouseEvent& event)
+void FxPanel::mouseEnter (const MouseEvent& event)
 {
     repaint();
 }
 
-void RBDFxPanel::mouseExit (const MouseEvent& event)
+void FxPanel::mouseExit (const MouseEvent& event)
 {
     repaint();
 }

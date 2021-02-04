@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    RBDLookAndFeel.h
+    RBDPluginLookAndFeel.h
     Created: 25 Jan 2021 7:34:49pm
     Author:  Anthony
 
@@ -13,10 +13,10 @@
 #include <JuceHeader.h>
 #include "RBDInterfaceConstants.h"
 
-class RBDLookAndFeel  : public LookAndFeel_V4
+class PluginLookAndFeel  : public LookAndFeel_V4
 {
 public:
-    RBDLookAndFeel()
+    PluginLookAndFeel()
     {
         // Store image assets
         // TODO: what's the difference from loading the image from file vs embedding it?
@@ -36,7 +36,7 @@ public:
         setColour (TextButton::textColourOffId, RBD::colour1);
     }
     
-    ~RBDLookAndFeel()
+    ~PluginLookAndFeel()
     {
         
     }

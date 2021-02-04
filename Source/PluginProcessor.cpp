@@ -54,7 +54,7 @@ ReallyBasicDelayAudioProcessor::ReallyBasicDelayAudioProcessor()
     // Initialise DSP modules
     initialiseDSP();
     // Create the preset manager
-    mPresetManager = std::make_unique<RBDPresetManager> (this);
+    mPresetManager = std::make_unique<PresetManager> (this);
 }
 
 ReallyBasicDelayAudioProcessor::~ReallyBasicDelayAudioProcessor()
@@ -317,10 +317,10 @@ void ReallyBasicDelayAudioProcessor::initialiseDSP()
     // TODO: hardcoding stereo processing here. Refactor!
     for (int channel = 0; channel < 2; ++channel)
     {
-        mInputGain[channel] = std::make_unique<RBDGain>();
-        mOutputGain[channel] = std::make_unique<RBDGain>();
-        mLfo[channel] = std::make_unique<RBDLfo>();
-        mDelay[channel] = std::make_unique<RBDDelay>();
+        mInputGain[channel] = std::make_unique<GainModule>();
+        mOutputGain[channel] = std::make_unique<GainModule>();
+        mLfo[channel] = std::make_unique<LfoModule>();
+        mDelay[channel] = std::make_unique<DelayModule>();
     }
 }
 

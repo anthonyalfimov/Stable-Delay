@@ -10,16 +10,16 @@
 
 #pragma once
 
-#include "RBDPanelBase.h"
+#include "RBDInterfacePanel.h"
 #include "RBDParameters.h"
 #include "RBDParameterSlider.h"
-#include "RBDMeter.h"
+#include "RBDLevelMeter.h"
 
-class RBDGainPanel  : public RBDPanelBase
+class GainPanel  : public InterfacePanel
 {
 public:
-    RBDGainPanel (ReallyBasicDelayAudioProcessor* inProcessor);
-    ~RBDGainPanel();
+    GainPanel (ReallyBasicDelayAudioProcessor* inProcessor);
+    ~GainPanel();
     
     // TODO: Consider setting parameter ID for GainPanel in its constructor
     void setParameterID (RBDParameter inParameter);
@@ -30,8 +30,8 @@ public:
     void mouseExit (const MouseEvent& event) override;
     
 private:
-    std::unique_ptr<RBDParameterSlider> mSlider;
-    std::unique_ptr<RBDMeter> mMeter;
+    std::unique_ptr<ParameterSlider> mSlider;
+    std::unique_ptr<LevelMeter> mMeter;
     
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RBDGainPanel)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GainPanel)
 };

@@ -11,13 +11,13 @@
 #include "RBDCentrePanelMenuBar.h"
 #include "RBDParameters.h"
 
-RBDCentrePanelMenuBar::RBDCentrePanelMenuBar (ReallyBasicDelayAudioProcessor* inProcessor)
-    : RBDPanelBase (inProcessor)
+CentrePanelMenuBar::CentrePanelMenuBar (ReallyBasicDelayAudioProcessor* inProcessor)
+    : InterfacePanel (inProcessor)
 {
     setSize (RBD::centrePanelMenuBarWidth, RBD::centrePanelMenuBarHeight);
     setName ("CenterMenu");
     
-    mFxTypeComboBox = std::make_unique<RBDParameterComboBox> (mProcessor->parameters,
+    mFxTypeComboBox = std::make_unique<ParameterComboBox> (mProcessor->parameters,
                                                               RBDParameterID[kParameter_DelayType]);
     const int width = 85;
     mFxTypeComboBox->setBounds (getWidth() - width, 0, width, getHeight());
@@ -34,17 +34,17 @@ RBDCentrePanelMenuBar::RBDCentrePanelMenuBar (ReallyBasicDelayAudioProcessor* in
     addAndMakeVisible (mFxTypeComboBox.get());
 }
 
-RBDCentrePanelMenuBar::~RBDCentrePanelMenuBar()
+CentrePanelMenuBar::~CentrePanelMenuBar()
 {
     
 }
 
-void RBDCentrePanelMenuBar::addFxTypeComboBoxListener (ComboBox::Listener* inListener)
+void CentrePanelMenuBar::addFxTypeComboBoxListener (ComboBox::Listener* inListener)
 {
     mFxTypeComboBox->addListener (inListener);
 }
 
-void RBDCentrePanelMenuBar::removeFxTypeComboBoxListener (ComboBox::Listener* inListener)
+void CentrePanelMenuBar::removeFxTypeComboBoxListener (ComboBox::Listener* inListener)
 {
     mFxTypeComboBox->removeListener (inListener);
 }

@@ -12,17 +12,17 @@
 
 #include <JuceHeader.h>
 
-class RBDParameterSlider  : public Slider
+class ParameterSlider  : public Slider
 {
 public:
     // TODO: we should be able to get the parameter label knowing its ID, without needing to pass it
-    RBDParameterSlider (AudioProcessorValueTreeState& stateToControl,
+    ParameterSlider (AudioProcessorValueTreeState& stateToControl,
                         const String& parameterID,
                         const String& parameterLabel);
-    ~RBDParameterSlider();
+    ~ParameterSlider();
     
 private:
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> mAttachment;
     
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RBDParameterSlider)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ParameterSlider)
 };

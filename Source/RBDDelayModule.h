@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    RBDDelay.h
+    RBDDelayModule.h
     Created: 5 Jan 2021 4:58:02pm
     Author:  Anthony
 
@@ -20,11 +20,11 @@ enum RBDDelayType
     kRBDDelayType_Chorus
 };
 
-class RBDDelay
+class DelayModule
 {
 public:
-    RBDDelay();
-    ~RBDDelay();
+    DelayModule();
+    ~DelayModule();
     
     void setSampleRate (double inSampleRate);
     void reset();

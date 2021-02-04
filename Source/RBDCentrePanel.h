@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    RBDCenterPanel.h
+    RBDCentrePanel.h
     Created: 11 Jan 2021 4:32:18pm
     Author:  Anthony
 
@@ -10,19 +10,19 @@
 
 #pragma once
 
-#include "RBDPanelBase.h"
+#include "RBDInterfacePanel.h"
 #include "RBDCentrePanelMenuBar.h"
 #include "RBDFxPanel.h"
 
-class RBDCentrePanel  : public RBDPanelBase
+class CentrePanel  : public InterfacePanel
 {
 public:
-    RBDCentrePanel (ReallyBasicDelayAudioProcessor* inProcessor);
-    ~RBDCentrePanel();
+    CentrePanel (ReallyBasicDelayAudioProcessor* inProcessor);
+    ~CentrePanel();
     
 private:
-    std::unique_ptr<RBDCentrePanelMenuBar> mMenuBar;
-    std::unique_ptr<RBDFxPanel> mFxPanel;
+    std::unique_ptr<CentrePanelMenuBar> mMenuBar;
+    std::unique_ptr<FxPanel> mFxPanel;
     
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RBDCentrePanel)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CentrePanel)
 };

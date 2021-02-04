@@ -9,9 +9,9 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "RBDGain.h"
-#include "RBDDelay.h"
-#include "RBDLfo.h"
+#include "RBDGainModule.h"
+#include "RBDDelayModule.h"
+#include "RBDLfoModule.h"
 #include "RBDPresetManager.h"
 
 // TODO: PROJECT LEVEL - check what methods can be made const
@@ -64,7 +64,7 @@ public:
     float getOutputMeterLevel (int inChannel) const;
     
     // TODO: Should we return a unique_ptr reference or something like that instead here?
-    RBDPresetManager* getPresetManager() const { return mPresetManager.get(); }
+    PresetManager* getPresetManager() const { return mPresetManager.get(); }
     
     // TODO: Do we need this member to be public? What's the common practice?
     /**
@@ -78,12 +78,12 @@ private:
     void initialiseDSP();
     
     // TODO: hardcoding stereo signal here - independent gain for left and right channels. Refactor!
-    std::unique_ptr<RBDGain> mInputGain[2];
-    std::unique_ptr<RBDGain> mOutputGain[2];
-    std::unique_ptr<RBDLfo> mLfo[2];
-    std::unique_ptr<RBDDelay> mDelay[2];
+    std::unique_ptr<GainModule> mInputGain[2];
+    std::unique_ptr<GainModule> mOutputGain[2];
+    std::unique_ptr<LfoModule> mLfo[2];
+    std::unique_ptr<DelayModule> mDelay[2];
     
-    std::unique_ptr<RBDPresetManager> mPresetManager;
+    std::unique_ptr<PresetManager> mPresetManager;
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReallyBasicDelayAudioProcessor)

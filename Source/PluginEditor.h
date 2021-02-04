@@ -11,7 +11,7 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "RBDMainPanel.h"
-#include "RBDLookAndFeel.h"
+#include "RBDPluginLookAndFeel.h"
 
 //==============================================================================
 /**
@@ -27,8 +27,8 @@ public:
     void resized() override;
 
 private:
-    std::unique_ptr<RBDMainPanel> mMainPanel;
-    std::unique_ptr<RBDLookAndFeel> mLookAndFeel;
+    std::unique_ptr<MainPanel> mMainPanel;
+    std::unique_ptr<PluginLookAndFeel> mLookAndFeel;
     
     // TODO: why are we drawing it here and not in the MainPanel?
     Image mBackgroundImage;

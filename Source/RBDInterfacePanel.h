@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    RBDPanelBase.h
+    RBDInterfacePanel.h
     Created: 11 Jan 2021 4:31:58pm
     Author:  Anthony
 
@@ -16,12 +16,12 @@
 
 // TODO: turn into an abstract base class
 
-class RBDPanelBase  : public Component
+class InterfacePanel  : public Component
 {
 public:
     // TODO: switch to passing Processor by reference for consistency with JUCE
-    RBDPanelBase (ReallyBasicDelayAudioProcessor* inProcessor);
-    ~RBDPanelBase();
+    InterfacePanel (ReallyBasicDelayAudioProcessor* inProcessor);
+    ~InterfacePanel();
     
     void paint (Graphics& g) override;
     
@@ -29,5 +29,5 @@ protected:
     ReallyBasicDelayAudioProcessor* mProcessor;
     
 private:
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RBDPanelBase)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (InterfacePanel)
 };

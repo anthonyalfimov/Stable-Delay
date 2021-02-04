@@ -22,11 +22,11 @@ namespace RBD
 
 // TODO: should this class be a singleton, or do we not care?
 
-class RBDPresetManager
+class PresetManager
 {
 public:
-    RBDPresetManager (AudioProcessor* inProcessor);
-    ~RBDPresetManager();
+    PresetManager (AudioProcessor* inProcessor);
+    ~PresetManager();
     
     // TODO: better method names
     void getXmlForPreset (XmlElement* outElement);

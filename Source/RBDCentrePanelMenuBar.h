@@ -10,21 +10,21 @@
 
 #pragma once
 
-#include "RBDPanelBase.h"
+#include "RBDInterfacePanel.h"
 #include "RBDParameterComboBox.h"
 
-class RBDCentrePanelMenuBar  : public RBDPanelBase
+class CentrePanelMenuBar  : public InterfacePanel
 {
 public:
-    RBDCentrePanelMenuBar (ReallyBasicDelayAudioProcessor* inProcessor);
-    ~RBDCentrePanelMenuBar();
+    CentrePanelMenuBar (ReallyBasicDelayAudioProcessor* inProcessor);
+    ~CentrePanelMenuBar();
     
     // These are here because mFxTypeComboBox is a private member of this class
     void addFxTypeComboBoxListener (ComboBox::Listener* inListener);
     void removeFxTypeComboBoxListener (ComboBox::Listener* inListener);
     
 private:
-    std::unique_ptr<RBDParameterComboBox> mFxTypeComboBox;
+    std::unique_ptr<ParameterComboBox> mFxTypeComboBox;
     
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RBDCentrePanelMenuBar)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CentrePanelMenuBar)
 };

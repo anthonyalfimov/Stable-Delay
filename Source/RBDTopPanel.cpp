@@ -10,8 +10,8 @@
 
 #include "RBDTopPanel.h"
 
-RBDTopPanel::RBDTopPanel (ReallyBasicDelayAudioProcessor* inProcessor)
-    : RBDPanelBase (inProcessor)
+TopPanel::TopPanel (ReallyBasicDelayAudioProcessor* inProcessor)
+    : InterfacePanel (inProcessor)
 {
     setSize (RBD::topPanelWidth, RBD::topPanelHeight);
     setName ("MainMenu");
@@ -55,14 +55,14 @@ RBDTopPanel::RBDTopPanel (ReallyBasicDelayAudioProcessor* inProcessor)
     addAndMakeVisible (mSaveAsPreset.get());
 }
 
-RBDTopPanel::~RBDTopPanel()
+TopPanel::~TopPanel()
 {
     
 }
 
-void RBDTopPanel::paint (Graphics& g)
+void TopPanel::paint (Graphics& g)
 {
-    RBDPanelBase::paint (g);
+    InterfacePanel::paint (g);
     
     g.setFont (RBD::font2);
     g.setColour (RBD::colour1);
@@ -70,9 +70,9 @@ void RBDTopPanel::paint (Graphics& g)
                 Justification::centredRight);
 }
 
-void RBDTopPanel::buttonClicked (Button* buttonThatWasPressed)
+void TopPanel::buttonClicked (Button* buttonThatWasPressed)
 {
-    RBDPresetManager* presetManager = mProcessor->getPresetManager();
+    PresetManager* presetManager = mProcessor->getPresetManager();
     
     if (buttonThatWasPressed == mNewPreset.get())
     {
@@ -96,20 +96,20 @@ void RBDTopPanel::buttonClicked (Button* buttonThatWasPressed)
     }
 }
     
-void RBDTopPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
+void TopPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
 {
     if (comboBoxThatHasChanged == mPresetList.get())
     {
-        RBDPresetManager* presetManager = mProcessor->getPresetManager();
+        PresetManager* presetManager = mProcessor->getPresetManager();
         const int index = mPresetList->getSelectedItemIndex();
         
         presetManager->loadPreset (index);
     }
 }
     
-void RBDTopPanel::displaySaveAsPopup()
+void TopPanel::displaySaveAsPopup()
 {
-    RBDPresetManager* presetManager = mProcessor->getPresetManager();
+    PresetManager* presetManager = mProcessor->getPresetManager();
     
     const String currentPresetName = presetManager->getCurrentPresetName();
     
@@ -132,9 +132,9 @@ void RBDTopPanel::displaySaveAsPopup()
     }
 }
 
-void RBDTopPanel::updatePresetList()
+void TopPanel::updatePresetList()
 {
-    RBDPresetManager* presetManager = mProcessor->getPresetManager();
+    PresetManager* presetManager = mProcessor->getPresetManager();
     
     mPresetList->clear (dontSendNotification);  // we'll be rebuilding the list, don't alert listeners
     

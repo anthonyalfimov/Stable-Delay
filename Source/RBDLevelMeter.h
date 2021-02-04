@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    RBDMeter.h
+    RBDLevelMeter.h
     Created: 29 Jan 2021 6:29:13pm
     Author:  Anthony
 
@@ -14,12 +14,12 @@
 #include "PluginProcessor.h"
 #include "RBDParameters.h"
 
-class RBDMeter  : public Component,
-                  public Timer
+class LevelMeter  : public Component,
+                    public Timer
 {
 public:
-    RBDMeter (RBDParameter inParameter, ReallyBasicDelayAudioProcessor* inProcessor);
-    ~RBDMeter();
+    LevelMeter (RBDParameter inParameter, ReallyBasicDelayAudioProcessor* inProcessor);
+    ~LevelMeter();
     
     void paint (Graphics& g) override;
     void timerCallback() override;

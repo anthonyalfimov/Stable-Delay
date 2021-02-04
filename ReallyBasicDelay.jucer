@@ -13,8 +13,8 @@
             file="Source/RBDInterfaceConstants.h"/>
       <FILE id="lU6RIO" name="RBDInterfaceUtilities.h" compile="0" resource="0"
             file="Source/RBDInterfaceUtilities.h"/>
-      <FILE id="GRKCGg" name="RBDLookAndFeel.h" compile="0" resource="0"
-            file="Source/RBDLookAndFeel.h"/>
+      <FILE id="GRKCGg" name="RBDPluginLookAndFeel.h" compile="0" resource="0"
+            file="Source/RBDPluginLookAndFeel.h"/>
       <FILE id="fjYt20" name="RBDParameters.h" compile="0" resource="0" file="Source/RBDParameters.h"/>
     </GROUP>
     <GROUP id="{6FDFCE5E-A25F-B71C-4766-D652B9DE2C74}" name="Managers">
@@ -34,13 +34,15 @@
             file="Source/RBDParameterSlider.h"/>
     </GROUP>
     <GROUP id="{89B33AAD-A27F-7960-6038-74F7F39F53E0}" name="Components">
-      <FILE id="uEiEFY" name="RBDMeter.cpp" compile="1" resource="0" file="Source/RBDMeter.cpp"/>
-      <FILE id="KsheeB" name="RBDMeter.h" compile="0" resource="0" file="Source/RBDMeter.h"/>
+      <FILE id="uEiEFY" name="RBDLevelMeter.cpp" compile="1" resource="0"
+            file="Source/RBDLevelMeter.cpp"/>
+      <FILE id="KsheeB" name="RBDLevelMeter.h" compile="0" resource="0" file="Source/RBDLevelMeter.h"/>
     </GROUP>
     <GROUP id="{B55B2190-C0A4-3B41-2D50-0A81E5CC3764}" name="Panels">
-      <FILE id="CLsfpr" name="RBDPanelBase.cpp" compile="1" resource="0"
-            file="Source/RBDPanelBase.cpp"/>
-      <FILE id="qCxFj2" name="RBDPanelBase.h" compile="0" resource="0" file="Source/RBDPanelBase.h"/>
+      <FILE id="CLsfpr" name="RBDInterfacePanel.cpp" compile="1" resource="0"
+            file="Source/RBDInterfacePanel.cpp"/>
+      <FILE id="qCxFj2" name="RBDInterfacePanel.h" compile="0" resource="0"
+            file="Source/RBDInterfacePanel.h"/>
       <FILE id="bKu8kC" name="RBDMainPanel.cpp" compile="1" resource="0"
             file="Source/RBDMainPanel.cpp"/>
       <FILE id="QigLtG" name="RBDMainPanel.h" compile="0" resource="0" file="Source/RBDMainPanel.h"/>
@@ -61,12 +63,16 @@
       <FILE id="vazdPS" name="RBDFxPanel.h" compile="0" resource="0" file="Source/RBDFxPanel.h"/>
     </GROUP>
     <GROUP id="{0EB6A607-778D-EA62-AAC3-98B7C537EEED}" name="DSP">
-      <FILE id="yrs5AZ" name="RBDDelay.cpp" compile="1" resource="0" file="Source/RBDDelay.cpp"/>
-      <FILE id="Hz1C1r" name="RBDDelay.h" compile="0" resource="0" file="Source/RBDDelay.h"/>
-      <FILE id="RKl3Qe" name="RBDGain.cpp" compile="1" resource="0" file="Source/RBDGain.cpp"/>
-      <FILE id="miQHTD" name="RBDGain.h" compile="0" resource="0" file="Source/RBDGain.h"/>
-      <FILE id="gYeDeC" name="RBDLfo.cpp" compile="1" resource="0" file="Source/RBDLfo.cpp"/>
-      <FILE id="AF9TA9" name="RBDLfo.h" compile="0" resource="0" file="Source/RBDLfo.h"/>
+      <FILE id="yrs5AZ" name="RBDDelayModule.cpp" compile="1" resource="0"
+            file="Source/RBDDelayModule.cpp"/>
+      <FILE id="Hz1C1r" name="RBDDelayModule.h" compile="0" resource="0"
+            file="Source/RBDDelayModule.h"/>
+      <FILE id="RKl3Qe" name="RBDGainModule.cpp" compile="1" resource="0"
+            file="Source/RBDGainModule.cpp"/>
+      <FILE id="miQHTD" name="RBDGainModule.h" compile="0" resource="0" file="Source/RBDGainModule.h"/>
+      <FILE id="gYeDeC" name="RBDLfoModule.cpp" compile="1" resource="0"
+            file="Source/RBDLfoModule.cpp"/>
+      <FILE id="AF9TA9" name="RBDLfoModule.h" compile="0" resource="0" file="Source/RBDLfoModule.h"/>
     </GROUP>
     <GROUP id="{99CE85E1-9C82-51EF-B1FE-A81D24CFC764}" name="Source">
       <FILE id="q3whJb" name="PluginProcessor.cpp" compile="1" resource="0"

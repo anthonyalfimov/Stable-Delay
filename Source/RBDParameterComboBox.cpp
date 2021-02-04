@@ -10,8 +10,8 @@
 
 #include "RBDParameterComboBox.h"
 
-RBDParameterComboBox::RBDParameterComboBox (AudioProcessorValueTreeState& stateToControl,
-                                            const String& parameterID)
+ParameterComboBox::ParameterComboBox (AudioProcessorValueTreeState& stateToControl,
+                                      const String& parameterID)
     : ComboBox (parameterID)
 {
     mAttachment = std::make_unique<AudioProcessorValueTreeState::ComboBoxAttachment> (stateToControl,
@@ -19,7 +19,7 @@ RBDParameterComboBox::RBDParameterComboBox (AudioProcessorValueTreeState& stateT
                                                                                       *this);
 }
 
-RBDParameterComboBox::~RBDParameterComboBox()
+ParameterComboBox::~ParameterComboBox()
 {
     
 }

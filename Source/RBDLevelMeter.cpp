@@ -1,31 +1,31 @@
 /*
   ==============================================================================
 
-    RBDMeter.cpp
+    RBDLevelMeter.cpp
     Created: 29 Jan 2021 6:29:13pm
     Author:  Anthony
 
   ==============================================================================
 */
 
-#include "RBDMeter.h"
+#include "RBDLevelMeter.h"
 #include "RBDAudioUtilities.h"
 #include "RBDInterfaceConstants.h"
 
 // FIXME: If minMeterDbLevel is smaller than 96,
 
-RBDMeter::RBDMeter (RBDParameter inParameter, ReallyBasicDelayAudioProcessor* inProcessor)
+LevelMeter::LevelMeter (RBDParameter inParameter, ReallyBasicDelayAudioProcessor* inProcessor)
     : mParameter (inParameter), mProcessor (inProcessor)
 {
     startTimerHz (15);  // start the timer once we know which paremeter we're metering
 }
 
-RBDMeter::~RBDMeter()
+LevelMeter::~LevelMeter()
 {
     
 }
 
-void RBDMeter::paint (Graphics& g)
+void LevelMeter::paint (Graphics& g)
 {
     // TODO: Programmatically draw meters for the given number of channels (at least 1 or 2)
     // TODO: Add colour to the meters
@@ -57,7 +57,7 @@ void RBDMeter::paint (Graphics& g)
     g.fillRoundedRectangle (ch1Bounds.reduced (2).toFloat(), RBD::defaultCornerSize);
 }
 
-void RBDMeter::timerCallback()
+void LevelMeter::timerCallback()
 {
     float updatedCh0Level = 0.0f;
     float updatedCh1Level = 0.0f;

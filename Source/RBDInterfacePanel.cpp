@@ -1,27 +1,27 @@
 /*
   ==============================================================================
 
-    RBDPanelBase.cpp
+    RBDInterfacePanel.cpp
     Created: 11 Jan 2021 4:31:58pm
     Author:  Anthony
 
   ==============================================================================
 */
 
-#include "RBDPanelBase.h"
+#include "RBDInterfacePanel.h"
 
-RBDPanelBase::RBDPanelBase (ReallyBasicDelayAudioProcessor* inProcessor)
+InterfacePanel::InterfacePanel (ReallyBasicDelayAudioProcessor* inProcessor)
     : mProcessor (inProcessor)
 {
     
 }
 
-RBDPanelBase::~RBDPanelBase()
+InterfacePanel::~InterfacePanel()
 {
     
 }
 
-void RBDPanelBase::paint (Graphics& g)
+void InterfacePanel::paint (Graphics& g)
 {
 
 }
