@@ -13,7 +13,7 @@
 #include "RBDPanelBase.h"
 #include "RBDTopPanel.h"
 #include "RBDGainPanel.h"
-#include "RBDCenterPanel.h"
+#include "RBDCentrePanel.h"
 
 class RBDMainPanel  : public RBDPanelBase
 {
@@ -25,7 +25,7 @@ private:
     std::unique_ptr<RBDTopPanel> mTopPanel;
     std::unique_ptr<RBDGainPanel> mInputGainPanel;
     std::unique_ptr<RBDGainPanel> mOutputGainPanel;
-    std::unique_ptr<RBDCenterPanel> mCenterPanel;
+    std::unique_ptr<RBDCentrePanel> mCentrePanel;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RBDMainPanel)
 };

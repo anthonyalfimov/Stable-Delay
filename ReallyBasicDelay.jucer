@@ -49,14 +49,14 @@
       <FILE id="sy0sG4" name="RBDGainPanel.cpp" compile="1" resource="0"
             file="Source/RBDGainPanel.cpp"/>
       <FILE id="Z4WLtd" name="RBDGainPanel.h" compile="0" resource="0" file="Source/RBDGainPanel.h"/>
-      <FILE id="FILMYm" name="RBDCenterPanel.cpp" compile="1" resource="0"
-            file="Source/RBDCenterPanel.cpp"/>
-      <FILE id="MzBUkA" name="RBDCenterPanel.h" compile="0" resource="0"
-            file="Source/RBDCenterPanel.h"/>
-      <FILE id="z6yyW3" name="RBDCenterPanelMenuBar.cpp" compile="1" resource="0"
-            file="Source/RBDCenterPanelMenuBar.cpp"/>
-      <FILE id="XDpY2r" name="RBDCenterPanelMenuBar.h" compile="0" resource="0"
-            file="Source/RBDCenterPanelMenuBar.h"/>
+      <FILE id="FILMYm" name="RBDCentrePanel.cpp" compile="1" resource="0"
+            file="Source/RBDCentrePanel.cpp"/>
+      <FILE id="MzBUkA" name="RBDCentrePanel.h" compile="0" resource="0"
+            file="Source/RBDCentrePanel.h"/>
+      <FILE id="z6yyW3" name="RBDCentrePanelMenuBar.cpp" compile="1" resource="0"
+            file="Source/RBDCentrePanelMenuBar.cpp"/>
+      <FILE id="XDpY2r" name="RBDCentrePanelMenuBar.h" compile="0" resource="0"
+            file="Source/RBDCentrePanelMenuBar.h"/>
       <FILE id="bTPdDn" name="RBDFxPanel.cpp" compile="1" resource="0" file="Source/RBDFxPanel.cpp"/>
       <FILE id="vazdPS" name="RBDFxPanel.h" compile="0" resource="0" file="Source/RBDFxPanel.h"/>
     </GROUP>

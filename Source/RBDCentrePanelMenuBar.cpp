@@ -8,10 +8,10 @@
   ==============================================================================
 */
 
-#include "RBDCenterPanelMenuBar.h"
+#include "RBDCentrePanelMenuBar.h"
 #include "RBDParameters.h"
 
-RBDCenterPanelMenuBar::RBDCenterPanelMenuBar (ReallyBasicDelayAudioProcessor* inProcessor)
+RBDCentrePanelMenuBar::RBDCentrePanelMenuBar (ReallyBasicDelayAudioProcessor* inProcessor)
     : RBDPanelBase (inProcessor)
 {
     setSize (RBD::centrePanelMenuBarWidth, RBD::centrePanelMenuBarHeight);
@@ -34,17 +34,17 @@ RBDCenterPanelMenuBar::RBDCenterPanelMenuBar (ReallyBasicDelayAudioProcessor* in
     addAndMakeVisible (mFxTypeComboBox.get());
 }
 
-RBDCenterPanelMenuBar::~RBDCenterPanelMenuBar()
+RBDCentrePanelMenuBar::~RBDCentrePanelMenuBar()
 {
     
 }
 
-void RBDCenterPanelMenuBar::addFxTypeComboBoxListener (ComboBox::Listener* inListener)
+void RBDCentrePanelMenuBar::addFxTypeComboBoxListener (ComboBox::Listener* inListener)
 {
     mFxTypeComboBox->addListener (inListener);
 }
 
-void RBDCenterPanelMenuBar::removeFxTypeComboBoxListener (ComboBox::Listener* inListener)
+void RBDCentrePanelMenuBar::removeFxTypeComboBoxListener (ComboBox::Listener* inListener)
 {
     mFxTypeComboBox->removeListener (inListener);
 }

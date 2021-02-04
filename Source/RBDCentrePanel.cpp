@@ -8,15 +8,15 @@
   ==============================================================================
 */
 
-#include "RBDCenterPanel.h"
+#include "RBDCentrePanel.h"
 
-RBDCenterPanel::RBDCenterPanel (ReallyBasicDelayAudioProcessor* inProcessor)
+RBDCentrePanel::RBDCentrePanel (ReallyBasicDelayAudioProcessor* inProcessor)
     : RBDPanelBase (inProcessor)
 {
     setSize (RBD::centrePanelWidth, RBD::centrePanelWidth);
     setName ("CenterPanel");
     
-    mMenuBar = std::make_unique<RBDCenterPanelMenuBar> (inProcessor);
+    mMenuBar = std::make_unique<RBDCentrePanelMenuBar> (inProcessor);
     mMenuBar->setTopLeftPosition (0, 0);
     addAndMakeVisible (mMenuBar.get());
     
@@ -27,7 +27,7 @@ RBDCenterPanel::RBDCenterPanel (ReallyBasicDelayAudioProcessor* inProcessor)
     mMenuBar->addFxTypeComboBoxListener (mFxPanel.get());
 }
 
-RBDCenterPanel::~RBDCenterPanel()
+RBDCentrePanel::~RBDCentrePanel()
 {
     mMenuBar->removeFxTypeComboBoxListener (mFxPanel.get());
 }

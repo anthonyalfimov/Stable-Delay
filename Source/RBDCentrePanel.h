@@ -11,18 +11,18 @@
 #pragma once
 
 #include "RBDPanelBase.h"
-#include "RBDCenterPanelMenuBar.h"
+#include "RBDCentrePanelMenuBar.h"
 #include "RBDFxPanel.h"
 
-class RBDCenterPanel  : public RBDPanelBase
+class RBDCentrePanel  : public RBDPanelBase
 {
 public:
-    RBDCenterPanel (ReallyBasicDelayAudioProcessor* inProcessor);
-    ~RBDCenterPanel();
+    RBDCentrePanel (ReallyBasicDelayAudioProcessor* inProcessor);
+    ~RBDCentrePanel();
     
 private:
-    std::unique_ptr<RBDCenterPanelMenuBar> mMenuBar;
+    std::unique_ptr<RBDCentrePanelMenuBar> mMenuBar;
     std::unique_ptr<RBDFxPanel> mFxPanel;
     
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RBDCenterPanel)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RBDCentrePanel)
 };

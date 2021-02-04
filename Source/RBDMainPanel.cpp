@@ -26,9 +26,9 @@ RBDMainPanel::RBDMainPanel (ReallyBasicDelayAudioProcessor* inProcessor)
     mInputGainPanel->setParameterID (kParameter_InputGain);
     addAndMakeVisible (mInputGainPanel.get());
     
-    mCenterPanel = std::make_unique<RBDCenterPanel> (inProcessor);
-    mCenterPanel->setTopLeftPosition (mInputGainPanel->getRight(), mTopPanel->getBottom());
-    addAndMakeVisible (mCenterPanel.get());
+    mCentrePanel = std::make_unique<RBDCentrePanel> (inProcessor);
+    mCentrePanel->setTopLeftPosition (mInputGainPanel->getRight(), mTopPanel->getBottom());
+    addAndMakeVisible (mCentrePanel.get());
     
     mOutputGainPanel = std::make_unique<RBDGainPanel> (inProcessor);
     mOutputGainPanel->setTopRightPosition (getRight(), mTopPanel->getBottom());
