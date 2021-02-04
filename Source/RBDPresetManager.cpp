@@ -63,7 +63,10 @@ void RBDPresetManager::getXmlForPreset (XmlElement* outElement)
 
 void RBDPresetManager::loadPresetForXml (XmlElement* inElement)
 {
-    // TODO: Why store current preset XML in the manager object?
+    // TODO: Why store current preset XML in the manager object? Currently, no reason.
+    // Usually, these are leftovers from what was planned for the course and they have a reason
+    //  behind them. So, before getting rid of it, let's try to figure out what was it intended for
+    
     mCurrentPresetXml = inElement;
     
     auto& parameters = mProcessor->getParameters();
