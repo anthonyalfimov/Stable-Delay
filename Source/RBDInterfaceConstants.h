@@ -36,11 +36,11 @@
 
 namespace RBD
 {
-    // Labels
-    const static int labelHeight = 20;
+    // Label sizes
+    constexpr static int labelHeight = 20;
     
     // Standard rounded corner radius
-    const static float defaultCornerSize = 3.0f;
+    constexpr static float defaultCornerSize = 3.0f;
     
     // TODO: descriptive colour names
     // const is static by default, explicitely state it to highlight intent

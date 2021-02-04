@@ -10,7 +10,7 @@
 
 #include "RBDFxPanel.h"
 #include "RBDParameters.h"
-#include "RBDInterfaceHelpers.h"
+#include "RBDInterfaceUtilities.h"
 
 RBDFxPanel::RBDFxPanel (ReallyBasicDelayAudioProcessor* inProcessor)
     : RBDPanelBase (inProcessor)

@@ -12,7 +12,7 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
-#include "RBDInterfaceDefines.h"
+#include "RBDInterfaceConstants.h"
 
 // TODO: turn into an abstract base class
 

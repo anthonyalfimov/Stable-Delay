@@ -9,8 +9,8 @@
 */
 
 #include "RBDMeter.h"
-#include "RBDAudioHelpers.h"
-#include "RBDInterfaceDefines.h"
+#include "RBDAudioUtilities.h"
+#include "RBDInterfaceConstants.h"
 
 // FIXME: If minMeterDbLevel is smaller than 96,
 

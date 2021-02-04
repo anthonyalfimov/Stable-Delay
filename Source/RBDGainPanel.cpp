@@ -9,7 +9,7 @@
 */
 
 #include "RBDGainPanel.h"
-#include "RBDInterfaceHelpers.h"
+#include "RBDInterfaceUtilities.h"
 
 RBDGainPanel::RBDGainPanel (ReallyBasicDelayAudioProcessor* inProcessor)
     : RBDPanelBase (inProcessor)

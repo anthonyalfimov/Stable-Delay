@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "RBDDelay.h"
+#include "RBDAudioUtilities.h"
 
 RBDDelay::RBDDelay()
 {

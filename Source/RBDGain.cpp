@@ -10,7 +10,8 @@
 
 #include <JuceHeader.h>
 #include "RBDGain.h"
-#include "RBDAudioHelpers.h"
+#include "RBDAudioConstants.h"
+#include "RBDAudioUtilities.h"
 
 // TODO: DSP module base class
 

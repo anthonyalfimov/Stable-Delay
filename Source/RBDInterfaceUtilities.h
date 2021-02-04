@@ -11,7 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "RBDInterfaceDefines.h"
+#include "RBDInterfaceConstants.h"
 
 // TODO: Implement labels using JUCE's Label class
 

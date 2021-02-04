@@ -4,13 +4,15 @@
               addUsingNamespaceToJuceHeader="1" displaySplashScreen="1" jucerFormatVersion="1"
               pluginFormats="buildAU,buildVST3" pluginVST3Category="Delay,Fx">
   <MAINGROUP id="xBPHQW" name="ReallyBasicDelay">
-    <GROUP id="{5289F700-E4EF-5ABA-1C4B-03009BE23305}" name="Helpers">
-      <FILE id="H6hnWb" name="RBDAudioHelpers.h" compile="0" resource="0"
-            file="Source/RBDAudioHelpers.h"/>
-      <FILE id="FJ9rx4" name="RBDInterfaceDefines.h" compile="0" resource="0"
-            file="Source/RBDInterfaceDefines.h"/>
-      <FILE id="lU6RIO" name="RBDInterfaceHelpers.h" compile="0" resource="0"
-            file="Source/RBDInterfaceHelpers.h"/>
+    <GROUP id="{5289F700-E4EF-5ABA-1C4B-03009BE23305}" name="Utilities">
+      <FILE id="kRVvrT" name="RBDAudioConstants.h" compile="0" resource="0"
+            file="Source/RBDAudioConstants.h"/>
+      <FILE id="H6hnWb" name="RBDAudioUtilities.h" compile="0" resource="0"
+            file="Source/RBDAudioUtilities.h"/>
+      <FILE id="FJ9rx4" name="RBDInterfaceConstants.h" compile="0" resource="0"
+            file="Source/RBDInterfaceConstants.h"/>
+      <FILE id="lU6RIO" name="RBDInterfaceUtilities.h" compile="0" resource="0"
+            file="Source/RBDInterfaceUtilities.h"/>
       <FILE id="GRKCGg" name="RBDLookAndFeel.h" compile="0" resource="0"
             file="Source/RBDLookAndFeel.h"/>
       <FILE id="fjYt20" name="RBDParameters.h" compile="0" resource="0" file="Source/RBDParameters.h"/>

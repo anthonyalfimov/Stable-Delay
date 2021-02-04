@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "RBDAudioHelpers.h"
+#include "RBDAudioConstants.h"
 
 // TODO: unite this with RBDFxPanelStyle, ComboBox index and ID
 // TODO: convert to en enum class

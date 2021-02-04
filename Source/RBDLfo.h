@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "RBDAudioHelpers.h"
+#include "RBDAudioConstants.h"
 
 class RBDLfo
 {

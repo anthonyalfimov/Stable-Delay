@@ -11,7 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "RBDInterfaceDefines.h"
+#include "RBDInterfaceConstants.h"
 
 class RBDLookAndFeel  : public LookAndFeel_V4
 {
