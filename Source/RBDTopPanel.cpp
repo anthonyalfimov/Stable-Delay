@@ -13,7 +13,7 @@
 RBDTopPanel::RBDTopPanel (ReallyBasicDelayAudioProcessor* inProcessor)
     : RBDPanelBase (inProcessor)
 {
-    setSize (TOP_PANEL_WIDTH, TOP_PANEL_HEIGHT);
+    setSize (RBD::topPanelWidth, RBD::topPanelHeight);
     setName ("MainMenu");
     
     const int height = 25;

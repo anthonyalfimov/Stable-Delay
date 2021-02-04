@@ -13,7 +13,7 @@
 RBDCenterPanel::RBDCenterPanel (ReallyBasicDelayAudioProcessor* inProcessor)
     : RBDPanelBase (inProcessor)
 {
-    setSize (CENTER_PANEL_WIDTH, CENTER_PANEL_HEIGHT);
+    setSize (RBD::centrePanelWidth, RBD::centrePanelWidth);
     setName ("CenterPanel");
     
     mMenuBar = std::make_unique<RBDCenterPanelMenuBar> (inProcessor);
@@ -21,7 +21,7 @@ RBDCenterPanel::RBDCenterPanel (ReallyBasicDelayAudioProcessor* inProcessor)
     addAndMakeVisible (mMenuBar.get());
     
     mFxPanel = std::make_unique<RBDFxPanel> (inProcessor);
-    mFxPanel->setTopLeftPosition (0, CENTER_PANEL_MENU_BAR_HEIGHT);
+    mFxPanel->setTopLeftPosition (0, mMenuBar->getBottom());
     addAndMakeVisible (mFxPanel.get());
     
     mMenuBar->addFxTypeComboBoxListener (mFxPanel.get());

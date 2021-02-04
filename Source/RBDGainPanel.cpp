@@ -14,7 +14,7 @@
 RBDGainPanel::RBDGainPanel (ReallyBasicDelayAudioProcessor* inProcessor)
     : RBDPanelBase (inProcessor)
 {
-    setSize (GAIN_PANEL_WIDTH, GAIN_PANEL_HEIGHT);
+    setSize (RBD::gainPanelWidth, RBD::gainPanelHeight);
     setName ("GainPanel");
 }
 

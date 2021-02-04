@@ -14,7 +14,7 @@
 RBDCenterPanelMenuBar::RBDCenterPanelMenuBar (ReallyBasicDelayAudioProcessor* inProcessor)
     : RBDPanelBase (inProcessor)
 {
-    setSize (CENTER_PANEL_MENU_BAR_WIDTH, CENTER_PANEL_MENU_BAR_HEIGHT);
+    setSize (RBD::centrePanelMenuBarWidth, RBD::centrePanelMenuBarHeight);
     setName ("CenterMenu");
     
     mFxTypeComboBox = std::make_unique<RBDParameterComboBox> (mProcessor->parameters,

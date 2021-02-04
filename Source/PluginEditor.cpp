@@ -13,7 +13,7 @@
 ReallyBasicDelayAudioProcessorEditor::ReallyBasicDelayAudioProcessorEditor (ReallyBasicDelayAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
-    setSize (MAIN_PANEL_WIDTH, MAIN_PANEL_HEIGHT);
+    setSize (RBD::mainPanelWidth, RBD::mainPanelHeight);
     
     mLookAndFeel = std::make_unique<RBDLookAndFeel> ();
     setLookAndFeel (mLookAndFeel.get());    // set Look And Feel for the editor and its children

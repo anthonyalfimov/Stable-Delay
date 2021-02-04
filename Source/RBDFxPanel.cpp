@@ -15,7 +15,7 @@
 RBDFxPanel::RBDFxPanel (ReallyBasicDelayAudioProcessor* inProcessor)
     : RBDPanelBase (inProcessor)
 {
-    setSize (FX_PANEL_WIDTH, FX_PANEL_HEIGHT);
+    setSize (RBD::fxPanelWidth, RBD::fxPanelHeight);
     auto& parameters = mProcessor->getParameters();
     // TODO: check whether this works on Windows!
     const RBDFxPanelStyle selectedStyle
