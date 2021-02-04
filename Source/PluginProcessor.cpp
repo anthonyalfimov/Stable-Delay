@@ -52,7 +52,7 @@ ReallyBasicDelayAudioProcessor::ReallyBasicDelayAudioProcessor()
 #endif
 {
     // Initialise DSP modules
-    initializeDSP();
+    initialiseDSP();
     // Create the preset manager
     mPresetManager = std::make_unique<RBDPresetManager> (this);
 }
@@ -311,7 +311,7 @@ float ReallyBasicDelayAudioProcessor::getOutputMeterLevel (int inChannel) const
     return mOutputGain[inChannel]->getMeterLevel();
 }
 
-void ReallyBasicDelayAudioProcessor::initializeDSP()
+void ReallyBasicDelayAudioProcessor::initialiseDSP()
 {
     // Initialise the DSP Gain modules
     // TODO: hardcoding stereo processing here. Refactor!

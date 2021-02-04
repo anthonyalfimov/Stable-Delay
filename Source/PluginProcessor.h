@@ -75,8 +75,7 @@ public:
     AudioProcessorValueTreeState parameters;
 
 private:
-    // TODO: switch to British spelling
-    void initializeDSP();
+    void initialiseDSP();
     
     // TODO: hardcoding stereo signal here - independent gain for left and right channels. Refactor!
     std::unique_ptr<RBDGain> mInputGain[2];
