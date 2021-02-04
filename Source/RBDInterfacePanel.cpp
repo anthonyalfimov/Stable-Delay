@@ -16,6 +16,7 @@ InterfacePanel::InterfacePanel (ReallyBasicDelayAudioProcessor* inProcessor)
     
 }
 
+// Pure virtual destructor still requires an empty body
 InterfacePanel::~InterfacePanel()
 {
     
@@ -23,5 +24,5 @@ InterfacePanel::~InterfacePanel()
 
 void InterfacePanel::paint (Graphics& g)
 {
-
+    // Common paint actions for all panels go here
 }

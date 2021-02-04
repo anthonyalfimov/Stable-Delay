@@ -14,14 +14,12 @@
 #include "PluginProcessor.h"
 #include "RBDInterfaceConstants.h"
 
-// TODO: turn into an abstract base class
-
 class InterfacePanel  : public Component
 {
 public:
     // TODO: switch to passing Processor by reference for consistency with JUCE
     InterfacePanel (ReallyBasicDelayAudioProcessor* inProcessor);
-    ~InterfacePanel();
+    virtual ~InterfacePanel() = 0;
     
     void paint (Graphics& g) override;
     
