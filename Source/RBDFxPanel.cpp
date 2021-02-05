@@ -45,8 +45,6 @@ void FxPanel::setFxPanelStyle (RBDFxPanelStyle inStyle)
     mStyle = inStyle;
     mSliders.clear();
     
-    const int sliderSize = 56;
-    
     // TODO: Can this be better implemented using std::unique_ptr or move semantics?
     
     switch (mStyle)
@@ -92,11 +90,14 @@ void FxPanel::setFxPanelStyle (RBDFxPanelStyle inStyle)
     if (mSliders.size() != 3)
         jassertfalse;           // array must contain 3 sliders to continue
     
+    const int sliderSize = 80;
+    
     mSliders[0]->setBounds (getLocalBounds().withSizeKeepingCentre (sliderSize, sliderSize)
-                            .translated (-2 * sliderSize, 0));
-    mSliders[1]->setBounds (getLocalBounds().withSizeKeepingCentre (sliderSize, sliderSize));
+                            .translated (-1.5 * sliderSize, 15));
+    mSliders[1]->setBounds (getLocalBounds().withSizeKeepingCentre (sliderSize, sliderSize)
+                            .translated (0, 15));
     mSliders[2]->setBounds (getLocalBounds().withSizeKeepingCentre (sliderSize, sliderSize)
-                            .translated (2 * sliderSize, 0));
+                            .translated (1.5 * sliderSize, 15));
     
     for (auto slider : mSliders)
     {

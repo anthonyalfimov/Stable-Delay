@@ -17,7 +17,7 @@
 
 inline void paintComponentLabel (Graphics& g, Component* inComponent)
 {
-    const int width = inComponent->getWidth() * 1.5;
+    const int width = inComponent->getWidth() * 1;
     const int height = RBD::labelHeight;
     const int yPosition = inComponent->getBottom();
     auto textBounds = inComponent->getBounds().withSizeKeepingCentre (width, height)

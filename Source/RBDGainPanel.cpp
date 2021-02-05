@@ -30,7 +30,7 @@ void GainPanel::setParameterID (RBDParameter inParameter)
                                                     RBDParameterID[inParameter],
                                                     RBDParameterLabel[inParameter]);
     
-    const int sliderSize = 56;
+    const int sliderSize = 80;
     
     // TODO: is there a better way to position slider at the center of parent component?
     //   A1: there's `centreWithSize()`, as well as the ability to set size and position separately,
@@ -39,7 +39,7 @@ void GainPanel::setParameterID (RBDParameter inParameter)
     //   A2: I think that it's much easier to understand the intent of component positioning when
     //       it's expressed as operations on rectangle objects, rather than math on coordinates and
     //       dimensions.
-    mSlider->setBounds (getLocalBounds().withSizeKeepingCentre (sliderSize, sliderSize).withY (25));
+    mSlider->setBounds (getLocalBounds().withSizeKeepingCentre (sliderSize, sliderSize).withY (20));
     
     addAndMakeVisible (mSlider.get());
     
@@ -51,7 +51,7 @@ void GainPanel::setParameterID (RBDParameter inParameter)
     mMeter = std::make_unique<LevelMeter> (inParameter, mProcessor);
     
     // Define meter bounds
-    const int meterWidth = sliderSize;
+    const int meterWidth = 56;
     const int meterGap = 20;
     Rectangle<int> meterBounds = mSlider->getBounds().withSizeKeepingCentre (meterWidth, 0);
     meterBounds.setTop (mSlider->getBottom() + RBD::labelHeight + meterGap);

@@ -20,8 +20,9 @@ public:
     {
         // Store image assets
         // TODO: what's the difference from loading the image from file vs embedding it?
-        mSliderImage = ImageCache::getFromMemory (BinaryData::kadenze_knob_png,
-                                                  BinaryData::kadenze_knob_pngSize);
+        // TODO: Kadenze image file size was smaller. Does it matter? Should we compress it more?
+        mSliderImage = ImageCache::getFromMemory (BinaryData::RBD_Knob_80_png,
+                                                  BinaryData::RBD_Knob_80_pngSize);
         
         // ComboBox colours
         setColour (ComboBox::backgroundColourId, RBD::colour3);
