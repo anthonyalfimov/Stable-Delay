@@ -22,8 +22,8 @@ ReallyBasicDelayAudioProcessorEditor::ReallyBasicDelayAudioProcessorEditor (Real
     mMainPanel = std::make_unique<MainPanel> (&audioProcessor);
     addAndMakeVisible (mMainPanel.get());
     
-    mBackgroundImage = ImageCache::getFromMemory (BinaryData::kadenze_bg_png,
-                                                  BinaryData::kadenze_bg_pngSize);
+    mBackgroundImage = ImageCache::getFromMemory (BinaryData::RBD_BG_png,
+                                                  BinaryData::RBD_BG_pngSize);
 }
 
 ReallyBasicDelayAudioProcessorEditor::~ReallyBasicDelayAudioProcessorEditor()
