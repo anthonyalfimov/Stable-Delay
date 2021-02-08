@@ -12,7 +12,7 @@ namespace BinaryData
     const int            RBD_BG_pngSize = 73886;
 
     extern const char*   RBD_Knob_80_png;
-    const int            RBD_Knob_80_pngSize = 603608;
+    const int            RBD_Knob_80_pngSize = 99216;
 
     extern const char*   OpenSansBold_ttf;
     const int            OpenSansBold_ttfSize = 224592;
