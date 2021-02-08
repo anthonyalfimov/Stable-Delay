@@ -27,8 +27,8 @@ TopPanel::TopPanel (ReallyBasicDelayAudioProcessor* inProcessor)
     addAndMakeVisible (mPresetList.get());
     updatePresetList();
     
-    const int buttonWidth = 55;
-    const int buttonStartX = 15;
+    const int buttonWidth = 65;
+    const int buttonStartX = 10;
     
     // TODO: repetitive button initialisation - can we make it more dry? Array of buttons?
     
