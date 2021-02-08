@@ -19,7 +19,7 @@ CentrePanelMenuBar::CentrePanelMenuBar (ReallyBasicDelayAudioProcessor* inProces
     
     mFxTypeComboBox = std::make_unique<ParameterComboBox> (mProcessor->parameters,
                                                               RBDParameterID[kParameter_DelayType]);
-    const int width = 85;
+    const int width = 90;
     mFxTypeComboBox->setBounds (getWidth() - width, 0, width, getHeight());
     
     // TODO: Clean up usage of RBDFxPanelStyle, ComboBox index and ID
