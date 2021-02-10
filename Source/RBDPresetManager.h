@@ -13,10 +13,11 @@
 #include <JuceHeader.h>
 
 // TODO: can we move these to the .cpp file? Or does it need to be globally available if needed?
+// TODO: Make static class members - these belong as a part of PresetManager
 namespace RBD
 {
     // TODO: Should we use StringRef instead here?
-    const static String presetFileExtention = ".kpf";
+    const static String presetFileExtention = ".rbdf";
     const static String untitledPresetName = "Untitled";
 }
 
