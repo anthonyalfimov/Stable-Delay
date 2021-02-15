@@ -99,7 +99,10 @@ void LevelMeter::timerCallback()
     }
     
     // TODO: If we want no denormals there should be a better JUCE way to achieve this
-    //       E.g. the Scoped NoDenormals object
+    //       Use the ScopedNoDenormals object. Since this processing occurs not inside the
+    //       process block, it does not benefit from disabled denormals there.
+    //       However, the threshold used for RBD::denormalise() is much greater than
+    //       the smallest normal float value. Therefore, this is not what's happening here.
     // TODO: If we want to ignore small values, the threshold can be higher
     //  The threshold should then work well with the lowest displayed meter level - minMeterDbLevel
     

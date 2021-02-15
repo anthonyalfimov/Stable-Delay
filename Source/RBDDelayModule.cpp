@@ -37,8 +37,6 @@ void DelayModule::reset()
 
 // FIXME: Delay behaves incorrectly when Time set to 0 - remap min Delay Time or fix behaviour
 
-// TODO: Should we disable denormals in our DSP modules?
-
 void DelayModule::process (const float* inAudio,
                         float inTime,
                         float inFeedback,

@@ -172,7 +172,13 @@ bool ReallyBasicDelayAudioProcessor::isBusesLayoutSupported (const BusesLayout& 
 
 void ReallyBasicDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
+    // Denormals are temporarily disabled when this object is created at the beginning of
+    // the process block and re-enabled when it's destroyed at the end of the process
+    // block. Therefore, anything that happens within the process block doesn't need
+    // to disable denormals - they won't be re-enabled until the end of the process
+    // block.
     juce::ScopedNoDenormals noDenormals;
+    
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
