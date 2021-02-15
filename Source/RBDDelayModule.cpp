@@ -35,20 +35,20 @@ void DelayModule::reset()
     zeromem (mBuffer, sizeof (float) * RBD::bufferSize);
 }
 
-// FIXME: Delay behaves incorrectly when Time set to 0 - remap min Delay Time or fix behaviour
-
 void DelayModule::process (const float* inAudio,
-                        float inTime,
-                        float inFeedback,
-                        float inWetDry,
-                        float inType,
-                        const float* inModulationBuffer,
-                        float* outAudio,
-                        int inNumSamplesToRender)
+                           float inTime,
+                           float inFeedback,
+                           float inWetDry,
+                           float inType,
+                           const float* inModulationBuffer,
+                           float* outAudio,
+                           int inNumSamplesToRender)
 {
     const float wet = inWetDry;
     const float dry = 1.0f - wet;
-    float feedbackMapped = jmap (inFeedback, 0.0f, 1.0f, 0.0f, 0.95f);
+    // TODO: Why not use NormalizableRange<> for parameters instead of mapping them here?
+    const float timeMapped = jmap (inTime, 0.001f, 1.0f);
+    float feedbackMapped = jmap (inFeedback, 0.0f, 0.95f);
     
     for (int i = 0; i < inNumSamplesToRender; ++i)
     {
@@ -58,7 +58,7 @@ void DelayModule::process (const float* inAudio,
         if (static_cast<RBDDelayType> (inType) == kRBDDelayType_Delay)
         {
             // Use member variable to maintain consistent smoothing between blocks
-            mTimeSmoothed = mTimeSmoothed - RBD::paramSmoothingCoefFine * (mTimeSmoothed - inTime);
+            mTimeSmoothed = mTimeSmoothed - RBD::paramSmoothingCoefFine * (mTimeSmoothed - timeMapped);
         }
         else
         {
