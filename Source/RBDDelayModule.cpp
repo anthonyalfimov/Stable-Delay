@@ -79,19 +79,19 @@ void DelayModule::process (const float* inAudio,
         const float sample = getInterpolatedSample (delayTimeInSamples);
         
         // Write to the buffer: mix of input audio and feedback signal
-        mBuffer[mDelayIndex] = inAudio[i] + mFeedbackSample * feedbackMapped;
+        mBuffer[mWritePosition] = inAudio[i] + mFeedbackSample * feedbackMapped;
         // Update feedback sample
         mFeedbackSample = sample;
         // Write output audio
         outAudio[i] = inAudio[i] * dry + sample * wet;
         // Advance the read head
-        mDelayIndex = (mDelayIndex + 1) % RBD::bufferSize;
+        mWritePosition = (mWritePosition + 1) % RBD::bufferSize;
     }
 }
 
-float DelayModule::getInterpolatedSample (double inDelayTimeInSamples) const
+float DelayModule::getInterpolatedSample (double delayTimeInSamples) const
 {
-    double readPosition = static_cast<double> (mDelayIndex) - inDelayTimeInSamples;
+    double readPosition = static_cast<double> (mWritePosition) - delayTimeInSamples;
     
     if (readPosition < 0.0)
         readPosition += RBD::bufferSize;
@@ -103,7 +103,7 @@ float DelayModule::getInterpolatedSample (double inDelayTimeInSamples) const
     const float readSample1 = mBuffer[readPositionIndex1];
     
     const double fractionalReadPosition = readPosition - readPositionIndex0;
-    float outSample = RBD::linearInterp(readSample0, readSample1, fractionalReadPosition);
+    float outSample = RBD::linearInterp (readSample0, readSample1, fractionalReadPosition);
     
     return outSample;
 }

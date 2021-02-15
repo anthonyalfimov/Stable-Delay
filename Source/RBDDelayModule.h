@@ -50,8 +50,7 @@ private:
     // TODO: Dynamically allocate the buffer with fixed duration independent of sample rate
     float mBuffer[RBD::bufferSize];
     
-    // TODO: Change variable names to something more descriptive, e.g. write / read head
-    int mDelayIndex = 0;
+    int mWritePosition = 0;
     
     // TODO: JUCE DSP modules don't use the Leak Detector. Should I?
     // JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RBDDelay)
