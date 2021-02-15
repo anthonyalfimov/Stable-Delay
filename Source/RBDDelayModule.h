@@ -40,6 +40,10 @@ public:
 private:
     float getInterpolatedSample (double inDelayTimeInSamples) const;
     
+    // TODO: Should we initialise smoothed values to the parameter default instead?
+    //       They quickly settle on the parameter value - whether it is set to default or the
+    //       recalled plugin state. Are there any audible artifacts due to this settling process?
+    //       Otherwise, there might not be a reason to change this.
     double mTimeSmoothed = 0.0; // Use member variable to maintain consistent smoothing between blocks
     double mSampleRate = -1.0;
     float mFeedbackSample = 0.0f;
