@@ -48,11 +48,12 @@ void DelayModule::process (const float* inAudio,
 {
     const float wet = inWetDry;
     const float dry = 1.0f - wet;
-    /*const*/ float feedbackMapped = jmap (inFeedback, 0.0f, 1.0f, 0.0f, 0.95f);
+    float feedbackMapped = jmap (inFeedback, 0.0f, 1.0f, 0.0f, 0.95f);
     
     for (int i = 0; i < inNumSamplesToRender; ++i)
     {
-        // TODO: does this need to be done on sample level? Maybe better to set type on block level?
+        // TODO: Can FX type be changed on the block level?
+        //       Or will this lead to audible delay before FX type switches
         
         if (static_cast<RBDDelayType> (inType) == kRBDDelayType_Delay)
         {
@@ -61,12 +62,15 @@ void DelayModule::process (const float* inAudio,
         }
         else
         {
+            // TODO: Switching FX to CHORUS produces a chirp. Should we fix this?
+            //       The chirp is due to smoothed delay time change. Slower smoothing
+            //       will fix this. Perhaps, slower smoothing just for the chorus?
+            
             const double delayTimeModulated = 0.003 + 0.002 * inModulationBuffer[i];
             
             // Use member variable to maintain consistent smoothing between blocks
             mTimeSmoothed = mTimeSmoothed - RBD::paramSmoothingCoefFine * (mTimeSmoothed - delayTimeModulated);
             
-            // TODO: better feedback reset - currently it has audible trail before disappearing
             // Reset feedback to 0
             feedbackMapped = 0.0f;
         }

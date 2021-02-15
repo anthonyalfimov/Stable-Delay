@@ -43,7 +43,8 @@ private:
     double mTimeSmoothed = 0.0; // Use member variable to maintain consistent smoothing between blocks
     double mSampleRate = -1.0;
     float mFeedbackSample = 0.0f;
-    float mBuffer[RBD::bufferSize];   // TODO: make buffer dynamic
+    // TODO: Dynamically allocate the buffer with fixed duration independent of sample rate
+    float mBuffer[RBD::bufferSize];
     
     int mDelayIndex = 0;
     
