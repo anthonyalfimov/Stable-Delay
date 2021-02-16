@@ -18,7 +18,7 @@ public:
     LfoModule();
     ~LfoModule();
     
-    void setSampleRate (double inSampleRate);
+    void setSampleRateAndBlockSize (double sampleRate, int samplesPerBlock);
     void reset();
     void process(float inRate,
                  float inDepth,
@@ -29,7 +29,9 @@ public:
 private:
     double mSampleRate = -1.0;
     float mPhase = 0.0f;
-    float mBuffer[RBD::bufferSize];     // TODO: dynamically allocate the buffer
+    
+    std::unique_ptr<float[]> mBuffer;
+    int mBufferSize = 0;
     
     // TODO: JUCE DSP modules don't use the Leak Detector. Should I?
     // JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RBDLfo)

@@ -130,7 +130,7 @@ void ReallyBasicDelayAudioProcessor::prepareToPlay (double sampleRate, int sampl
     // initialisation that you need..
     for (int channel = 0; channel < 2; ++channel)
     {
-        mLfo[channel]->setSampleRate (sampleRate);
+        mLfo[channel]->setSampleRateAndBlockSize (sampleRate, samplesPerBlock);
         mDelay[channel]->setSampleRate (sampleRate);
     }
 }

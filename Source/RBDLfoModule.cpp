@@ -21,9 +21,12 @@ LfoModule::~LfoModule()
     
 }
 
-void LfoModule::setSampleRate (double inSampleRate)
+void LfoModule::setSampleRateAndBlockSize (double sampleRate, int samplesPerBlock)
 {
-    mSampleRate = inSampleRate;
+    mSampleRate = sampleRate;
+    mBufferSize = samplesPerBlock;
+    mBuffer = std::make_unique<float[]> (mBufferSize);
+    reset();
 }
 
 void LfoModule::reset()
@@ -31,19 +34,18 @@ void LfoModule::reset()
     // Reset the phase
     mPhase = 0.0f;
     // Clear the buffer
-    zeromem (mBuffer, sizeof (float) * RBD::bufferSize);
+    if (mBuffer != nullptr)
+        zeromem (mBuffer.get(), sizeof (float) * mBufferSize);
 }
 
-void LfoModule::process(float inRate,
-                     float inDepth,
-                     int inNumSamplesToRender)
+void LfoModule::process (float inRate, float inDepth, int inNumSamplesToRender)
 {
-    const float rate = jmap(inRate, 0.0f, 1.0f, 0.01f, 10.0f);
+    const float rate = jmap (inRate, 0.01f, 10.0f);
     
     for (int i = 0; i < inNumSamplesToRender; ++i)
     {
         // Record the LFO state in the buffer
-        const float lfoPosition = inDepth * sinf(mPhase * MathConstants<float>::twoPi);
+        const float lfoPosition = inDepth * sinf (mPhase * MathConstants<float>::twoPi);
         mBuffer[i] = lfoPosition;
         
         // Advance the LFO phase
@@ -56,5 +58,5 @@ void LfoModule::process(float inRate,
 
 const float* LfoModule::getBuffer() const
 {
-    return mBuffer;
+    return mBuffer.get();
 }

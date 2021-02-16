@@ -19,8 +19,6 @@
 namespace RBD
 {
     // Global const is static by default, just reinforce the intent
-    constexpr static int bufferSize = 192000;
-    
     constexpr static double paramSmoothingCoefGeneric = 0.04;
     constexpr static double paramSmoothingCoefFine = 0.004;
     constexpr static float meterSmoothingCoef = 0.2f;
