@@ -16,11 +16,12 @@ public:
     GainModule();
     ~GainModule();
     
-    // TODO: using raw pointers for audio buffers here.. is it safe? is there a better way?
+    // TODO: Using raw pointers for audio buffers here.. is it safe? is there a better way?
+    //       Pass reference to the JUCE AudioBuffer instead?
     void process (const float* inAudio,
-                  float inGain,
+                  float gain,
                   float* outAudio,
-                  int inNumSamplesToRender);
+                  int numSamplesToRender);
     
     float getMeterLevel() const;
     

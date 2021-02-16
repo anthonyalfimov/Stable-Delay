@@ -26,21 +26,22 @@ GainModule::~GainModule()
 }
 
 void GainModule::process (const float* inAudio,
-                       float inGain,
-                       float* outAudio,
-                       int inNumSamplesToRender)
+                          float gain,
+                          float* outAudio,
+                          int numSamplesToRender)
 {
     // Map inGain [0, 1] to the new [-24dB, +24dB] range
-    float gainMapped = jmap (inGain, 0.0f, 1.0f, -24.0f, 24.0f);
+    float gainMapped = jmap (gain, -24.0f, 24.0f);
     // Convert decibels to gain
     gainMapped = Decibels::decibelsToGain (gainMapped, -24.0f);
     
-    for (int i = 0; i < inNumSamplesToRender; ++i)
+    for (int i = 0; i < numSamplesToRender; ++i)
         outAudio[i] = inAudio[i] * gainMapped;
     
     // TODO: We're already smoothing audio level in RBDMeter. Do we need to smooth it twice?
     // TODO: This metering depends on the buffer size, sample rate. Look up real metering algorithms
     //  Here we are not really averaging, and we can miss peaks
+    //  JUCE AudioBuffer class has a built-in RMS method - use it instead?
     float absSampleValue = fabs (outAudio[0]);
     mLevelSmoothed = mLevelSmoothed - RBD::meterSmoothingCoef * (mLevelSmoothed - absSampleValue);
     //mLevelSmoothed = absSampleValue;

@@ -22,9 +22,9 @@ DelayModule::~DelayModule()
     
 }
 
-void DelayModule::setSampleRate (double inSampleRate)
+void DelayModule::setSampleRate (double sampleRate)
 {
-    mSampleRate = inSampleRate;
+    mSampleRate = sampleRate;
     mBufferSize = mSampleRate * maxDelayTimeInSeconds;
     mBuffer = std::make_unique<float[]> (mBufferSize);
     reset();
@@ -40,26 +40,26 @@ void DelayModule::reset()
 }
 
 void DelayModule::process (const float* inAudio,
-                           float inTime,
-                           float inFeedback,
-                           float inWetDry,
-                           float inType,
-                           const float* inModulationBuffer,
+                           float time,
+                           float feedback,
+                           float wetDry,
+                           float type,
+                           const float* modulationBuffer,
                            float* outAudio,
-                           int inNumSamplesToRender)
+                           int numSamplesToRender)
 {
-    const float wet = inWetDry;
+    const float wet = wetDry;
     const float dry = 1.0f - wet;
     // TODO: Why not use NormalizableRange<> for parameters instead of mapping them here?
-    const float timeMapped = jmap (inTime, 0.001f, maxDelayTimeInSeconds);
-    float feedbackMapped = jmap (inFeedback, 0.0f, 0.95f);
+    const float timeMapped = jmap (time, 0.001f, maxDelayTimeInSeconds);
+    float feedbackMapped = jmap (feedback, 0.0f, 0.95f);
     
-    for (int i = 0; i < inNumSamplesToRender; ++i)
+    for (int i = 0; i < numSamplesToRender; ++i)
     {
         // TODO: Can FX type be changed on the block level?
         //       Or will this lead to audible delay before FX type switches
         
-        if (static_cast<RBDDelayType> (inType) == kRBDDelayType_Delay)
+        if (static_cast<RBDDelayType> (type) == kRBDDelayType_Delay)
         {
             // Use member variable to maintain consistent smoothing between blocks
             mTimeSmoothed = mTimeSmoothed - RBD::paramSmoothingCoefFine * (mTimeSmoothed - timeMapped);
@@ -70,7 +70,7 @@ void DelayModule::process (const float* inAudio,
             //       The chirp is due to smoothed delay time change. Slower smoothing
             //       will fix this. Perhaps, slower smoothing just for the chorus?
             
-            const double delayTimeModulated = 0.003 + 0.002 * inModulationBuffer[i];
+            const double delayTimeModulated = 0.003 + 0.002 * modulationBuffer[i];
             
             // Use member variable to maintain consistent smoothing between blocks
             mTimeSmoothed = mTimeSmoothed - RBD::paramSmoothingCoefFine * (mTimeSmoothed - delayTimeModulated);

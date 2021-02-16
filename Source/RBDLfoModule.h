@@ -20,9 +20,9 @@ public:
     
     void setSampleRateAndBlockSize (double sampleRate, int samplesPerBlock);
     void reset();
-    void process(float inRate,
-                 float inDepth,
-                 int inNumSamplesToRender);
+    void process(float rate,
+                 float depth,
+                 int numSamplesToRender);
     
     const float* getBuffer() const;
     

@@ -26,21 +26,21 @@ public:
     DelayModule();
     ~DelayModule();
     
-    void setSampleRate (double inSampleRate);
+    void setSampleRate (double sampleRate);
     void reset();
     void process (const float* inAudio,
-                  float inTime,
-                  float inFeedback,
-                  float inWetDry,
-                  float inType,
-                  const float* inModulationBuffer,
+                  float time,
+                  float feedback,
+                  float wetDry,
+                  float type,
+                  const float* modulationBuffer,
                   float* outAudio,
-                  int inNumSamplesToRender);
+                  int numSamplesToRender);
 
     static constexpr float maxDelayTimeInSeconds = 1.0f;
 
 private:
-    float getInterpolatedSample (double inDelayTimeInSamples) const;
+    float getInterpolatedSample (double delayTimeInSamples) const;
     
     // TODO: Should we initialise smoothed values to the parameter default instead?
     //       They quickly settle on the parameter value - whether it is set to default or the
