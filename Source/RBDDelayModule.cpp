@@ -25,6 +25,9 @@ DelayModule::~DelayModule()
 void DelayModule::setSampleRate (double inSampleRate)
 {
     mSampleRate = inSampleRate;
+    mBufferSize = mSampleRate * maxDelayTimeInSeconds;
+    mBuffer = std::make_unique<float[]> (mBufferSize);
+    reset();
 }
 
 void DelayModule::reset()
@@ -32,7 +35,8 @@ void DelayModule::reset()
     // Clear the feedback sample
     mFeedbackSample = 0.0f;
     // Clear the delay buffer
-    zeromem (mBuffer, sizeof (float) * RBD::bufferSize);
+    if (mBuffer != nullptr)
+        zeromem (mBuffer.get(), sizeof (float) * mBufferSize);
 }
 
 void DelayModule::process (const float* inAudio,
@@ -47,7 +51,7 @@ void DelayModule::process (const float* inAudio,
     const float wet = inWetDry;
     const float dry = 1.0f - wet;
     // TODO: Why not use NormalizableRange<> for parameters instead of mapping them here?
-    const float timeMapped = jmap (inTime, 0.001f, 1.0f);
+    const float timeMapped = jmap (inTime, 0.001f, maxDelayTimeInSeconds);
     float feedbackMapped = jmap (inFeedback, 0.0f, 0.95f);
     
     for (int i = 0; i < inNumSamplesToRender; ++i)
@@ -85,7 +89,7 @@ void DelayModule::process (const float* inAudio,
         // Write output audio
         outAudio[i] = inAudio[i] * dry + sample * wet;
         // Advance the read head
-        mWritePosition = (mWritePosition + 1) % RBD::bufferSize;
+        mWritePosition = (mWritePosition + 1) % mBufferSize;
     }
 }
 
@@ -94,10 +98,10 @@ float DelayModule::getInterpolatedSample (double delayTimeInSamples) const
     double readPosition = static_cast<double> (mWritePosition) - delayTimeInSamples;
     
     if (readPosition < 0.0)
-        readPosition += RBD::bufferSize;
+        readPosition += mBufferSize;
     
     const int readPositionIndex0 = static_cast<int> (readPosition);
-    const int readPositionIndex1 = (readPositionIndex0 + 1) % RBD::bufferSize;
+    const int readPositionIndex1 = (readPositionIndex0 + 1) % mBufferSize;
     
     const float readSample0 = mBuffer[readPositionIndex0];
     const float readSample1 = mBuffer[readPositionIndex1];

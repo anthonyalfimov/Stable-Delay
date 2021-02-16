@@ -36,7 +36,9 @@ public:
                   const float* inModulationBuffer,
                   float* outAudio,
                   int inNumSamplesToRender);
-    
+
+    static constexpr float maxDelayTimeInSeconds = 1.0f;
+
 private:
     float getInterpolatedSample (double inDelayTimeInSamples) const;
     
@@ -47,12 +49,27 @@ private:
     double mTimeSmoothed = 0.0; // Use member variable to maintain consistent smoothing between blocks
     double mSampleRate = -1.0;
     float mFeedbackSample = 0.0f;
-    // TODO: Dynamically allocate the buffer with fixed duration independent of sample rate
-    float mBuffer[RBD::bufferSize];
+
+    // TODO: DSP modules per channel -> DSP modules processing vectorised channels
+    // The downside of isolating each channel to its own set of DSP modules is that the
+    // channels cannot interact without creating dedicated interfaces.
+
+    // TODO: Consider a better data structure for holding the delay buffer
+    // JUCE AudioBuffer template should be a good choice. It is designed to hold
+    // multiple channels, while our current design handles multiple channesl by creating
+    // the appropriate number of DSP modules. Withing the DSP module itself, there's
+    // always just one channel. Switching to JUCE AudioBuffer makes sense once we also
+    // switch to having a single instance of each DSP module handling vectorised channels
+
+    // std::vector allows reallocation, but is this a real problem for us here?
+
+    std::unique_ptr<float[]> mBuffer;
+    int mBufferSize = 0;
     
     int mWritePosition = 0;
     
     // TODO: JUCE DSP modules don't use the Leak Detector. Should I?
+    // Probably not?
     // JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RBDDelay)
 };
 
