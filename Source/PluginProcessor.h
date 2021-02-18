@@ -63,14 +63,18 @@ public:
     float getInputMeterLevel (int inChannel) const;
     float getOutputMeterLevel (int inChannel) const;
     
-    // TODO: Should we return a unique_ptr reference or something like that instead here?
+    // TODO: Should we return a reference instead here?
     PresetManager* getPresetManager() const { return mPresetManager.get(); }
     
-    // TODO: Do we need this member to be public? What's the common practice?
+    // TODO: Can we make the AudioProcessorValueTreeState member private?
+    //       JUCE tutorials make the `parameters` member private, but our code needs to
+    //       be able to pass it to the ParameterSlider to create the attachment.
+    //       Can the attachment be created in some other way? How is it done in JUCE
+    //       tutorials and examples?
     /**
-     This class contains a ValueTree that is used to manage an AudioProcessor's entire state.
-     It has its own internal class of parameter object that is linked to values within its ValueTree,
-     and which are each identified by a string ID.
+     This class contains a ValueTree that is used to manage an AudioProcessor's entire
+     state. It has its own internal class of parameter object that is linked to values
+     within its ValueTree, and which are each identified by a string ID.
     */
     AudioProcessorValueTreeState parameters;
 
