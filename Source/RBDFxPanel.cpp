@@ -44,10 +44,10 @@ void FxPanel::setFxPanelStyle (FxTypeID inTypeID)
     mTypeID = inTypeID;
     mSliders.clear();
     
-    // TODO: Can this be better implemented using std::unique_ptr or move semantics?
     
     switch (mTypeID)
     {
+    // TODO: Can this be better implemented using std::unique_ptr or move semantics?
         case FxTypeID::Delay:
             setName ("DELAY");
             
@@ -110,7 +110,7 @@ void FxPanel::setFxPanelStyle (FxTypeID inTypeID)
 
 void FxPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
 {
-    auto newTypeID = static_cast<FxTypeID> (comboBoxThatHasChanged->getSelectedId());
+    const auto newTypeID = static_cast<FxTypeID> (comboBoxThatHasChanged->getSelectedId());
     setFxPanelStyle (newTypeID);
 }
 
