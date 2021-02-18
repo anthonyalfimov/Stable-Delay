@@ -18,14 +18,14 @@ class LevelMeter  : public Component,
                     public Timer
 {
 public:
-    LevelMeter (RBDParameter inParameter, ReallyBasicDelayAudioProcessor* inProcessor);
+    LevelMeter (Parameter::Index inParameter, ReallyBasicDelayAudioProcessor* inProcessor);
     ~LevelMeter();
     
     void paint (Graphics& g) override;
     void timerCallback() override;
         
 private:
-    const RBDParameter mParameter;
+    const Parameter::Index mParameter;
     
     // TODO: Programmatically handle channels to allow for different channel configurations
     //       E.g. mono, mono->stereo

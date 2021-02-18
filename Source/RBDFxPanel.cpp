@@ -19,7 +19,7 @@ FxPanel::FxPanel (ReallyBasicDelayAudioProcessor* inProcessor)
     auto& parameters = mProcessor->getParameters();
     // TODO: check whether this works on Windows!
     const RBDFxPanelStyle selectedStyle
-        = static_cast<RBDFxPanelStyle> (parameters[kParameter_DelayType]->getValue());
+        = static_cast<RBDFxPanelStyle> (parameters[Parameter::DelayType]->getValue());
     setFxPanelStyle (selectedStyle);
 }
 
@@ -53,31 +53,31 @@ void FxPanel::setFxPanelStyle (RBDFxPanelStyle inStyle)
             setName ("DELAY");
             
             mSliders.add (new ParameterSlider (mProcessor->parameters,
-                                                  RBDParameterID[kParameter_DelayTime],
-                                                  RBDParameterLabel[kParameter_DelayTime]));
+                                                  Parameter::ID[Parameter::DelayTime],
+                                                  Parameter::Label[Parameter::DelayTime]));
             
             mSliders.add (new ParameterSlider (mProcessor->parameters,
-                                                  RBDParameterID[kParameter_DelayFeedback],
-                                                  RBDParameterLabel[kParameter_DelayFeedback]));
+                                                  Parameter::ID[Parameter::DelayFeedback],
+                                                  Parameter::Label[Parameter::DelayFeedback]));
             
             mSliders.add (new ParameterSlider (mProcessor->parameters,
-                                                  RBDParameterID[kParameter_DelayWetDry],
-                                                  RBDParameterLabel[kParameter_DelayWetDry]));
+                                                  Parameter::ID[Parameter::DelayWetDry],
+                                                  Parameter::Label[Parameter::DelayWetDry]));
             break;
         case kRBDFxPanelStyle_Chorus:
             setName ("CHORUS");
             
             mSliders.add (new ParameterSlider (mProcessor->parameters,
-                                                  RBDParameterID[kParameter_ModulationRate],
-                                                  RBDParameterLabel[kParameter_ModulationRate]));
+                                                  Parameter::ID[Parameter::ModulationRate],
+                                                  Parameter::Label[Parameter::ModulationRate]));
             
             mSliders.add (new ParameterSlider (mProcessor->parameters,
-                                                  RBDParameterID[kParameter_ModulationDepth],
-                                                  RBDParameterLabel[kParameter_ModulationDepth]));
+                                                  Parameter::ID[Parameter::ModulationDepth],
+                                                  Parameter::Label[Parameter::ModulationDepth]));
             
             mSliders.add (new ParameterSlider (mProcessor->parameters,
-                                                  RBDParameterID[kParameter_DelayWetDry],
-                                                  RBDParameterLabel[kParameter_DelayWetDry]));
+                                                  Parameter::ID[Parameter::DelayWetDry],
+                                                  Parameter::Label[Parameter::DelayWetDry]));
             break;
             
         default:

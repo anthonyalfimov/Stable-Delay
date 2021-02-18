@@ -18,7 +18,7 @@ CentrePanelMenuBar::CentrePanelMenuBar (ReallyBasicDelayAudioProcessor* inProces
     setName ("CenterMenu");
     
     mFxTypeComboBox = std::make_unique<ParameterComboBox> (mProcessor->parameters,
-                                                              RBDParameterID[kParameter_DelayType]);
+                                                           Parameter::ID[Parameter::DelayType]);
     const int width = 90;
     mFxTypeComboBox->setBounds (getWidth() - width, 0, width, getHeight());
     
@@ -29,7 +29,7 @@ CentrePanelMenuBar::CentrePanelMenuBar (ReallyBasicDelayAudioProcessor* inProces
     mFxTypeComboBox->addItem ("CHORUS", 2);
     auto& parameters = mProcessor->getParameters();
     // getUnchecked() is faster, but doesn't check the passed index. This is UI, so why not?
-    const int selectedItemIndex = static_cast<int> (parameters[kParameter_DelayType]->getValue());
+    const int selectedItemIndex = static_cast<int> (parameters[Parameter::DelayType]->getValue());
     mFxTypeComboBox->setSelectedItemIndex (selectedItemIndex, dontSendNotification);
     addAndMakeVisible (mFxTypeComboBox.get());
 }

@@ -23,23 +23,25 @@ GainPanel::~GainPanel()
     
 }
 
-void GainPanel::setParameterID (RBDParameter inParameter)
+void GainPanel::setParameterID (Parameter::Index inParameter)
 {
 //  CREATE SLIDER
     mSlider = std::make_unique<ParameterSlider> (mProcessor->parameters,
-                                                    RBDParameterID[inParameter],
-                                                    RBDParameterLabel[inParameter]);
+                                                 Parameter::ID[inParameter],
+                                                 Parameter::Label[inParameter]);
     
     const int sliderSize = 80;
     
     // TODO: is there a better way to position slider at the center of parent component?
-    //   A1: there's `centreWithSize()`, as well as the ability to set size and position separately,
-    //       and set position relative to parent size. But I haven't found another way to set this
-    //       up with a single line where you can modify the bounds freely.
-    //   A2: I think that it's much easier to understand the intent of component positioning when
-    //       it's expressed as operations on rectangle objects, rather than math on coordinates and
-    //       dimensions.
-    mSlider->setBounds (getLocalBounds().withSizeKeepingCentre (sliderSize, sliderSize).withY (20));
+    //   A1: there's `centreWithSize()`, as well as the ability to set size and position
+    //       separately, and set position relative to parent size. But I haven't found
+    //       another way to set this up with a single line where you can modify the bounds
+    //       freely.
+    //   A2: I think that it's much easier to understand the intent of component
+    //       positioning when it's expressed as operations on rectangle objects, rather
+    //       than math on coordinates and dimensions.
+    mSlider->setBounds (getLocalBounds().withSizeKeepingCentre (sliderSize, sliderSize)
+                        .withY (20));
     
     addAndMakeVisible (mSlider.get());
     

@@ -21,12 +21,12 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
     
     AudioProcessorValueTreeState::ParameterLayout layout;
 
-    for (int i = 0; i < kParameter_TotalNumParameters; ++i)
+    for (int i = 0; i < Parameter::NumParameters; ++i)
     {
-        layout.add (std::make_unique<AudioParameterFloat> (RBDParameterID[i],
-                                                           RBDParameterLabel[i],
+        layout.add (std::make_unique<AudioParameterFloat> (Parameter::ID[i],
+                                                           Parameter::Label[i],
                                                            NormalisableRange<float> (0.0f, 1.0f),
-                                                           RBDParameterDefaultValue[i]));
+                                                           Parameter::DefaultValue[i]));
     }
     
     return layout;
@@ -211,31 +211,34 @@ void ReallyBasicDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
         // TODO: add smoothing for all parameters
         // TODO: is this the proper way of using modern JUCE parameter handling?
         // TODO: consider using std::atomic<float> for .process() functions of DSP modules!
-        float inputGain = *(parameters.getRawParameterValue (RBDParameterID[kParameter_InputGain]));
+        float inputGain
+        = *(parameters.getRawParameterValue (Parameter::ID[Parameter::InputGain]));
         mInputGain[channel]->process (channelData,              // inAudio
                                       inputGain,                // inGain
                                       channelData,              // outAudio
                                       buffer.getNumSamples());  // inNumSamplesToRender
         
         float modulationRate
-            = *(parameters.getRawParameterValue (RBDParameterID[kParameter_ModulationRate]));
+        = *(parameters.getRawParameterValue (Parameter::ID[Parameter::ModulationRate]));
         
         if (channel == 0)
             modulationRate = 0.0f;
         
         float modulationDepth
-            = *(parameters.getRawParameterValue (RBDParameterID[kParameter_ModulationDepth]));
+        = *(parameters.getRawParameterValue (Parameter::ID[Parameter::ModulationDepth]));
         
         mLfo[channel]->process (modulationRate,             // inRate
                                 modulationDepth,            // inDepth
                                 buffer.getNumSamples());    // inNumSamplesToRender
         
-        float delayTime = *(parameters.getRawParameterValue (RBDParameterID[kParameter_DelayTime]));
+        float delayTime
+        = *(parameters.getRawParameterValue (Parameter::ID[Parameter::DelayTime]));
         float delayFeedback
-            = *(parameters.getRawParameterValue (RBDParameterID[kParameter_DelayFeedback]));
+        = *(parameters.getRawParameterValue (Parameter::ID[Parameter::DelayFeedback]));
         float delayWetDry
-            = *(parameters.getRawParameterValue (RBDParameterID[kParameter_DelayWetDry]));
-        float delayType = *(parameters.getRawParameterValue (RBDParameterID[kParameter_DelayType]));
+        = *(parameters.getRawParameterValue (Parameter::ID[Parameter::DelayWetDry]));
+        float delayType
+        = *(parameters.getRawParameterValue (Parameter::ID[Parameter::DelayType]));
         
         mDelay[channel]->process (channelData,                  // inAudio
                                   delayTime,                    // inTime
@@ -247,7 +250,7 @@ void ReallyBasicDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
                                   buffer.getNumSamples());      // inNumSamplesToRender
         
         float outputGain
-            = *(parameters.getRawParameterValue (RBDParameterID[kParameter_OutputGain]));
+        = *(parameters.getRawParameterValue (Parameter::ID[Parameter::OutputGain]));
         
         mOutputGain[channel]->process (channelData,             // inAudio
                                        outputGain,              // inGain

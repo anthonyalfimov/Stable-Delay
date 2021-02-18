@@ -14,7 +14,7 @@
 
 // FIXME: If minMeterDbLevel is smaller than 96,
 
-LevelMeter::LevelMeter (RBDParameter inParameter, ReallyBasicDelayAudioProcessor* inProcessor)
+LevelMeter::LevelMeter (Parameter::Index inParameter, ReallyBasicDelayAudioProcessor* inProcessor)
     : mParameter (inParameter), mProcessor (inProcessor)
 {
     startTimerHz (15);  // start the timer once we know which paremeter we're metering
@@ -64,12 +64,12 @@ void LevelMeter::timerCallback()
     
     switch (mParameter)
     {
-        case kParameter_InputGain:
+        case Parameter::InputGain:
             updatedCh0Level = mProcessor->getInputMeterLevel (0);
             updatedCh1Level = mProcessor->getInputMeterLevel (1);
             break;
     
-        case kParameter_OutputGain:
+        case Parameter::OutputGain:
             updatedCh0Level = mProcessor->getOutputMeterLevel (0);
             updatedCh1Level = mProcessor->getOutputMeterLevel (1);
             break;

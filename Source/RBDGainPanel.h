@@ -22,7 +22,7 @@ public:
     ~GainPanel();
     
     // TODO: Consider setting parameter ID for GainPanel in its constructor
-    void setParameterID (RBDParameter inParameter);
+    void setParameterID (Parameter::Index inParameter);
     
     void paint (Graphics& g) override;
     
