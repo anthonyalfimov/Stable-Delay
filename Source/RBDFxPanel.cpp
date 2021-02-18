@@ -17,10 +17,9 @@ FxPanel::FxPanel (ReallyBasicDelayAudioProcessor* inProcessor)
 {
     setSize (RBD::fxPanelWidth, RBD::fxPanelHeight);
     auto& parameters = mProcessor->getParameters();
-    // TODO: check whether this works on Windows!
-    const RBDFxPanelStyle selectedStyle
-        = static_cast<RBDFxPanelStyle> (parameters[Parameter::DelayType]->getValue());
-    setFxPanelStyle (selectedStyle);
+    const auto selectedTypeID
+    = floatToFxTypeID (parameters[Parameter::DelayType]->getValue());
+    setFxPanelStyle (selectedTypeID);
 }
 
 FxPanel::~FxPanel()
@@ -40,44 +39,45 @@ void FxPanel::paint (Graphics& g)
         paintComponentLabel (g, slider);
 }
     
-void FxPanel::setFxPanelStyle (RBDFxPanelStyle inStyle)
+void FxPanel::setFxPanelStyle (FxTypeID inTypeID)
 {
-    mStyle = inStyle;
+    mTypeID = inTypeID;
     mSliders.clear();
     
     // TODO: Can this be better implemented using std::unique_ptr or move semantics?
     
-    switch (mStyle)
+    switch (mTypeID)
     {
-        case kRBDFxPanelStyle_Delay:
+        case FxTypeID::Delay:
             setName ("DELAY");
             
             mSliders.add (new ParameterSlider (mProcessor->parameters,
-                                                  Parameter::ID[Parameter::DelayTime],
-                                                  Parameter::Label[Parameter::DelayTime]));
+                                               Parameter::ID[Parameter::DelayTime],
+                                               Parameter::Label[Parameter::DelayTime]));
             
             mSliders.add (new ParameterSlider (mProcessor->parameters,
-                                                  Parameter::ID[Parameter::DelayFeedback],
-                                                  Parameter::Label[Parameter::DelayFeedback]));
+                                               Parameter::ID[Parameter::DelayFeedback],
+                                               Parameter::Label[Parameter::DelayFeedback]));
             
             mSliders.add (new ParameterSlider (mProcessor->parameters,
-                                                  Parameter::ID[Parameter::DelayWetDry],
-                                                  Parameter::Label[Parameter::DelayWetDry]));
+                                               Parameter::ID[Parameter::DelayWetDry],
+                                               Parameter::Label[Parameter::DelayWetDry]));
             break;
-        case kRBDFxPanelStyle_Chorus:
+            
+        case FxTypeID::Chorus:
             setName ("CHORUS");
             
             mSliders.add (new ParameterSlider (mProcessor->parameters,
-                                                  Parameter::ID[Parameter::ModulationRate],
-                                                  Parameter::Label[Parameter::ModulationRate]));
+                                               Parameter::ID[Parameter::ModulationRate],
+                                               Parameter::Label[Parameter::ModulationRate]));
             
             mSliders.add (new ParameterSlider (mProcessor->parameters,
-                                                  Parameter::ID[Parameter::ModulationDepth],
-                                                  Parameter::Label[Parameter::ModulationDepth]));
+                                               Parameter::ID[Parameter::ModulationDepth],
+                                               Parameter::Label[Parameter::ModulationDepth]));
             
             mSliders.add (new ParameterSlider (mProcessor->parameters,
-                                                  Parameter::ID[Parameter::DelayWetDry],
-                                                  Parameter::Label[Parameter::DelayWetDry]));
+                                               Parameter::ID[Parameter::DelayWetDry],
+                                               Parameter::Label[Parameter::DelayWetDry]));
             break;
             
         default:
@@ -104,8 +104,8 @@ void FxPanel::setFxPanelStyle (RBDFxPanelStyle inStyle)
         addAndMakeVisible (slider);
         
         // TODO: Do we need to unregister when Sliders are destroyed?
-        //       List of listeners is stored in Slider object and destroyed with it - so no?
-        //
+        //  List of listeners is stored in Slider object and destroyed with it - so no?
+        
         // Register as mouse listener for Sliders so we can repaint Slider labels when mouse
         //  enters and exits Slider components
         slider->addMouseListener (this, false);
@@ -116,10 +116,8 @@ void FxPanel::setFxPanelStyle (RBDFxPanelStyle inStyle)
 
 void FxPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
 {
-    // TODO: Clean up usage of RBDFxPanelStyle, ComboBox index and ID:
-    //       RBDFxPanelStyle <-> index <-> ID correspondense is not ensured!
-    auto newStyle = static_cast<RBDFxPanelStyle> (comboBoxThatHasChanged->getSelectedItemIndex());
-    setFxPanelStyle (newStyle);
+    auto newTypeID = static_cast<FxTypeID> (comboBoxThatHasChanged->getSelectedId());
+    setFxPanelStyle (newTypeID);
 }
 
 void FxPanel::mouseEnter (const MouseEvent& event)

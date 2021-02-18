@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 #include "RBDDelayModule.h"
 #include "RBDAudioUtilities.h"
+#include "RBDParameters.h"
 
 DelayModule::DelayModule()
 {
@@ -50,6 +51,7 @@ void DelayModule::process (const float* inAudio,
 {
     const float wet = wetDry;
     const float dry = 1.0f - wet;
+    
     // TODO: Why not use NormalizableRange<> for parameters instead of mapping them here?
     const float timeMapped = jmap (time, 0.001f, maxDelayTimeInSeconds);
     float feedbackMapped = jmap (feedback, 0.0f, 0.95f);
@@ -57,9 +59,11 @@ void DelayModule::process (const float* inAudio,
     for (int i = 0; i < numSamplesToRender; ++i)
     {
         // TODO: Can FX type be changed on the block level?
-        //       Or will this lead to audible delay before FX type switches
+        //  Or will this lead to audible delay before FX type switches
         
-        if (static_cast<RBDDelayType> (type) == kRBDDelayType_Delay)
+        const auto typeID = floatToFxTypeID (type);
+        
+        if (typeID == FxTypeID::Delay)
         {
             // Use member variable to maintain consistent smoothing between blocks
             mTimeSmoothed = mTimeSmoothed - RBD::paramSmoothingCoefFine * (mTimeSmoothed - timeMapped);
@@ -67,8 +71,8 @@ void DelayModule::process (const float* inAudio,
         else
         {
             // TODO: Switching FX to CHORUS produces a chirp. Should we fix this?
-            //       The chirp is due to smoothed delay time change. Slower smoothing
-            //       will fix this. Perhaps, slower smoothing just for the chorus?
+            //  The chirp is due to smoothed delay time change. Slower smoothing
+            //  will fix this. Perhaps, slower smoothing just for the chorus?
             
             const double delayTimeModulated = 0.003 + 0.002 * modulationBuffer[i];
             

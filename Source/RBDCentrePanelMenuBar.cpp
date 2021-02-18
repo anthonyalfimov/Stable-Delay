@@ -17,20 +17,20 @@ CentrePanelMenuBar::CentrePanelMenuBar (ReallyBasicDelayAudioProcessor* inProces
     setSize (RBD::centrePanelMenuBarWidth, RBD::centrePanelMenuBarHeight);
     setName ("CenterMenu");
     
-    mFxTypeComboBox = std::make_unique<ParameterComboBox> (mProcessor->parameters,
-                                                           Parameter::ID[Parameter::DelayType]);
+    mFxTypeComboBox
+    = std::make_unique<ParameterComboBox> (mProcessor->parameters,
+                                           Parameter::ID[Parameter::DelayType]);
     const int width = 90;
     mFxTypeComboBox->setBounds (getWidth() - width, 0, width, getHeight());
     
-    // TODO: Clean up usage of RBDFxPanelStyle, ComboBox index and ID
-    // TODO: replace IDs with an enum class
-    // NB: IDs are not the same as indices, and IDs must start with 1
-    mFxTypeComboBox->addItem ("DELAY", 1);
-    mFxTypeComboBox->addItem ("CHORUS", 2);
+    mFxTypeComboBox->addItem ("DELAY", static_cast<int> (FxTypeID::Delay));
+    mFxTypeComboBox->addItem ("CHORUS", static_cast<int> (FxTypeID::Chorus));
     auto& parameters = mProcessor->getParameters();
-    // getUnchecked() is faster, but doesn't check the passed index. This is UI, so why not?
-    const int selectedItemIndex = static_cast<int> (parameters[Parameter::DelayType]->getValue());
-    mFxTypeComboBox->setSelectedItemIndex (selectedItemIndex, dontSendNotification);
+    
+    const auto selectedTypeID
+    = floatToFxTypeID (parameters[Parameter::DelayType]->getValue());
+    mFxTypeComboBox->setSelectedId (static_cast<int> (selectedTypeID),
+                                    dontSendNotification);
     addAndMakeVisible (mFxTypeComboBox.get());
 }
 

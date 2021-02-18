@@ -70,8 +70,18 @@ namespace Parameter
     };
 } // end namespace Parameter
 
-//enum RBDDelayType
-//{
-//    kRBDDelayType_Delay = 0,
-//    kRBDDelayType_Chorus
-//};
+// We will use this enum as comboBox IDs, so the items must start from 1
+enum class FxTypeID
+{
+    Delay = 1,
+    Chorus
+};
+/**
+Helper function that converts a float [0, 1] value to the FxTypeID to accomodate
+ float representation of the FX TYPE parameter
+@param value float [0, 1] representation of the parameter to be interpreted as FxTypeID
+*/
+inline FxTypeID floatToFxTypeID (float value)
+{
+    return (value < 0.5f) ? FxTypeID::Delay : FxTypeID::Chorus;
+}
