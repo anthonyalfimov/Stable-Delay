@@ -23,12 +23,10 @@ GainPanel::~GainPanel()
     
 }
 
-void GainPanel::setParameterID (Parameter::Index inParameter)
+void GainPanel::setParameterID (Parameter::Index parameterIndex)
 {
 //  CREATE SLIDER
-    mSlider = std::make_unique<ParameterSlider> (mProcessor->parameters,
-                                                 Parameter::ID[inParameter],
-                                                 Parameter::Label[inParameter]);
+    mSlider = std::make_unique<ParameterSlider> (mProcessor->parameters, parameterIndex);
     
     const int sliderSize = 80;
     
@@ -50,7 +48,7 @@ void GainPanel::setParameterID (Parameter::Index inParameter)
     mSlider->addMouseListener (this, false);
     
 //  CREATE METER
-    mMeter = std::make_unique<LevelMeter> (inParameter, mProcessor);
+    mMeter = std::make_unique<LevelMeter> (parameterIndex, mProcessor);
     
     // Define meter bounds
     const int meterWidth = 56;

@@ -11,12 +11,13 @@
 #include "RBDParameterComboBox.h"
 
 ParameterComboBox::ParameterComboBox (AudioProcessorValueTreeState& stateToControl,
-                                      const String& parameterID)
-    : ComboBox (parameterID)
+                                      Parameter::Index parameterIndex)
+    : ComboBox (Parameter::Label[parameterIndex])
 {
-    mAttachment = std::make_unique<AudioProcessorValueTreeState::ComboBoxAttachment> (stateToControl,
-                                                                                      parameterID,
-                                                                                      *this);
+    using ComboBoxAttachment = AudioProcessorValueTreeState::ComboBoxAttachment;
+    mAttachment = std::make_unique<ComboBoxAttachment> (stateToControl,
+                                                        Parameter::ID[parameterIndex],
+                                                        *this);
 }
 
 ParameterComboBox::~ParameterComboBox()

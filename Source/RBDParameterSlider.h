@@ -11,14 +11,13 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "RBDParameters.h"
 
 class ParameterSlider  : public Slider
 {
 public:
-    // TODO: we should be able to get the parameter label knowing its ID, without needing to pass it
     ParameterSlider (AudioProcessorValueTreeState& stateToControl,
-                        const String& parameterID,
-                        const String& parameterLabel);
+                     Parameter::Index parameterIndex);
     ~ParameterSlider();
     
 private:

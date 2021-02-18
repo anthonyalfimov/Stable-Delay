@@ -11,11 +11,13 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "RBDParameters.h"
 
 class ParameterComboBox  : public ComboBox
 {
 public:
-    ParameterComboBox (AudioProcessorValueTreeState& stateToControl, const String& parameterID);
+    ParameterComboBox (AudioProcessorValueTreeState& stateToControl,
+                       Parameter::Index parameterIndex);
     ~ParameterComboBox();
     
 private:

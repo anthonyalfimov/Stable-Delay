@@ -52,32 +52,26 @@ void FxPanel::setFxPanelStyle (FxTypeID inTypeID)
             setName ("DELAY");
             
             mSliders.add (new ParameterSlider (mProcessor->parameters,
-                                               Parameter::ID[Parameter::DelayTime],
-                                               Parameter::Label[Parameter::DelayTime]));
+                                               Parameter::DelayTime));
             
             mSliders.add (new ParameterSlider (mProcessor->parameters,
-                                               Parameter::ID[Parameter::DelayFeedback],
-                                               Parameter::Label[Parameter::DelayFeedback]));
+                                               Parameter::DelayFeedback));
             
             mSliders.add (new ParameterSlider (mProcessor->parameters,
-                                               Parameter::ID[Parameter::DelayWetDry],
-                                               Parameter::Label[Parameter::DelayWetDry]));
+                                               Parameter::DelayWetDry));
             break;
             
         case FxTypeID::Chorus:
             setName ("CHORUS");
             
             mSliders.add (new ParameterSlider (mProcessor->parameters,
-                                               Parameter::ID[Parameter::ModulationRate],
-                                               Parameter::Label[Parameter::ModulationRate]));
+                                               Parameter::ModulationRate));
             
             mSliders.add (new ParameterSlider (mProcessor->parameters,
-                                               Parameter::ID[Parameter::ModulationDepth],
-                                               Parameter::Label[Parameter::ModulationDepth]));
+                                               Parameter::ModulationDepth));
             
             mSliders.add (new ParameterSlider (mProcessor->parameters,
-                                               Parameter::ID[Parameter::DelayWetDry],
-                                               Parameter::Label[Parameter::DelayWetDry]));
+                                               Parameter::DelayWetDry));
             break;
             
         default:

@@ -11,18 +11,18 @@
 #include "RBDParameterSlider.h"
 
 ParameterSlider::ParameterSlider (AudioProcessorValueTreeState& stateToControl,
-                                  const String& parameterID,
-                                  const String& parameterLabel)
-    : Slider (parameterLabel)
+                                  Parameter::Index parameterIndex)
+    : Slider (Parameter::Label[parameterIndex])
 {
     setSliderStyle (SliderStyle::RotaryHorizontalVerticalDrag);
     setTextBoxStyle (Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
     
     setRange (0.0f, 1.0f, 0.001f);
     
-    mAttachment = std::make_unique<AudioProcessorValueTreeState::SliderAttachment> (stateToControl,
-                                                                                    parameterID,
-                                                                                    *this);
+    using SliderAttachment = AudioProcessorValueTreeState::SliderAttachment;
+    mAttachment = std::make_unique<SliderAttachment> (stateToControl,
+                                                      Parameter::ID[parameterIndex],
+                                                      *this);
 }
 
 ParameterSlider::~ParameterSlider()
