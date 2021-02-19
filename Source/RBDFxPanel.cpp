@@ -16,7 +16,7 @@ FxPanel::FxPanel (ReallyBasicDelayAudioProcessor* inProcessor)
     : InterfacePanel (inProcessor)
 {
     setSize (RBD::fxPanelWidth, RBD::fxPanelHeight);
-    auto& parameters = mProcessor->getParameters();
+    const auto& parameters = mProcessor->getParameters();
     const auto selectedTypeID
     = floatToFxTypeID (parameters[Parameter::FxType]->getValue());
     setFxPanelStyle (selectedTypeID);

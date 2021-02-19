@@ -16,7 +16,7 @@
 // Current solution is to put a plain enum in a namespace to have name scope, but
 // keep automatic casting to int.
 
-// TODO: Find a solution to use enum class as an array index efficiently
+// TODO: (?) Find a solution to use enum class as an array index efficiently
 // e.g. use an array class to store items and add an overloaded operator[] ?
 
 namespace Parameter
@@ -58,6 +58,8 @@ namespace Parameter
         "Mod Depth"
     };
 
+    // TODO: Update Type range to follow the FxTypeID values
+
     const static NormalisableRange<float> Range[NumParameters]
     {
         {0.0f, 1.0f},       // Input Gain
@@ -90,9 +92,7 @@ enum class FxTypeID
     Chorus
 };
 
-// FIXME: This function should map items identically to JUCE ComboBoxAttachment
-//  Otherwise, we can get mismatch in behaviour between "manually" handling the value
-//  and ComboBoxAttachment handling it.
+// TODO: With updated Type range, replace this function with a simple cast
 /**
 Helper function that converts a float [0, 1] value to the FxTypeID to accomodate
  float representation of the FX TYPE parameter
