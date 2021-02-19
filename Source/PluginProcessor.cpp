@@ -15,7 +15,7 @@
 // This creates the plugin parameter layout
 AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
 {
-    // TODO: NormalisableRange takes care of parameter range mapping, why map in the processor?
+    // TODO: NormalisableRange takes care of range mapping, why map in the processor?
     // TODO: Implement labels using JUCE's Label class
     // TODO: (?) Change the type of the Delay Type parameter to AudioParameterChoice
     //  This should make the host better display this parameter and might
@@ -28,7 +28,7 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
     {
         layout.add (std::make_unique<AudioParameterFloat> (Parameter::ID[i],
                                                            Parameter::Label[i],
-                                                           NormalisableRange<float> (0.0f, 1.0f),
+                                                           Parameter::Range[i],
                                                            Parameter::DefaultValue[i]));
     }
     
