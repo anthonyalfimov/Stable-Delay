@@ -23,7 +23,7 @@ public:
     
     void paint (Graphics& g) override;
     
-    void setFxPanelStyle (FxTypeID inTypeID);
+    void setFxPanelStyle (FxTypeID typeID);
     
     void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
     

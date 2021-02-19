@@ -39,12 +39,11 @@ void FxPanel::paint (Graphics& g)
         paintComponentLabel (g, slider);
 }
     
-void FxPanel::setFxPanelStyle (FxTypeID inTypeID)
+void FxPanel::setFxPanelStyle (FxTypeID typeID)
 {
-    mTypeID = inTypeID;
+    mTypeID = typeID;
     mSliders.clear();
-    
-    
+
     switch (mTypeID)
     {
     // TODO: Can this be better implemented using std::unique_ptr or move semantics?
@@ -100,8 +99,8 @@ void FxPanel::setFxPanelStyle (FxTypeID inTypeID)
         // TODO: Do we need to unregister when Sliders are destroyed?
         //  List of listeners is stored in Slider object and destroyed with it - so no?
         
-        // Register as mouse listener for Sliders so we can repaint Slider labels when mouse
-        //  enters and exits Slider components
+        // Register as mouse listener for Sliders so we can repaint Slider labels when
+        //  mouse enters and exits Slider components
         slider->addMouseListener (this, false);
     }
     
