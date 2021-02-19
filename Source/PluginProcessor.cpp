@@ -217,9 +217,9 @@ void ReallyBasicDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
         float inputGain
         = *(parameters.getRawParameterValue (Parameter::ID[Parameter::InputGain]));
         mInputGain[channel]->process (channelData,              // inAudio
-                                      inputGain,                // inGain
+                                      inputGain,                // gain
                                       channelData,              // outAudio
-                                      buffer.getNumSamples());  // inNumSamplesToRender
+                                      buffer.getNumSamples());  // numSamplesToRender
         
         float modulationRate
         = *(parameters.getRawParameterValue (Parameter::ID[Parameter::ModulationRate]));
@@ -230,35 +230,35 @@ void ReallyBasicDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
         float modulationDepth
         = *(parameters.getRawParameterValue (Parameter::ID[Parameter::ModulationDepth]));
         
-        mLfo[channel]->process (modulationRate,             // inRate
-                                modulationDepth,            // inDepth
-                                buffer.getNumSamples());    // inNumSamplesToRender
+        mLfo[channel]->process (modulationRate,             // rate
+                                modulationDepth,            // depth
+                                buffer.getNumSamples());    // numSamplesToRender
         
         float delayTime
         = *(parameters.getRawParameterValue (Parameter::ID[Parameter::DelayTime]));
         float delayFeedback
         = *(parameters.getRawParameterValue (Parameter::ID[Parameter::DelayFeedback]));
-        float delayWetDry
-        = *(parameters.getRawParameterValue (Parameter::ID[Parameter::DelayWetDry]));
-        float delayType
-        = *(parameters.getRawParameterValue (Parameter::ID[Parameter::DelayType]));
+        float dryWet
+        = *(parameters.getRawParameterValue (Parameter::ID[Parameter::DryWet]));
+        float fxType
+        = *(parameters.getRawParameterValue (Parameter::ID[Parameter::FxType]));
         
         mDelay[channel]->process (channelData,                  // inAudio
-                                  delayTime,                    // inTime
-                                  delayFeedback,                // inFeedback
-                                  delayWetDry,                  // inWetDry
-                                  delayType,                    // inType
-                                  mLfo[channel]->getBuffer(),   // inModulationBuffer
+                                  delayTime,                    // time
+                                  delayFeedback,                // feedback
+                                  dryWet,                       // dryWet
+                                  fxType,                       // type
+                                  mLfo[channel]->getBuffer(),   // modulationBuffer
                                   channelData,                  // outAudio
-                                  buffer.getNumSamples());      // inNumSamplesToRender
+                                  buffer.getNumSamples());      // numSamplesToRender
         
         float outputGain
         = *(parameters.getRawParameterValue (Parameter::ID[Parameter::OutputGain]));
         
         mOutputGain[channel]->process (channelData,             // inAudio
-                                       outputGain,              // inGain
+                                       outputGain,              // gain
                                        channelData,             // outAudio
-                                       buffer.getNumSamples()); // inNumSamplesToRender
+                                       buffer.getNumSamples()); // numSamplesToRender
     }
 }
 

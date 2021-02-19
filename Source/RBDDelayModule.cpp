@@ -43,13 +43,13 @@ void DelayModule::reset()
 void DelayModule::process (const float* inAudio,
                            float time,
                            float feedback,
-                           float wetDry,
+                           float dryWet,
                            float type,
                            const float* modulationBuffer,
                            float* outAudio,
                            int numSamplesToRender)
 {
-    const float wet = wetDry;
+    const float wet = dryWet;
     const float dry = 1.0f - wet;
     
     // TODO: Why not use NormalizableRange<> for parameters instead of mapping them here?

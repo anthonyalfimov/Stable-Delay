@@ -23,7 +23,7 @@ public:
     void process (const float* inAudio,
                   float time,
                   float feedback,
-                  float wetDry,
+                  float dryWet,
                   float type,
                   const float* modulationBuffer,
                   float* outAudio,

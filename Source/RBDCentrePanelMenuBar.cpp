@@ -18,7 +18,7 @@ CentrePanelMenuBar::CentrePanelMenuBar (ReallyBasicDelayAudioProcessor* inProces
     setName ("CenterMenu");
     
     mFxTypeComboBox
-    = std::make_unique<ParameterComboBox> (mProcessor->parameters, Parameter::DelayType);
+    = std::make_unique<ParameterComboBox> (mProcessor->parameters, Parameter::FxType);
     const int width = 90;
     mFxTypeComboBox->setBounds (getWidth() - width, 0, width, getHeight());
     
@@ -27,7 +27,7 @@ CentrePanelMenuBar::CentrePanelMenuBar (ReallyBasicDelayAudioProcessor* inProces
     auto& parameters = mProcessor->getParameters();
     
     const auto selectedTypeID
-    = floatToFxTypeID (parameters[Parameter::DelayType]->getValue());
+    = floatToFxTypeID (parameters[Parameter::FxType]->getValue());
     mFxTypeComboBox->setSelectedId (static_cast<int> (selectedTypeID),
                                     dontSendNotification);
     addAndMakeVisible (mFxTypeComboBox.get());

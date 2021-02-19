@@ -18,7 +18,7 @@ FxPanel::FxPanel (ReallyBasicDelayAudioProcessor* inProcessor)
     setSize (RBD::fxPanelWidth, RBD::fxPanelHeight);
     auto& parameters = mProcessor->getParameters();
     const auto selectedTypeID
-    = floatToFxTypeID (parameters[Parameter::DelayType]->getValue());
+    = floatToFxTypeID (parameters[Parameter::FxType]->getValue());
     setFxPanelStyle (selectedTypeID);
 }
 
@@ -58,7 +58,7 @@ void FxPanel::setFxPanelStyle (FxTypeID inTypeID)
                                                Parameter::DelayFeedback));
             
             mSliders.add (new ParameterSlider (mProcessor->parameters,
-                                               Parameter::DelayWetDry));
+                                               Parameter::DryWet));
             break;
             
         case FxTypeID::Chorus:
@@ -71,7 +71,7 @@ void FxPanel::setFxPanelStyle (FxTypeID inTypeID)
                                                Parameter::ModulationDepth));
             
             mSliders.add (new ParameterSlider (mProcessor->parameters,
-                                               Parameter::DelayWetDry));
+                                               Parameter::DryWet));
             break;
             
         default:
