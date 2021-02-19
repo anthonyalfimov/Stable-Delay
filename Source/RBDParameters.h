@@ -76,6 +76,10 @@ enum class FxTypeID
     Delay = 1,
     Chorus
 };
+
+// FIXME: This function should map items identically to JUCE ComboBoxAttachment
+//  Otherwise, we can get mismatch in behaviour between "manually" handling the value
+//  and ComboBoxAttachment handling it.
 /**
 Helper function that converts a float [0, 1] value to the FxTypeID to accomodate
  float representation of the FX TYPE parameter
