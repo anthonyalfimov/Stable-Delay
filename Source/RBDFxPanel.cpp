@@ -46,31 +46,36 @@ void FxPanel::setFxPanelStyle (FxTypeID typeID)
 
     switch (mTypeID)
     {
-    // TODO: Can this be better implemented using std::unique_ptr or move semantics?
         case FxTypeID::Delay:
             setName ("DELAY");
             
-            mSliders.add (new ParameterSlider (mProcessor->parameters,
-                                               Parameter::DelayTime));
+            mSliders.add (std::make_unique<ParameterSlider>
+                                          (mProcessor->parameters,
+                                           Parameter::DelayTime));
+
+            mSliders.add (std::make_unique<ParameterSlider>
+                                          (mProcessor->parameters,
+                                           Parameter::DelayFeedback));
             
-            mSliders.add (new ParameterSlider (mProcessor->parameters,
-                                               Parameter::DelayFeedback));
-            
-            mSliders.add (new ParameterSlider (mProcessor->parameters,
-                                               Parameter::DryWet));
+            mSliders.add (std::make_unique<ParameterSlider>
+                                          (mProcessor->parameters,
+                                           Parameter::DryWet));
             break;
             
         case FxTypeID::Chorus:
             setName ("CHORUS");
             
-            mSliders.add (new ParameterSlider (mProcessor->parameters,
-                                               Parameter::ModulationRate));
+            mSliders.add (std::make_unique<ParameterSlider>
+                                          (mProcessor->parameters,
+                                           Parameter::ModulationRate));
             
-            mSliders.add (new ParameterSlider (mProcessor->parameters,
-                                               Parameter::ModulationDepth));
+            mSliders.add (std::make_unique<ParameterSlider>
+                                          (mProcessor->parameters,
+                                           Parameter::ModulationDepth));
             
-            mSliders.add (new ParameterSlider (mProcessor->parameters,
-                                               Parameter::DryWet));
+            mSliders.add (std::make_unique<ParameterSlider>
+                                          (mProcessor->parameters,
+                                           Parameter::DryWet));
             break;
             
         default:
@@ -85,11 +90,14 @@ void FxPanel::setFxPanelStyle (FxTypeID typeID)
     
     const int sliderSize = 80;
     
-    mSliders[0]->setBounds (getLocalBounds().withSizeKeepingCentre (sliderSize, sliderSize)
+    mSliders[0]->setBounds (getLocalBounds()
+                            .withSizeKeepingCentre (sliderSize, sliderSize)
                             .translated (-1.5 * sliderSize, 15));
-    mSliders[1]->setBounds (getLocalBounds().withSizeKeepingCentre (sliderSize, sliderSize)
+    mSliders[1]->setBounds (getLocalBounds()
+                            .withSizeKeepingCentre (sliderSize, sliderSize)
                             .translated (0, 15));
-    mSliders[2]->setBounds (getLocalBounds().withSizeKeepingCentre (sliderSize, sliderSize)
+    mSliders[2]->setBounds (getLocalBounds()
+                            .withSizeKeepingCentre (sliderSize, sliderSize)
                             .translated (1.5 * sliderSize, 15));
     
     for (auto slider : mSliders)
