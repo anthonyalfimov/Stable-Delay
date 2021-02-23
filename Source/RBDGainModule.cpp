@@ -13,8 +13,6 @@
 #include "RBDAudioConstants.h"
 #include "RBDAudioUtilities.h"
 
-// TODO: DSP module base class
-
 GainModule::GainModule()
 {
     

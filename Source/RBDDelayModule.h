@@ -12,6 +12,14 @@
 
 #include "RBDAudioConstants.h"
 
+// TODO: DSP module base class
+//  Consider using JUCE-style dsp::ProcessSpec object to initialise DSP modules
+//  The base class can provide a `prepare()` method that initialises sample
+//  rate, block size and number of channels.
+//  It can also provide a utility for const-duration smoothing. Perhaps, provide
+//  a fixed time factor that is calculated based on sample rate (or block size
+//  for block-level smoothing). Or just store the smoothing coefficeints.
+
 class DelayModule
 {
 public:

@@ -124,7 +124,9 @@ void TopPanel::displaySaveAsPopup()
     saveAsDialogue.addTextEditor ("presetName", currentPresetName, "Preset name: ");
     saveAsDialogue.addButton ("Save", 0);
     saveAsDialogue.addButton ("Cancel", 1);
-    
+
+    // TODO: Jules said to always avoid modal loops in a plugin
+    //  Does this apply here? Why should we avoid it? What's the alternative?
     if (saveAsDialogue.runModalLoop() == 0) // if exit code is 0
     {
         const String presetName = saveAsDialogue.getTextEditorContents ("presetName");
