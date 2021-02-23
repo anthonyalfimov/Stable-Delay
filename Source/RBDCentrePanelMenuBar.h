@@ -18,6 +18,8 @@ class CentrePanelMenuBar  : public InterfacePanel
 public:
     CentrePanelMenuBar (ReallyBasicDelayAudioProcessor* inProcessor);
     ~CentrePanelMenuBar();
+
+    void paint (Graphics& g) override;
     
     // These are here because mFxTypeComboBox is a private member of this class
     void addFxTypeComboBoxListener (ComboBox::Listener* inListener);

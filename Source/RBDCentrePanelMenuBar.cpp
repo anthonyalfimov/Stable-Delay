@@ -38,6 +38,24 @@ CentrePanelMenuBar::~CentrePanelMenuBar()
     
 }
 
+void CentrePanelMenuBar::paint (Graphics& g)
+{
+    InterfacePanel::paint (g);
+
+    // TODO: Projucer uses a Label object for every label. Should we do too?
+    // TODO: Enable build stamp only for the debug version, or remove later
+
+    g.setFont (RBD::font1);
+    g.setColour (RBD::colour1);
+    auto buildDate = Time::getCompilationDate();
+    g.drawText ("Build: " + String (buildDate.getHours()) + ":"
+                + String (buildDate.getMinutes()) + ", "
+                + String (buildDate.getDayOfMonth()) + " "
+                + buildDate.getMonthName (true) + " "
+                + String (buildDate.getYear()),
+                getLocalBounds().withTrimmedLeft (10), Justification::centredLeft);
+}
+
 void CentrePanelMenuBar::addFxTypeComboBoxListener (ComboBox::Listener* inListener)
 {
     mFxTypeComboBox->addListener (inListener);
