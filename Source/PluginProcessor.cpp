@@ -209,10 +209,19 @@ void ReallyBasicDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
         // TODO: Using the same buffer to read and write - is there a better approach?
         // TODO: Stereo processing hardcoded. This will fail for >2 channels, will it for mono?
         /* Q: Why can't we use one RBD::Gain object for both channels?
-           A: If we have parameter smoothing, it must remain continuos between blocks. DSP module
-              acquires memory in this case, and this memory needs to be per-channel
+           A: If we have parameter smoothing, it must remain continuos between
+              blocks. DSP module keeps information about its state via the
+              member variable that stores the "old" parameter value.
+              This state information must be preserved per-channel.
         */
-        // TODO: add smoothing for all parameters
+        // TODO: Add smoothing for all parameters
+        // TODO: Consider updating parameter values only when they change
+        //  AudioProgrammer does this in his tutorials by creating a
+        //  std::atomic<bool> flag that tells the processor whether it needs
+        //  to update parameter values. The flag itself is updated in a
+        //  AudioProcessorValueTree listener. He makes the processor itself
+        //  a listener.
+        //  Are there significant performance benefits from this approach?
 
         mInputGain[channel]->process (channelData,              // inAudio
                                       *mInputGainParameter,     // gain
