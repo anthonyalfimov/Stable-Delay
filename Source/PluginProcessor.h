@@ -80,12 +80,27 @@ public:
 
 private:
     void initialiseDSP();
+    void initialiseParameters();
     
+    // DSP Modules
     // TODO: hardcoding stereo signal here - independent gain for left and right channels. Refactor!
     std::unique_ptr<GainModule> mInputGain[2];
     std::unique_ptr<GainModule> mOutputGain[2];
     std::unique_ptr<LfoModule> mLfo[2];
     std::unique_ptr<DelayModule> mDelay[2];
+    
+    // Parameters
+    // TODO: Is there a better option than storing raw ptrs to parameter values?
+    //  Lifetime of these ptrs is the same at the AudioProcessorValueTreeState that
+    //  stores them, so there should be no problems
+    std::atomic<float>* mInputGainParameter = nullptr;
+    std::atomic<float>* mModulationRateParameter = nullptr;
+    std::atomic<float>* mModulationDepthParameter = nullptr;
+    std::atomic<float>* mDelayTimeParameter = nullptr;
+    std::atomic<float>* mDelayFeedbackParameter = nullptr;
+    std::atomic<float>* mDryWetParameter = nullptr;
+    std::atomic<float>* mFxTypeParameter = nullptr;
+    std::atomic<float>* mOutputGainParameter = nullptr;
     
     std::unique_ptr<PresetManager> mPresetManager;
     

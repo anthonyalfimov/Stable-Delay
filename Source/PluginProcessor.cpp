@@ -56,6 +56,8 @@ ReallyBasicDelayAudioProcessor::ReallyBasicDelayAudioProcessor()
 {
     // Initialise DSP modules
     initialiseDSP();
+    // Initialise Parameter pointers
+    initialiseParameters();
     // Create the preset manager
     mPresetManager = std::make_unique<PresetManager> (this);
 }
@@ -210,53 +212,30 @@ void ReallyBasicDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
            A: If we have parameter smoothing, it must remain continuos between blocks. DSP module
               acquires memory in this case, and this memory needs to be per-channel
         */
-        // NB: Calling this when mGain[] unique_ptrs are not initialised is UB!
         // TODO: add smoothing for all parameters
-        // TODO: is this the proper way of using modern JUCE parameter handling?
-        // TODO: consider using std::atomic<float> for .process() functions of DSP modules!
-        float inputGain
-        = *(parameters.getRawParameterValue (Parameter::ID[Parameter::InputGain]));
+
         mInputGain[channel]->process (channelData,              // inAudio
-                                      inputGain,                // gain
+                                      *mInputGainParameter,     // gain
                                       channelData,              // outAudio
                                       buffer.getNumSamples());  // numSamplesToRender
         
-        float modulationRate
-        = *(parameters.getRawParameterValue (Parameter::ID[Parameter::ModulationRate]));
-        
-        if (channel == 0)
-            modulationRate = 0.0f;
-        
-        float modulationDepth
-        = *(parameters.getRawParameterValue (Parameter::ID[Parameter::ModulationDepth]));
-        
-        mLfo[channel]->process (modulationRate,             // rate
-                                modulationDepth,            // depth
-                                buffer.getNumSamples());    // numSamplesToRender
-        
-        float delayTime
-        = *(parameters.getRawParameterValue (Parameter::ID[Parameter::DelayTime]));
-        float delayFeedback
-        = *(parameters.getRawParameterValue (Parameter::ID[Parameter::DelayFeedback]));
-        float dryWet
-        = *(parameters.getRawParameterValue (Parameter::ID[Parameter::DryWet]));
-        float fxType
-        = *(parameters.getRawParameterValue (Parameter::ID[Parameter::FxType]));
+        float modulationRate = (channel == 0) ? 0.0f : mModulationRateParameter->load();
+
+        mLfo[channel]->process (modulationRate,                 // rate
+                                *mModulationDepthParameter,     // depth
+                                buffer.getNumSamples());        // numSamplesToRender
         
         mDelay[channel]->process (channelData,                  // inAudio
-                                  delayTime,                    // time
-                                  delayFeedback,                // feedback
-                                  dryWet,                       // dryWet
-                                  fxType,                       // type
+                                  *mDelayTimeParameter,         // time
+                                  *mDelayFeedbackParameter,     // feedback
+                                  *mDryWetParameter,            // dryWet
+                                  *mFxTypeParameter,            // type
                                   mLfo[channel]->getBuffer(),   // modulationBuffer
                                   channelData,                  // outAudio
                                   buffer.getNumSamples());      // numSamplesToRender
         
-        float outputGain
-        = *(parameters.getRawParameterValue (Parameter::ID[Parameter::OutputGain]));
-        
         mOutputGain[channel]->process (channelData,             // inAudio
-                                       outputGain,              // gain
+                                       *mOutputGainParameter,   // gain
                                        channelData,             // outAudio
                                        buffer.getNumSamples()); // numSamplesToRender
     }
@@ -346,6 +325,26 @@ void ReallyBasicDelayAudioProcessor::initialiseDSP()
         mLfo[channel] = std::make_unique<LfoModule>();
         mDelay[channel] = std::make_unique<DelayModule>();
     }
+}
+
+void ReallyBasicDelayAudioProcessor::initialiseParameters()
+{
+    mInputGainParameter
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::InputGain]);
+    mModulationRateParameter
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::ModulationRate]);
+    mModulationDepthParameter
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::ModulationDepth]);
+    mDelayTimeParameter
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::DelayTime]);
+    mDelayFeedbackParameter
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::DelayFeedback]);
+    mDryWetParameter
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::DryWet]);
+    mFxTypeParameter
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::FxType]);
+    mOutputGainParameter
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::OutputGain]);
 }
 
 //==============================================================================
