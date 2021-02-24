@@ -31,6 +31,7 @@ private:
     //       E.g. mono, mono->stereo
     float mCh0Level = 0.0f;
     float mCh1Level = 0.0f;
-  
+    
+    // TODO: Can we avoid including "PluginProcessor.h" here?
     ReallyBasicDelayAudioProcessor* mProcessor = nullptr;
 };

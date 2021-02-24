@@ -283,6 +283,18 @@ void ReallyBasicDelayAudioProcessor::getStateInformation (juce::MemoryBlock& des
     // TODO: Why do we need a separate child for the preset body?
     //       Can't we just use one XML element on the stack?
     
+    // TODO: Could we use `copyState` and `replaceState` functions here?
+    //  Together with `.createXml()` and `.fromXml()` methods.
+    //
+    //  Tutorial https://docs.juce.com/master/tutorial_audio_processor_value_tree_state.html
+    //  uses these functions to save and recall the whole plugin state to and from XML
+    //  How does this approach work when the number or ranges of parameters change?
+    //  Is our approach safer for backwards compatibility, or could we just use the
+    //  approach from the tutorial?
+    //
+    //  The real question is, are `.createXml()` and `.fromXml()` methods equivalent to
+    //  our preset manager methods?
+    
     XmlElement preset ("RBD_StateInfo");
     
     auto presetBody = std::make_unique<XmlElement> ("RBD_Preset");
@@ -299,7 +311,7 @@ void ReallyBasicDelayAudioProcessor::setStateInformation (const void* data, int 
     
     std::unique_ptr<XmlElement> xmlState = getXmlFromBinary (data, sizeInBytes);
     
-    if (xmlState.get() != nullptr)
+    if (xmlState != nullptr)
     {
         forEachXmlChildElement (*xmlState, subChild)
         {
@@ -308,7 +320,7 @@ void ReallyBasicDelayAudioProcessor::setStateInformation (const void* data, int 
     }
     else
     {
-    // TODO: nullptr can be returned if data is corrupted, so it should send an error in prod code
+    // TODO: nullptr can be returned if data is corrupted, send an error instead
         jassertfalse;
     }
 }
