@@ -12,8 +12,8 @@
 
 #include <JuceHeader.h>
 
-// TODO: can we move these to the .cpp file? Or does it need to be globally available if needed?
 // TODO: Make static class members - these belong as a part of PresetManager
+
 namespace RBD
 {
     // TODO: Should we use StringRef instead here?
@@ -53,6 +53,6 @@ private:
     String mPresetDirectory;
     Array<File> mLocalPresets;
     
-    XmlElement* mCurrentPresetXml;          // TODO: What is the point of this member?
+    XmlElement* mCurrentPresetXml;  // TODO: What is the point of this member?
     AudioProcessor* mProcessor;
 };

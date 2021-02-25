@@ -12,9 +12,8 @@
 #include "RBDAudioUtilities.h"
 #include "RBDInterfaceConstants.h"
 
-// FIXME: If minMeterDbLevel is smaller than 96,
-
-LevelMeter::LevelMeter (Parameter::Index inParameter, ReallyBasicDelayAudioProcessor* inProcessor)
+LevelMeter::LevelMeter (Parameter::Index inParameter,
+                        ReallyBasicDelayAudioProcessor* inProcessor)
     : mParameter (inParameter), mProcessor (inProcessor)
 {
     startTimerHz (15);  // start the timer once we know which paremeter we're metering
@@ -27,7 +26,7 @@ LevelMeter::~LevelMeter()
 
 void LevelMeter::paint (Graphics& g)
 {
-    // TODO: Programmatically draw meters for the given number of channels (at least 1 or 2)
+    // TODO: Programmatically draw meters for the given number of channels
     // TODO: Add colour to the meters
     // TODO: Add clipping indicators
     
@@ -42,10 +41,13 @@ void LevelMeter::paint (Graphics& g)
     g.fillRoundedRectangle (ch0Bounds.toFloat(), RBD::defaultCornerSize);
     g.fillRoundedRectangle (ch1Bounds.toFloat(), RBD::defaultCornerSize);
     
-    // Find the top Y coordinate of the meter fill, clamping it so it doesn't go negative
-    // If mCh0/1Level is negative, we move the Top of the meter below the Bottom, making it height 0
-    const int ch0FillTop = jmax (0, static_cast<int> (getHeight() - (getHeight() * mCh0Level)));
-    const int ch1FillTop = jmax (0, static_cast<int> (getHeight() - (getHeight() * mCh1Level)));
+    // Find the top Y coordinate of the meter fill, clamping it so it doesn't
+    //  go negative. If mCh0/1Level is negative, move the Top of the meter
+    //  below the Bottom, making it height 0
+    const int ch0FillTop = jmax (0, static_cast<int> (getHeight()
+                                                      - (getHeight() * mCh0Level)));
+    const int ch1FillTop = jmax (0, static_cast<int> (getHeight()
+                                                      - (getHeight() * mCh1Level)));
     
     // Set bounds for meter fill
     ch0Bounds.setTop (ch0FillTop);
@@ -78,8 +80,10 @@ void LevelMeter::timerCallback()
             break;
     }
     
-    // TODO: We're already smoothing the levels in RBDGain. Do we need to smooth it twice?
-    // Immidiately update Channel Level if new Updated Level is higher than the stored value
+    // TODO: Already smoothing the levels in RBDGain. Do we need to smooth it twice?
+
+    // Immidiately update Channel Level if new Updated Level is higher than the
+    //  stored value
     if (updatedCh0Level > mCh0Level)
     {
         mCh0Level = updatedCh0Level;
@@ -98,22 +102,23 @@ void LevelMeter::timerCallback()
         mCh1Level = mCh1Level - RBD::meterSmoothingCoef * (mCh1Level - updatedCh1Level);
     }
     
-    // TODO: If we want no denormals there should be a better JUCE way to achieve this
-    //       Use the ScopedNoDenormals object. Since this processing occurs not inside the
-    //       process block, it does not benefit from disabled denormals there.
-    //       However, the threshold used for RBD::denormalise() is much greater than
-    //       the smallest normal float value. Therefore, this is not what's happening here.
-    // TODO: If we want to ignore small values, the threshold can be higher
-    //  The threshold should then work well with the lowest displayed meter level - minMeterDbLevel
+    // TODO: If we want to disable denormals, use ScopedNoDenormals object
+    //  Since this processing occurs not inside the process block, it does not
+    //  benefit from disabled denormals there.
+    //  However, the threshold used for RBD::denormalise() is much greater than
+    //  the smallest normal float value. So, this is not what's happening here.
+    // TODO: If we want to ignore small values, calculate threashold better
+    //  The threshold should then correspond with the lowest displayed
+    //  meter level - minMeterDbLevel, and the "floor" constant (1e-15) in the
+    //  denormalise function
     
     mCh0Level = RBD::denormalise (mCh0Level);
     mCh1Level = RBD::denormalise (mCh1Level);
-    
-    // TODO: Meter value threshold should relate with minMeterDbLevel and "floor" constant
-   
-    // FIXME: When minMeterDbLevel is higher than 96, level becomes negative and meter gets "stuck"
-    // Probably level becomes negative too quickly so that the meter stops being repainted
-    // Probalem actually gets fixed when forcing a repaint by hovering over a knob
+
+    // FIXME: When minMeterDbLevel is higher than 96, the meter gets "stuck"
+    //  Probably level becomes negative too quickly so that the meter stops
+    //  being repainted. Probalem gets fixed when forcing a repaint by hovering
+    //  over a knob
     
     // Repaint only if values are worth painting (non-zero)
     if (mCh0Level > 0.0f && mCh1Level > 0.0f)

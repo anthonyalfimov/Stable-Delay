@@ -25,7 +25,7 @@ PresetManager::PresetManager (AudioProcessor* inProcessor)
     
     storeLocalPresets();
     
-    // FIXME: preset name / selection is not recalled as a part of plugin's state by the Host
+    // FIXME: preset selection is not recalled as a part of plugin's state
 }
 
 PresetManager::~PresetManager()
@@ -35,17 +35,19 @@ PresetManager::~PresetManager()
 
 void PresetManager::getXmlForPreset (XmlElement* outElement)
 {
-    // Note: we can't access mProcessor->parameters here because mProcessor is a base class pointer
-    //       and current scope is not aware of ReallyBasicDelayAudioProcessor
+    // Note: we can't access mProcessor->parameters here because mProcessor is
+    //  a base class pointer and current scope is not aware of
+    //  ReallyBasicDelayAudioProcessor. We'd need to include "Processor.h" to
+    //  do that. Why not?
     
     // TODO: Why not access AudioProcessorValueTreeState directly here?
-    //  Is the approach here somehow safer, or is it just an older way of doing it?
-    
+
     auto& parameters = mProcessor->getParameters();
     
     for (auto* parameter : parameters)
     {
-        // Downcast parameter pointer to AudioProcessorParameterWithID ptr to access its ID
+        // Downcast parameter pointer to AudioProcessorParameterWithID ptr
+        //  to access its ID
         auto* parameterWithID = dynamic_cast<AudioProcessorParameterWithID*> (parameter);
         
         // Handle failed downcast
@@ -63,9 +65,10 @@ void PresetManager::getXmlForPreset (XmlElement* outElement)
 
 void PresetManager::loadPresetForXml (XmlElement* inElement)
 {
-    // TODO: Why store current preset XML in the manager object? Currently, no reason.
-    // Usually, these are leftovers from what was planned for the course and they have a reason
-    //  behind them. So, before getting rid of it, let's try to figure out what was it intended for
+    // TODO: Why store current preset XML in the manager object?
+    //  Usually, these are leftovers from what was planned for the course and
+    //  they have a reason behind them. So, before getting rid of it, let's try
+    //  to figure out what was it intended for
     
     mCurrentPresetXml = inElement;
     
@@ -79,7 +82,7 @@ void PresetManager::loadPresetForXml (XmlElement* inElement)
         
         for (auto* parameter : parameters)
         {
-            // Downcast parameter pointer to AudioProcessorParameterWithID ptr to access its ID
+            // Downcast parameter ptr to AudioProcessorParameterWithID to access its ID
             auto* parameterWithID = dynamic_cast<AudioProcessorParameterWithID*> (parameter);
             
             // Handle failed downcast
@@ -123,13 +126,14 @@ void PresetManager::savePreset()
     MemoryBlock destinationData;
     mProcessor->getStateInformation (destinationData);
     
-    mCurrentlyLoadedPreset.replaceWithData (destinationData.getData(), destinationData.getSize());    
+    mCurrentlyLoadedPreset.replaceWithData (destinationData.getData(),
+                                            destinationData.getSize());
 }
 
 void PresetManager::saveAsPreset (String inPresetName)
 {
-    File presetFile (File::addTrailingSeparator (mPresetDirectory) + inPresetName
-                     + RBD::presetFileExtention);
+    File presetFile (File::addTrailingSeparator (mPresetDirectory)
+                     + inPresetName + RBD::presetFileExtention);
     
     MemoryBlock destinationData;
     mProcessor->getStateInformation (destinationData);
