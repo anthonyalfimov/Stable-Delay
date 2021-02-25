@@ -33,7 +33,7 @@ PresetManager::~PresetManager()
     
 }
 
-void PresetManager::getXmlForPreset (XmlElement* outElement)
+void PresetManager::createXmlForPreset (XmlElement* outElement)
 {
     // Note: we can't access mProcessor->parameters here because mProcessor is
     //  a base class pointer and current scope is not aware of
@@ -55,8 +55,10 @@ void PresetManager::getXmlForPreset (XmlElement* outElement)
         // Handle failed downcast
         if (parameterWithID == nullptr)
             break;
-        
-        outElement->setAttribute (parameterWithID->paramID, parameterWithID->getValue());
+
+        // MARK: getValue() returns a 0to1 range
+        outElement->setAttribute (parameterWithID->paramID,
+                                  parameterWithID->getValue());
     }
 }
 
@@ -65,7 +67,7 @@ void PresetManager::getXmlForPreset (XmlElement* outElement)
  better reliability and backwards compatibility
 */
 
-void PresetManager::loadPresetForXml (XmlElement* inElement)
+void PresetManager::loadPresetFromXml (XmlElement* inElement)
 {
     // TODO: Why store current preset XML in the manager object?
     //  Usually, these are leftovers from what was planned for the course and
@@ -87,13 +89,15 @@ void PresetManager::loadPresetForXml (XmlElement* inElement)
         
         for (auto* parameter : parameters)
         {
-            // Downcast parameter ptr to AudioProcessorParameterWithID to access its ID
-            auto* parameterWithID = dynamic_cast<AudioProcessorParameterWithID*> (parameter);
+        // Downcast parameter ptr to AudioProcessorParameterWithID to access ID
+            auto* parameterWithID
+            = dynamic_cast<AudioProcessorParameterWithID*> (parameter);
             
             // Handle failed downcast
             if (parameterWithID == nullptr)
                 break;
-            
+
+            // MARK: setValueNotifyingHost() expects 0to1 range
             if (name == parameterWithID->paramID)
                 parameterWithID->setValueNotifyingHost (value);
         }

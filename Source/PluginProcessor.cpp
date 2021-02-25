@@ -300,7 +300,7 @@ void ReallyBasicDelayAudioProcessor::getStateInformation (juce::MemoryBlock& des
     XmlElement preset ("RBD_StateInfo");
 
     auto presetBody = std::make_unique<XmlElement> ("RBD_Preset");
-    mPresetManager->getXmlForPreset (presetBody.get());
+    mPresetManager->createXmlForPreset (presetBody.get());
     
     preset.addChildElement (presetBody.release());  // this transfers the ownership of `presetBody`
     copyXmlToBinary (preset, destData);
@@ -317,7 +317,7 @@ void ReallyBasicDelayAudioProcessor::setStateInformation (const void* data, int 
     {
         forEachXmlChildElement (*xmlState, subChild)
         {
-            mPresetManager->loadPresetForXml (subChild);
+            mPresetManager->loadPresetFromXml (subChild);
         }
     }
     else

@@ -37,9 +37,8 @@ public:
     PresetManager (AudioProcessor& processor);
     ~PresetManager();
     
-    // TODO: better method names
-    void getXmlForPreset (XmlElement* outElement);
-    void loadPresetForXml (XmlElement* inElement);
+    void createXmlForPreset (XmlElement* outElement);
+    void loadPresetFromXml (XmlElement* inElement);
     
     int getNumberOfPresets() const;
     String getPresetName (int inPresetIndex) const;
