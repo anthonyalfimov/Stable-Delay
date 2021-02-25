@@ -12,15 +12,24 @@
 
 #include <JuceHeader.h>
 
-// TODO: Make static class members - these belong as a part of PresetManager
-
 namespace RBD
 {
     const static String presetFileExtention = ".rbdf";
     const static String untitledPresetName = "Untitled";
 }
 
-// TODO: should this class be a singleton, or do we not care?
+// NB: We cannot store a reference to ReallyBasicDelayAudioProcessor here,
+//  because that would cause circular inclusion.
+
+// TODO: Consider storing a reference to AudioProcessorValueTreeState instead
+//  Processor reference is used to:
+//  - get plugin name (there might be alternatives?)
+//  - get and set plugin state information to save and load presets
+//  - access parameters
+//  We could include both AudioProcessor& and the AudioProcessorValueTreeState&,
+//  but is it worth it?
+
+// TODO: Should this class be a singleton, or do we not care?
 
 class PresetManager
 {
