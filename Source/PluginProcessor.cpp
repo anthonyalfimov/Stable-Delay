@@ -36,23 +36,21 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
 }
 
 //==============================================================================
-ReallyBasicDelayAudioProcessor::ReallyBasicDelayAudioProcessor()
+ReallyBasicDelayAudioProcessor::ReallyBasicDelayAudioProcessor() :
 #ifndef JucePlugin_PreferredChannelConfigurations
-     : AudioProcessor (BusesProperties()
+     AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
                       #if ! JucePlugin_IsSynth
                        .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       ),
-    // TODO: initialising inside #ifndef - source of potential problems?
+                       ),         
+#endif
     parameters (*this,                      // reference to processor
                 nullptr,                    // null pointer to undoManager
                 Identifier ("RBD"),         // valueTree indentifier
                 createParameterLayout())    // parameter layout
-                
-#endif
 {
     // Initialise DSP modules
     initialiseDSP();
