@@ -145,8 +145,10 @@ void TopPanel::updatePresetList()
     
     for (int i = 0; i < numPresets; ++i)
     {
-        mPresetList->addItem (presetManager->getPresetName (i), i + 1); // IDs start with 1
+        // IDs start with 1:
+        mPresetList->addItem (presetManager->getPresetName (i), i + 1);
     }
-    
+
+    // This also sets the comboBox selected item, if it's a valid Item Text
     mPresetList->setText (presetManager->getCurrentPresetName());
 }

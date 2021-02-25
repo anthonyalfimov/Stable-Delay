@@ -16,7 +16,6 @@
 
 namespace RBD
 {
-    // TODO: Should we use StringRef instead here?
     const static String presetFileExtention = ".rbdf";
     const static String untitledPresetName = "Untitled";
 }

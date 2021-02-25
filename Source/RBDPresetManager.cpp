@@ -69,6 +69,9 @@ void PresetManager::loadPresetForXml (XmlElement* inElement)
     //  Usually, these are leftovers from what was planned for the course and
     //  they have a reason behind them. So, before getting rid of it, let's try
     //  to figure out what was it intended for
+
+    //  Maybe this is to avoid creating a new XML if the current preset hasn't
+    //  changed, and just return the already existing one?
     
     mCurrentPresetXml = inElement;
     
@@ -139,8 +142,16 @@ void PresetManager::saveAsPreset (String inPresetName)
     mProcessor->getStateInformation (destinationData);
     
     presetFile.replaceWithData (destinationData.getData(), destinationData.getSize());
-    
-    // TODO: Shouldn't mCurrentlyLoadedPreset be updated here?
+
+    // TODO: More robust design for updating the loaded preset
+    //  Note: Technically, we don't need to update mCurrentlyLoadedPreset here.
+    //  This method is currently only called from TopPanel::displaySaveAsPopup()
+    //  That method also calls an update on the preset list, which in turn
+    //  updates the comboBox selection to the newly created preset. Updating the
+    //  comboBox selection calls PresetManager::loadPreset(), and that updates
+    //  mCurrentlyLoadedPreset.
+    //  However, is this a robust design? If we forget to update the preset
+    //  list, loadPreset() will not be called.
     
     mIsCurrentPresetSaved = true;
     mCurrentPresetName = inPresetName;
@@ -179,10 +190,11 @@ void PresetManager::storeLocalPresets()
     mLocalPresets.clear();
     
     // TODO: Is there a better way to handle file extentions?
-    for (DirectoryEntry entry : RangedDirectoryIterator (File (mPresetDirectory),
-                                                         false,
-                                                         "*" + RBD::presetFileExtention,
-                                                         File::TypesOfFileToFind::findFiles))
+    for (DirectoryEntry entry
+            : RangedDirectoryIterator (File (mPresetDirectory),
+                                       false,
+                                       "*" + RBD::presetFileExtention,
+                                       File::TypesOfFileToFind::findFiles))
     {
         mLocalPresets.add (entry.getFile());
     }

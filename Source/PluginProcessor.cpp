@@ -221,7 +221,13 @@ void ReallyBasicDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
         //  to update parameter values. The flag itself is updated in a
         //  AudioProcessorValueTree listener. He makes the processor itself
         //  a listener.
-        //  Are there significant performance benefits from this approach?
+        //  Note that he still updates the parameters in the processor before
+        //  any processing takes place, rather than in the listener.
+        //  This is supposed to improve thread safety: so that the listener call
+        //  cannot interrupt the processing and change the values in the middle
+        //  of it. Is this correct?
+        // Q:    Are there significant performance benefits from this approach?
+        // A(?): Perhaps, when the plugin has a lot of parameters
 
         mInputGain[channel]->process (channelData,              // inAudio
                                       *mInputGainParameter,     // gain
@@ -269,22 +275,32 @@ void ReallyBasicDelayAudioProcessor::getStateInformation (juce::MemoryBlock& des
     // as intermediaries to make it easy to save and load complex data.
     
     // TODO: Why do we need a separate child for the preset body?
-    //       Can't we just use one XML element on the stack?
+    //  Can't we just use one XML element on the stack?
+    //  Perhaps, this is to add more information to the preset, like information
+    //  about currently selected preset?
     
-    // TODO: Could we use `copyState` and `replaceState` functions here?
-    //  Together with `.createXml()` and `.fromXml()` methods.
+    // TODO: Can we simplify preset management using ValueTree methods?
+
+    // One option is to use `copyState()` and `replaceState()`
+    //  AudioProcessorValueTreeState methods together with
+    //  `createXml()` and `fromXml()`  ValueTree methods.
     //
-    //  Tutorial https://docs.juce.com/master/tutorial_audio_processor_value_tree_state.html
-    //  uses these functions to save and recall the whole plugin state to and from XML
-    //  How does this approach work when the number or ranges of parameters change?
-    //  Is our approach safer for backwards compatibility, or could we just use the
-    //  approach from the tutorial?
+    //  Tutorial
+    //  https://docs.juce.com/master/tutorial_audio_processor_value_tree_state.html
+    //  uses these functions to save and recall the whole plugin state to and
+    //  from XML.
     //
-    //  The real question is, are `.createXml()` and `.fromXml()` methods equivalent to
-    //  our preset manager methods?
-    
+    // Q: How does this approach work when the number or ranges of parameters
+    //    change? Is our approach safer for backwards compatibility, or could we
+    //    just use the approach from the tutorial?
+    // A: `replaceState()` is not equivalent to our 'loadPresetForXml()' method,
+    //    as it simply replaces the reference to the ValueTree's SharedObject.
+    //    I.e., it completely replaces the old tree with a new one.
+    //    Therefore, it's not suitable for the backwards compatible way of
+    //    loading presets.
+
     XmlElement preset ("RBD_StateInfo");
-    
+
     auto presetBody = std::make_unique<XmlElement> ("RBD_Preset");
     mPresetManager->getXmlForPreset (presetBody.get());
     
