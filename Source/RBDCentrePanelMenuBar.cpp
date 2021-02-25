@@ -11,14 +11,14 @@
 #include "RBDCentrePanelMenuBar.h"
 #include "RBDParameters.h"
 
-CentrePanelMenuBar::CentrePanelMenuBar (ReallyBasicDelayAudioProcessor* inProcessor)
-    : InterfacePanel (inProcessor)
+CentrePanelMenuBar::CentrePanelMenuBar (ReallyBasicDelayAudioProcessor& processor)
+    : InterfacePanel (processor)
 {
     setSize (RBD::centrePanelMenuBarWidth, RBD::centrePanelMenuBarHeight);
     setName ("CenterMenu");
     
     mFxTypeComboBox
-    = std::make_unique<ParameterComboBox> (mProcessor->parameters, Parameter::FxType);
+    = std::make_unique<ParameterComboBox> (mProcessor.parameters, Parameter::FxType);
     const int width = 90;
     mFxTypeComboBox->setBounds (getWidth() - width, 0, width, getHeight());
     
@@ -26,7 +26,7 @@ CentrePanelMenuBar::CentrePanelMenuBar (ReallyBasicDelayAudioProcessor* inProces
     mFxTypeComboBox->addItem ("CHORUS", static_cast<int> (FxTypeID::Chorus));
 
     // TODO: Why use getParameters() if we have access to state ValueTree?
-    auto& parameters = mProcessor->getParameters();
+    auto& parameters = mProcessor.getParameters();
 
     // FIXME: Calling getValue() always returns a normalised 0to1 value!
     const auto selectedTypeID

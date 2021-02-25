@@ -17,7 +17,7 @@
 class CentrePanel  : public InterfacePanel
 {
 public:
-    CentrePanel (ReallyBasicDelayAudioProcessor* inProcessor);
+    CentrePanel (ReallyBasicDelayAudioProcessor& processor);
     ~CentrePanel();
     
 private:

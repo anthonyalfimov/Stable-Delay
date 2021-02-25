@@ -25,7 +25,7 @@ namespace RBD
 class PresetManager
 {
 public:
-    PresetManager (AudioProcessor* inProcessor);
+    PresetManager (AudioProcessor& processor);
     ~PresetManager();
     
     // TODO: better method names
@@ -53,5 +53,5 @@ private:
     Array<File> mLocalPresets;
     
     XmlElement* mCurrentPresetXml;  // TODO: What is the point of this member?
-    AudioProcessor* mProcessor;
+    AudioProcessor& mProcessor;
 };

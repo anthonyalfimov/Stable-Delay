@@ -19,7 +19,7 @@ ReallyBasicDelayAudioProcessorEditor::ReallyBasicDelayAudioProcessorEditor (Real
     setLookAndFeel (mLookAndFeel.get());    // set Look And Feel for the editor and its children
     LookAndFeel::setDefaultLookAndFeel (mLookAndFeel.get());    // set default for all components
     
-    mMainPanel = std::make_unique<MainPanel> (&audioProcessor);
+    mMainPanel = std::make_unique<MainPanel> (audioProcessor);
     addAndMakeVisible (mMainPanel.get());
     
     mBackgroundImage = ImageCache::getFromMemory (BinaryData::RBD_BG_png,

@@ -10,8 +10,8 @@
 
 #include "RBDTopPanel.h"
 
-TopPanel::TopPanel (ReallyBasicDelayAudioProcessor* inProcessor)
-    : InterfacePanel (inProcessor)
+TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor)
+    : InterfacePanel (processor)
 {
     setSize (RBD::topPanelWidth, RBD::topPanelHeight);
     setName ("MainMenu");
@@ -73,7 +73,7 @@ void TopPanel::paint (Graphics& g)
 
 void TopPanel::buttonClicked (Button* buttonThatWasPressed)
 {
-    PresetManager* presetManager = mProcessor->getPresetManager();
+    PresetManager* presetManager = mProcessor.getPresetManager();
     
     if (buttonThatWasPressed == mNewPreset.get())
     {
@@ -101,7 +101,7 @@ void TopPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
 {
     if (comboBoxThatHasChanged == mPresetList.get())
     {
-        PresetManager* presetManager = mProcessor->getPresetManager();
+        PresetManager* presetManager = mProcessor.getPresetManager();
         const int index = mPresetList->getSelectedItemIndex();
         
         presetManager->loadPreset (index);
@@ -110,7 +110,7 @@ void TopPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
     
 void TopPanel::displaySaveAsPopup()
 {
-    PresetManager* presetManager = mProcessor->getPresetManager();
+    PresetManager* presetManager = mProcessor.getPresetManager();
     
     const String currentPresetName = presetManager->getCurrentPresetName();
     
@@ -137,7 +137,7 @@ void TopPanel::displaySaveAsPopup()
 
 void TopPanel::updatePresetList()
 {
-    PresetManager* presetManager = mProcessor->getPresetManager();
+    PresetManager* presetManager = mProcessor.getPresetManager();
     
     mPresetList->clear (dontSendNotification);  // we'll be rebuilding the list, don't alert listeners
     

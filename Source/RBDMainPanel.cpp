@@ -11,26 +11,26 @@
 #include "RBDMainPanel.h"
 #include "RBDParameters.h"
 
-MainPanel::MainPanel (ReallyBasicDelayAudioProcessor* inProcessor)
-    : InterfacePanel (inProcessor)
+MainPanel::MainPanel (ReallyBasicDelayAudioProcessor& processor)
+    : InterfacePanel (processor)
 {
     setSize (RBD::mainPanelWidth, RBD::mainPanelHeight);
     setName ("MainPanel");
     
-    mTopPanel = std::make_unique<TopPanel> (inProcessor);
+    mTopPanel = std::make_unique<TopPanel> (processor);
     mTopPanel->setTopLeftPosition (0, 0);
     addAndMakeVisible (mTopPanel.get());
     
-    mInputGainPanel = std::make_unique<GainPanel> (inProcessor);
+    mInputGainPanel = std::make_unique<GainPanel> (processor);
     mInputGainPanel->setTopLeftPosition (0, mTopPanel->getBottom());
     mInputGainPanel->setParameterID (Parameter::InputGain);
     addAndMakeVisible (mInputGainPanel.get());
     
-    mCentrePanel = std::make_unique<CentrePanel> (inProcessor);
+    mCentrePanel = std::make_unique<CentrePanel> (processor);
     mCentrePanel->setTopLeftPosition (mInputGainPanel->getRight(), mTopPanel->getBottom());
     addAndMakeVisible (mCentrePanel.get());
     
-    mOutputGainPanel = std::make_unique<GainPanel> (inProcessor);
+    mOutputGainPanel = std::make_unique<GainPanel> (processor);
     mOutputGainPanel->setTopRightPosition (getRight(), mTopPanel->getBottom());
     mOutputGainPanel->setParameterID (Parameter::OutputGain);
     addAndMakeVisible (mOutputGainPanel.get());

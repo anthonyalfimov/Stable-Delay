@@ -18,7 +18,7 @@ class FxPanel  : public InterfacePanel,
                     public ComboBox::Listener
 {
 public:
-    FxPanel (ReallyBasicDelayAudioProcessor* inProcessor);
+    FxPanel (ReallyBasicDelayAudioProcessor& processor);
     ~FxPanel();
     
     void paint (Graphics& g) override;

@@ -29,20 +29,20 @@ class LevelMeter  : public Component,
                     public Timer
 {
 public:
-    LevelMeter (Parameter::Index inParameter, ReallyBasicDelayAudioProcessor* inProcessor);
+    LevelMeter (Parameter::Index parameterIndex,
+                ReallyBasicDelayAudioProcessor& processor);
     ~LevelMeter();
     
     void paint (Graphics& g) override;
     void timerCallback() override;
         
 private:
-    const Parameter::Index mParameter;
+    const Parameter::Index mParameterIndex;
     
     // TODO: Programmatically handle audio channels in the meter
     //       E.g. mono, mono->stereo
     float mCh0Level = 0.0f;
     float mCh1Level = 0.0f;
     
-    // TODO: Can we avoid including "PluginProcessor.h" here?
-    ReallyBasicDelayAudioProcessor* mProcessor = nullptr;
+    ReallyBasicDelayAudioProcessor& mProcessor;
 };

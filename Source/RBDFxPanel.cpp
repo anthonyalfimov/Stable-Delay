@@ -12,13 +12,13 @@
 #include "RBDParameters.h"
 #include "RBDInterfaceUtilities.h"
 
-FxPanel::FxPanel (ReallyBasicDelayAudioProcessor* inProcessor)
-    : InterfacePanel (inProcessor)
+FxPanel::FxPanel (ReallyBasicDelayAudioProcessor& processor)
+    : InterfacePanel (processor)
 {
     setSize (RBD::fxPanelWidth, RBD::fxPanelHeight);
 
     // TODO: Why use getParameters() if we have access to state ValueTree?
-    const auto& parameters = mProcessor->getParameters();
+    const auto& parameters = mProcessor.getParameters();
 
     // FIXME: Calling getValue() always returns a normalised 0to1 value!
     const auto selectedTypeID
@@ -54,15 +54,15 @@ void FxPanel::setFxPanelStyle (FxTypeID typeID)
             setName ("DELAY");
             
             mSliders.add (std::make_unique<ParameterSlider>
-                                          (mProcessor->parameters,
+                                          (mProcessor.parameters,
                                            Parameter::DelayTime));
 
             mSliders.add (std::make_unique<ParameterSlider>
-                                          (mProcessor->parameters,
+                                          (mProcessor.parameters,
                                            Parameter::DelayFeedback));
             
             mSliders.add (std::make_unique<ParameterSlider>
-                                          (mProcessor->parameters,
+                                          (mProcessor.parameters,
                                            Parameter::DryWet));
             break;
             
@@ -70,15 +70,15 @@ void FxPanel::setFxPanelStyle (FxTypeID typeID)
             setName ("CHORUS");
             
             mSliders.add (std::make_unique<ParameterSlider>
-                                          (mProcessor->parameters,
+                                          (mProcessor.parameters,
                                            Parameter::ModulationRate));
             
             mSliders.add (std::make_unique<ParameterSlider>
-                                          (mProcessor->parameters,
+                                          (mProcessor.parameters,
                                            Parameter::ModulationDepth));
             
             mSliders.add (std::make_unique<ParameterSlider>
-                                          (mProcessor->parameters,
+                                          (mProcessor.parameters,
                                            Parameter::DryWet));
             break;
             

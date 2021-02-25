@@ -10,14 +10,14 @@
 
 #include "RBDPresetManager.h"
 
-PresetManager::PresetManager (AudioProcessor* inProcessor)
-    : mProcessor (inProcessor)
+PresetManager::PresetManager (AudioProcessor& processor)
+    : mProcessor (processor)
 {
-    const auto pluginName = mProcessor->getName();
+    const auto pluginName = mProcessor.getName();
     
     // TODO: Swap preset location to a more sensible directory
-    const String parentDirectory = (File::getSpecialLocation (File::userDesktopDirectory))
-                                   .getFullPathName();
+    const auto parentDirectory = (File::getSpecialLocation (File::userDesktopDirectory))
+                                  .getFullPathName();
     mPresetDirectory = File::addTrailingSeparator (parentDirectory) + pluginName;
     
     if (! File (mPresetDirectory).exists())
@@ -44,7 +44,7 @@ void PresetManager::getXmlForPreset (XmlElement* outElement)
     //  All our Interface Panels use a ptr/reference to our
     //  ReallyBasicDelayAudioProcessor object, not a base-class pointer
 
-    auto& parameters = mProcessor->getParameters();
+    auto& parameters = mProcessor.getParameters();
     
     for (auto* parameter : parameters)
     {
@@ -77,7 +77,7 @@ void PresetManager::loadPresetForXml (XmlElement* inElement)
     
     mCurrentPresetXml = inElement;
     
-    auto& parameters = mProcessor->getParameters();
+    auto& parameters = mProcessor.getParameters();
     const int numAttributes = mCurrentPresetXml->getNumAttributes();
     
     for (int attr = 0; attr < numAttributes; ++attr)
@@ -112,7 +112,7 @@ String PresetManager::getPresetName (int inPresetIndex) const
 
 void PresetManager::createNewPreset()
 {
-    auto& parameters = mProcessor->getParameters();
+    auto& parameters = mProcessor.getParameters();
     
     // Reset all parameters to default values
     for (auto* parameter : parameters)
@@ -129,7 +129,7 @@ void PresetManager::savePreset()
         jassertfalse;
     
     MemoryBlock destinationData;
-    mProcessor->getStateInformation (destinationData);
+    mProcessor.getStateInformation (destinationData);
     
     mCurrentlyLoadedPreset.replaceWithData (destinationData.getData(),
                                             destinationData.getSize());
@@ -141,7 +141,7 @@ void PresetManager::saveAsPreset (String inPresetName)
                      + inPresetName + RBD::presetFileExtention);
     
     MemoryBlock destinationData;
-    mProcessor->getStateInformation (destinationData);
+    mProcessor.getStateInformation (destinationData);
     
     presetFile.replaceWithData (destinationData.getData(), destinationData.getSize());
 
@@ -171,8 +171,8 @@ void PresetManager::loadPreset (int inPresetIndex)
     {
         mIsCurrentPresetSaved = true;
         mCurrentPresetName = getPresetName (inPresetIndex);
-        mProcessor->setStateInformation (presetBinary.getData(),
-                                         static_cast<int> (presetBinary.getSize()));
+        mProcessor.setStateInformation (presetBinary.getData(),
+                                        static_cast<int> (presetBinary.getSize()));
     }
 }
 

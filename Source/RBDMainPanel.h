@@ -18,7 +18,7 @@
 class MainPanel  : public InterfacePanel
 {
 public:
-    MainPanel (ReallyBasicDelayAudioProcessor* inProcessor);
+    MainPanel (ReallyBasicDelayAudioProcessor& processor);
     ~MainPanel();
     
 private:

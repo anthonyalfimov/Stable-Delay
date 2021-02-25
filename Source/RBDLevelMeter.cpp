@@ -12,9 +12,9 @@
 #include "RBDAudioUtilities.h"
 #include "RBDInterfaceConstants.h"
 
-LevelMeter::LevelMeter (Parameter::Index inParameter,
-                        ReallyBasicDelayAudioProcessor* inProcessor)
-    : mParameter (inParameter), mProcessor (inProcessor)
+LevelMeter::LevelMeter (Parameter::Index parameterIndex,
+                        ReallyBasicDelayAudioProcessor& processor)
+    : mParameterIndex (parameterIndex), mProcessor (processor)
 {
     startTimerHz (15);  // start the timer once we know which paremeter we're metering
 }
@@ -64,16 +64,16 @@ void LevelMeter::timerCallback()
     float updatedCh0Level = 0.0f;
     float updatedCh1Level = 0.0f;
     
-    switch (mParameter)
+    switch (mParameterIndex)
     {
         case Parameter::InputGain:
-            updatedCh0Level = mProcessor->getInputMeterLevel (0);
-            updatedCh1Level = mProcessor->getInputMeterLevel (1);
+            updatedCh0Level = mProcessor.getInputMeterLevel (0);
+            updatedCh1Level = mProcessor.getInputMeterLevel (1);
             break;
     
         case Parameter::OutputGain:
-            updatedCh0Level = mProcessor->getOutputMeterLevel (0);
-            updatedCh1Level = mProcessor->getOutputMeterLevel (1);
+            updatedCh0Level = mProcessor.getOutputMeterLevel (0);
+            updatedCh1Level = mProcessor.getOutputMeterLevel (1);
             break;
         
         default:

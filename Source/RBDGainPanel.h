@@ -18,7 +18,7 @@
 class GainPanel  : public InterfacePanel
 {
 public:
-    GainPanel (ReallyBasicDelayAudioProcessor* inProcessor);
+    GainPanel (ReallyBasicDelayAudioProcessor& processor);
     ~GainPanel();
     
     // TODO: Consider setting parameter ID for GainPanel in its constructor

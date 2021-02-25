@@ -10,8 +10,8 @@
 
 #include "RBDInterfacePanel.h"
 
-InterfacePanel::InterfacePanel (ReallyBasicDelayAudioProcessor* inProcessor)
-    : mProcessor (inProcessor)
+InterfacePanel::InterfacePanel (ReallyBasicDelayAudioProcessor& processor)
+    : mProcessor (processor)
 {
     
 }

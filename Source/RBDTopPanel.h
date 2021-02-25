@@ -17,7 +17,7 @@ class TopPanel  : public InterfacePanel,
                   public ComboBox::Listener
 {
 public:
-    TopPanel (ReallyBasicDelayAudioProcessor* inProcessor);
+    TopPanel (ReallyBasicDelayAudioProcessor& processor);
     ~TopPanel();
     
     void paint (Graphics&) override;

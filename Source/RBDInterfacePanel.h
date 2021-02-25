@@ -17,14 +17,13 @@
 class InterfacePanel  : public Component
 {
 public:
-    // TODO: switch to passing Processor by reference for consistency with JUCE
-    InterfacePanel (ReallyBasicDelayAudioProcessor* inProcessor);
+    InterfacePanel (ReallyBasicDelayAudioProcessor& processor);
     virtual ~InterfacePanel() = 0;
     
     void paint (Graphics& g) override;
     
 protected:
-    ReallyBasicDelayAudioProcessor* mProcessor;
+    ReallyBasicDelayAudioProcessor& mProcessor;
     
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (InterfacePanel)

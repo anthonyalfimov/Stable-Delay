@@ -16,7 +16,7 @@
 class CentrePanelMenuBar  : public InterfacePanel
 {
 public:
-    CentrePanelMenuBar (ReallyBasicDelayAudioProcessor* inProcessor);
+    CentrePanelMenuBar (ReallyBasicDelayAudioProcessor& processor);
     ~CentrePanelMenuBar();
 
     void paint (Graphics& g) override;

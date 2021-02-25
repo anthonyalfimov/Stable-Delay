@@ -59,7 +59,7 @@ ReallyBasicDelayAudioProcessor::ReallyBasicDelayAudioProcessor()
     // Initialise Parameter pointers
     initialiseParameters();
     // Create the preset manager
-    mPresetManager = std::make_unique<PresetManager> (this);
+    mPresetManager = std::make_unique<PresetManager> (*this);
 }
 
 ReallyBasicDelayAudioProcessor::~ReallyBasicDelayAudioProcessor()

@@ -11,8 +11,8 @@
 #include "RBDGainPanel.h"
 #include "RBDInterfaceUtilities.h"
 
-GainPanel::GainPanel (ReallyBasicDelayAudioProcessor* inProcessor)
-    : InterfacePanel (inProcessor)
+GainPanel::GainPanel (ReallyBasicDelayAudioProcessor& processor)
+    : InterfacePanel (processor)
 {
     setSize (RBD::gainPanelWidth, RBD::gainPanelHeight);
     setName ("GainPanel");
@@ -26,7 +26,8 @@ GainPanel::~GainPanel()
 void GainPanel::setParameterID (Parameter::Index parameterIndex)
 {
 //  CREATE SLIDER
-    mSlider = std::make_unique<ParameterSlider> (mProcessor->parameters, parameterIndex);
+    mSlider = std::make_unique<ParameterSlider> (mProcessor.parameters,
+                                                 parameterIndex);
     
     const int sliderSize = 80;
     
