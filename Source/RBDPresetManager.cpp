@@ -41,6 +41,8 @@ void PresetManager::getXmlForPreset (XmlElement* outElement)
     //  do that. Why not?
     
     // TODO: Why not access AudioProcessorValueTreeState directly here?
+    //  All our Interface Panels use a ptr/reference to our
+    //  ReallyBasicDelayAudioProcessor object, not a base-class pointer
 
     auto& parameters = mProcessor->getParameters();
     

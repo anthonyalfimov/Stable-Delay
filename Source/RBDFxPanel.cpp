@@ -16,7 +16,11 @@ FxPanel::FxPanel (ReallyBasicDelayAudioProcessor* inProcessor)
     : InterfacePanel (inProcessor)
 {
     setSize (RBD::fxPanelWidth, RBD::fxPanelHeight);
+
+    // TODO: Why use getParameters() if we have access to state ValueTree?
     const auto& parameters = mProcessor->getParameters();
+
+    // FIXME: Calling getValue() always returns a normalised 0to1 value!
     const auto selectedTypeID
     = floatToFxTypeID (parameters[Parameter::FxType]->getValue());
     setFxPanelStyle (selectedTypeID);
