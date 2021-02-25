@@ -31,7 +31,7 @@ void GainPanel::setParameterID (Parameter::Index parameterIndex)
     
     const int sliderSize = 80;
     
-    // TODO: is there a better way to position slider at the center of parent component?
+    // TODO: Is there a better way to position slider at the center of parent component?
     //   A1: there's `centreWithSize()`, as well as the ability to set size and position
     //       separately, and set position relative to parent size. But I haven't found
     //       another way to set this up with a single line where you can modify the bounds

@@ -18,6 +18,8 @@ namespace RBD
     const static String untitledPresetName = "Untitled";
 }
 
+#warning Preset name / selection is not recalled as part of the plugin state
+
 // NB: We cannot store a reference to ReallyBasicDelayAudioProcessor here,
 //  because that would cause circular inclusion.
 

@@ -24,8 +24,6 @@ PresetManager::PresetManager (AudioProcessor& processor)
         File (mPresetDirectory).createDirectory();
     
     storeLocalPresets();
-    
-    // FIXME: preset selection is not recalled as a part of plugin's state
 }
 
 PresetManager::~PresetManager()

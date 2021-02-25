@@ -19,7 +19,7 @@ public:
     PluginLookAndFeel()
     {
         // Store image assets
-        // TODO: what's the difference from loading the image from file vs embedding it?
+        // TODO: What's the difference from loading the image from file vs embedding it?
         // TODO: Kadenze image file size was smaller. Does it matter? Should we compress it more?
         mSliderImage = ImageCache::getFromMemory (BinaryData::RBD_Knob_80_png,
                                                   BinaryData::RBD_Knob_80_pngSize);
@@ -67,7 +67,7 @@ public:
         
         const float cornerSize = 6.0f;
         
-        // TODO: non-namespaced Rectangle might be a problem on Windows, test it and fix if it is
+        #warning Non-namespaced Rectangle might be a problem on Windows
         const Rectangle<float> bounds = button.getLocalBounds().toFloat().reduced (0.5f);
         
         g.setColour (fillColour);
@@ -99,7 +99,7 @@ public:
         g.setColour (textColour);
         g.setFont (RBD::font1);
         
-        // TODO: check the bounds for the text - do they make sense?
+        // TODO: Check the bounds for the text - do they make sense?
         bounds.setLeft (10);
         bounds.setY (1);
         

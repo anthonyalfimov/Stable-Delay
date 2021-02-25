@@ -52,11 +52,11 @@ void DelayModule::process (const float* inAudio,
     const float wet = dryWet;
     const float dry = 1.0f - wet;
     
-    // TODO: Why not use NormalizableRange<> for parameters instead of mapping them here?
+    // TODO: Use NormalizableRange<> for parameters instead of mapping them here
     const float timeMapped = jmap (time, 0.001f, maxDelayTimeInSeconds);
     float feedbackMapped = jmap (feedback, 0.0f, 0.95f);
     
-    // TODO: Parameter values currently can't change during execution!
+    // TODO: Parameter values currently can only change on block level. Adjust accordingly
     //  We load the value from the parameter in the plugin processor. Here we
     //  are working with a copy that can't change. So we should change the code
     //  accordingly.
@@ -65,9 +65,6 @@ void DelayModule::process (const float* inAudio,
     
     for (int i = 0; i < numSamplesToRender; ++i)
     {
-        // TODO: Can FX type be changed on the block level?
-        //  Or will this lead to audible delay before FX type switches
-        
         const auto typeID = floatToFxTypeID (type);
         
         if (typeID == FxTypeID::Delay)

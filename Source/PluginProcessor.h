@@ -14,7 +14,7 @@
 #include "RBDLfoModule.h"
 #include "RBDPresetManager.h"
 
-// TODO: PROJECT LEVEL - check what methods can be made const
+#warning Check what methods and variables can be made const
 
 //==============================================================================
 /**
@@ -65,12 +65,7 @@ public:
     
     // TODO: Should we return a reference instead here?
     PresetManager* getPresetManager() const { return mPresetManager.get(); }
-    
-    // TODO: Can we make the AudioProcessorValueTreeState member private?
-    //       JUCE tutorials make the `parameters` member private, but our code needs to
-    //       be able to pass it to the ParameterSlider to create the attachment.
-    //       Can the attachment be created in some other way? How is it done in JUCE
-    //       tutorials and examples?
+
     /**
      This class contains a ValueTree that is used to manage an AudioProcessor's entire
      state. It has its own internal class of parameter object that is linked to values
@@ -83,7 +78,7 @@ private:
     void initialiseParameters();
     
     // DSP Modules
-    // TODO: hardcoding stereo signal here - independent gain for left and right channels. Refactor!
+    // TODO: Hardcoding stereo signal here - independent gain for left and right channels. Refactor!
     std::unique_ptr<GainModule> mInputGain[2];
     std::unique_ptr<GainModule> mOutputGain[2];
     std::unique_ptr<LfoModule> mLfo[2];

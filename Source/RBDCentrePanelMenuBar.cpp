@@ -28,7 +28,7 @@ CentrePanelMenuBar::CentrePanelMenuBar (ReallyBasicDelayAudioProcessor& processo
     // TODO: Why use getParameters() if we have access to state ValueTree?
     auto& parameters = mProcessor.getParameters();
 
-    // FIXME: Calling getValue() always returns a normalised 0to1 value!
+#warning Calling getValue() returns a normalised 0to1 value!
     const auto selectedTypeID
     = floatToFxTypeID (parameters[Parameter::FxType]->getValue());
     mFxTypeComboBox->setSelectedId (static_cast<int> (selectedTypeID),

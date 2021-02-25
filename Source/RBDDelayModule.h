@@ -12,7 +12,7 @@
 
 #include "RBDAudioConstants.h"
 
-// TODO: DSP module base class
+// TODO: Add DSP module base class
 //  Consider using JUCE-style dsp::ProcessSpec object to initialise DSP modules
 //  The base class can provide a `prepare()` method that initialises sample
 //  rate, block size and number of channels.

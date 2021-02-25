@@ -20,7 +20,7 @@ TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor)
     const int presetListWidth = 200;
     
     mPresetList = std::make_unique<ComboBox>();
-    // TODO: is it a bad practice to use the same Rect object to position all UI elements?
+    // TODO: Is it a bad practice to use the same Rect object to position all UI elements?
     Rectangle<int> bounds = getLocalBounds().withSizeKeepingCentre (presetListWidth, height);
     mPresetList->setBounds (bounds);
     mPresetList->addListener (this);
@@ -30,7 +30,7 @@ TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor)
     const int buttonWidth = 65;
     const int buttonStartX = 10;
     
-    // TODO: repetitive button initialisation - can we make it more dry? Array of buttons?
+    // TODO: Repetitive button initialisation - can we make it more dry? Array of buttons?
     
     mNewPreset = std::make_unique<TextButton>();
     bounds.setWidth (buttonWidth);
@@ -118,14 +118,14 @@ void TopPanel::displaySaveAsPopup()
                                 "Please enter a name for the preset",
                                 AlertWindow::NoIcon);
     
-    // FIXME: properly position the dialogue window in relation to the plugin
+    // FIXME: Properly position the dialogue window in relation to the plugin
     saveAsDialogue.centreAroundComponent (this, getWidth(), getHeight());
     
     saveAsDialogue.addTextEditor ("presetName", currentPresetName, "Preset name: ");
     saveAsDialogue.addButton ("Save", 0);
     saveAsDialogue.addButton ("Cancel", 1);
 
-    // TODO: Jules said to always avoid modal loops in a plugin
+    #warning Jules said to always avoid modal loops in a plugin
     //  Does this apply here? Why should we avoid it? What's the alternative?
     if (saveAsDialogue.runModalLoop() == 0) // if exit code is 0
     {

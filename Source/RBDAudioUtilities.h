@@ -17,9 +17,7 @@ namespace RBD
     {
         return (1.0 - fractionalPosition) * value0 + fractionalPosition * value1;
     }
-    
-    // TODO: There must be a better way to disable denormals if this is what we want to achieve
-    
+
     inline float denormalise (float inValue)
     {
         return fabs (inValue) < 1e-15 ? 0.0f : inValue;
@@ -36,7 +34,7 @@ namespace RBD
     {
         // Convert [0, 1] level into dBFS scale - result is negative for all non-clipping levels
         // Arbritrary "floor" constant added - to avoid singularity when converting 0 to log scale
-        // TODO: does this "floor" constant need to relate to some other values? minMeterDbLevel?
+        // TODO: Does this "floor" constant need to relate to some other values? minMeterDbLevel?
         float inDbLevel = Decibels::gainToDecibels (inSampleLevel + 0.00001f);
         
         // `minMeterDbLevel` defines the minimum level displayed on the meter.

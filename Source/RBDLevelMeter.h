@@ -23,7 +23,7 @@
 //  get destroyed when the editor is closed, while the processor component
 //  will always be running.
 
-// FIXME: Communication with the process thread is not safe!
+#warning Communication with the processor thread is not safe!
 
 class LevelMeter  : public Component,
                     public Timer

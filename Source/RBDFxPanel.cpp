@@ -20,7 +20,7 @@ FxPanel::FxPanel (ReallyBasicDelayAudioProcessor& processor)
     // TODO: Why use getParameters() if we have access to state ValueTree?
     const auto& parameters = mProcessor.getParameters();
 
-    // FIXME: Calling getValue() always returns a normalised 0to1 value!
+    #warning Calling getValue() returns a normalised 0to1 value!
     const auto selectedTypeID
     = floatToFxTypeID (parameters[Parameter::FxType]->getValue());
     setFxPanelStyle (selectedTypeID);
@@ -88,7 +88,7 @@ void FxPanel::setFxPanelStyle (FxTypeID typeID)
             break;
     }
     
-    // TODO: Positioning the sliders assumes there are always 3. Perhaps, generalise?
+    // TODO: Positioning the sliders assumes there are always 3. Generalise
     if (mSliders.size() != 3)
         jassertfalse;           // array must contain 3 sliders to continue
     

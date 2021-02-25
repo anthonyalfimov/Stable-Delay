@@ -30,7 +30,7 @@ private:
     std::unique_ptr<MainPanel> mMainPanel;
     std::unique_ptr<PluginLookAndFeel> mLookAndFeel;
     
-    // TODO: why are we drawing it here and not in the MainPanel?
+    // TODO: Why are we drawing it here and not in the MainPanel?
     Image mBackgroundImage;
     
     // This reference is provided as a quick way for your editor to

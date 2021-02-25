@@ -23,7 +23,6 @@ inline void paintComponentLabel (Graphics& g, Component* inComponent)
     auto textBounds = inComponent->getBounds().withSizeKeepingCentre (width, height)
                                               .withY (yPosition);
     
-    // TODO: make the label colour change when hovering over "parent" component
     const Colour labelBgColour = inComponent->isMouseOver() ? RBD::colour6 : RBD::colour3;
     g.setColour (labelBgColour);
     g.fillRoundedRectangle (textBounds.toFloat(), RBD::defaultCornerSize);

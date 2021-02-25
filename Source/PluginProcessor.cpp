@@ -10,12 +10,10 @@
 #include "PluginEditor.h"
 #include "RBDParameters.h"
 
-// TODO: Is there a better location for this function? Parameter.h, perhaps?
 //==============================================================================
 // This creates the plugin parameter layout
 AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
 {
-    // TODO: NormalisableRange takes care of range mapping, why map in the processor?
     // TODO: Implement labels using JUCE's Label class
     // TODO: (?) Change the type of the Type parameter to AudioParameterChoice
     // TODO: (OR) Supply ValueToText function for Type parameter
@@ -340,7 +338,7 @@ float ReallyBasicDelayAudioProcessor::getOutputMeterLevel (int inChannel) const
 void ReallyBasicDelayAudioProcessor::initialiseDSP()
 {
     // Initialise the DSP Gain modules
-    // TODO: hardcoding stereo processing here. Refactor!
+    // TODO: Hardcoding stereo processing here. Refactor!
     for (int channel = 0; channel < 2; ++channel)
     {
         mInputGain[channel] = std::make_unique<GainModule>();

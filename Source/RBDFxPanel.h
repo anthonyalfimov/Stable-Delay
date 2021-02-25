@@ -33,9 +33,7 @@ public:
 private:
     FxTypeID mTypeID;
     
-    // TODO: Why use pointers here? Why not create an array of Slider objects?
-    //  Objects of this class are dynamically allocated anyway. Perhaps, polymorphism?
-    //  Note: some JUCE examples show Sliders, etc, contained as objects, not ptrs.
+    // Use an array or pointers to allow dynamically changing number of sliders
     OwnedArray<ParameterSlider> mSliders;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FxPanel)
