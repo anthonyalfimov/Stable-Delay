@@ -204,9 +204,9 @@ void ReallyBasicDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     // interleaved by keeping the same state.
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
-        float* channelData = buffer.getWritePointer (channel);
+        const float* readChannelData = buffer.getReadPointer (channel);
+        float* writeChannelData = buffer.getWritePointer (channel);
         
-        // TODO: Using the same buffer to read and write - is there a better approach?
         // TODO: Stereo processing hardcoded. This will fail for >2 channels, will it for mono?
         /* Q: Why can't we use one RBD::Gain object for both channels?
            A: If we have parameter smoothing, it must remain continuos between
@@ -229,30 +229,30 @@ void ReallyBasicDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
         // Q:    Are there significant performance benefits from this approach?
         // A(?): Perhaps, when the plugin has a lot of parameters
 
-        mInputGain[channel]->process (channelData,              // inAudio
-                                      *mInputGainParameter,     // gain
-                                      channelData,              // outAudio
-                                      buffer.getNumSamples());  // numSamplesToRender
+        mInputGain[channel]->process (readChannelData,              // inAudio
+                                      mInputGainParameter->load(),  // gain
+                                      writeChannelData,             // outAudio
+                                      buffer.getNumSamples());      // numSamplesToRender
         
         float modulationRate = (channel == 0) ? 0.0f : mModulationRateParameter->load();
 
-        mLfo[channel]->process (modulationRate,                 // rate
-                                *mModulationDepthParameter,     // depth
-                                buffer.getNumSamples());        // numSamplesToRender
+        mLfo[channel]->process (modulationRate,                     // rate
+                                mModulationDepthParameter->load(),  // depth
+                                buffer.getNumSamples());            // numSamplesToRender
         
-        mDelay[channel]->process (channelData,                  // inAudio
-                                  *mDelayTimeParameter,         // time
-                                  *mDelayFeedbackParameter,     // feedback
-                                  *mDryWetParameter,            // dryWet
-                                  *mFxTypeParameter,            // type
-                                  mLfo[channel]->getBuffer(),   // modulationBuffer
-                                  channelData,                  // outAudio
-                                  buffer.getNumSamples());      // numSamplesToRender
+        mDelay[channel]->process (readChannelData,                  // inAudio
+                                  mDelayTimeParameter->load(),      // time
+                                  mDelayFeedbackParameter->load(),  // feedback
+                                  mDryWetParameter->load(),         // dryWet
+                                  mFxTypeParameter->load(),         // type
+                                  mLfo[channel]->getBuffer(),       // modulationBuffer
+                                  writeChannelData,                 // outAudio
+                                  buffer.getNumSamples());          // numSamplesToRender
         
-        mOutputGain[channel]->process (channelData,             // inAudio
-                                       *mOutputGainParameter,   // gain
-                                       channelData,             // outAudio
-                                       buffer.getNumSamples()); // numSamplesToRender
+        mOutputGain[channel]->process (readChannelData,             // inAudio
+                                       mOutputGainParameter->load(),// gain
+                                       writeChannelData,            // outAudio
+                                       buffer.getNumSamples());     // numSamplesToRender
     }
 }
 
