@@ -102,8 +102,9 @@ double ReallyBasicDelayAudioProcessor::getTailLengthSeconds() const
 
 int ReallyBasicDelayAudioProcessor::getNumPrograms()
 {
-    return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
-                // so this should be at least 1, even if you're not really implementing programs.
+    // NB: some hosts don't cope very well if you tell them there are 0 programs,
+    // so this should be at least 1, even if you're not really implementing programs.
+    return 1;
 }
 
 int ReallyBasicDelayAudioProcessor::getCurrentProgram()
@@ -225,30 +226,30 @@ void ReallyBasicDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
         // Q:    Are there significant performance benefits from this approach?
         // A(?): Perhaps, when the plugin has a lot of parameters
 
-        mInputGain[channel]->process (readChannelData,              // inAudio
-                                      mInputGainParameter->load(),  // gain
-                                      writeChannelData,             // outAudio
-                                      buffer.getNumSamples());      // numSamplesToRender
+        mInputGain[channel]->process (readChannelData,          // inAudio
+                                      mInputGainValue->load(),  // gain
+                                      writeChannelData,         // outAudio
+                                      buffer.getNumSamples());  // numSamplesToRender
         
-        float modulationRate = (channel == 0) ? 0.0f : mModulationRateParameter->load();
+        float modulationRate = (channel == 0) ? 0.0f : mModulationRateValue->load();
 
-        mLfo[channel]->process (modulationRate,                     // rate
-                                mModulationDepthParameter->load(),  // depth
-                                buffer.getNumSamples());            // numSamplesToRender
+        mLfo[channel]->process (modulationRate,                 // rate
+                                mModulationDepthValue->load(),  // depth
+                                buffer.getNumSamples());        // numSamplesToRender
         
-        mDelay[channel]->process (readChannelData,                  // inAudio
-                                  mDelayTimeParameter->load(),      // time
-                                  mDelayFeedbackParameter->load(),  // feedback
-                                  mDryWetParameter->load(),         // dryWet
-                                  mFxTypeParameter->load(),         // type
-                                  mLfo[channel]->getBuffer(),       // modulationBuffer
-                                  writeChannelData,                 // outAudio
-                                  buffer.getNumSamples());          // numSamplesToRender
+        mDelay[channel]->process (readChannelData,              // inAudio
+                                  mDelayTimeValue->load(),      // time
+                                  mDelayFeedbackValue->load(),  // feedback
+                                  mDryWetValue->load(),         // dryWet
+                                  mFxTypeValue->load(),         // type
+                                  mLfo[channel]->getBuffer(),   // modulationBuffer
+                                  writeChannelData,             // outAudio
+                                  buffer.getNumSamples());      // numSamplesToRender
         
-        mOutputGain[channel]->process (readChannelData,             // inAudio
-                                       mOutputGainParameter->load(),// gain
-                                       writeChannelData,            // outAudio
-                                       buffer.getNumSamples());     // numSamplesToRender
+        mOutputGain[channel]->process (readChannelData,         // inAudio
+                                       mOutputGainValue->load(),// gain
+                                       writeChannelData,        // outAudio
+                                       buffer.getNumSamples()); // numSamplesToRender
     }
 }
 
@@ -357,21 +358,21 @@ void ReallyBasicDelayAudioProcessor::initialiseParameters()
     //  Create std::atomic<float> members (or an array of them) and initialise
     //  them once in the processor constructor.
 
-    mInputGainParameter
+    mInputGainValue
     = parameters.getRawParameterValue (Parameter::ID[Parameter::InputGain]);
-    mModulationRateParameter
+    mModulationRateValue
     = parameters.getRawParameterValue (Parameter::ID[Parameter::ModulationRate]);
-    mModulationDepthParameter
+    mModulationDepthValue
     = parameters.getRawParameterValue (Parameter::ID[Parameter::ModulationDepth]);
-    mDelayTimeParameter
+    mDelayTimeValue
     = parameters.getRawParameterValue (Parameter::ID[Parameter::DelayTime]);
-    mDelayFeedbackParameter
+    mDelayFeedbackValue
     = parameters.getRawParameterValue (Parameter::ID[Parameter::DelayFeedback]);
-    mDryWetParameter
+    mDryWetValue
     = parameters.getRawParameterValue (Parameter::ID[Parameter::DryWet]);
-    mFxTypeParameter
+    mFxTypeValue
     = parameters.getRawParameterValue (Parameter::ID[Parameter::FxType]);
-    mOutputGainParameter
+    mOutputGainValue
     = parameters.getRawParameterValue (Parameter::ID[Parameter::OutputGain]);
 }
 
