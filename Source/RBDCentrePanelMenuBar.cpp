@@ -16,9 +16,16 @@ CentrePanelMenuBar::CentrePanelMenuBar (ReallyBasicDelayAudioProcessor& processo
 {
     setSize (RBD::centrePanelMenuBarWidth, RBD::centrePanelMenuBarHeight);
     setName ("CenterMenu");
-    
-    mFxTypeComboBox
-    = std::make_unique<ParameterComboBox> (mProcessor.parameters, Parameter::FxType);
+
+    // MARK: Initial ComboBox update happens when attachment is created
+    //  In this case, attachment is created in the ParameterComboBox constructor
+    //  before any items get added to it. Therefore, the initial update doesn't
+    //  succeed. For it to work, either the attachment should be created after
+    //  the items are added, or it should be manually updated (which is what
+    //  we do).
+
+    mFxTypeComboBox = std::make_unique<ParameterComboBox> (mProcessor.parameters,
+                                                           Parameter::FxType);
     const int width = 90;
     mFxTypeComboBox->setBounds (getWidth() - width, 0, width, getHeight());
     

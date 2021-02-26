@@ -16,11 +16,13 @@
 // Current solution is to put a plain enum in a namespace to have name scope, but
 // keep automatic casting to int.
 
-// TODO: (?) Find a solution to use enum class as an array index efficiently
-// e.g. use an array class to store items and add an overloaded operator[] ?
-
 namespace Parameter
 {
+    // TODO: Consider using and enum class with overriden operator[]
+    //  If all containers that we need to index with this enum are not
+    //  using a plain array, we can add an overrid for the operator[]
+    //  to allow these enumerators to act as an index.
+
     enum Index : int
     {
         InputGain = 0,
@@ -33,6 +35,8 @@ namespace Parameter
         ModulationDepth,
         NumParameters
     };
+
+    // TODO: Consider using StringArray objects
 
     const static String ID[NumParameters]
     {
@@ -91,6 +95,11 @@ enum class FxTypeID
     Delay = 1,
     Chorus
 };
+
+// TODO: Consider creating a StringArray with Fx Types listed
+//  Is is also useful to add an override for operator[] to allow FxTypeID
+//  to be used as an index directly - with the necessary conversion.
+//  It also can be used in converting FxType parameter value to string.
 
 // TODO: With updated Type range, replace this function with a simple cast
 /**
