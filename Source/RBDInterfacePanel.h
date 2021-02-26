@@ -14,6 +14,13 @@
 #include "PluginProcessor.h"
 #include "RBDInterfaceConstants.h"
 
+// TODO: Consider storing a reference to APVTS instead of the processor
+//  Right now the processor reference is used to:
+//  - Access parameter values (can be done through APVTS)
+//  - Get access to Preset Manager
+//  - Create the Level Meter object (could we communicate level through APVTS?)
+//  To do this, we need to somehow deal with the last two points
+
 class InterfacePanel  : public Component
 {
 public:

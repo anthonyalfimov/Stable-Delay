@@ -350,6 +350,13 @@ void ReallyBasicDelayAudioProcessor::initialiseDSP()
 
 void ReallyBasicDelayAudioProcessor::initialiseParameters()
 {
+    // MARK: Retrieving parameter pointers from APVTS uses string search
+    //  String search is slow, so better keep this off the processBlock.
+    //  Pointers to the parameter atomic values do not change during execution,
+    //  so it is preferable to retrieve them from APVTS just once.
+    //  Create std::atomic<float> members (or an array of them) and initialise
+    //  them once in the processor constructor.
+
     mInputGainParameter
     = parameters.getRawParameterValue (Parameter::ID[Parameter::InputGain]);
     mModulationRateParameter
