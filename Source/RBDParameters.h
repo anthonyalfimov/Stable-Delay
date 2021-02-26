@@ -22,6 +22,8 @@ namespace Parameter
     //  If all containers that we need to index with this enum are not
     //  using a plain array, we can add an overrid for the operator[]
     //  to allow these enumerators to act as an index.
+    //  NB: operator[] override can't be non-member, so the only way to do it is to
+    //  derive a custom class from StringArray or create a function
 
     enum Index : int
     {
@@ -62,15 +64,13 @@ namespace Parameter
         "Mod Depth"
     };
 
-    // TODO: Update Type range to follow the FxTypeID values
-
     const static NormalisableRange<float> Range[NumParameters]
     {
         {0.0f, 1.0f},       // Input Gain
         {0.0f, 1.0f},       // Time
         {0.0f, 1.0f},       // Feedback
         {0.0f, 1.0f},       // Dry Wet
-        {0.0f, 1.0f, 1.0f}, // Type
+        {1.0f, 2.0f, 1.0f}, // Type
         {0.0f, 1.0f},       // Output Gain
         {0.0f, 1.0f},       // Modulation Rate
         {0.0f, 1.0f}        // Modulation Depth
@@ -82,7 +82,7 @@ namespace Parameter
         0.5f,   // Time
         0.35f,  // Feedback
         0.5f,   // Dry Wet
-        0.0f,   // Type
+        1.0f,   // Type
         0.5f,   // Output Gain
         0.2f,   // Modulation Rate
         0.35f   // Modulation Depth
@@ -100,14 +100,5 @@ enum class FxTypeID
 //  Is is also useful to add an override for operator[] to allow FxTypeID
 //  to be used as an index directly - with the necessary conversion.
 //  It also can be used in converting FxType parameter value to string.
-
-// TODO: With updated Type range, replace this function with a simple cast
-/**
-Helper function that converts a float [0, 1] value to the FxTypeID to accomodate
- float representation of the FX TYPE parameter
-@param value float [0, 1] representation of the parameter to be interpreted as FxTypeID
-*/
-inline FxTypeID floatToFxTypeID (float value)
-{
-    return (value < 0.5f) ? FxTypeID::Delay : FxTypeID::Chorus;
-}
+//  NB: operator[] override can't be non-member, so the only way to do it is to
+//  derive a custom class from StringArray or create a function

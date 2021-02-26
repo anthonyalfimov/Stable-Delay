@@ -17,12 +17,13 @@ FxPanel::FxPanel (ReallyBasicDelayAudioProcessor& processor)
 {
     setSize (RBD::fxPanelWidth, RBD::fxPanelHeight);
 
-    // TODO: Why use getParameters() if we have access to state ValueTree?
-    const auto& parameters = mProcessor.getParameters();
+    auto* fxTypeParameter = dynamic_cast<AudioParameterFloat*>
+    (mProcessor.parameters.getParameter (Parameter::ID[Parameter::FxType]));
 
-    #warning Calling getValue() returns a normalised 0to1 value!
-    const auto selectedTypeID
-    = floatToFxTypeID (parameters[Parameter::FxType]->getValue());
+    if (fxTypeParameter == nullptr)
+        jassertfalse;
+
+    const auto selectedTypeID = static_cast<FxTypeID> (fxTypeParameter->get());
     setFxPanelStyle (selectedTypeID);
 }
 
@@ -107,12 +108,12 @@ void FxPanel::setFxPanelStyle (FxTypeID typeID)
     for (auto slider : mSliders)
     {
         addAndMakeVisible (slider);
+
+        // List of listeners is stored in Slider object and destroyed with it,
+        //  so we don't need to unregister this component.
         
-        // TODO: Do we need to unregister when Sliders are destroyed?
-        //  List of listeners is stored in Slider object and destroyed with it - so no?
-        
-        // Register as mouse listener for Sliders so we can repaint Slider labels when
-        //  mouse enters and exits Slider components
+        // Register as mouse listener for Sliders so we can repaint Slider
+        //  labels when mouse enters and exits Slider components
         slider->addMouseListener (this, false);
     }
     

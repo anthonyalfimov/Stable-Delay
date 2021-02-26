@@ -65,7 +65,7 @@ void DelayModule::process (const float* inAudio,
     
     for (int i = 0; i < numSamplesToRender; ++i)
     {
-        const auto typeID = floatToFxTypeID (type);
+        const auto typeID = static_cast<FxTypeID> (type);
         
         if (typeID == FxTypeID::Delay)
         {

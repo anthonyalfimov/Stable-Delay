@@ -32,14 +32,15 @@ CentrePanelMenuBar::CentrePanelMenuBar (ReallyBasicDelayAudioProcessor& processo
     mFxTypeComboBox->addItem ("DELAY", static_cast<int> (FxTypeID::Delay));
     mFxTypeComboBox->addItem ("CHORUS", static_cast<int> (FxTypeID::Chorus));
 
-    // TODO: Why use getParameters() if we have access to state ValueTree?
-    auto& parameters = mProcessor.getParameters();
+    auto* fxTypeParameter = dynamic_cast<AudioParameterFloat*>
+    (mProcessor.parameters.getParameter (Parameter::ID[Parameter::FxType]));
 
-#warning Calling getValue() returns a normalised 0to1 value!
-    const auto selectedTypeID
-    = floatToFxTypeID (parameters[Parameter::FxType]->getValue());
-    mFxTypeComboBox->setSelectedId (static_cast<int> (selectedTypeID),
-                                    dontSendNotification);
+    if (fxTypeParameter == nullptr)
+        jassertfalse;
+
+    const int selectedTypeIdAsInt = static_cast<int> (fxTypeParameter->get());
+    mFxTypeComboBox->setSelectedId (selectedTypeIdAsInt, dontSendNotification);
+
     addAndMakeVisible (mFxTypeComboBox.get());
 }
 
