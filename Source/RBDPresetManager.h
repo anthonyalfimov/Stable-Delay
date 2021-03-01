@@ -12,12 +12,6 @@
 
 #include <JuceHeader.h>
 
-namespace RBD
-{
-    const static String presetFileExtention = ".rbdf";
-    const static String untitledPresetName = "Untitled";
-}
-
 // NB: We cannot store a reference to ReallyBasicDelayAudioProcessor here,
 //  because that would cause circular inclusion.
 
@@ -49,12 +43,15 @@ public:
     void loadPreset (int inPresetIndex);
     bool isCurrentPresetSaved() const;
     String getCurrentPresetName() const;
+
+    static inline const String presetFileExtention = ".rbdf";
+    static inline const String untitledPresetName = "Untitled";
     
 private:
     void storeLocalPresets();
     
-    bool mIsCurrentPresetSaved = false;     // is current preset file saved to disk?
-    String mCurrentPresetName = RBD::untitledPresetName;
+    bool mIsCurrentPresetSaved = false; // is current preset file saved to disk?
+    String mCurrentPresetName = untitledPresetName;
     File mCurrentlyLoadedPreset;
     
     String mPresetDirectory;

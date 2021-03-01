@@ -74,6 +74,8 @@ void PresetManager::loadPresetFromXml (XmlElement* inElement)
 
     //  Maybe this is to avoid creating a new XML if the current preset hasn't
     //  changed, and just return the already existing one?
+
+    //  This could be used for implementing A / B feature?
     
     mCurrentPresetXml = inElement;
     
@@ -121,7 +123,7 @@ void PresetManager::createNewPreset()
         parameter->setValueNotifyingHost (parameter->getDefaultValue());
     
     mIsCurrentPresetSaved = false;
-    mCurrentPresetName = RBD::untitledPresetName;
+    mCurrentPresetName = untitledPresetName;
 }
 
 void PresetManager::savePreset()
@@ -140,7 +142,7 @@ void PresetManager::savePreset()
 void PresetManager::saveAsPreset (String inPresetName)
 {
     File presetFile (File::addTrailingSeparator (mPresetDirectory)
-                     + inPresetName + RBD::presetFileExtention);
+                     + inPresetName + presetFileExtention);
     
     MemoryBlock destinationData;
     mProcessor.getStateInformation (destinationData);
@@ -197,7 +199,7 @@ void PresetManager::storeLocalPresets()
     for (DirectoryEntry entry
             : RangedDirectoryIterator (File (mPresetDirectory),
                                        false,
-                                       "*" + RBD::presetFileExtention,
+                                       "*" + presetFileExtention,
                                        File::TypesOfFileToFind::findFiles))
     {
         mLocalPresets.add (entry.getFile());

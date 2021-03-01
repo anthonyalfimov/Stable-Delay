@@ -18,10 +18,12 @@
 
 namespace RBD
 {
-    // Global const is static by default, just reinforce the intent
-    constexpr static double paramSmoothingCoefGeneric = 0.04;
-    constexpr static double paramSmoothingCoefFine = 0.004;
-    constexpr static float meterSmoothingCoef = 0.2f;
-    
-    constexpr static float minMeterDbLevel = 96.0f;
+    // C++17 "inline" keyword ensures that only one copy of the constant
+    //  is created for the whole project
+
+    inline constexpr double paramSmoothingCoefGeneric = 0.04;
+    inline constexpr double paramSmoothingCoefFine = 0.004;
+
+    inline constexpr float meterSmoothingCoef = 0.2f;
+    inline constexpr float minMeterDbLevel = 96.0f;
 }

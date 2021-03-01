@@ -37,7 +37,7 @@ namespace Parameter
 
     // TODO: Consider switching to StringArray objects
 
-    const static String ID[NumParameters]
+    inline const String ID[NumParameters]
     {
         "InputGain",
         "Time",
@@ -49,7 +49,7 @@ namespace Parameter
         "ModulationDepth"
     };
 
-    const static String Label[NumParameters]
+    inline const String Label[NumParameters]
     {
         "Input Gain",
         "Time",
@@ -61,7 +61,7 @@ namespace Parameter
         "Mod Depth"
     };
 
-    const static NormalisableRange<float> Range[NumParameters]
+    inline const NormalisableRange<float> Range[NumParameters]
     {
         {0.0f, 1.0f},       // Input Gain
         {0.0f, 1.0f},       // Time
@@ -73,7 +73,7 @@ namespace Parameter
         {0.0f, 1.0f}        // Modulation Depth
     };
 
-    const static float DefaultValue[NumParameters]
+    inline const float DefaultValue[NumParameters]
     {
         0.5f,   // Input Gain
         0.5f,   // Time
