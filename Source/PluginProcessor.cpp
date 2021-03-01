@@ -326,12 +326,12 @@ void ReallyBasicDelayAudioProcessor::setStateInformation (const void* data, int 
     }
 }
 
-float ReallyBasicDelayAudioProcessor::getInputMeterLevel (int inChannel) const
+const std::atomic<float>* ReallyBasicDelayAudioProcessor::getInputMeterLevel (int inChannel) const
 {
     return mInputGain[inChannel]->getMeterLevel();
 }
 
-float ReallyBasicDelayAudioProcessor::getOutputMeterLevel (int inChannel) const
+const std::atomic<float>* ReallyBasicDelayAudioProcessor::getOutputMeterLevel (int inChannel) const
 {
     return mOutputGain[inChannel]->getMeterLevel();
 }

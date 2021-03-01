@@ -11,7 +11,6 @@
 #include <JuceHeader.h>
 #include "RBDGainModule.h"
 #include "RBDAudioConstants.h"
-#include "RBDAudioUtilities.h"
 
 GainModule::GainModule()
 {
@@ -41,12 +40,13 @@ void GainModule::process (const float* inAudio,
     //  Here we are not really averaging, and we can miss peaks
     //  JUCE AudioBuffer class has a built-in RMS method - use it instead?
     float absSampleValue = fabs (outAudio[0]);
-    mLevelSmoothed = mLevelSmoothed - RBD::meterSmoothingCoef * (mLevelSmoothed - absSampleValue);
-    //mLevelSmoothed = absSampleValue;
+    float levelSmoothed = mMeterLevel.load();
+    levelSmoothed = levelSmoothed - RBD::meterSmoothingCoef * (levelSmoothed - absSampleValue);
+    mMeterLevel.store (levelSmoothed);
 }
 
-float GainModule::getMeterLevel() const
+const std::atomic<float>* GainModule::getMeterLevel() const
 {
-    return RBD::remappedMeterLevel (mLevelSmoothed);
+    return &mMeterLevel;
 }
 

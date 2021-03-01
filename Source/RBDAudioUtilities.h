@@ -24,22 +24,27 @@ namespace RBD
     }
     
     // TODO: This function just remaps [0, 1] -> [0, 1] with a skew. Should this be done better?
-    //       Technically, it's not [0, 1]: sample at 1.0f is 0 dBFS, but it could exceed that (?)
-    //       However, our meters don't go above 0 dBFS
+    //  Technically, it's not [0, 1]: sample at 1.0f is 0 dBFS, but it could
+    //  exceed that (?)
+    //  However, our meters don't go above 0 dBFS
     
-    // This function takes sample value from [0, 1] and remaps it back to [0, 1], but now
-    //  with logarithmic scale (linear on dB level)
-    
+    /**
+    This function takes sample value from [0, 1] and remaps it back to [0, 1],
+    but now with logarithmic scale (linear on dB level)
+    */
     inline float remappedMeterLevel (float inSampleLevel)
     {
-        // Convert [0, 1] level into dBFS scale - result is negative for all non-clipping levels
-        // Arbritrary "floor" constant added - to avoid singularity when converting 0 to log scale
+        // Convert [0, 1] level into dBFS scale - result is negative for all
+        // non-clipping levels.
+        // Arbritrary "floor" constant added - to avoid singularity when
+        // converting 0 to log scale
         // TODO: Does this "floor" constant need to relate to some other values? minMeterDbLevel?
         float inDbLevel = Decibels::gainToDecibels (inSampleLevel + 0.00001f);
         
         // `minMeterDbLevel` defines the minimum level displayed on the meter.
-        //  If it is 96.0f, then meter starts from -96 dBFS. Levels below that will result in a
-        //  negative value that should be caugth by the meter painting routine.
+        //  If it is 96.0f, then meter starts from -96 dBFS. Levels below that
+        //  will result in a negative value that should be caugth by the meter
+        //  painting routine.
         return (inDbLevel + minMeterDbLevel) / minMeterDbLevel;
     }
 }

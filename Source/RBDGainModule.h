@@ -23,11 +23,11 @@ public:
                   float* outAudio,
                   int numSamplesToRender);
     
-    float getMeterLevel() const;
+    const std::atomic<float>* getMeterLevel() const;
     
 private:
     // TODO: We're already smoothing audio level in RBDMeter. Do we need to smooth it here too?
-    float mLevelSmoothed = 0.0f;
+    std::atomic<float> mMeterLevel { 0.0f };
     
     // TODO: JUCE DSP modules don't use the Leak Detector. Should I?
     // JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RBDGain)

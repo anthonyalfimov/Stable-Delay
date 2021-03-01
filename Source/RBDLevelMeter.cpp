@@ -16,7 +16,7 @@ LevelMeter::LevelMeter (Parameter::Index parameterIndex,
                         ReallyBasicDelayAudioProcessor& processor)
     : mParameterIndex (parameterIndex), mProcessor (processor)
 {
-    startTimerHz (15);  // start the timer once we know which paremeter we're metering
+    startTimerHz (15);  // start the timer
 }
 
 LevelMeter::~LevelMeter()
@@ -67,18 +67,22 @@ void LevelMeter::timerCallback()
     switch (mParameterIndex)
     {
         case Parameter::InputGain:
-            updatedCh0Level = mProcessor.getInputMeterLevel (0);
-            updatedCh1Level = mProcessor.getInputMeterLevel (1);
+            updatedCh0Level = mProcessor.getInputMeterLevel (0)->load();
+            updatedCh1Level = mProcessor.getInputMeterLevel (1)->load();
             break;
     
         case Parameter::OutputGain:
-            updatedCh0Level = mProcessor.getOutputMeterLevel (0);
-            updatedCh1Level = mProcessor.getOutputMeterLevel (1);
+            updatedCh0Level = mProcessor.getOutputMeterLevel (0)->load();
+            updatedCh1Level = mProcessor.getOutputMeterLevel (1)->load();
             break;
         
         default:
             break;
     }
+
+    // Remap meter level to be linear on the decibel value
+    updatedCh0Level = RBD::remappedMeterLevel (updatedCh0Level);
+    updatedCh1Level = RBD::remappedMeterLevel (updatedCh1Level);
     
     // TODO: Already smoothing the levels in RBDGain. Do we need to smooth it twice?
 

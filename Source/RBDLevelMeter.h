@@ -28,8 +28,6 @@
 //  parameter that can't be changed ("analysisMeter" tag). But this would solve
 //  the question of communicating between the processor and the editor.
 
-#warning Communication with the processor thread is not safe!
-
 class LevelMeter  : public Component,
                     public Timer
 {
