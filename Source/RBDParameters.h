@@ -67,7 +67,7 @@ namespace Parameter
         {0.0f, 1.0f},       // Time
         {0.0f, 1.0f},       // Feedback
         {0.0f, 1.0f},       // Dry Wet
-        {1.0f, 2.0f, 1.0f}, // Type
+        {0.0f, 1.0f, 1.0f}, // Type
         {0.0f, 1.0f},       // Output Gain
         {0.0f, 1.0f},       // Modulation Rate
         {0.0f, 1.0f}        // Modulation Depth
@@ -79,17 +79,26 @@ namespace Parameter
         0.5f,   // Time
         0.35f,  // Feedback
         0.5f,   // Dry Wet
-        1.0f,   // Type
+        0.0f,   // Type
         0.5f,   // Output Gain
         0.2f,   // Modulation Rate
         0.35f   // Modulation Depth
     };
 } // end namespace Parameter
 
-// We will use this enum as comboBox IDs, so the items must start from 1
-enum class FxTypeID
+namespace FxType
 {
-    Delay = 1,
-    Chorus
-};
+    enum Index : int
+    {
+        Delay = 0,
+        Chorus
+    };
+
+    inline const StringArray Label
+    {
+        "DELAY",
+        "CHORUS"
+    };
+} // end namespace FxType
+
 

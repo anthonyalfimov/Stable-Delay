@@ -18,6 +18,10 @@ class ParameterComboBox  : public ComboBox
 public:
     ParameterComboBox (AudioProcessorValueTreeState& stateToControl,
                        Parameter::Index parameterIndex);
+    ParameterComboBox (AudioProcessorValueTreeState& stateToControl,
+                       Parameter::Index parameterIndex,
+                       const StringArray& itemList,
+                       int firstItemIdOffset = 1);
     ~ParameterComboBox();
     
 private:

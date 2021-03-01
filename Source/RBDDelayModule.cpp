@@ -65,9 +65,9 @@ void DelayModule::process (const float* inAudio,
     
     for (int i = 0; i < numSamplesToRender; ++i)
     {
-        const auto typeID = static_cast<FxTypeID> (type);
+        const auto typeIndex = static_cast<FxType::Index> (type);
         
-        if (typeID == FxTypeID::Delay)
+        if (typeIndex == FxType::Delay)
         {
             // Use member variable to maintain consistent smoothing between blocks
             mTimeSmoothed = mTimeSmoothed - RBD::paramSmoothingCoefFine * (mTimeSmoothed - timeMapped);

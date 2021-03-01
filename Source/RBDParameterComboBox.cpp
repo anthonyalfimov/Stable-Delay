@@ -20,6 +20,20 @@ ParameterComboBox::ParameterComboBox (AudioProcessorValueTreeState& stateToContr
                                                         *this);
 }
 
+ParameterComboBox::ParameterComboBox (AudioProcessorValueTreeState& stateToControl,
+                                      Parameter::Index parameterIndex,
+                                      const StringArray& itemList,
+                                      int firstItemIdOffset)
+    : ComboBox (Parameter::Label[parameterIndex])
+{
+    addItemList (itemList, firstItemIdOffset);
+
+    using ComboBoxAttachment = AudioProcessorValueTreeState::ComboBoxAttachment;
+    mAttachment = std::make_unique<ComboBoxAttachment> (stateToControl,
+                                                        Parameter::ID[parameterIndex],
+                                                        *this);
+}
+
 ParameterComboBox::~ParameterComboBox()
 {
     

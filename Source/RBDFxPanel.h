@@ -23,7 +23,7 @@ public:
     
     void paint (Graphics& g) override;
     
-    void setFxPanelStyle (FxTypeID typeID);
+    void setFxPanelStyle (FxType::Index typeIndex);
     
     void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
     
@@ -31,7 +31,7 @@ public:
     void mouseExit (const MouseEvent& event) override;
     
 private:
-    FxTypeID mTypeID;
+    FxType::Index mTypeIndex;
     
     // Use an array or pointers to allow dynamically changing number of sliders
     OwnedArray<ParameterSlider> mSliders;

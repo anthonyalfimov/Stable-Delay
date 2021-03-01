@@ -23,8 +23,8 @@ FxPanel::FxPanel (ReallyBasicDelayAudioProcessor& processor)
     if (fxTypeParameter == nullptr)
         jassertfalse;
 
-    const auto selectedTypeID = static_cast<FxTypeID> (fxTypeParameter->get());
-    setFxPanelStyle (selectedTypeID);
+    const auto selectedTypeIndex = static_cast<FxType::Index> (fxTypeParameter->get());
+    setFxPanelStyle (selectedTypeIndex);
 }
 
 FxPanel::~FxPanel()
@@ -44,16 +44,15 @@ void FxPanel::paint (Graphics& g)
         paintComponentLabel (g, slider);
 }
     
-void FxPanel::setFxPanelStyle (FxTypeID typeID)
+void FxPanel::setFxPanelStyle (FxType::Index typeIndex)
 {
-    mTypeID = typeID;
+    mTypeIndex = typeIndex;
     mSliders.clear();
+    setName (FxType::Label[mTypeIndex]);
 
-    switch (mTypeID)
+    switch (mTypeIndex)
     {
-        case FxTypeID::Delay:
-            setName ("DELAY");
-            
+        case FxType::Delay:
             mSliders.add (std::make_unique<ParameterSlider>
                                           (mProcessor.parameters,
                                            Parameter::DelayTime));
@@ -67,9 +66,7 @@ void FxPanel::setFxPanelStyle (FxTypeID typeID)
                                            Parameter::DryWet));
             break;
             
-        case FxTypeID::Chorus:
-            setName ("CHORUS");
-            
+        case FxType::Chorus:
             mSliders.add (std::make_unique<ParameterSlider>
                                           (mProcessor.parameters,
                                            Parameter::ModulationRate));
@@ -122,8 +119,8 @@ void FxPanel::setFxPanelStyle (FxTypeID typeID)
 
 void FxPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
 {
-    const auto newTypeID = static_cast<FxTypeID> (comboBoxThatHasChanged->getSelectedId());
-    setFxPanelStyle (newTypeID);
+    const auto newTypeIndex = static_cast<FxType::Index> (comboBoxThatHasChanged->getSelectedItemIndex());
+    setFxPanelStyle (newTypeIndex);
 }
 
 void FxPanel::mouseEnter (const MouseEvent& event)

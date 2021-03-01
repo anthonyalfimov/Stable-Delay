@@ -17,29 +17,15 @@ CentrePanelMenuBar::CentrePanelMenuBar (ReallyBasicDelayAudioProcessor& processo
     setSize (RBD::centrePanelMenuBarWidth, RBD::centrePanelMenuBarHeight);
     setName ("CenterMenu");
 
-    // MARK: Initial ComboBox update happens when attachment is created
-    //  In this case, attachment is created in the ParameterComboBox constructor
-    //  before any items get added to it. Therefore, the initial update doesn't
-    //  succeed. For it to work, either the attachment should be created after
-    //  the items are added, or it should be manually updated (which is what
-    //  we do).
+    // Note: Initial ComboBox update happens when attachment is created
+    //  Using the ParameterComboBox ctor that takes the item list allows to
+    //  add the items before the attachment is created and ComboBox is updated
 
     mFxTypeComboBox = std::make_unique<ParameterComboBox> (mProcessor.parameters,
-                                                           Parameter::FxType);
+                                                           Parameter::FxType,
+                                                           FxType::Label);
     const int width = 90;
     mFxTypeComboBox->setBounds (getWidth() - width, 0, width, getHeight());
-    
-    mFxTypeComboBox->addItem ("DELAY", static_cast<int> (FxTypeID::Delay));
-    mFxTypeComboBox->addItem ("CHORUS", static_cast<int> (FxTypeID::Chorus));
-
-    auto* fxTypeParameter = dynamic_cast<AudioParameterFloat*>
-    (mProcessor.parameters.getParameter (Parameter::ID[Parameter::FxType]));
-
-    if (fxTypeParameter == nullptr)
-        jassertfalse;
-
-    const int selectedTypeIdAsInt = static_cast<int> (fxTypeParameter->get());
-    mFxTypeComboBox->setSelectedId (selectedTypeIdAsInt, dontSendNotification);
 
     addAndMakeVisible (mFxTypeComboBox.get());
 }
