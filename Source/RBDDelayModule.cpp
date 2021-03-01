@@ -72,19 +72,38 @@ void DelayModule::process (const float* inAudio,
             // Use member variable to maintain consistent smoothing between blocks
             mTimeSmoothed = mTimeSmoothed - RBD::paramSmoothingCoefFine * (mTimeSmoothed - timeMapped);
         }
-        else
+        else if (typeIndex == FxType::Chorus)
         {
             // TODO: Switching FX to CHORUS produces a chirp. Should we fix this?
             //  The chirp is due to smoothed delay time change. Slower smoothing
             //  will fix this. Perhaps, slower smoothing just for the chorus?
             
-            const double delayTimeModulated = 0.003 + 0.002 * modulationBuffer[i];
+            const double delayTimeModulated = jmap (modulationBuffer[i],
+                                                    -1.0f, 1.0f,
+                                                    0.001f, 0.010f);
             
             // Use member variable to maintain consistent smoothing between blocks
-            mTimeSmoothed = mTimeSmoothed - RBD::paramSmoothingCoefFine * (mTimeSmoothed - delayTimeModulated);
+            mTimeSmoothed = mTimeSmoothed - RBD::paramSmoothingCoefFine
+                            * (mTimeSmoothed - delayTimeModulated);
             
             // Reset feedback to 0
             feedbackMapped = 0.0f;
+        }
+        else if (typeIndex == FxType::Flanger)
+        {
+            const double delayTimeModulated = jmap (modulationBuffer[i],
+                                                    -1.0f, 1.0f,
+                                                    0.0005f, 0.0050f);
+
+            mTimeSmoothed = mTimeSmoothed - RBD::paramSmoothingCoefFine
+                            * (mTimeSmoothed - delayTimeModulated);
+
+            // TODO: Flanger should use feedback parameter
+            feedbackMapped = 0.6f;
+        }
+        else
+        {
+            jassertfalse;
         }
         
         const double delayTimeInSamples = mTimeSmoothed * mSampleRate;

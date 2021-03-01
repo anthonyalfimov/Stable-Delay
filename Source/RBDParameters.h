@@ -57,8 +57,8 @@ namespace Parameter
         "Dry Wet",
         "Type",
         "Output Gain",
-        "Mod Rate",
-        "Mod Depth"
+        "Rate",
+        "Depth"
     };
 
     inline const NormalisableRange<float> Range[NumParameters]
@@ -67,7 +67,7 @@ namespace Parameter
         {0.0f, 1.0f},       // Time
         {0.0f, 1.0f},       // Feedback
         {0.0f, 1.0f},       // Dry Wet
-        {0.0f, 1.0f, 1.0f}, // Type
+        {0.0f, 2.0f, 1.0f}, // Type
         {0.0f, 1.0f},       // Output Gain
         {0.0f, 1.0f},       // Modulation Rate
         {0.0f, 1.0f}        // Modulation Depth
@@ -91,13 +91,15 @@ namespace FxType
     enum Index : int
     {
         Delay = 0,
-        Chorus
+        Chorus,
+        Flanger
     };
 
     inline const StringArray Label
     {
         "DELAY",
-        "CHORUS"
+        "CHORUS",
+        "FLANGER"
     };
 } // end namespace FxType
 

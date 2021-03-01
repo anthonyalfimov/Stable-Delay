@@ -24,7 +24,7 @@ CentrePanelMenuBar::CentrePanelMenuBar (ReallyBasicDelayAudioProcessor& processo
     mFxTypeComboBox = std::make_unique<ParameterComboBox> (mProcessor.parameters,
                                                            Parameter::FxType,
                                                            FxType::Label);
-    const int width = 90;
+    const int width = 95;
     mFxTypeComboBox->setBounds (getWidth() - width, 0, width, getHeight());
 
     addAndMakeVisible (mFxTypeComboBox.get());

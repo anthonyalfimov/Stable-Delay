@@ -50,6 +50,7 @@ void FxPanel::setFxPanelStyle (FxType::Index typeIndex)
     mSliders.clear();
     setName (FxType::Label[mTypeIndex]);
 
+    // Add controls based on the FxType
     switch (mTypeIndex)
     {
         case FxType::Delay:
@@ -65,8 +66,10 @@ void FxPanel::setFxPanelStyle (FxType::Index typeIndex)
                                           (mProcessor.parameters,
                                            Parameter::DryWet));
             break;
-            
+
+        //  Chorus and Flanger use the same set of controls
         case FxType::Chorus:
+        case FxType::Flanger:
             mSliders.add (std::make_unique<ParameterSlider>
                                           (mProcessor.parameters,
                                            Parameter::ModulationRate));
