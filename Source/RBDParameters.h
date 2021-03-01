@@ -10,20 +10,17 @@
 
 #pragma once
 
-
 // One of the main uses for this enum is to serve as named array indices.
-// Therefore, I don't want to have to cast it to int every time.
-// Current solution is to put a plain enum in a namespace to have name scope, but
-// keep automatic casting to int.
+//  Therefore, I don't want to have to cast it to int every time.
+//  Current solution is to put a plain enum in a namespace to have name scope
+//  but keep automatic casting to int.
 
 namespace Parameter
 {
-    // TODO: Consider using and enum class with overriden operator[]
-    //  If all containers that we need to index with this enum are not
-    //  using a plain array, we can add an overrid for the operator[]
-    //  to allow these enumerators to act as an index.
-    //  NB: operator[] override can't be non-member, so the only way to do it is to
-    //  derive a custom class from StringArray or create a function
+    // TODO: Consider using switching to an enum class
+    //  Together with the namespace, this would make using the enum more bulky
+    //  and will require extra considerations for using it as an array index,
+    //  but will eliminate potentially unsafe implicit cast to int
 
     enum Index : int
     {
@@ -38,7 +35,7 @@ namespace Parameter
         NumParameters
     };
 
-    // TODO: Consider using StringArray objects
+    // TODO: Consider switching to StringArray objects
 
     const static String ID[NumParameters]
     {
@@ -96,9 +93,3 @@ enum class FxTypeID
     Chorus
 };
 
-// TODO: Consider creating a StringArray with Fx Types listed
-//  Is is also useful to add an override for operator[] to allow FxTypeID
-//  to be used as an index directly - with the necessary conversion.
-//  It also can be used in converting FxType parameter value to string.
-//  NB: operator[] override can't be non-member, so the only way to do it is to
-//  derive a custom class from StringArray or create a function
