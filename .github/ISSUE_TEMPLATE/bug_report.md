@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-| **DAWs** | Present |
+| **DAW** | Bug |
 |--|--|
 | Reaper 6.23 ARM beta | [ ? ]
 | Reaper 6.23 Intel | [ ? ]
@@ -15,3 +15,5 @@ assignees: ''
 | Logic 10.5.1 Intel | [ ? ]
 
 ---
+
+Bug description
