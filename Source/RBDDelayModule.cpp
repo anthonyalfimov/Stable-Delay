@@ -54,7 +54,7 @@ void DelayModule::process (const float* inAudio,
     
     // TODO: Use NormalizableRange<> for parameters instead of mapping them here
     const float timeMapped = jmap (time, 0.001f, maxDelayTimeInSeconds);
-    float feedbackMapped = jmap (feedback, 0.0f, 0.95f);
+    float feedbackMapped = jmap (feedback, 0.0f, 1.2f);
     
     // TODO: Parameter values currently can only change on block level. Adjust accordingly
     //  We load the value from the parameter in the plugin processor. Here we
@@ -109,8 +109,9 @@ void DelayModule::process (const float* inAudio,
         const double delayTimeInSamples = mTimeSmoothed * mSampleRate;
         const float sample = getInterpolatedSample (delayTimeInSamples);
         
-        // Write to the buffer: mix of input audio and feedback signal
-        mBuffer[mWritePosition] = inAudio[i] + mFeedbackSample * feedbackMapped;
+        // Write to the buffer: mix of input audio and feedback signal, clipped
+        mBuffer[mWritePosition]
+        = RBD::fastTanh (inAudio[i] + mFeedbackSample * feedbackMapped);
         // Update feedback sample
         mFeedbackSample = sample;
         // Write output audio
