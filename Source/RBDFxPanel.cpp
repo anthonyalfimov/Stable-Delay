@@ -89,24 +89,21 @@ void FxPanel::setFxPanelStyle (FxType::Index typeIndex)
             break;
     }
     
-    // TODO: Positioning the sliders assumes there are always 3. Generalise
-    if (mSliders.size() != 3)
-        jassertfalse;           // array must contain 3 sliders to continue
-    
     const int sliderSize = 80;
+    const float sliderPadding = 0.5f;
+    const float sliderStep = 1.0f + sliderPadding;
     
-    mSliders[0]->setBounds (getLocalBounds()
-                            .withSizeKeepingCentre (sliderSize, sliderSize)
-                            .translated (-1.5 * sliderSize, 15));
-    mSliders[1]->setBounds (getLocalBounds()
-                            .withSizeKeepingCentre (sliderSize, sliderSize)
-                            .translated (0, 15));
-    mSliders[2]->setBounds (getLocalBounds()
-                            .withSizeKeepingCentre (sliderSize, sliderSize)
-                            .translated (1.5 * sliderSize, 15));
-    
+    // Calculate leftmost slider offset first:
+    float sliderOffset = -sliderStep * (mSliders.size() - 1) / 2.0f;
+        
     for (auto slider : mSliders)
     {
+        slider->setBounds (getLocalBounds()
+                           .withSizeKeepingCentre (sliderSize, sliderSize)
+                           .translated (sliderOffset * sliderSize, 15.0f));
+        
+        sliderOffset += sliderStep;     // update offset for the next slider
+        
         addAndMakeVisible (slider);
 
         // List of listeners is stored in Slider object and destroyed with it,
