@@ -67,8 +67,20 @@ void FxPanel::setFxPanelStyle (FxType::Index typeIndex)
                                            Parameter::DryWet));
             break;
 
-        //  Chorus and Flanger use the same set of controls
         case FxType::Chorus:
+            mSliders.add (std::make_unique<ParameterSlider>
+                                          (mProcessor.parameters,
+                                           Parameter::ModulationRate));
+            
+            mSliders.add (std::make_unique<ParameterSlider>
+                                          (mProcessor.parameters,
+                                           Parameter::ModulationDepth));
+            
+            mSliders.add (std::make_unique<ParameterSlider>
+                                          (mProcessor.parameters,
+                                           Parameter::DryWet));
+            break;
+            
         case FxType::Flanger:
             mSliders.add (std::make_unique<ParameterSlider>
                                           (mProcessor.parameters,
@@ -77,6 +89,10 @@ void FxPanel::setFxPanelStyle (FxType::Index typeIndex)
             mSliders.add (std::make_unique<ParameterSlider>
                                           (mProcessor.parameters,
                                            Parameter::ModulationDepth));
+            
+            mSliders.add (std::make_unique<ParameterSlider>
+                                          (mProcessor.parameters,
+                                           Parameter::DelayFeedback));
             
             mSliders.add (std::make_unique<ParameterSlider>
                                           (mProcessor.parameters,

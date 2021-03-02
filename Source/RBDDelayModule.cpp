@@ -97,9 +97,6 @@ void DelayModule::process (const float* inAudio,
 
             mTimeSmoothed = mTimeSmoothed - RBD::paramSmoothingCoefFine
                             * (mTimeSmoothed - delayTimeModulated);
-
-            // TODO: Flanger should use feedback parameter
-            feedbackMapped = 0.6f;
         }
         else
         {
@@ -112,9 +109,9 @@ void DelayModule::process (const float* inAudio,
         // TODO: Pick which saturation curve to use
         // Write to the buffer: mix of input audio and feedback signal, clipped
         mBuffer[mWritePosition]
-        //= RBD::saturateAlpha (inAudio[i] + mFeedbackSample * feedbackMapped);
+//        = RBD::saturateAlpha (inAudio[i] + mFeedbackSample * feedbackMapped);
         = RBD::saturateBeta (inAudio[i] + mFeedbackSample * feedbackMapped);
-        //= RBD::saturateGamma (inAudio[i] + mFeedbackSample * feedbackMapped);
+//        = RBD::saturateGamma (inAudio[i] + mFeedbackSample * feedbackMapped);
         
         // Update feedback sample
         mFeedbackSample = sample;
