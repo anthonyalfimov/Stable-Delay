@@ -24,18 +24,37 @@ namespace RBD
     }
     
     /**
-    Clipped version of fast rational tanh(x) approximation
+    Fast rational approximation of tanh(x) saturation curve. The most shallow
+    surve, resulting in most level loss.
     */
-    inline float fastTanh (float x)
+    inline float saturateAlpha (float x)
     {
         return jlimit (-1.0f, 1.0f, x * (27 + x * x) / (27 + 9 * x * x));
     }
     
-    // TODO: Consider clipping saturation curve to avoid negative ratio compression
+    // TODO: Consider clipping saturation curve Beta to eliminate folding
     //  Clip at x = ±2
-    inline float saturateAlpha (float x)
+
+    /**
+    The simplest rational saturation surve with intermediate steepness and wave
+    folding (single fold only).
+    */
+    inline float saturateBeta (float x)
     {
         return 4 * x / (x * x + 4);
+    }
+
+    /**
+    The steepest saturation curve, resulting in least level loss.
+    */
+    inline float saturateGamma (float x)
+    {
+        if (x > 1.5f)
+            return 1.0f;
+        else if (x < -1.5f)
+            return -1.0f;
+        else
+            return x * (1 - x * x / 6.75f);
     }
     
     // TODO: This function just remaps [0, 1] -> [0, 1] with a skew. Should this be done better?
