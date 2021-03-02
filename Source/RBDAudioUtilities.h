@@ -23,13 +23,19 @@ namespace RBD
         return fabs (inValue) < 1e-15 ? 0.0f : inValue;
     }
     
-    // TODO: Consider using an unclipped version of rational tanh approximation
     /**
     Clipped version of fast rational tanh(x) approximation
     */
     inline float fastTanh (float x)
     {
         return jlimit (-1.0f, 1.0f, x * (27 + x * x) / (27 + 9 * x * x));
+    }
+    
+    // TODO: Consider clipping saturation curve to avoid negative ratio compression
+    //  Clip at x = ±2
+    inline float saturateAlpha (float x)
+    {
+        return 4 * x / (x * x + 4);
     }
     
     // TODO: This function just remaps [0, 1] -> [0, 1] with a skew. Should this be done better?

@@ -109,9 +109,12 @@ void DelayModule::process (const float* inAudio,
         const double delayTimeInSamples = mTimeSmoothed * mSampleRate;
         const float sample = getInterpolatedSample (delayTimeInSamples);
         
+        // TODO: Pick which saturation curve to use
         // Write to the buffer: mix of input audio and feedback signal, clipped
         mBuffer[mWritePosition]
         = RBD::fastTanh (inAudio[i] + mFeedbackSample * feedbackMapped);
+        //= RBD::saturateAlpha (inAudio[i] + mFeedbackSample * feedbackMapped);
+        
         // Update feedback sample
         mFeedbackSample = sample;
         // Write output audio
