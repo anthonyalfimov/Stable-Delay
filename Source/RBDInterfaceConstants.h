@@ -54,7 +54,8 @@ namespace RBD
     // Standard rounded corner radius
     inline constexpr float defaultCornerSize = 3.0f;
     
-    // TODO: Can we move colour and font global constants into LookAndFeel class?
+    // TODO: Move colour and font global constants into LookAndFeel class
+    //  Aim to use ColourIds as much as possible
 
     inline const Colour textNormalColour = Colour (105, 105, 105);
     inline const Colour textActiveColour = Colour (125, 125, 125);

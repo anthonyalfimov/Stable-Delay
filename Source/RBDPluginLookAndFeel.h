@@ -13,6 +13,11 @@
 #include <JuceHeader.h>
 #include "RBDInterfaceConstants.h"
 
+// TODO: Move towards using the LookAndFeel facilities more
+//  E.g. when drawing a button, the text could be drawn using Label painting
+//  method. A lot of methods that we override have parameters that we don't use,
+//  but, perhaps, should.
+
 class PluginLookAndFeel  : public LookAndFeel_V4
 {
 public:
@@ -46,13 +51,13 @@ public:
     
 //  BUTTONS
     
-    Font getTextButtonFont (TextButton& button, int buttonHeight) override
+    Font getTextButtonFont (TextButton& /*button*/, int /*buttonHeight*/) override
     {
         return RBD::font1;
     }
     
     void drawButtonBackground (Graphics& g, Button& button,
-                               const Colour& backgroundColour,
+                               const Colour& /*backgroundColour*/,
                                bool shouldDrawButtonAsHighlighted,
                                bool shouldDrawButtonAsDown) override
     {
@@ -77,18 +82,18 @@ public:
     }
     
 //  COMBOBOXES
-    // TODO: Make the popup list transparent, with rounded corners
+    // TODO: Make the popup list semi-transparent, with rounded corners
     
-    Font getLabelFont (Label& label) override
+    Font getLabelFont (Label& /*label*/) override
     {
         return RBD::font1;
     }
     
     void drawPopupMenuItem (Graphics& g, const Rectangle<int>& area,
-                            bool isSeparator, bool isActive, bool isHighlighted,
-                            bool isTicked, bool hasSubMenu,
-                            const String& text, const String& shortcutKeyText,
-                            const Drawable* icon, const Colour* passedTextColour) override
+                            bool /*isSeparator*/, bool /*isActive*/,
+                            bool isHighlighted, bool isTicked, bool /*hasSubMenu*/,
+                            const String& text, const String& /*shortcutKeyText*/,
+                            const Drawable* /*icon*/, const Colour* /*passedTextColour*/) override
     {
         Rectangle<int> bounds (area);       // create editable copy of passed bounds to adjust them
         bounds.removeFromBottom (1);
@@ -109,8 +114,8 @@ public:
         g.drawFittedText (text, bounds, Justification::left, 1);
     }
     
-    void drawComboBox (Graphics& g, int width, int height, bool isButtonDown,
-                       int buttonX, int buttonY, int buttonW, int buttonH,
+    void drawComboBox (Graphics& g, int width, int height, bool /*isButtonDown*/,
+                       int /*buttonX*/, int /*buttonY*/, int /*buttonW*/, int /*buttonH*/,
                        ComboBox& comboBox) override
     {
         const Rectangle<float> comboBoxBounds (0.0f, 0.0f, width, height);
@@ -143,8 +148,8 @@ public:
     
 //  SLIDERS
     void drawRotarySlider (Graphics& g, int x, int y, int width, int height,
-                           float sliderPosProportional, float rotaryStartAngle,
-                           float rotaryEndAngle, Slider& slider) override
+                           float sliderPosProportional, float /*rotaryStartAngle*/,
+                           float /*rotaryEndAngle*/, Slider& /*slider*/) override
     {
         const int numFrames = mKnobImage.getHeight() / mKnobImage.getWidth();
         const int frameIndex = static_cast<int> (std::ceil (sliderPosProportional * (numFrames - 1)));

@@ -34,6 +34,11 @@ SliderLabel::~SliderLabel()
 
 void SliderLabel::paint (Graphics& g)
 {
+    // TODO: Use LookAndFeel method to paint the SliderLabel text
+    //  Our LookAndFeel should have a method to draw a generic label without
+    //  any background. Here, we should first draw the label background as we
+    //  do, and then call the LookAndFeel method to draw the text
+    
     const Colour bgColour = mOwnerSlider->isMouseOver() ? RBD::controlHoverColour
                                                         : RBD::controlNormalColour;
     g.setColour (bgColour);
@@ -41,6 +46,8 @@ void SliderLabel::paint (Graphics& g)
 
     g.setColour (RBD::textNormalColour);
     g.setFont (RBD::font1);
+    
+    // TODO: Disable text scaling
     g.drawFittedText (getText(), getLocalBounds(), Justification::centred, 1);
 }
 
