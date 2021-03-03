@@ -21,7 +21,7 @@ public:
         // Store image assets
         // TODO: What's the difference from loading the image from file vs embedding it?
         // TODO: Kadenze image file size was smaller. Does it matter? Should we compress it more?
-        mSliderImage = ImageCache::getFromMemory (BinaryData::RBD_Knob_80_png,
+        mKnobImage = ImageCache::getFromMemory (BinaryData::RBD_Knob_80_png,
                                                   BinaryData::RBD_Knob_80_pngSize);
         
         // ComboBox colours
@@ -29,7 +29,9 @@ public:
         setColour (ComboBox::outlineColourId, RBD::colour2);
         setColour (ComboBox::arrowColourId, RBD::colour1);
         setColour (ComboBox::textColourId, RBD::colour1);
-        setColour (PopupMenu::backgroundColourId, RBD::colour8);    // ComboBox popup bg colour
+
+        // Popup colours (for comboBox popup)
+        setColour (PopupMenu::backgroundColourId, RBD::colour8);
         
         // TextButton colours
         setColour (TextButton::buttonColourId, RBD::colour1);
@@ -138,26 +140,26 @@ public:
                            float sliderPosProportional, float rotaryStartAngle,
                            float rotaryEndAngle, Slider& slider) override
     {
-        const int numFrames = mSliderImage.getHeight() / mSliderImage.getWidth();
+        const int numFrames = mKnobImage.getHeight() / mKnobImage.getWidth();
         const int frameIndex = static_cast<int> (std::ceil (sliderPosProportional * (numFrames - 1)));
         
         const int diameter = jmin (width, height);
         auto bounds = Rectangle<int> (x, y, width, height).withSizeKeepingCentre (diameter, diameter);
         
         g.setOpacity (1.0f);    // Make sure the image is drawn opaque
-        g.drawImage (mSliderImage,  // Image
+        g.drawImage (mKnobImage,  // Image
                      bounds.getX(), // Destination X
                      bounds.getY(), // Destination Y
                      bounds.getWidth(), // Destination width
                      bounds.getHeight(),    // Destination height
                      0, // Source X
-                     frameIndex * mSliderImage.getWidth(),  // Source Y
-                     mSliderImage.getWidth(),   // Source width
-                     mSliderImage.getWidth());  // Source height
+                     frameIndex * mKnobImage.getWidth(),  // Source Y
+                     mKnobImage.getWidth(),   // Source width
+                     mKnobImage.getWidth());  // Source height
     }
     
 private:
     // NB! Image object dynamically allocates memory for the image data, so we create it as a
     //      contained object, not a pointer!
-    Image mSliderImage;
+    Image mKnobImage;
 };

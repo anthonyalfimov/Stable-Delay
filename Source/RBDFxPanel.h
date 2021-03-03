@@ -11,11 +11,11 @@
 #pragma once
 
 #include "RBDInterfacePanel.h"
-#include "RBDParameterSlider.h"
+#include "RBDParameterKnob.h"
 #include "RBDParameters.h"
 
 class FxPanel  : public InterfacePanel,
-                    public ComboBox::Listener
+                 public ComboBox::Listener
 {
 public:
     FxPanel (ReallyBasicDelayAudioProcessor& processor);
@@ -33,8 +33,8 @@ public:
 private:
     FxType::Index mTypeIndex;
     
-    // Use an array or pointers to allow dynamically changing number of sliders
-    OwnedArray<ParameterSlider> mSliders;
+    // Use an array or pointers to allow dynamically changing number of knobs
+    OwnedArray<ParameterKnob> mKnobs;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FxPanel)
 };

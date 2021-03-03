@@ -25,28 +25,20 @@ GainPanel::~GainPanel()
 
 void GainPanel::setParameterID (Parameter::Index parameterIndex)
 {
-//  CREATE SLIDER
-    mSlider = std::make_unique<ParameterSlider> (mProcessor.parameters,
-                                                 parameterIndex);
+//  CREATE KNOB
+    mKnob = std::make_unique<ParameterKnob> (mProcessor.parameters,
+                                             parameterIndex);
     
-    const int sliderSize = 80;
+    const int knobSize = RBD::defaultKnobSize;
     
-    // TODO: Is there a better way to position slider at the center of parent component?
-    //   A1: there's `centreWithSize()`, as well as the ability to set size and position
-    //       separately, and set position relative to parent size. But I haven't found
-    //       another way to set this up with a single line where you can modify the bounds
-    //       freely.
-    //   A2: I think that it's much easier to understand the intent of component
-    //       positioning when it's expressed as operations on rectangle objects, rather
-    //       than math on coordinates and dimensions.
-    mSlider->setBounds (getLocalBounds().withSizeKeepingCentre (sliderSize, sliderSize)
-                        .withY (20));
+    mKnob->setBounds (getLocalBounds().withSizeKeepingCentre (knobSize, knobSize)
+                                      .withY (20));
     
-    addAndMakeVisible (mSlider.get());
+    addAndMakeVisible (mKnob.get());
     
-    // Register as mouse listener for Sliders so we can repaint Slider labels when mouse
-    //  enters and exits Slider components
-    mSlider->addMouseListener (this, false);
+    // Register as mouse listener for Knobs so we can repaint Knob labels
+    //  when mouse enters and exits Knob components
+    mKnob->addMouseListener (this, false);
     
 //  CREATE METER
     mMeter = std::make_unique<LevelMeter> (parameterIndex, mProcessor);
@@ -54,8 +46,9 @@ void GainPanel::setParameterID (Parameter::Index parameterIndex)
     // Define meter bounds
     const int meterWidth = 56;
     const int meterGap = 20;
-    Rectangle<int> meterBounds = mSlider->getBounds().withSizeKeepingCentre (meterWidth, 0);
-    meterBounds.setTop (mSlider->getBottom() + RBD::labelHeight + meterGap);
+    Rectangle<int> meterBounds
+    = mKnob->getBounds().withSizeKeepingCentre (meterWidth, 0);
+    meterBounds.setTop (mKnob->getBottom() + RBD::labelHeight + meterGap);
     meterBounds.setBottom (getHeight() - meterGap);
     
     mMeter->setBounds (meterBounds);
@@ -66,9 +59,9 @@ void GainPanel::setParameterID (Parameter::Index parameterIndex)
 void GainPanel::paint (Graphics& g)
 {
     InterfacePanel::paint(g);
-    
-    if (mSlider != nullptr)
-        paintComponentLabel (g, mSlider.get());     // only paint label if slider exists
+
+    if (mKnob != nullptr)     // only paint label if knob exists
+        paintComponentLabel (g, mKnob.get());
 }
 
 void GainPanel::mouseEnter (const MouseEvent& event)

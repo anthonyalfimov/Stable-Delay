@@ -40,61 +40,61 @@ void FxPanel::paint (Graphics& g)
     g.setFont (RBD::font3);
     g.drawText (getName(), getLocalBounds().withHeight (80), Justification::centred);
     
-    for (auto slider : mSliders)
-        paintComponentLabel (g, slider);
+    for (auto knob : mKnobs)
+        paintComponentLabel (g, knob);
 }
     
 void FxPanel::setFxPanelStyle (FxType::Index typeIndex)
 {
     mTypeIndex = typeIndex;
-    mSliders.clear();
+    mKnobs.clear();
     setName (FxType::Label[mTypeIndex]);
 
     // Add controls based on the FxType
     switch (mTypeIndex)
     {
         case FxType::Delay:
-            mSliders.add (std::make_unique<ParameterSlider>
+            mKnobs.add (std::make_unique<ParameterKnob>
                                           (mProcessor.parameters,
                                            Parameter::DelayTime));
 
-            mSliders.add (std::make_unique<ParameterSlider>
+            mKnobs.add (std::make_unique<ParameterKnob>
                                           (mProcessor.parameters,
                                            Parameter::DelayFeedback));
             
-            mSliders.add (std::make_unique<ParameterSlider>
+            mKnobs.add (std::make_unique<ParameterKnob>
                                           (mProcessor.parameters,
                                            Parameter::DryWet));
             break;
 
         case FxType::Chorus:
-            mSliders.add (std::make_unique<ParameterSlider>
+            mKnobs.add (std::make_unique<ParameterKnob>
                                           (mProcessor.parameters,
                                            Parameter::ModulationRate));
             
-            mSliders.add (std::make_unique<ParameterSlider>
+            mKnobs.add (std::make_unique<ParameterKnob>
                                           (mProcessor.parameters,
                                            Parameter::ModulationDepth));
             
-            mSliders.add (std::make_unique<ParameterSlider>
+            mKnobs.add (std::make_unique<ParameterKnob>
                                           (mProcessor.parameters,
                                            Parameter::DryWet));
             break;
             
         case FxType::Flanger:
-            mSliders.add (std::make_unique<ParameterSlider>
+            mKnobs.add (std::make_unique<ParameterKnob>
                                           (mProcessor.parameters,
                                            Parameter::ModulationRate));
             
-            mSliders.add (std::make_unique<ParameterSlider>
+            mKnobs.add (std::make_unique<ParameterKnob>
                                           (mProcessor.parameters,
                                            Parameter::ModulationDepth));
             
-            mSliders.add (std::make_unique<ParameterSlider>
+            mKnobs.add (std::make_unique<ParameterKnob>
                                           (mProcessor.parameters,
                                            Parameter::DelayFeedback));
             
-            mSliders.add (std::make_unique<ParameterSlider>
+            mKnobs.add (std::make_unique<ParameterKnob>
                                           (mProcessor.parameters,
                                            Parameter::DryWet));
             break;
@@ -105,29 +105,29 @@ void FxPanel::setFxPanelStyle (FxType::Index typeIndex)
             break;
     }
     
-    const int sliderSize = 80;
-    const float sliderPadding = 0.5f;
-    const float sliderStep = 1.0f + sliderPadding;
+    const int knobSize = RBD::defaultKnobSize;
+    const float knobPadding = 0.5f;
+    const float knobStep = 1.0f + knobPadding;
     
-    // Calculate leftmost slider offset first:
-    float sliderOffset = -sliderStep * (mSliders.size() - 1) / 2.0f;
+    // Calculate leftmost knob offset first:
+    float knobOffset = -knobStep * (mKnobs.size() - 1) / 2.0f;
         
-    for (auto slider : mSliders)
+    for (auto knob : mKnobs)
     {
-        slider->setBounds (getLocalBounds()
-                           .withSizeKeepingCentre (sliderSize, sliderSize)
-                           .translated (sliderOffset * sliderSize, 15.0f));
+        knob->setBounds (getLocalBounds()
+                           .withSizeKeepingCentre (knobSize, knobSize)
+                           .translated (knobOffset * knobSize, 15.0f));
         
-        sliderOffset += sliderStep;     // update offset for the next slider
+        knobOffset += knobStep;     // update offset for the next knob
         
-        addAndMakeVisible (slider);
+        addAndMakeVisible (knob);
 
-        // List of listeners is stored in Slider object and destroyed with it,
+        // List of listeners is stored in Knob object and destroyed with it,
         //  so we don't need to unregister this component.
         
-        // Register as mouse listener for Sliders so we can repaint Slider
-        //  labels when mouse enters and exits Slider components
-        slider->addMouseListener (this, false);
+        // Register as mouse listener for Knobs so we can repaint Knob
+        //  labels when mouse enters and exits Knob components
+        knob->addMouseListener (this, false);
     }
     
     repaint();

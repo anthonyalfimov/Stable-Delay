@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    RBDParameterSlider.h
+    RBDParameterKnob.h
     Created: 13 Jan 2021 9:29:21pm
     Author:  Anthony
 
@@ -13,15 +13,15 @@
 #include <JuceHeader.h>
 #include "RBDParameters.h"
 
-class ParameterSlider  : public Slider
+class ParameterKnob  : public Slider
 {
 public:
-    ParameterSlider (AudioProcessorValueTreeState& stateToControl,
-                     Parameter::Index parameterIndex);
-    ~ParameterSlider();
+    ParameterKnob (AudioProcessorValueTreeState& stateToControl,
+                   Parameter::Index parameterIndex);
+    ~ParameterKnob();
     
 private:
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> mAttachment;
     
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ParameterSlider)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ParameterKnob)
 };

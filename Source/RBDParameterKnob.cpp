@@ -1,17 +1,17 @@
 /*
   ==============================================================================
 
-    RBDParameterSlider.cpp
+    RBDParameterKnob.cpp
     Created: 13 Jan 2021 9:29:21pm
     Author:  Anthony
 
   ==============================================================================
 */
 
-#include "RBDParameterSlider.h"
+#include "RBDParameterKnob.h"
 
-ParameterSlider::ParameterSlider (AudioProcessorValueTreeState& stateToControl,
-                                  Parameter::Index parameterIndex)
+ParameterKnob::ParameterKnob (AudioProcessorValueTreeState& stateToControl,
+                              Parameter::Index parameterIndex)
     : Slider (Parameter::Label[parameterIndex])
 {
     setSliderStyle (SliderStyle::RotaryHorizontalVerticalDrag);
@@ -25,7 +25,7 @@ ParameterSlider::ParameterSlider (AudioProcessorValueTreeState& stateToControl,
                                                       *this);
 }
 
-ParameterSlider::~ParameterSlider()
+ParameterKnob::~ParameterKnob()
 {
     
 }

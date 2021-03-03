@@ -12,7 +12,7 @@
 
 #include "RBDInterfacePanel.h"
 #include "RBDParameters.h"
-#include "RBDParameterSlider.h"
+#include "RBDParameterKnob.h"
 #include "RBDLevelMeter.h"
 
 class GainPanel  : public InterfacePanel
@@ -30,7 +30,7 @@ public:
     void mouseExit (const MouseEvent& event) override;
     
 private:
-    std::unique_ptr<ParameterSlider> mSlider;
+    std::unique_ptr<ParameterKnob> mKnob;
     std::unique_ptr<LevelMeter> mMeter;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GainPanel)
