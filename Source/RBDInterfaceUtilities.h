@@ -22,13 +22,14 @@ inline void paintComponentLabel (Graphics& g, Component* inComponent)
     const int yPosition = inComponent->getBottom();
     auto textBounds = inComponent->getBounds().withSizeKeepingCentre (width, height)
                                               .withY (yPosition);
-    
-    const Colour labelBgColour = inComponent->isMouseOver() ? RBD::colour6 : RBD::colour3;
+
+    const Colour labelBgColour = inComponent->isMouseOver() ? RBD::controlHoverColour
+                                                            : RBD::controlNormalColour;
     g.setColour (labelBgColour);
     g.fillRoundedRectangle (textBounds.toFloat(), RBD::defaultCornerSize);
-    
+
     const String label = inComponent->getName();
-    g.setColour (RBD::colour1);
+    g.setColour (RBD::textNormalColour);
     g.setFont (RBD::font1);
     g.drawFittedText (label, textBounds, Justification::centred, 1);
 }

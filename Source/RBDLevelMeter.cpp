@@ -37,7 +37,7 @@ void LevelMeter::paint (Graphics& g)
     Rectangle<int> ch1Bounds = ch0Bounds.withRightX (getWidth());
     
     // Fill meter background
-    g.setColour (RBD::colour6);
+    g.setColour (RBD::meterBgColour);
     g.fillRoundedRectangle (ch0Bounds.toFloat(), RBD::defaultCornerSize);
     g.fillRoundedRectangle (ch1Bounds.toFloat(), RBD::defaultCornerSize);
     
@@ -54,7 +54,7 @@ void LevelMeter::paint (Graphics& g)
     ch1Bounds.setTop (ch1FillTop);
     
     // Fill meter fill
-    g.setColour (RBD::colour7);
+    g.setColour (RBD::meterFillColour);
     g.fillRoundedRectangle (ch0Bounds.reduced (2).toFloat(), RBD::defaultCornerSize);
     g.fillRoundedRectangle (ch1Bounds.reduced (2).toFloat(), RBD::defaultCornerSize);
 }

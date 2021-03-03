@@ -55,16 +55,19 @@ namespace RBD
     inline constexpr float defaultCornerSize = 3.0f;
     
     // TODO: Can we move colour and font global constants into LookAndFeel class?
-    // TODO: Add descriptive colour names
-    inline const Colour colour1 = Colour (105, 105, 105);
-    inline const Colour colour2 = Colour (0, 0, 0).withAlpha (0.0f);
-    inline const Colour colour3 = Colour (0, 0, 0).withAlpha (0.3f);
-    inline const Colour colour4 = Colour (0, 0, 0).withAlpha (0.6f);
-    inline const Colour colour5 = Colour (105, 105, 105).withAlpha (0.3f);
-    inline const Colour colour6 = Colour (0, 0, 0).withAlpha (0.8f);
-    inline const Colour colour7 = Colour (125, 125, 125);
-    inline const Colour colour8 = Colour (40, 40, 40);
-    
+
+    inline const Colour textNormalColour = Colour (105, 105, 105);
+    inline const Colour textActiveColour = Colour (125, 125, 125);
+    inline const Colour textFxTypeColour = Colour (105, 105, 105).withAlpha (0.3f);
+    inline const Colour controlNormalColour = Colour (0, 0, 0).withAlpha (0.3f);
+    inline const Colour controlHoverColour = Colour (0, 0, 0).withAlpha (0.8f);
+    inline const Colour controlActiveColour = Colour (105, 105, 105).withAlpha (0.3f);
+    inline const Colour controlOutlineColour = Colour (0, 0, 0).withAlpha (0.0f);
+    inline const Colour popupBgColour = Colour (40, 40, 40);
+    inline const Colour popupItemBgColour = Colour (0, 0, 0).withAlpha (0.6f);
+    inline const Colour meterBgColour = Colour (0, 0, 0).withAlpha (0.8f);
+    inline const Colour meterFillColour = Colour (125, 125, 125);
+
     // Font
     inline const Typeface::Ptr primaryFont
         = Typeface::createSystemTypefaceFor (BinaryData::OpenSansBold_ttf,

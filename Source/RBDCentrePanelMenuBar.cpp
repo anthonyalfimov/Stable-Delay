@@ -43,7 +43,7 @@ void CentrePanelMenuBar::paint (Graphics& g)
     // TODO: Enable build stamp only for the debug version, or remove later
 
     g.setFont (RBD::font1);
-    g.setColour (RBD::colour1);
+    g.setColour (RBD::textNormalColour);
     auto buildDate = Time::getCompilationDate();
     g.drawText ("Build: " + String (buildDate.getHours()) + ":"
                 + String (buildDate.getMinutes()) + ", "

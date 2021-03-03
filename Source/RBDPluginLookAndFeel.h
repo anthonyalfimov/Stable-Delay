@@ -25,18 +25,18 @@ public:
                                                   BinaryData::RBD_Knob_80_pngSize);
         
         // ComboBox colours
-        setColour (ComboBox::backgroundColourId, RBD::colour3);
-        setColour (ComboBox::outlineColourId, RBD::colour2);
-        setColour (ComboBox::arrowColourId, RBD::colour1);
-        setColour (ComboBox::textColourId, RBD::colour1);
+        setColour (ComboBox::backgroundColourId, RBD::controlNormalColour);
+        setColour (ComboBox::outlineColourId, RBD::controlOutlineColour);
+        setColour (ComboBox::arrowColourId, RBD::textNormalColour);
+        setColour (ComboBox::textColourId, RBD::textNormalColour);
 
         // Popup colours (for comboBox popup)
-        setColour (PopupMenu::backgroundColourId, RBD::colour8);
+        setColour (PopupMenu::backgroundColourId, RBD::popupBgColour);
         
         // TextButton colours
-        setColour (TextButton::buttonColourId, RBD::colour1);
-        setColour (TextButton::textColourOnId, RBD::colour1);
-        setColour (TextButton::textColourOffId, RBD::colour1);
+        setColour (TextButton::buttonColourId, RBD::textNormalColour);
+        setColour (TextButton::textColourOnId, RBD::textNormalColour);
+        setColour (TextButton::textColourOffId, RBD::textNormalColour);
     }
     
     ~PluginLookAndFeel()
@@ -56,15 +56,15 @@ public:
                                bool shouldDrawButtonAsHighlighted,
                                bool shouldDrawButtonAsDown) override
     {
-        Colour fillColour = RBD::colour3;
+        Colour fillColour = RBD::controlNormalColour;
         
         if (shouldDrawButtonAsDown)
         {
-            fillColour = RBD::colour5;
+            fillColour = RBD::controlActiveColour;
         }
         else if (shouldDrawButtonAsHighlighted)
         {
-            fillColour = RBD::colour6;
+            fillColour = RBD::controlHoverColour;
         }
         
         const float cornerSize = 6.0f;
@@ -92,12 +92,13 @@ public:
     {
         Rectangle<int> bounds (area);       // create editable copy of passed bounds to adjust them
         bounds.removeFromBottom (1);
-        Colour fillColour = isHighlighted ? RBD::colour5 : RBD::colour4;
+        Colour fillColour = isHighlighted ? RBD::controlActiveColour
+                                          : RBD::popupItemBgColour;
         
         g.setColour (fillColour);
         g.fillRect (bounds);
         
-        Colour textColour = isTicked ? RBD::colour7 : RBD::colour1;
+        Colour textColour = isTicked ? RBD::textActiveColour : RBD::textNormalColour;
         g.setColour (textColour);
         g.setFont (RBD::font1);
         
@@ -115,22 +116,27 @@ public:
         const Rectangle<float> comboBoxBounds (0.0f, 0.0f, width, height);
         
         // TODO: Change highlight condition to mouseOver
-        const Colour comboBoxColour = comboBox.isPopupActive() ? RBD::colour6 : RBD::colour3;
+        const Colour comboBoxColour = comboBox.isPopupActive()
+                                        ? RBD::controlHoverColour
+                                        : RBD::controlNormalColour;
         g.setColour (comboBoxColour);
         g.fillRoundedRectangle (comboBoxBounds, RBD::defaultCornerSize);
         
-        const Rectangle<float> arrowBounds (comboBoxBounds.withWidth (20.0f).withRightX (width - 10.0f));
+        const Rectangle<float> arrowBounds (comboBoxBounds.withWidth (20.0f)
+                                                .withRightX (width - 10.0f));
         
         // Create arrow shape
         Path arrow;
-        arrow.startNewSubPath (arrowBounds.getX() + 3.0f, arrowBounds.getCentreY() - 2.0f);
+        arrow.startNewSubPath (arrowBounds.getX() + 3.0f,
+                               arrowBounds.getCentreY() - 2.0f);
         arrow.lineTo (arrowBounds.getCentreX(), arrowBounds.getCentreY() + 2.0f);
         arrow.lineTo (arrowBounds.getRight() - 3.0f, arrowBounds.getCentreY() - 2.0f);
         
         // We're not disabling the comboBox anywhere, so it makes more sense to use different
         //  shades when popup is active, rather than on enabled / disabled
-        const Colour arrowColour = comboBox.findColour (ComboBox::arrowColourId)
-                                            .withAlpha (comboBox.isPopupActive() ? 0.9f : 0.5f);
+        const Colour arrowColour
+        = comboBox.findColour (ComboBox::arrowColourId)
+                              .withAlpha (comboBox.isPopupActive() ? 0.9f : 0.5f);
         g.setColour (arrowColour);
         g.strokePath (arrow, PathStrokeType (2.0f));
     }
