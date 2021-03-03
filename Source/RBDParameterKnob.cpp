@@ -16,7 +16,8 @@ ParameterKnob::ParameterKnob (AudioProcessorValueTreeState& stateToControl,
 {
     setSliderStyle (SliderStyle::RotaryHorizontalVerticalDrag);
     setTextBoxStyle (Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
-    
+
+    #warning Do we need to manually set Slider range when using APVTS?
     setRange (0.0f, 1.0f, 0.001f);
     
     using SliderAttachment = AudioProcessorValueTreeState::SliderAttachment;

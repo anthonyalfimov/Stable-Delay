@@ -9,7 +9,6 @@
 */
 
 #include "RBDGainPanel.h"
-#include "RBDInterfaceUtilities.h"
 
 GainPanel::GainPanel (ReallyBasicDelayAudioProcessor& processor)
     : InterfacePanel (processor)
@@ -36,9 +35,10 @@ void GainPanel::setParameterID (Parameter::Index parameterIndex)
     
     addAndMakeVisible (mKnob.get());
     
-    // Register as mouse listener for Knobs so we can repaint Knob labels
-    //  when mouse enters and exits Knob components
-    mKnob->addMouseListener (this, false);
+//  CREATE KNOB LABEL
+    mLabel = std::make_unique<SliderLabel> (mKnob.get());
+    
+    addAndMakeVisible (mLabel.get());
     
 //  CREATE METER
     mMeter = std::make_unique<LevelMeter> (parameterIndex, mProcessor);
@@ -50,26 +50,7 @@ void GainPanel::setParameterID (Parameter::Index parameterIndex)
     = mKnob->getBounds().withSizeKeepingCentre (meterWidth, 0);
     meterBounds.setTop (mKnob->getBottom() + RBD::labelHeight + meterGap);
     meterBounds.setBottom (getHeight() - meterGap);
-    
     mMeter->setBounds (meterBounds);
     
     addAndMakeVisible (mMeter.get());
-}
-
-void GainPanel::paint (Graphics& g)
-{
-    InterfacePanel::paint(g);
-
-    if (mKnob != nullptr)     // only paint label if knob exists
-        paintComponentLabel (g, mKnob.get());
-}
-
-void GainPanel::mouseEnter (const MouseEvent& event)
-{
-    repaint();
-}
-
-void GainPanel::mouseExit (const MouseEvent& event)
-{
-    repaint();
 }

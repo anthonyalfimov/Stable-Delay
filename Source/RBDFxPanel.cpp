@@ -10,7 +10,6 @@
 
 #include "RBDFxPanel.h"
 #include "RBDParameters.h"
-#include "RBDInterfaceUtilities.h"
 
 FxPanel::FxPanel (ReallyBasicDelayAudioProcessor& processor)
     : InterfacePanel (processor)
@@ -39,14 +38,12 @@ void FxPanel::paint (Graphics& g)
     g.setColour (RBD::textFxTypeColour);
     g.setFont (RBD::font3);
     g.drawText (getName(), getLocalBounds().withHeight (80), Justification::centred);
-    
-    for (auto knob : mKnobs)
-        paintComponentLabel (g, knob);
 }
     
 void FxPanel::setFxPanelStyle (FxType::Index typeIndex)
 {
     mTypeIndex = typeIndex;
+    mLabels.clear();
     mKnobs.clear();
     setName (FxType::Label[mTypeIndex]);
 
@@ -121,13 +118,7 @@ void FxPanel::setFxPanelStyle (FxType::Index typeIndex)
         knobOffset += knobStep;     // update offset for the next knob
         
         addAndMakeVisible (knob);
-
-        // List of listeners is stored in Knob object and destroyed with it,
-        //  so we don't need to unregister this component.
-        
-        // Register as mouse listener for Knobs so we can repaint Knob
-        //  labels when mouse enters and exits Knob components
-        knob->addMouseListener (this, false);
+        addAndMakeVisible (mLabels.add (std::make_unique<SliderLabel> (knob)));
     }
     
     repaint();
@@ -137,14 +128,4 @@ void FxPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
 {
     const auto newTypeIndex = static_cast<FxType::Index> (comboBoxThatHasChanged->getSelectedItemIndex());
     setFxPanelStyle (newTypeIndex);
-}
-
-void FxPanel::mouseEnter (const MouseEvent& event)
-{
-    repaint();
-}
-
-void FxPanel::mouseExit (const MouseEvent& event)
-{
-    repaint();
 }

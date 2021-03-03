@@ -12,8 +12,6 @@
             file="Source/RBDAudioUtilities.h"/>
       <FILE id="FJ9rx4" name="RBDInterfaceConstants.h" compile="0" resource="0"
             file="Source/RBDInterfaceConstants.h"/>
-      <FILE id="lU6RIO" name="RBDInterfaceUtilities.h" compile="0" resource="0"
-            file="Source/RBDInterfaceUtilities.h"/>
       <FILE id="GRKCGg" name="RBDPluginLookAndFeel.h" compile="0" resource="0"
             file="Source/RBDPluginLookAndFeel.h"/>
       <FILE id="fjYt20" name="RBDParameters.h" compile="0" resource="0" file="Source/RBDParameters.h"/>
@@ -38,6 +36,10 @@
       <FILE id="uEiEFY" name="RBDLevelMeter.cpp" compile="1" resource="0"
             file="Source/RBDLevelMeter.cpp"/>
       <FILE id="KsheeB" name="RBDLevelMeter.h" compile="0" resource="0" file="Source/RBDLevelMeter.h"/>
+      <FILE id="PFoj7C" name="RBDSliderLabel.cpp" compile="1" resource="0"
+            file="Source/RBDSliderLabel.cpp"/>
+      <FILE id="BHynvf" name="RBDSliderLabel.h" compile="0" resource="0"
+            file="Source/RBDSliderLabel.h"/>
     </GROUP>
     <GROUP id="{B55B2190-C0A4-3B41-2D50-0A81E5CC3764}" name="Panels">
       <FILE id="CLsfpr" name="RBDInterfacePanel.cpp" compile="1" resource="0"

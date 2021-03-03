@@ -12,6 +12,7 @@
 
 #include "RBDInterfacePanel.h"
 #include "RBDParameterKnob.h"
+#include "RBDSliderLabel.h"
 #include "RBDParameters.h"
 
 class FxPanel  : public InterfacePanel,
@@ -27,14 +28,12 @@ public:
     
     void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
     
-    void mouseEnter (const MouseEvent& event) override;
-    void mouseExit (const MouseEvent& event) override;
-    
 private:
     FxType::Index mTypeIndex;
     
     // Use an array or pointers to allow dynamically changing number of knobs
     OwnedArray<ParameterKnob> mKnobs;
+    OwnedArray<SliderLabel> mLabels;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FxPanel)
 };
