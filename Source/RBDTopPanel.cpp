@@ -20,8 +20,8 @@ TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor)
     const int presetListWidth = 200;
     
     mPresetList = std::make_unique<ComboBox>();
-    // TODO: Is it a bad practice to use the same Rect object to position all UI elements?
-    Rectangle<int> bounds = getLocalBounds().withSizeKeepingCentre (presetListWidth, height);
+    Rectangle<int> bounds
+    = getLocalBounds().withSizeKeepingCentre (presetListWidth, height);
     mPresetList->setBounds (bounds);
     mPresetList->addListener (this);
     addAndMakeVisible (mPresetList.get());
@@ -30,7 +30,8 @@ TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor)
     const int buttonWidth = 65;
     const int buttonStartX = 10;
     
-    // TODO: Repetitive button initialisation - can we make it more dry? Array of buttons?
+    // TODO: Repetitive button initialisation - can we make it more dry?
+    //  OwnedArray of buttons and StringArray of labels?
     
     mNewPreset = std::make_unique<TextButton>();
     bounds.setWidth (buttonWidth);
