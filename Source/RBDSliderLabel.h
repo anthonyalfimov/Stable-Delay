@@ -59,6 +59,10 @@ private:
     String mSliderName;
     Colour mBgColour = RBD::controlNormalColour;
 
+    // TODO: This time should cover double clicking
+    //  Set it high enough, or, possibly, check the system setting for
+    //  double click time/speed and use that?
+    
     // Time before slider value display switches back to slider name
     inline static const int switchDelayTime = 600 /* ms */;
 };
