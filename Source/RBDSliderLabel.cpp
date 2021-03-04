@@ -9,16 +9,6 @@
 */
 
 #include "RBDSliderLabel.h"
-#include "RBDInterfaceConstants.h"
-
-// TODO: Choose whether to handle the case when OwnerSlider is nullptr
-//  If we want to handle the case when the passed ptr is null, our paint()
-//  method should not use the mOwnerSlider member - access to it should be
-//  limited only to Listener callbacks (they get called only if the caller
-//  exists).
-//  If we are sure that we won't be passing nullptr to the constructor and
-//  that Slider ptrs will not be reset to null during their lifetime,
-//  we can keep things as they are remove all the precautions from the ctor.
 
 SliderLabel::SliderLabel (Slider* ownerSlider)
 {
@@ -31,8 +21,9 @@ SliderLabel::SliderLabel (Slider* ownerSlider)
         ownerSlider->removeMouseListener (this);
 
         ownerSlider->addMouseListener (this, false);
-        setName (mOwnerSlider->getName() + "Label");
-        setText (mOwnerSlider->getName(), dontSendNotification);
+        mSliderName = mOwnerSlider->getName();
+        setName (mSliderName + "Label");
+        setText (mSliderName, dontSendNotification);
     }
 }
 
@@ -49,21 +40,14 @@ void SliderLabel::paint (Graphics& g)
     //  any background. Here, we should first draw the label background as we
     //  do, and then call the LookAndFeel method to draw the text
 
-    const Colour bgColour = mOwnerSlider->isMouseOverOrDragging()
-                          ? RBD::controlHoverColour
-                          : RBD::controlNormalColour;
-    g.setColour (bgColour);
+    g.setColour (mBgColour);
     g.fillRoundedRectangle (getLocalBounds().toFloat(), RBD::defaultCornerSize);
 
     g.setColour (RBD::textNormalColour);
     g.setFont (RBD::font1);
 
-    const String text = mOwnerSlider->isMouseButtonDown()
-                      ? mOwnerSlider->getTextFromValue (mOwnerSlider->getValue())
-                      : getText();
-
     // TODO: Disable text scaling
-    g.drawFittedText (text, getLocalBounds(), Justification::centred, 1);
+    g.drawFittedText (getText(), getLocalBounds(), Justification::centred, 1);
 }
 
 void SliderLabel::componentMovedOrResized (Component& component,
@@ -78,28 +62,68 @@ void SliderLabel::componentMovedOrResized (Component& component,
     setBounds (bounds);
 }
 
-void SliderLabel::mouseEnter (const MouseEvent& /*event*/)
+void SliderLabel::timerCallback()
 {
+    // change display style from value to name
+
+    stopTimer();
     repaint();
 }
 
-void SliderLabel::mouseExit (const MouseEvent& /*event*/)
+void SliderLabel::mouseEnter (const MouseEvent& event)
 {
+    if (event.eventComponent != mOwnerSlider)
+        return;
+
+    mBgColour = RBD::controlHoverColour;
+
     repaint();
 }
 
-void SliderLabel::mouseDown (const MouseEvent& /*event*/)
+void SliderLabel::mouseExit (const MouseEvent& event)
 {
+    if (event.eventComponent != mOwnerSlider)
+        return;
+
+    if (! mOwnerSlider->isMouseButtonDown())
+        mBgColour = RBD::controlNormalColour;
+
     repaint();
 }
 
-void SliderLabel::mouseDrag (const MouseEvent& /*event*/)
+void SliderLabel::mouseDown (const MouseEvent& event)
 {
+    if (event.eventComponent != mOwnerSlider)
+        return;
+
+    setText (mOwnerSlider->getTextFromValue (mOwnerSlider->getValue()),
+             dontSendNotification);
+
     repaint();
 }
 
-void SliderLabel::mouseUp (const MouseEvent& /*event*/)
+void SliderLabel::mouseDrag (const MouseEvent& event)
 {
+    if (event.eventComponent != mOwnerSlider)
+        return;
+
+    setText (mOwnerSlider->getTextFromValue (mOwnerSlider->getValue()),
+             dontSendNotification);
+
+
+    repaint();
+}
+
+void SliderLabel::mouseUp (const MouseEvent& event)
+{
+    if (event.eventComponent != mOwnerSlider)
+        return;
+
+    if (! mOwnerSlider->isMouseOver())
+        mBgColour = RBD::controlNormalColour;
+
+    setText (mSliderName, dontSendNotification);
+
     repaint();
 }
 
