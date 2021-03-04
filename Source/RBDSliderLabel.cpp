@@ -62,14 +62,6 @@ void SliderLabel::componentMovedOrResized (Component& component,
     setBounds (bounds);
 }
 
-void SliderLabel::timerCallback()
-{
-    // change display style from value to name
-
-    stopTimer();
-    repaint();
-}
-
 void SliderLabel::mouseEnter (const MouseEvent& event)
 {
     if (event.eventComponent != mOwnerSlider)
@@ -95,6 +87,9 @@ void SliderLabel::mouseDown (const MouseEvent& event)
 {
     if (event.eventComponent != mOwnerSlider)
         return;
+
+    if (isTimerRunning())
+        stopTimer();
 
     setText (mOwnerSlider->getTextFromValue (mOwnerSlider->getValue()),
              dontSendNotification);
@@ -122,8 +117,28 @@ void SliderLabel::mouseUp (const MouseEvent& event)
     if (! mOwnerSlider->isMouseOver())
         mBgColour = RBD::controlNormalColour;
 
+    // Start the timer for switching back to displaying slider name
+    startTimer (switchDelayTime);
+
+    repaint();
+}
+
+void SliderLabel::mouseDoubleClick (const MouseEvent& event)
+{
+    if (event.eventComponent != mOwnerSlider)
+        return;
+
+    setText (mOwnerSlider->getTextFromValue (mOwnerSlider->getValue()),
+             dontSendNotification);
+
+    repaint();
+}
+
+void SliderLabel::timerCallback()
+{
     setText (mSliderName, dontSendNotification);
 
+    stopTimer();
     repaint();
 }
 

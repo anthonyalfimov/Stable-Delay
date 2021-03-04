@@ -38,9 +38,6 @@ public:
                                   bool wasResized) override;
 
     /** @internal */
-    void timerCallback() override;
-
-    /** @internal */
     void mouseEnter (const MouseEvent& event) override;
     /** @internal */
     void mouseExit (const MouseEvent& event) override;
@@ -50,6 +47,11 @@ public:
     void mouseDrag (const MouseEvent& event) override;
     /** @internal */
     void mouseUp (const MouseEvent& event) override;
+    /** @internal */
+    void mouseDoubleClick (const MouseEvent& event) override;
+
+    /** @internal */
+    void timerCallback() override;
 
 private:
     Slider* mOwnerSlider;
@@ -58,5 +60,5 @@ private:
     Colour mBgColour = RBD::controlNormalColour;
 
     // Time before slider value display switches back to slider name
-    inline static const int switchDelayTime = 500 /* ms */;
+    inline static const int switchDelayTime = 600 /* ms */;
 };
