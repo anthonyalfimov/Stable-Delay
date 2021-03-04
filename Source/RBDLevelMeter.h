@@ -29,14 +29,17 @@
 //  the question of communicating between the processor and the editor.
 
 class LevelMeter  : public Component,
-                    public Timer
+                    private Timer
 {
 public:
     LevelMeter (Parameter::Index parameterIndex,
                 ReallyBasicDelayAudioProcessor& processor);
     ~LevelMeter();
-    
+
+    //==============================================================================
+    /** @internal */
     void paint (Graphics& g) override;
+    /** @internal */
     void timerCallback() override;
         
 private:
