@@ -27,10 +27,8 @@ void GainModule::process (const float* inAudio,
                           float* outAudio,
                           int numSamplesToRender)
 {
-    // Map inGain [0, 1] to the new [-24dB, +24dB] range
-    float gainMapped = jmap (gain, -24.0f, 24.0f);
     // Convert decibels to gain
-    gainMapped = Decibels::decibelsToGain (gainMapped, -24.0f);
+    const float gainMapped = Decibels::decibelsToGain (gain);
     
     for (int i = 0; i < numSamplesToRender; ++i)
         outAudio[i] = inAudio[i] * gainMapped;

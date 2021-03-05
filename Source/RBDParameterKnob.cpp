@@ -12,13 +12,13 @@
 
 ParameterKnob::ParameterKnob (AudioProcessorValueTreeState& stateToControl,
                               Parameter::Index parameterIndex)
-    : Slider (Parameter::Label[parameterIndex])
+    : Slider (Parameter::Name[parameterIndex])
 {
+    // Set up common Slider style
     setSliderStyle (SliderStyle::RotaryHorizontalVerticalDrag);
     setTextBoxStyle (Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
-
-    #warning Do we need to manually set Slider range when using APVTS?
-    setRange (0.0f, 1.0f, 0.001f);
+    auto parameter = stateToControl.getParameter (Parameter::ID[parameterIndex]);
+    setTextValueSuffix (parameter->getLabel());
     
     using SliderAttachment = AudioProcessorValueTreeState::SliderAttachment;
     mAttachment = std::make_unique<SliderAttachment> (stateToControl,

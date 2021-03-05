@@ -37,8 +37,6 @@ public:
                   float* outAudio,
                   int numSamplesToRender);
 
-    static constexpr float maxDelayTimeInSeconds = 1.0f;
-
 private:
     float getInterpolatedSample (double delayTimeInSamples) const;
     

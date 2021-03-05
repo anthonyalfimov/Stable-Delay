@@ -26,7 +26,7 @@ DelayModule::~DelayModule()
 void DelayModule::setSampleRate (double sampleRate)
 {
     mSampleRate = sampleRate;
-    mBufferSize = mSampleRate * maxDelayTimeInSeconds;
+    mBufferSize = mSampleRate * RBD::maxDelayTimeInSeconds;
     mBuffer = std::make_unique<float[]> (mBufferSize);
     reset();
 }
@@ -49,12 +49,11 @@ void DelayModule::process (const float* inAudio,
                            float* outAudio,
                            int numSamplesToRender)
 {
-    const float wet = dryWet;
+    const float wet = dryWet / 100.0f;  // convert from %
     const float dry = 1.0f - wet;
     
-    // TODO: Use NormalizableRange<> for parameters instead of mapping them here
-    const float timeMapped = jmap (time, 0.001f, maxDelayTimeInSeconds);
-    float feedbackMapped = jmap (feedback, 0.0f, 1.2f);
+    const float timeMapped = time / 1000.0f;        // convert from ms to s
+    float feedbackMapped = feedback / 100.0f;       // convert from %
     
     // TODO: Parameter values currently can only change on block level. Adjust accordingly
     //  We load the value from the parameter in the plugin processor. Here we

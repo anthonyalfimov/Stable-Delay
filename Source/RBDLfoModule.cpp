@@ -40,16 +40,16 @@ void LfoModule::reset()
 
 void LfoModule::process (float rate, float depth, int numSamplesToRender)
 {
-    const float rateMapped = jmap (rate, 0.01f, 10.0f);
-    
+    const float depthMapped = depth / 100.0f;   // convert from %
     for (int i = 0; i < numSamplesToRender; ++i)
     {
         // Record the LFO state in the buffer
-        const float lfoPosition = depth * sinf (mPhase * MathConstants<float>::twoPi);
+        const float lfoPosition = depthMapped
+                                    * sinf (mPhase * MathConstants<float>::twoPi);
         mBuffer[i] = lfoPosition;
         
         // Advance the LFO phase
-        mPhase += rateMapped / mSampleRate;
+        mPhase += rate / mSampleRate;
         
         if (mPhase > 1.0f)
             mPhase -= 1.0f;

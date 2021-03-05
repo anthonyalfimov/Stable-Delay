@@ -14,7 +14,6 @@
 // This creates the plugin parameter layout
 AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
 {
-    // TODO: Implement labels using JUCE's Label class
     // TODO: (?) Change the type of the Type parameter to AudioParameterChoice
     // TODO: (OR) Supply ValueToText function for Type parameter
     //  This should make the host display this parameter using suitable
@@ -25,9 +24,10 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
     for (int i = 0; i < Parameter::NumParameters; ++i)
     {
         layout.add (std::make_unique<AudioParameterFloat> (Parameter::ID[i],
-                                                           Parameter::Label[i],
+                                                           Parameter::Name[i],
                                                            Parameter::Range[i],
-                                                           Parameter::DefaultValue[i]));
+                                                           Parameter::DefaultValue[i],
+                                                           Parameter::Label[i]));
     }
     
     return layout;

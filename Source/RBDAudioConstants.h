@@ -21,6 +21,9 @@ namespace RBD
     // C++17 "inline" keyword ensures that only one copy of the constant
     //  is created for the whole project
 
+    inline constexpr float maxDelayTimeInSeconds = 1.0f;
+    inline constexpr float maxDelayTimeInMs = maxDelayTimeInSeconds * 1000.0f;
+
     inline constexpr double paramSmoothingCoefGeneric = 0.04;
     inline constexpr double paramSmoothingCoefFine = 0.004;
 
