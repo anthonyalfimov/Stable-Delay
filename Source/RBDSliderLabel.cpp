@@ -118,7 +118,7 @@ void SliderLabel::mouseUp (const MouseEvent& event)
         mBgColour = RBD::controlNormalColour;
 
     // Start the timer for switching back to displaying slider name
-    startTimer (switchDelayTime);
+    startTimer (switchDelayTimeInMs);
 
     repaint();
 }

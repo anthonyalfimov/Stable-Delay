@@ -64,5 +64,5 @@ private:
     //  double click time/speed and use that?
     
     // Time before slider value display switches back to slider name
-    inline static const int switchDelayTime = 600 /* ms */;
+    inline static const int switchDelayTimeInMs = 1000 /* ms */;
 };
