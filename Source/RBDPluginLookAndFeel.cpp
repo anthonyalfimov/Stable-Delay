@@ -45,7 +45,7 @@ PluginLookAndFeel::~PluginLookAndFeel()
 Font PluginLookAndFeel::getTextButtonFont (TextButton& /*button*/,
                                            int /*buttonHeight*/)
 {
-    return RBD::font1;
+    return RBD::mainFont;
 }
 
 void PluginLookAndFeel::drawButtonBackground (Graphics& g, Button& button,
@@ -77,7 +77,7 @@ void PluginLookAndFeel::drawButtonBackground (Graphics& g, Button& button,
 
 Font PluginLookAndFeel::getLabelFont (Label& /*label*/)
 {
-    return RBD::font1;
+    return RBD::mainFont;
 }
 
 void PluginLookAndFeel::drawPopupMenuItem (Graphics& g, const Rectangle<int>& area,
@@ -98,7 +98,7 @@ void PluginLookAndFeel::drawPopupMenuItem (Graphics& g, const Rectangle<int>& ar
 
     Colour textColour = isTicked ? RBD::textActiveColour : RBD::textNormalColour;
     g.setColour (textColour);
-    g.setFont (RBD::font1);
+    g.setFont (RBD::mainFont);
 
     // TODO: Check the bounds for the text - do they make sense?
     bounds.setLeft (10);

@@ -36,7 +36,7 @@ void FxPanel::paint (Graphics& g)
     InterfacePanel::paint (g);
     
     g.setColour (RBD::textFxTypeColour);
-    g.setFont (RBD::font3);
+    g.setFont (RBD::fxTypeFont);
     g.drawText (getName(), getLocalBounds().withHeight (80), Justification::centred);
 }
     

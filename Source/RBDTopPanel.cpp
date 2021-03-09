@@ -66,7 +66,7 @@ void TopPanel::paint (Graphics& g)
     InterfacePanel::paint (g);
 
     // TODO: Projucer uses a Label object for every label. Should we do that too?
-    g.setFont (RBD::font2);
+    g.setFont (RBD::titleFont);
     g.setColour (RBD::textNormalColour);
     g.drawText ("Really Basic Delay", getLocalBounds().withTrimmedRight (10),
                 Justification::centredRight);

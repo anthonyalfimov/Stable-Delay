@@ -44,7 +44,7 @@ void SliderLabel::paint (Graphics& g)
     g.fillRoundedRectangle (getLocalBounds().toFloat(), RBD::defaultCornerSize);
 
     g.setColour (RBD::textNormalColour);
-    g.setFont (RBD::font1);
+    g.setFont (RBD::mainFont);
 
     // TODO: Disable text scaling
     g.drawFittedText (getText(), getLocalBounds(), Justification::centred, 1);

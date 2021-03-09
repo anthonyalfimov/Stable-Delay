@@ -42,7 +42,7 @@ void CentrePanelMenuBar::paint (Graphics& g)
     // TODO: Projucer uses a Label object for every label. Should we do too?
     // TODO: Enable build stamp only for the debug version, or remove later
 
-    g.setFont (RBD::font1);
+    g.setFont (RBD::mainFont);
     g.setColour (RBD::textNormalColour);
     auto buildDate = Time::getCompilationDate();
     g.drawText ("Build: " + String (buildDate.getHours()) + ":"

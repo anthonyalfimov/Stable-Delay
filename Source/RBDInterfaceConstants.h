@@ -75,7 +75,7 @@ namespace RBD
                                              BinaryData::OpenSansBold_ttfSize);
 
     // Styles
-    inline const Font font1 = Font (primaryFont).withPointHeight (11.0f);
-    inline const Font font2 = Font (primaryFont).withPointHeight (18.0f);
-    inline const Font font3 = Font (primaryFont).withPointHeight (48.0f);
+    inline const Font mainFont = Font (primaryFont).withPointHeight (11.0f);
+    inline const Font titleFont = Font (primaryFont).withPointHeight (18.0f);
+    inline const Font fxTypeFont = Font (primaryFont).withPointHeight (48.0f);
 }
