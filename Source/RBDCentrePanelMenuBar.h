@@ -18,15 +18,17 @@ class CentrePanelMenuBar  : public InterfacePanel
 public:
     CentrePanelMenuBar (ReallyBasicDelayAudioProcessor& processor);
     ~CentrePanelMenuBar();
-
-    void paint (Graphics& g) override;
     
     // These are here because mFxTypeComboBox is a private member of this class
+    /** @internal */
     void addFxTypeComboBoxListener (ComboBox::Listener* inListener);
+    /** @internal */
     void removeFxTypeComboBoxListener (ComboBox::Listener* inListener);
     
 private:
     std::unique_ptr<ParameterComboBox> mFxTypeComboBox;
+
+    Label mBuildVersionLabel { "build" };
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CentrePanelMenuBar)
 };

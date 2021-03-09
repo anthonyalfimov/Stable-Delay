@@ -13,9 +13,11 @@
 TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor)
     : InterfacePanel (processor)
 {
+    // Set up Panel attributes
     setSize (RBD::topPanelWidth, RBD::topPanelHeight);
     setName ("MainMenu");
-    
+
+    // Set up the Preset List
     const int height = 25;
     const int presetListWidth = 200;
     
@@ -26,7 +28,8 @@ TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor)
     mPresetList->addListener (this);
     addAndMakeVisible (mPresetList.get());
     updatePresetList();
-    
+
+    // Set up the Preset Manager buttons
     const int buttonWidth = 65;
     const int buttonStartX = 10;
     
@@ -54,22 +57,19 @@ TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor)
     mSaveAsPreset->setButtonText ("SAVE AS");
     mSaveAsPreset->addListener (this);
     addAndMakeVisible (mSaveAsPreset.get());
+
+    // Set up the Title Label
+    mTitleLabel.setFont (RBD::titleFont);
+    mTitleLabel.setJustificationType (Justification::centredRight);
+    mTitleLabel.setBorderSize ({ 1, 10, 1, 10 });
+    auto titleLabelBounds = getLocalBounds().withLeft (mPresetList->getRight());
+    mTitleLabel.setBounds (titleLabelBounds);
+    addAndMakeVisible (mTitleLabel);
 }
 
 TopPanel::~TopPanel()
 {
     
-}
-
-void TopPanel::paint (Graphics& g)
-{
-    InterfacePanel::paint (g);
-
-    // TODO: Projucer uses a Label object for every label. Should we do that too?
-    g.setFont (RBD::titleFont);
-    g.setColour (RBD::textNormalColour);
-    g.drawText ("Really Basic Delay", getLocalBounds().withTrimmedRight (10),
-                Justification::centredRight);
 }
 
 void TopPanel::buttonClicked (Button* buttonThatWasPressed)

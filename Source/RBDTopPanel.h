@@ -20,10 +20,9 @@ public:
     TopPanel (ReallyBasicDelayAudioProcessor& processor);
     ~TopPanel();
     
-    void paint (Graphics&) override;
-    
+    /** @internal */
     void buttonClicked (Button* buttonThatWasPressed) override;
-    
+    /** @internal */
     void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
     
 private:
@@ -32,6 +31,8 @@ private:
     
     std::unique_ptr<ComboBox> mPresetList;
     std::unique_ptr<TextButton> mNewPreset, mSavePreset, mSaveAsPreset;
+
+    Label mTitleLabel { "title", "Really Basic Delay" };
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TopPanel)
 };

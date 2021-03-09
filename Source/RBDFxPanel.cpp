@@ -14,8 +14,17 @@
 FxPanel::FxPanel (ReallyBasicDelayAudioProcessor& processor)
     : InterfacePanel (processor)
 {
+    // Set up Panel attributes
     setSize (RBD::fxPanelWidth, RBD::fxPanelHeight);
 
+    // Set up the FX Type Label
+    mFxTypeLabel.setFont (RBD::fxTypeFont);
+    mFxTypeLabel.setJustificationType (Justification::centred);
+    mFxTypeLabel.setColour (Label::textColourId, RBD::textFxTypeColour);
+    mFxTypeLabel.setBounds (getLocalBounds().withHeight (80));
+    addAndMakeVisible (mFxTypeLabel);
+
+    // Set up initial Panel Style
     auto* fxTypeParameter = dynamic_cast<AudioParameterFloat*>
     (mProcessor.parameters.getParameter (Parameter::ID[Parameter::FxType]));
 
@@ -30,22 +39,12 @@ FxPanel::~FxPanel()
 {
     
 }
-
-void FxPanel::paint (Graphics& g)
-{
-    InterfacePanel::paint (g);
-    
-    g.setColour (RBD::textFxTypeColour);
-    g.setFont (RBD::fxTypeFont);
-    g.drawText (getName(), getLocalBounds().withHeight (80), Justification::centred);
-}
     
 void FxPanel::setFxPanelStyle (FxType::Index typeIndex)
 {
     mTypeIndex = typeIndex;
     mLabels.clear();
     mKnobs.clear();
-    setName (FxType::Label[mTypeIndex]);
 
     // Add controls based on the FxType
     switch (mTypeIndex)
@@ -120,7 +119,9 @@ void FxPanel::setFxPanelStyle (FxType::Index typeIndex)
         addAndMakeVisible (knob);
         addAndMakeVisible (mLabels.add (std::make_unique<SliderLabel> (knob)));
     }
-    
+
+    setName (FxType::Label[mTypeIndex]);    // update panel name to reflect FX type
+    mFxTypeLabel.setText (getName(), dontSendNotification); // update label text
     repaint();
 }
 

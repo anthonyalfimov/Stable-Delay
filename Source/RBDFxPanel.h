@@ -22,10 +22,9 @@ public:
     FxPanel (ReallyBasicDelayAudioProcessor& processor);
     ~FxPanel();
     
-    void paint (Graphics& g) override;
-    
     void setFxPanelStyle (FxType::Index typeIndex);
     
+    /** @internal */
     void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
     
 private:
@@ -34,6 +33,8 @@ private:
     // Use an array or pointers to allow dynamically changing number of knobs
     OwnedArray<ParameterKnob> mKnobs;
     OwnedArray<SliderLabel> mLabels;
+
+    Label mFxTypeLabel { "fxType", "ERROR" };
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FxPanel)
 };

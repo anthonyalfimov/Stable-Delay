@@ -14,8 +14,11 @@
 CentrePanelMenuBar::CentrePanelMenuBar (ReallyBasicDelayAudioProcessor& processor)
     : InterfacePanel (processor)
 {
+    // Set up Panel attributes
     setSize (RBD::centrePanelMenuBarWidth, RBD::centrePanelMenuBarHeight);
     setName ("CenterMenu");
+
+    // Set up FX Type ComboBox
 
     // Note: Initial ComboBox update happens when attachment is created
     //  Using the ParameterComboBox ctor that takes the item list allows to
@@ -25,32 +28,31 @@ CentrePanelMenuBar::CentrePanelMenuBar (ReallyBasicDelayAudioProcessor& processo
                                                            Parameter::FxType,
                                                            FxType::Label);
     const int width = 95;
-    mFxTypeComboBox->setBounds (getWidth() - width, 0, width, getHeight());
-
+    auto bounds = getLocalBounds().withLeft (getWidth() - width);
+    mFxTypeComboBox->setBounds (bounds);
     addAndMakeVisible (mFxTypeComboBox.get());
+
+    // TODO: Enable build stamp only for the debug version, or remove later
+    // Set up Build Version Label
+    mBuildVersionLabel.setFont (RBD::mainFont);
+    mBuildVersionLabel.setJustificationType (Justification::centredLeft);
+    const auto buildDate = Time::getCompilationDate();
+    mBuildVersionLabel.setText ("Build: " + String (buildDate.getHours()) + ":"
+                                + String (buildDate.getMinutes()) + ", "
+                                + String (buildDate.getDayOfMonth()) + " "
+                                + buildDate.getMonthName (true) + " "
+                                + String (buildDate.getYear()),
+                                dontSendNotification);
+    mBuildVersionLabel.setBorderSize ({ 1, 10, 1, 10 });
+    bounds.setX (0);
+    bounds.setRight (mFxTypeComboBox->getX());
+    mBuildVersionLabel.setBounds (bounds);
+    addAndMakeVisible (mBuildVersionLabel);
 }
 
 CentrePanelMenuBar::~CentrePanelMenuBar()
 {
     
-}
-
-void CentrePanelMenuBar::paint (Graphics& g)
-{
-    InterfacePanel::paint (g);
-
-    // TODO: Projucer uses a Label object for every label. Should we do too?
-    // TODO: Enable build stamp only for the debug version, or remove later
-
-    g.setFont (RBD::mainFont);
-    g.setColour (RBD::textNormalColour);
-    auto buildDate = Time::getCompilationDate();
-    g.drawText ("Build: " + String (buildDate.getHours()) + ":"
-                + String (buildDate.getMinutes()) + ", "
-                + String (buildDate.getDayOfMonth()) + " "
-                + buildDate.getMonthName (true) + " "
-                + String (buildDate.getYear()),
-                getLocalBounds().withTrimmedLeft (10), Justification::centredLeft);
 }
 
 void CentrePanelMenuBar::addFxTypeComboBoxListener (ComboBox::Listener* inListener)
