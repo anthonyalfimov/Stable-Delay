@@ -32,9 +32,6 @@ namespace RBD
         return jlimit (-1.0f, 1.0f, x * (27 + x * x) / (27 + 9 * x * x));
     }
     
-    // TODO: Consider clipping saturation curve Beta to eliminate folding
-    //  Clip at x = ±2
-
     /**
     The simplest rational saturation surve with intermediate steepness and wave
     folding (single fold only).
