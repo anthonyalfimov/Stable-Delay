@@ -29,9 +29,7 @@ public:
     SliderLabel (Slider* ownerSlider);
     ~SliderLabel();
 
-    //==============================================================================
-    /** @internal */
-    void paint (Graphics& g) override;
+//==============================================================================
     /** @internal */
     void componentMovedOrResized (Component& component,
                                   bool wasMoved,
@@ -57,7 +55,6 @@ private:
     Slider* mOwnerSlider;
 
     String mSliderName;
-    Colour mBgColour = RBD::controlNormalColour;
 
     // TODO: This time should cover double clicking
     //  Set it high enough, or, possibly, check the system setting for

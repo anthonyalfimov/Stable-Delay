@@ -29,22 +29,13 @@ SliderLabel::SliderLabel (Slider* ownerSlider)
     // Set appearance
     setFont (RBD::mainFont);
     setJustificationType (Justification::centred);
+    setColour (Label::backgroundColourId, RBD::controlNormalColour);
 }
 
 SliderLabel::~SliderLabel()
 {
     if (mOwnerSlider != nullptr)
         mOwnerSlider->removeMouseListener (this);
-}
-
-void SliderLabel::paint (Graphics& g)
-{
-    // Draw label background
-    g.setColour (mBgColour);
-    g.fillRoundedRectangle (getLocalBounds().toFloat(), RBD::defaultCornerSize);
-
-    // Draw label text
-    getLookAndFeel().drawLabel (g, *this);
 }
 
 void SliderLabel::componentMovedOrResized (Component& component,
@@ -64,7 +55,7 @@ void SliderLabel::mouseEnter (const MouseEvent& event)
     if (event.eventComponent != mOwnerSlider)
         return;
 
-    mBgColour = RBD::controlHoverColour;
+    setColour (Label::backgroundColourId, RBD::controlHoverColour);
 
     repaint();
 }
@@ -75,7 +66,7 @@ void SliderLabel::mouseExit (const MouseEvent& event)
         return;
 
     if (! mOwnerSlider->isMouseButtonDown())
-        mBgColour = RBD::controlNormalColour;
+        setColour (Label::backgroundColourId, RBD::controlNormalColour);
 
     repaint();
 }
@@ -102,7 +93,6 @@ void SliderLabel::mouseDrag (const MouseEvent& event)
     setText (mOwnerSlider->getTextFromValue (mOwnerSlider->getValue()),
              dontSendNotification);
 
-
     repaint();
 }
 
@@ -112,7 +102,7 @@ void SliderLabel::mouseUp (const MouseEvent& event)
         return;
 
     if (! mOwnerSlider->isMouseOver())
-        mBgColour = RBD::controlNormalColour;
+        setColour (Label::backgroundColourId, RBD::controlNormalColour);
 
     // Start the timer for switching back to displaying slider name
     startTimer (switchDelayTimeInMs);

@@ -21,7 +21,7 @@ PluginLookAndFeel::PluginLookAndFeel()
                                               BinaryData::RBD_Knob_80_pngSize);
 
     // Label colours
-    setColour (Label::backgroundColourId, Colour (0x00000000));
+    setColour (Label::backgroundColourId, RBD::noColour);
     setColour (Label::textColourId, RBD::textNormalColour);
     setColour (Label::outlineColourId, RBD::controlOutlineColour);
 
@@ -49,8 +49,14 @@ PluginLookAndFeel::~PluginLookAndFeel()
 
 void PluginLookAndFeel::drawLabel (Graphics& g, Label& label)
 {
+    // Draw Label background
+    g.setColour (label.findColour (Label::backgroundColourId));
+    g.fillRoundedRectangle (label.getLocalBounds().toFloat(),
+                            RBD::defaultCornerSize);
+
     // MARK: Not handling editable labels
-    
+
+    // Draw Label text
     auto alpha = label.isEnabled() ? 1.0f : 0.5f;
     const Font font (getLabelFont (label));
 
@@ -65,6 +71,8 @@ void PluginLookAndFeel::drawLabel (Graphics& g, Label& label)
                                  / font.getHeight()));
 
     g.drawFittedText (label.getText(), textBounds, label.getJustificationType(),                        maxNumberOfLines, 1.0f /* don't squeeze my text! */);
+
+    // MARK: Not painting the outline
 }
 
 //= BUTTONS ====================================================================

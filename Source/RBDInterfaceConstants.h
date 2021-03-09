@@ -57,13 +57,14 @@ namespace RBD
     // TODO: Move colour and font global constants into LookAndFeel class
     //  Aim to use ColourIds as much as possible
 
+    inline const Colour noColour = Colour (0, 0, 0).withAlpha (0.0f);
     inline const Colour textNormalColour = Colour (105, 105, 105);
     inline const Colour textActiveColour = Colour (125, 125, 125);
     inline const Colour textFxTypeColour = Colour (105, 105, 105).withAlpha (0.3f);
     inline const Colour controlNormalColour = Colour (0, 0, 0).withAlpha (0.3f);
     inline const Colour controlHoverColour = Colour (0, 0, 0).withAlpha (0.8f);
     inline const Colour controlActiveColour = Colour (105, 105, 105).withAlpha (0.3f);
-    inline const Colour controlOutlineColour = Colour (0, 0, 0).withAlpha (0.0f);
+    inline const Colour controlOutlineColour = noColour;
     inline const Colour popupBgColour = Colour (40, 40, 40);
     inline const Colour popupItemBgColour = Colour (0, 0, 0).withAlpha (0.6f);
     inline const Colour meterBgColour = Colour (0, 0, 0).withAlpha (0.8f);
