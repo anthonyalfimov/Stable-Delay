@@ -25,6 +25,10 @@ SliderLabel::SliderLabel (Slider* ownerSlider)
         setName (mSliderName + "Label");
         setText (mSliderName, dontSendNotification);
     }
+
+    // Set appearance
+    setFont (RBD::mainFont);
+    setJustificationType (Justification::centred);
 }
 
 SliderLabel::~SliderLabel()
@@ -35,19 +39,12 @@ SliderLabel::~SliderLabel()
 
 void SliderLabel::paint (Graphics& g)
 {
-    // TODO: Use LookAndFeel method to paint the SliderLabel text
-    //  Our LookAndFeel should have a method to draw a generic label without
-    //  any background. Here, we should first draw the label background as we
-    //  do, and then call the LookAndFeel method to draw the text
-
+    // Draw label background
     g.setColour (mBgColour);
     g.fillRoundedRectangle (getLocalBounds().toFloat(), RBD::defaultCornerSize);
 
-    g.setColour (RBD::textNormalColour);
-    g.setFont (RBD::mainFont);
-
-    // TODO: Disable text scaling
-    g.drawFittedText (getText(), getLocalBounds(), Justification::centred, 1);
+    // Draw label text
+    getLookAndFeel().drawLabel (g, *this);
 }
 
 void SliderLabel::componentMovedOrResized (Component& component,

@@ -24,6 +24,10 @@ public:
     PluginLookAndFeel();
     
     ~PluginLookAndFeel();
+
+//= LABELS =====================================================================
+
+     void drawLabel (Graphics& g, Label& label) override;
     
 //= BUTTONS ====================================================================
     
@@ -33,18 +37,20 @@ public:
                                const Colour& backgroundColour,
                                bool shouldDrawButtonAsHighlighted,
                                bool shouldDrawButtonAsDown) override;
-    
-//= COMBOBOXES =================================================================
-    // TODO: Make the popup list semi-transparent, with rounded corners
-    
-    Font getLabelFont (Label& label) override;
-    
+
+//= POPUP MENUS ================================================================
+
     void drawPopupMenuItem (Graphics& g, const Rectangle<int>& area,
                             bool isSeparator, bool isActive,
                             bool isHighlighted, bool isTicked, bool hasSubMenu,
                             const String& text, const String& shortcutKeyText,
                             const Drawable* icon,
                             const Colour* passedTextColour) override;
+
+//= COMBOBOXES =================================================================
+    // TODO: Make the popup list semi-transparent, with rounded corners
+
+    Font getComboBoxFont (ComboBox& comboBox) override;
     
     void drawComboBox (Graphics& g, int width, int height, bool isButtonDown,
                        int buttonX, int buttonY, int buttonW, int buttonH,

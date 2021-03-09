@@ -20,6 +20,11 @@ PluginLookAndFeel::PluginLookAndFeel()
     mKnobImage = ImageCache::getFromMemory (BinaryData::RBD_Knob_80_png,
                                               BinaryData::RBD_Knob_80_pngSize);
 
+    // Label colours
+    setColour (Label::backgroundColourId, Colour (0x00000000));
+    setColour (Label::textColourId, RBD::textNormalColour);
+    setColour (Label::outlineColourId, RBD::controlOutlineColour);
+
     // ComboBox colours
     setColour (ComboBox::backgroundColourId, RBD::controlNormalColour);
     setColour (ComboBox::outlineColourId, RBD::controlOutlineColour);
@@ -38,6 +43,28 @@ PluginLookAndFeel::PluginLookAndFeel()
 PluginLookAndFeel::~PluginLookAndFeel()
 {
 
+}
+
+//= LABELS =====================================================================
+
+void PluginLookAndFeel::drawLabel (Graphics& g, Label& label)
+{
+    // MARK: Not handling editable labels
+    
+    auto alpha = label.isEnabled() ? 1.0f : 0.5f;
+    const Font font (getLabelFont (label));
+
+    g.setColour (label.findColour (Label::textColourId).withMultipliedAlpha (alpha));
+    g.setFont (font);
+
+    const auto textBounds = label.getBorderSize()
+                                 .subtractedFrom (label.getLocalBounds());
+
+    int maxNumberOfLines
+    = jmax (1, static_cast<int> (static_cast<float> (textBounds.getHeight())
+                                 / font.getHeight()));
+
+    g.drawFittedText (label.getText(), textBounds, label.getJustificationType(),                        maxNumberOfLines, 1.0f /* don't squeeze my text! */);
 }
 
 //= BUTTONS ====================================================================
@@ -73,12 +100,7 @@ void PluginLookAndFeel::drawButtonBackground (Graphics& g, Button& button,
     g.fillRoundedRectangle (bounds.reduced (1.0f), cornerSize);
 }
 
-//= COMBOBOXES =================================================================
-
-Font PluginLookAndFeel::getLabelFont (Label& /*label*/)
-{
-    return RBD::mainFont;
-}
+//= POPUP MENUS ================================================================
 
 void PluginLookAndFeel::drawPopupMenuItem (Graphics& g, const Rectangle<int>& area,
                                            bool /*isSeparator*/, bool /*isActive*/,
@@ -107,6 +129,16 @@ void PluginLookAndFeel::drawPopupMenuItem (Graphics& g, const Rectangle<int>& ar
     g.drawFittedText (text, bounds, Justification::left, 1);
 }
 
+//= COMBOBOXES =================================================================
+
+Font PluginLookAndFeel::getComboBoxFont (ComboBox& /*comboBox*/)
+{
+    return RBD::mainFont;
+}
+
+// TODO: Use passed button data when drawing ComboBox
+//  We will probably need to set the button dimensions and position when
+//  creating the ComboBox
 void PluginLookAndFeel::drawComboBox (Graphics& g, int width, int height,
                                       bool /*isButtonDown*/,
                                       int /*buttonX*/, int /*buttonY*/,
@@ -132,8 +164,7 @@ void PluginLookAndFeel::drawComboBox (Graphics& g, int width, int height,
     arrow.lineTo (arrowBounds.getCentreX(), arrowBounds.getCentreY() + 2.0f);
     arrow.lineTo (arrowBounds.getRight() - 3.0f, arrowBounds.getCentreY() - 2.0f);
 
-    // We're not disabling the comboBox anywhere, so it makes more sense to use different
-    //  shades when popup is active, rather than on enabled / disabled
+
     const Colour arrowColour
     = comboBox.findColour (ComboBox::arrowColourId)
                           .withAlpha (comboBox.isPopupActive() ? 0.9f : 0.5f);
