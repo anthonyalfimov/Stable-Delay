@@ -11,6 +11,7 @@
 #pragma once
 
 #include "RBDInterfacePanel.h"
+#include "RBDHighlightableComboBox.h"
 
 class TopPanel  : public InterfacePanel,
                   public Button::Listener,
@@ -29,7 +30,7 @@ private:
     void displaySaveAsPopup();
     void updatePresetList();
     
-    std::unique_ptr<ComboBox> mPresetList;
+    std::unique_ptr<HighlightableComboBox> mPresetList;
     std::unique_ptr<TextButton> mNewPreset, mSavePreset, mSaveAsPreset;
 
     Label mTitleLabel { "title", "Really Basic Delay" };

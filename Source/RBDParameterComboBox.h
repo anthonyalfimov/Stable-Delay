@@ -10,10 +10,10 @@
 
 #pragma once
 
-#include <JuceHeader.h>
+#include "RBDHighlightableComboBox.h"
 #include "RBDParameters.h"
 
-class ParameterComboBox  : public ComboBox
+class ParameterComboBox  : public HighlightableComboBox
 {
 public:
     ParameterComboBox (AudioProcessorValueTreeState& stateToControl,

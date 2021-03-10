@@ -21,7 +21,7 @@ TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor)
     const int height = 25;
     const int presetListWidth = 200;
     
-    mPresetList = std::make_unique<ComboBox>();
+    mPresetList = std::make_unique<HighlightableComboBox> ("PresetList");
     Rectangle<int> bounds
     = getLocalBounds().withSizeKeepingCentre (presetListWidth, height);
     mPresetList->setBounds (bounds);

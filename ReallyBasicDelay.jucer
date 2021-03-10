@@ -26,6 +26,10 @@
             file="Source/RBDPresetManager.h"/>
     </GROUP>
     <GROUP id="{195656B5-0487-FECC-6F4E-58DC537044AA}" name="Parameter Control">
+      <FILE id="XrGQNb" name="RBDHighlightableComboBox.cpp" compile="1" resource="0"
+            file="Source/RBDHighlightableComboBox.cpp"/>
+      <FILE id="aov2Gv" name="RBDHighlightableComboBox.h" compile="0" resource="0"
+            file="Source/RBDHighlightableComboBox.h"/>
       <FILE id="SWzc8U" name="RBDParameterComboBox.cpp" compile="1" resource="0"
             file="Source/RBDParameterComboBox.cpp"/>
       <FILE id="PWCrOy" name="RBDParameterComboBox.h" compile="0" resource="0"

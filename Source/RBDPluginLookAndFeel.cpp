@@ -147,10 +147,11 @@ void PluginLookAndFeel::drawComboBox (Graphics& g, int width, int height,
 {
     const Rectangle<float> comboBoxBounds (0.0f, 0.0f, width, height);
 
-    // TODO: Change highlight condition to mouseOver
-    const Colour comboBoxColour = comboBox.isPopupActive()
-                                    ? RBD::controlHoverColour
-                                    : RBD::controlNormalColour;
+    // TODO: Set the comboBox colour in the mouse callbacks rather than here
+    const Colour comboBoxColour
+    = (comboBox.isPopupActive() || comboBox.isMouseOverOrDragging (true))
+                                            ? RBD::controlHoverColour
+                                            : RBD::controlNormalColour;
     g.setColour (comboBoxColour);
     g.fillRoundedRectangle (comboBoxBounds, RBD::defaultCornerSize);
 
