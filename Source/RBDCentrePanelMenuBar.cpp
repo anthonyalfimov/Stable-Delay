@@ -37,11 +37,8 @@ CentrePanelMenuBar::CentrePanelMenuBar (ReallyBasicDelayAudioProcessor& processo
     mBuildVersionLabel.setFont (RBD::mainFont);
     mBuildVersionLabel.setJustificationType (Justification::centredLeft);
     const auto buildDate = Time::getCompilationDate();
-    mBuildVersionLabel.setText ("Build: " + String (buildDate.getHours()) + ":"
-                                + String (buildDate.getMinutes()) + ", "
-                                + String (buildDate.getDayOfMonth()) + " "
-                                + buildDate.getMonthName (true) + " "
-                                + String (buildDate.getYear()),
+    mBuildVersionLabel.setText ("Build: "
+                                + buildDate.toString (true, true, false, true),
                                 dontSendNotification);
     mBuildVersionLabel.setBorderSize ({ 1, 10, 1, 10 });
     bounds.setX (0);
