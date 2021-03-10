@@ -15,8 +15,8 @@ PresetManager::PresetManager (AudioProcessor& processor)
 {
     const auto pluginName = mProcessor.getName();
     
-    // TODO: Swap preset location to a more sensible directory
-    const auto parentDirectory = (File::getSpecialLocation (File::userDesktopDirectory))
+    // TODO: Explore possible preset locations and pick
+    const auto parentDirectory = (File::getSpecialLocation (File::userDocumentsDirectory))
                                   .getFullPathName();
     mPresetDirectory = File::addTrailingSeparator (parentDirectory) + pluginName;
     
