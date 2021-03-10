@@ -35,7 +35,7 @@ PluginLookAndFeel::PluginLookAndFeel()
     setColour (PopupMenu::backgroundColourId, RBD::popupBgColour);
 
     // TextButton colours
-    setColour (TextButton::buttonColourId, RBD::textNormalColour);
+    setColour (TextButton::buttonColourId, RBD::controlNormalColour);
     setColour (TextButton::textColourOnId, RBD::textNormalColour);
     setColour (TextButton::textColourOffId, RBD::textNormalColour);
 }
@@ -88,23 +88,18 @@ void PluginLookAndFeel::drawButtonBackground (Graphics& g, Button& button,
                                               bool shouldDrawButtonAsHighlighted,
                                               bool shouldDrawButtonAsDown)
 {
-    Colour fillColour = RBD::controlNormalColour;
+    auto fillColour = RBD::controlNormalColour;
 
     if (shouldDrawButtonAsDown)
-    {
         fillColour = RBD::controlActiveColour;
-    }
     else if (shouldDrawButtonAsHighlighted)
-    {
         fillColour = RBD::controlHoverColour;
-    }
-
-    const float cornerSize = 6.0f;
 
     #warning Non-namespaced Rectangle might be a problem on Windows
-    const Rectangle<float> bounds = button.getLocalBounds().toFloat().reduced (0.5f);
+    const auto bounds = button.getLocalBounds().toFloat().reduced (0.5f);
 
     g.setColour (fillColour);
+    const float cornerSize = 2.0f * RBD::defaultCornerSize;
     g.fillRoundedRectangle (bounds.reduced (1.0f), cornerSize);
 }
 
@@ -118,7 +113,7 @@ void PluginLookAndFeel::drawPopupMenuItem (Graphics& g, const Rectangle<int>& ar
                                            const Drawable* /*icon*/,
                                            const Colour* /*passedTextColour*/)
 {
-    Rectangle<int> bounds (area);       // create editable copy of passed bounds to adjust them
+    Rectangle<int> bounds (area);   // create editable copy of passed bounds to adjust
     bounds.removeFromBottom (1);
     Colour fillColour = isHighlighted ? RBD::controlActiveColour
                                       : RBD::popupItemBgColour;
@@ -144,9 +139,6 @@ Font PluginLookAndFeel::getComboBoxFont (ComboBox& /*comboBox*/)
     return RBD::mainFont;
 }
 
-// TODO: Use passed button data when drawing ComboBox
-//  We will probably need to set the button dimensions and position when
-//  creating the ComboBox
 void PluginLookAndFeel::drawComboBox (Graphics& g, int width, int height,
                                       bool /*isButtonDown*/,
                                       int /*buttonX*/, int /*buttonY*/,
