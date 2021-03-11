@@ -236,7 +236,7 @@ void ReallyBasicDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
         
         float modulationRate = mModulationRateValue->load();
 
-        if (channel == 0)
+        if (channel == 1)
             modulationRate *= 1.01f;
 
         mLfo[channel]->process (modulationRate,                 // rate
