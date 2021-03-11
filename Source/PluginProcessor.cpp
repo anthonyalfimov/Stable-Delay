@@ -234,7 +234,10 @@ void ReallyBasicDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
                                       writeChannelData,         // outAudio
                                       buffer.getNumSamples());  // numSamplesToRender
         
-        float modulationRate = (channel == 0) ? 0.0f : mModulationRateValue->load();
+        float modulationRate = mModulationRateValue->load();
+
+        if (channel == 0)
+            modulationRate *= 1.01f;
 
         mLfo[channel]->process (modulationRate,                 // rate
                                 mModulationDepthValue->load(),  // depth
