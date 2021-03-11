@@ -49,6 +49,8 @@ void DelayModule::process (const float* inAudio,
                            float* outAudio,
                            int numSamplesToRender)
 {
+    // TODO: Consider wrapping our buffer in a AudioBlock object for processing
+    
     const float wet = dryWet / 100.0f;  // convert from %
     const float dry = 1.0f - wet;
     
