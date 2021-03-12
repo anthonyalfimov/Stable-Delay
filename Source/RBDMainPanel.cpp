@@ -21,18 +21,17 @@ MainPanel::MainPanel (ReallyBasicDelayAudioProcessor& processor)
     mTopPanel->setTopLeftPosition (0, 0);
     addAndMakeVisible (mTopPanel.get());
     
-    mInputGainPanel = std::make_unique<GainPanel> (processor);
+    mInputGainPanel = std::make_unique<GainPanel> (processor, Parameter::InputGain);
     mInputGainPanel->setTopLeftPosition (0, mTopPanel->getBottom());
-    mInputGainPanel->setParameterID (Parameter::InputGain);
     addAndMakeVisible (mInputGainPanel.get());
     
     mCentrePanel = std::make_unique<CentrePanel> (processor);
-    mCentrePanel->setTopLeftPosition (mInputGainPanel->getRight(), mTopPanel->getBottom());
+    mCentrePanel->setTopLeftPosition (mInputGainPanel->getRight(),
+                                      mTopPanel->getBottom());
     addAndMakeVisible (mCentrePanel.get());
     
-    mOutputGainPanel = std::make_unique<GainPanel> (processor);
+    mOutputGainPanel = std::make_unique<GainPanel> (processor, Parameter::OutputGain);
     mOutputGainPanel->setTopRightPosition (getRight(), mTopPanel->getBottom());
-    mOutputGainPanel->setParameterID (Parameter::OutputGain);
     addAndMakeVisible (mOutputGainPanel.get());
 }
 

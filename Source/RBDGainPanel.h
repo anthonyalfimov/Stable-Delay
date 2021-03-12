@@ -19,11 +19,9 @@
 class GainPanel  : public InterfacePanel
 {
 public:
-    GainPanel (ReallyBasicDelayAudioProcessor& processor);
+    GainPanel (ReallyBasicDelayAudioProcessor& processor,
+               Parameter::Index parameterIndex);
     ~GainPanel();
-    
-    // TODO: Consider setting parameter ID for GainPanel in its constructor
-    void setParameterID (Parameter::Index parameterIndex);
     
 private:
     std::unique_ptr<ParameterKnob> mKnob;
