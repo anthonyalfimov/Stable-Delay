@@ -14,15 +14,6 @@
 #include "PluginProcessor.h"
 #include "RBDParameters.h"
 
-// TODO: Consider redesigning the meter as a two-component system
-//  A "probe" in the processing thread that analyses the audio buffer and
-//  a UI component (basically, this class) that draws the meters.
-//  Two components should communicate in a real-time thread-safe manner,
-//  i.e. via atomics.
-//  NB: pay attention to lifetime - the editor component of this system will
-//  get destroyed when the editor is closed, while the processor component
-//  will always be running.
-
 // TODO: Consider storing the channel levels in the APVTS
 //  These would need to be hidden from the host or marked as a special type of
 //  parameter that can't be changed ("analysisMeter" tag). But this would solve
