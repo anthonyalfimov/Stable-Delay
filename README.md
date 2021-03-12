@@ -7,4 +7,5 @@ This project has started as coursework for the "[Advanced Audio Plugin Developme
 ## Building
 
 JUCE version: 6.0.7
+
 C++17
