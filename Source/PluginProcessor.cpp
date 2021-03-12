@@ -135,8 +135,10 @@ void ReallyBasicDelayAudioProcessor::prepareToPlay (double sampleRate, int sampl
     // initialisation that you need..
     for (int channel = 0; channel < 2; ++channel)
     {
-        mLfo[channel]->setSampleRateAndBlockSize (sampleRate, samplesPerBlock);
-        mDelay[channel]->setSampleRate (sampleRate);
+        mInputGain[channel]->prepare (sampleRate, samplesPerBlock);
+        mDelay[channel]->prepare (sampleRate, samplesPerBlock);
+        mDryWetMixer[channel]->prepare (sampleRate, samplesPerBlock);
+        mOutputGain[channel]->prepare (sampleRate, samplesPerBlock);
     }
 }
 
@@ -146,8 +148,10 @@ void ReallyBasicDelayAudioProcessor::releaseResources()
     // spare memory, etc.
     for (int channel = 0; channel < 2; ++channel)
     {
-        mLfo[channel]->reset();
+        mInputGain[channel]->reset();
         mDelay[channel]->reset();
+        mDryWetMixer[channel]->reset();
+        mOutputGain[channel]->reset();
     }
 }
 
@@ -204,58 +208,42 @@ void ReallyBasicDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     // interleaved by keeping the same state.
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
-        const float* readChannelData = buffer.getReadPointer (channel);
-        float* writeChannelData = buffer.getWritePointer (channel);
-        
-        // TODO: Stereo processing hardcoded. This will fail for >2 channels, will it for mono?
+        // TODO: Add smoothing for all parameters
+
+        // FIXME: Stereo processing hardcoded
         /* Q: Why can't we use one RBD::Gain object for both channels?
            A: If we have parameter smoothing, it must remain continuos between
               blocks. DSP module keeps information about its state via the
               member variable that stores the "old" parameter value.
               This state information must be preserved per-channel.
         */
-        // TODO: Add smoothing for all parameters
-        // TODO: Consider updating parameter values only when they change
-        //  AudioProgrammer does this in his tutorials by creating a
-        //  std::atomic<bool> flag that tells the processor whether it needs
-        //  to update parameter values. The flag itself is updated in a
-        //  AudioProcessorValueTree listener. He makes the processor itself
-        //  a listener.
-        //  Note that he still updates the parameters in the processor before
-        //  any processing takes place, rather than in the listener.
-        //  This is supposed to improve thread safety: so that the listener call
-        //  cannot interrupt the processing and change the values in the middle
-        //  of it. Is this correct?
-        // Q:    Are there significant performance benefits from this approach?
-        // A(?): Perhaps, when the plugin has a lot of parameters
 
-        mInputGain[channel]->process (readChannelData,          // inAudio
-                                      mInputGainValue->load(),  // gain
-                                      writeChannelData,         // outAudio
-                                      buffer.getNumSamples());  // numSamplesToRender
-        
-        float modulationRate = mModulationRateValue->load();
+        // TODO: Update parameter values only when it's needed
+        /*  AudioProgrammer does this in his tutorials by creating a
+            std::atomic<bool> flag that tells the processor whether it needs
+            to update parameter values. The flag itself is updated in a
+            AudioProcessorValueTree listener. He makes the processor itself
+            a listener.
+            Note that he still updates the parameters in the processor before
+            any processing takes place, rather than in the listener.
+            This is supposed to improve thread safety: so that the listener call
+            cannot interrupt the processing and change the values in the middle
+            of it. Is this correct?
+        */
 
-        if (channel == 1)
-            modulationRate *= 1.01f;
+        updateParameters();
 
-        mLfo[channel]->process (modulationRate,                 // rate
-                                mModulationDepthValue->load(),  // depth
-                                buffer.getNumSamples());        // numSamplesToRender
-        
-        mDelay[channel]->process (readChannelData,              // inAudio
-                                  mDelayTimeValue->load(),      // time
-                                  mDelayFeedbackValue->load(),  // feedback
-                                  mDryWetValue->load(),         // dryWet
-                                  mFxTypeValue->load(),         // type
-                                  mLfo[channel]->getBuffer(),   // modulationBuffer
-                                  writeChannelData,             // outAudio
-                                  buffer.getNumSamples());      // numSamplesToRender
-        
-        mOutputGain[channel]->process (readChannelData,         // inAudio
-                                       mOutputGainValue->load(),// gain
-                                       writeChannelData,        // outAudio
-                                       buffer.getNumSamples()); // numSamplesToRender
+        const float* readChannelData = buffer.getReadPointer (channel);
+        float* writeChannelData = buffer.getWritePointer (channel);
+        const auto numSamples = buffer.getNumSamples();
+
+        mInputGain[channel]->process (readChannelData, writeChannelData, numSamples);
+        mInputMeterProbe[channel]->process (readChannelData, numSamples);
+        mDryWetMixer[channel]->pushDryBlock (readChannelData, numSamples);
+        mDelay[channel]->process (readChannelData, writeChannelData, numSamples);
+        mDryWetMixer[channel]->process (readChannelData, writeChannelData, numSamples);
+        mOutputGain[channel]->process (readChannelData, writeChannelData, numSamples);
+        mOutputMeterProbe[channel]->process (readChannelData, numSamples);
     }
 }
 
@@ -334,24 +322,26 @@ void ReallyBasicDelayAudioProcessor::setStateInformation (const void* data, int 
 
 const std::atomic<float>* ReallyBasicDelayAudioProcessor::getInputMeterLevel (int inChannel) const
 {
-    return mInputGain[inChannel]->getMeterLevel();
+    return mInputMeterProbe[inChannel]->getMeterLevel();
 }
 
 const std::atomic<float>* ReallyBasicDelayAudioProcessor::getOutputMeterLevel (int inChannel) const
 {
-    return mOutputGain[inChannel]->getMeterLevel();
+    return mOutputMeterProbe[inChannel]->getMeterLevel();
 }
 
 void ReallyBasicDelayAudioProcessor::initialiseDSP()
 {
-    // Initialise the DSP Gain modules
     // TODO: Hardcoding stereo processing here. Refactor!
+    
     for (int channel = 0; channel < 2; ++channel)
     {
         mInputGain[channel] = std::make_unique<GainModule>();
-        mOutputGain[channel] = std::make_unique<GainModule>();
-        mLfo[channel] = std::make_unique<LfoModule>();
+        mInputMeterProbe[channel] = std::make_unique<MeterProbe>();
         mDelay[channel] = std::make_unique<DelayModule>();
+        mDryWetMixer[channel] = std::make_unique<DryWetModule>();
+        mOutputGain[channel] = std::make_unique<GainModule>();
+        mOutputMeterProbe[channel] = std::make_unique<MeterProbe>();
     }
 }
 
@@ -366,20 +356,41 @@ void ReallyBasicDelayAudioProcessor::initialiseParameters()
 
     mInputGainValue
     = parameters.getRawParameterValue (Parameter::ID[Parameter::InputGain]);
-    mModulationRateValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::ModulationRate]);
-    mModulationDepthValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::ModulationDepth]);
     mDelayTimeValue
     = parameters.getRawParameterValue (Parameter::ID[Parameter::DelayTime]);
     mDelayFeedbackValue
     = parameters.getRawParameterValue (Parameter::ID[Parameter::DelayFeedback]);
-    mDryWetValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::DryWet]);
     mFxTypeValue
     = parameters.getRawParameterValue (Parameter::ID[Parameter::FxType]);
+    mDryWetValue
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::DryWet]);
+    mModulationRateValue
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::ModulationRate]);
+    mModulationDepthValue
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::ModulationDepth]);
     mOutputGainValue
     = parameters.getRawParameterValue (Parameter::ID[Parameter::OutputGain]);
+
+    updateParameters();
+}
+
+void ReallyBasicDelayAudioProcessor::updateParameters()
+{
+    for (int channel = 0; channel < 2; ++channel)
+    {
+        mInputGain[channel]->setState (mInputGainValue->load());
+
+        const float modulationOffset = (channel == 0) ? 0.0f : 50.0f;
+
+        mDelay[channel]->setState (mDelayTimeValue->load(),
+                                   mDelayFeedbackValue->load(),
+                                   mFxTypeValue->load(),
+                                   mModulationRateValue->load(),
+                                   mModulationDepthValue->load(),
+                                   modulationOffset);
+        mDryWetMixer[channel]->setState (mDryWetValue->load());
+        mOutputGain[channel]->setState (mOutputGainValue->load());
+    }
 }
 
 //==============================================================================

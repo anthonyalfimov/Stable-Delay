@@ -73,16 +73,28 @@
       <FILE id="vazdPS" name="RBDFxPanel.h" compile="0" resource="0" file="Source/RBDFxPanel.h"/>
     </GROUP>
     <GROUP id="{0EB6A607-778D-EA62-AAC3-98B7C537EEED}" name="DSP">
-      <FILE id="yrs5AZ" name="RBDDelayModule.cpp" compile="1" resource="0"
-            file="Source/RBDDelayModule.cpp"/>
-      <FILE id="Hz1C1r" name="RBDDelayModule.h" compile="0" resource="0"
-            file="Source/RBDDelayModule.h"/>
+      <FILE id="pQH5KF" name="RBDDspModule.h" compile="0" resource="0" file="Source/RBDDspModule.h"/>
       <FILE id="RKl3Qe" name="RBDGainModule.cpp" compile="1" resource="0"
             file="Source/RBDGainModule.cpp"/>
       <FILE id="miQHTD" name="RBDGainModule.h" compile="0" resource="0" file="Source/RBDGainModule.h"/>
       <FILE id="gYeDeC" name="RBDLfoModule.cpp" compile="1" resource="0"
             file="Source/RBDLfoModule.cpp"/>
       <FILE id="AF9TA9" name="RBDLfoModule.h" compile="0" resource="0" file="Source/RBDLfoModule.h"/>
+      <FILE id="yrs5AZ" name="RBDDelayModule.cpp" compile="1" resource="0"
+            file="Source/RBDDelayModule.cpp"/>
+      <FILE id="Hz1C1r" name="RBDDelayModule.h" compile="0" resource="0"
+            file="Source/RBDDelayModule.h"/>
+      <FILE id="Caouf7" name="RBDDryWetModule.cpp" compile="1" resource="0"
+            file="Source/RBDDryWetModule.cpp"/>
+      <FILE id="tle1Tc" name="RBDDryWetModule.h" compile="0" resource="0"
+            file="Source/RBDDryWetModule.h"/>
+      <FILE id="p0iOWO" name="RBDSaturationModule.cpp" compile="1" resource="0"
+            file="Source/RBDSaturationModule.cpp"/>
+      <FILE id="UBI3Fy" name="RBDSaturationModule.h" compile="0" resource="0"
+            file="Source/RBDSaturationModule.h"/>
+      <FILE id="dzLL5s" name="RBDMeterProbe.cpp" compile="1" resource="0"
+            file="Source/RBDMeterProbe.cpp"/>
+      <FILE id="EMC7Qe" name="RBDMeterProbe.h" compile="0" resource="0" file="Source/RBDMeterProbe.h"/>
     </GROUP>
     <GROUP id="{99CE85E1-9C82-51EF-B1FE-A81D24CFC764}" name="Source">
       <FILE id="q3whJb" name="PluginProcessor.cpp" compile="1" resource="0"

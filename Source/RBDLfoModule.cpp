@@ -13,50 +13,48 @@
 
 LfoModule::LfoModule()
 {
-    reset();
+    
 }
 
 LfoModule::~LfoModule()
 {
-    
+
 }
 
-void LfoModule::setSampleRateAndBlockSize (double sampleRate, int samplesPerBlock)
+void LfoModule::prepare (double sampleRate, int blockSize)
 {
-    mSampleRate = sampleRate;
-    mBufferSize = samplesPerBlock;
-    mBuffer = std::make_unique<float[]> (mBufferSize);
+    DspModule::prepare (sampleRate, blockSize);
     reset();
 }
 
-void LfoModule::reset()
+void LfoModule::process (const float* /*inBuffer*/, float* outBuffer,
+                         int numSamplesToRender)
 {
-    // Reset the phase
-    mPhase = 0.0f;
-    // Clear the buffer
-    if (mBuffer != nullptr)
-        zeromem (mBuffer.get(), sizeof (float) * mBufferSize);
-}
+    // Ignoring input buffer
 
-void LfoModule::process (float rate, float depth, int numSamplesToRender)
-{
-    const float depthMapped = depth / 100.0f;   // convert from %
     for (int i = 0; i < numSamplesToRender; ++i)
     {
-        // Record the LFO state in the buffer
-        const float lfoPosition = depthMapped
-                                    * sinf (mPhase * MathConstants<float>::twoPi);
-        mBuffer[i] = lfoPosition;
-        
+        // Record the LFO state in the output buffer
+        outBuffer[i] = mDepthValue * sinf (mPhase * MathConstants<float>::twoPi
+                                          + mPhaseOffset);
+
         // Advance the LFO phase
-        mPhase += rate / mSampleRate;
-        
+        mPhase += mRateValue / mSampleRate;
+
         if (mPhase > 1.0f)
             mPhase -= 1.0f;
     }
 }
 
-const float* LfoModule::getBuffer() const
+void LfoModule::reset()
 {
-    return mBuffer.get();
+    mPhase = 0.0f;
+}
+
+void LfoModule::setState (float rate, float depthPercent, float phaseOffsetPercent)
+{
+    mRateValue = rate;
+    mDepthValue = depthPercent / 100.0f;        // convert from %
+    mPhaseOffset = MathConstants<float>::pi
+                    * (phaseOffsetPercent / 100.0f);    // convert % to radians
 }

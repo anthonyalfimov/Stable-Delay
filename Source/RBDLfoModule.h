@@ -10,29 +10,25 @@
 
 #pragma once
 
-#include "RBDAudioConstants.h"
+#include "RBDDspModule.h"
 
-class LfoModule
+class LfoModule  : public DspModule
 {
 public:
     LfoModule();
     ~LfoModule();
-    
-    void setSampleRateAndBlockSize (double sampleRate, int samplesPerBlock);
-    void reset();
-    void process(float rate,
-                 float depth,
-                 int numSamplesToRender);
-    
-    const float* getBuffer() const;
+
+    void prepare (double sampleRate, int blockSize) override;
+    void process (const float* inBuffer, float* outBuffer,
+                  int numSamplesToRender) override;
+    void reset() override;
+
+    void setState (float rate, float depthPercent, float phaseOffsetPercent);
     
 private:
-    double mSampleRate = -1.0;
+    float mRateValue = 1.0f;
+    float mDepthValue = 0.0f;
+    float mPhaseOffset = 0.0f;
+
     float mPhase = 0.0f;
-    
-    std::unique_ptr<float[]> mBuffer;
-    int mBufferSize = 0;
-    
-    // TODO: JUCE DSP modules don't use the Leak Detector. Should I?
-    // JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RBDLfo)
 };

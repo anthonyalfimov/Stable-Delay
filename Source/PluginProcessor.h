@@ -11,7 +11,8 @@
 #include <JuceHeader.h>
 #include "RBDGainModule.h"
 #include "RBDDelayModule.h"
-#include "RBDLfoModule.h"
+#include "RBDDryWetModule.h"
+#include "RBDMeterProbe.h"
 #include "RBDPresetManager.h"
 
 #warning Check what methods and variables can be made const
@@ -76,13 +77,16 @@ public:
 private:
     void initialiseDSP();
     void initialiseParameters();
+    void updateParameters();
     
     // DSP Modules
     // TODO: Hardcoding stereo signal here - independent gain for left and right channels. Refactor!
     std::unique_ptr<GainModule> mInputGain[2];
-    std::unique_ptr<GainModule> mOutputGain[2];
-    std::unique_ptr<LfoModule> mLfo[2];
+    std::unique_ptr<MeterProbe> mInputMeterProbe[2];
     std::unique_ptr<DelayModule> mDelay[2];
+    std::unique_ptr<DryWetModule> mDryWetMixer[2];
+    std::unique_ptr<GainModule> mOutputGain[2];
+    std::unique_ptr<MeterProbe> mOutputMeterProbe[2];
     
     // Parameter Values
     // TODO: Is there a better option than storing raw ptrs to parameter values?

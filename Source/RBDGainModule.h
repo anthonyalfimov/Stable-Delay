@@ -10,26 +10,23 @@
 
 #pragma once
 
-class GainModule
+#include "RBDDspModule.h"
+
+class GainModule  : public DspModule
 {
 public:
+    // TODO: Is there a reason to explicitely provide empty ctor and dtor?
+
     GainModule();
     ~GainModule();
     
-    // TODO: Using raw pointers for audio buffers here.. is it safe? is there a better way?
-    //       Pass reference to the JUCE AudioBuffer instead?
-    void process (const float* inAudio,
-                  float gain,
-                  float* outAudio,
-                  int numSamplesToRender);
-    
-    const std::atomic<float>* getMeterLevel() const;
-    
+    void process (const float* inAudio, float* outAudio,
+                  int numSamplesToRender) override;
+    void reset() override;
+
+    void setState (float gainInDecibels);
+
 private:
-    // TODO: We're already smoothing audio level in RBDMeter. Do we need to smooth it here too?
-    std::atomic<float> mMeterLevel { 0.0f };
-    
-    // TODO: JUCE DSP modules don't use the Leak Detector. Should I?
-    // JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RBDGain)
+    float mGainValue = 0.0f;
 };
 
