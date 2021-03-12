@@ -16,15 +16,13 @@ class HighlightableComboBox  : public ComboBox
 {
 public:
     HighlightableComboBox (const String& componentName = {});
-    ~HighlightableComboBox();
+    virtual ~HighlightableComboBox();
 
 //==============================================================================
     /** @internal */
     void mouseEnter (const MouseEvent& event) override;
     /** @internal */
     void mouseExit (const MouseEvent& event) override;
-    /** @internal */
-    //void mouseDown (const MouseEvent& event) override;
     /** @internal */
     void mouseUp (const MouseEvent& event) override;
 

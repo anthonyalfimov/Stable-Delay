@@ -33,11 +33,6 @@ void HighlightableComboBox::mouseExit (const MouseEvent& event)
     repaint();
 }
 
-//void HighlightableComboBox::mouseDown (const MouseEvent& event)
-//{
-//
-//}
-
 void HighlightableComboBox::mouseUp (const MouseEvent& event)
 {
     repaint();
