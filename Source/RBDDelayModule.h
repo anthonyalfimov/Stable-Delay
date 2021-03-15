@@ -22,19 +22,28 @@ public:
     ~DelayModule();
 
     void prepare (double sampleRate, int blockSize) override;
+    void reset() override;
     void process (const float* inAudio, float* outAudio,
                   int numSamplesToRender) override;
-    void reset() override;
 
     void setState (float time, float feedback, float type,
                    float modRate, float modDepth, float modOffset);
 
 private:
-    float mTimeValue = 0.0f;
-    float mFeedbackValue = 0.0f;
+    //==========================================================================
+    // Parameters
+    // TODO: Is there actual benefit from type double for delay time?
+    SmoothedValue<double, ValueSmoothingTypes::Multiplicative> mTimeSmoothed;
+    SmoothedValue<float> mFeedbackSmoothed;
     FxType::Index mTypeValue = FxType::Delay;
 
-    double mTimeSmoothed = 0.0;
+    //==========================================================================
+    // FX type constants
+    // TODO: Should the spans be type double for more LFO precision?
+    inline static const double chorusCentreTime = 0.006;
+    inline static const float chorusTimeAmplitude = 0.005f;
+    inline static const double flangerCentreTime = 0.0027;
+    inline static const float flangerTimeAmplitude = 0.0023f;
 
     //==========================================================================
     // Delay

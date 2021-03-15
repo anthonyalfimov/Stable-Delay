@@ -8,7 +8,6 @@
   ==============================================================================
 */
 
-#include <JuceHeader.h>
 #include "RBDLfoModule.h"
 
 LfoModule::LfoModule()
@@ -27,34 +26,42 @@ void LfoModule::prepare (double sampleRate, int blockSize)
     reset();
 }
 
+void LfoModule::reset()
+{
+    // Reset LFO phase
+    mPhase = 0.0f;
+
+    // Reset smoothed parameters
+    mRateSmoothed.reset (mSampleRate, 0.05f);
+    mAmplitudeSmoothed.reset (mSampleRate, 0.05f);
+    mPhaseOffsetSmoothed.reset (mSampleRate, 0.05f);
+}
+
 void LfoModule::process (const float* /*inBuffer*/, float* outBuffer,
                          int numSamplesToRender)
 {
-    // Ignoring input buffer
+    // MARK: Ignoring input buffer
 
     for (int i = 0; i < numSamplesToRender; ++i)
     {
         // Record the LFO state in the output buffer
-        outBuffer[i] = mDepthValue * sinf (mPhase * MathConstants<float>::twoPi
-                                          + mPhaseOffset);
+        outBuffer[i] = mAmplitudeSmoothed.getNextValue()
+                        * sinf (MathConstants<float>::twoPi * mPhase
+                                + mPhaseOffsetSmoothed.getNextValue());
 
         // Advance the LFO phase
-        mPhase += mRateValue / mSampleRate;
+        mPhase += mRateSmoothed.getNextValue() / mSampleRate;
 
         if (mPhase > 1.0f)
             mPhase -= 1.0f;
     }
 }
 
-void LfoModule::reset()
+void LfoModule::setState (float rate, float amplitude, float phaseOffsetPercent)
 {
-    mPhase = 0.0f;
-}
-
-void LfoModule::setState (float rate, float depthPercent, float phaseOffsetPercent)
-{
-    mRateValue = rate;
-    mDepthValue = depthPercent / 100.0f;        // convert from %
-    mPhaseOffset = MathConstants<float>::pi
-                    * (phaseOffsetPercent / 100.0f);    // convert % to radians
+    mRateSmoothed.setTargetValue (rate);
+    mAmplitudeSmoothed.setTargetValue (amplitude);
+    // Convert % value to radians (100% = pi)
+    mPhaseOffsetSmoothed.setTargetValue (MathConstants<float>::pi
+                                         * (phaseOffsetPercent / 100.0f));
 }

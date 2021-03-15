@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include <JuceHeader.h>
 #include "RBDDspModule.h"
 
 class LfoModule  : public DspModule
@@ -19,16 +20,16 @@ public:
     ~LfoModule();
 
     void prepare (double sampleRate, int blockSize) override;
+    void reset() override;
     void process (const float* inBuffer, float* outBuffer,
                   int numSamplesToRender) override;
-    void reset() override;
 
-    void setState (float rate, float depthPercent, float phaseOffsetPercent);
+    void setState (float rate, float amplitude, float phaseOffsetPercent);
     
 private:
-    float mRateValue = 1.0f;
-    float mDepthValue = 0.0f;
-    float mPhaseOffset = 0.0f;
+    SmoothedValue<float, ValueSmoothingTypes::Multiplicative> mRateSmoothed;
+    SmoothedValue<float> mAmplitudeSmoothed;
+    SmoothedValue<float> mPhaseOffsetSmoothed;
 
     float mPhase = 0.0f;
 };
