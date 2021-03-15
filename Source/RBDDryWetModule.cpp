@@ -77,12 +77,10 @@ void DryWetModule::process (const float* inAudio, float* outAudio,
 
 void DryWetModule::setState (float dryWetPercent)
 {
-    // TODO: Consider using a different mixing rule to retain volume at 50%
+    const float wetValue = dryWetPercent / 100.0f;   // convert from %
+    const float dryValue = 1.0f - wetValue;
 
-    // Linear mixing rule
-    const float wetGain = dryWetPercent / 100.0f;   // convert from %
-    const float dryGain = 1.0f - wetGain;
-
-    mDryGainSmoothed.setTargetValue (dryGain);
-    mWetGainSmoothed.setTargetValue (wetGain);
+    // Using 3 dB panning rule
+    mWetGainSmoothed.setTargetValue (std::sqrt (wetValue));
+    mDryGainSmoothed.setTargetValue (std::sqrt (dryValue));
 }
