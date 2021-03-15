@@ -19,14 +19,15 @@ public:
 
     GainModule();
     ~GainModule();
-    
+
+    void prepare (double sampleRate, int blockSize) override;
+    void reset() override;
     void process (const float* inAudio, float* outAudio,
                   int numSamplesToRender) override;
-    void reset() override;
 
     void setState (float gainInDecibels);
 
 private:
-    float mGainValue = 0.0f;
+    SmoothedValue<float, ValueSmoothingTypes::Multiplicative> mGainSmoothed;
 };
 

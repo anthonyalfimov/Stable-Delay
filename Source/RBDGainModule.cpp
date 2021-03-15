@@ -21,20 +21,28 @@ GainModule::~GainModule()
     
 }
 
-void GainModule::process (const float* inAudio, float* outAudio,
-                          int numSamplesToRender)
+void GainModule::prepare (double sampleRate, int blockSize)
 {
-    for (int i = 0; i < numSamplesToRender; ++i)
-        outAudio[i] = inAudio[i] * mGainValue;
+    DspModule::prepare (sampleRate, blockSize);
+    reset();
 }
 
 void GainModule::reset()
 {
+    // Reset smoothed parameters
+    mGainSmoothed.reset (mSampleRate, 0.05f);
+}
 
+void GainModule::process (const float* inAudio, float* outAudio,
+                          int numSamplesToRender)
+{
+    for (int i = 0; i < numSamplesToRender; ++i)
+        outAudio[i] = inAudio[i] * mGainSmoothed.getNextValue();
 }
 
 void GainModule::setState (float gainInDecibels)
 {
-    mGainValue = Decibels::decibelsToGain (gainInDecibels); // convert from decibels
+    // Convert from decibels
+    mGainSmoothed.setTargetValue (Decibels::decibelsToGain (gainInDecibels));
 }
 
