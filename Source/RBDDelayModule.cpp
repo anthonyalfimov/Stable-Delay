@@ -8,9 +8,7 @@
   ==============================================================================
 */
 
-#include <JuceHeader.h>
 #include "RBDDelayModule.h"
-#include "RBDAudioUtilities.h"
 #include "RBDAudioConstants.h"
 
 DelayModule::DelayModule()

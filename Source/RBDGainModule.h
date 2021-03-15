@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include <JuceHeader.h>
 #include "RBDDspModule.h"
 
 class GainModule  : public DspModule

@@ -8,7 +8,6 @@
   ==============================================================================
 */
 
-#include <JuceHeader.h>
 #include "RBDGainModule.h"
 
 GainModule::GainModule()
