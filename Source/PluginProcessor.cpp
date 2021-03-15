@@ -208,8 +208,6 @@ void ReallyBasicDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     // interleaved by keeping the same state.
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
-        // TODO: Add smoothing for all parameters
-
         // FIXME: Stereo processing hardcoded
         /* Q: Why can't we use one RBD::Gain object for both channels?
            A: If we have parameter smoothing, it must remain continuos between

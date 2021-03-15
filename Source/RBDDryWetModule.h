@@ -20,15 +20,16 @@ public:
     ~DryWetModule();
 
     void prepare (double sampleRate, int blockSize) override;
+    void reset() override;
     void pushDryBlock (const float* inAudio, int numSamples);
     void process (const float* inAudio, float* outAudio,
                   int numSamplesToRender) override;
-    void reset() override;
 
     void setState (float dryWetPercent);
 
 private:
+    SmoothedValue<float> mDryGainSmoothed;
+    SmoothedValue<float> mWetGainSmoothed;
+
     std::unique_ptr<float[]> mDryBuffer;
-    
-    float mDryWetValue = 0.0f;
 };

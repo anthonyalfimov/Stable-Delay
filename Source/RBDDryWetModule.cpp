@@ -28,6 +28,17 @@ void DryWetModule::prepare (double sampleRate, int blockSize)
     reset();
 }
 
+void DryWetModule::reset()
+{
+    // Clear the dry buffer
+    if (mDryBuffer != nullptr)
+        FloatVectorOperations::clear (mDryBuffer.get(), mBlockSize);
+
+    // Reset smoothed parameters
+    mDryGainSmoothed.reset (mSampleRate, 0.05f);
+    mWetGainSmoothed.reset (mSampleRate, 0.05f);
+}
+
 void DryWetModule::pushDryBlock (const float* inAudio, int numSamples)
 {
     jassert (isPositiveAndNotGreaterThan (numSamples, mBlockSize));
@@ -40,25 +51,38 @@ void DryWetModule::process (const float* inAudio, float* outAudio,
 {
     jassert (isPositiveAndNotGreaterThan (numSamplesToRender, mBlockSize));
 
-    // TODO: Consider using a different mixing rule
-
-    // Linear mixing rule
-    const float wetGain = mDryWetValue;
-    const float dryGain = 1.0f - wetGain;
-
-    FloatVectorOperations::multiply (mDryBuffer.get(), dryGain, numSamplesToRender);
-    FloatVectorOperations::copyWithMultiply (outAudio, inAudio, wetGain,
-                                             numSamplesToRender);
-    FloatVectorOperations::add (outAudio, mDryBuffer.get(), numSamplesToRender);
-}
-
-void DryWetModule::reset()
-{
-    if (mDryBuffer != nullptr)
-        FloatVectorOperations::clear (mDryBuffer.get(), mBlockSize);
+    // If parameters are not smoothing, apply gain to the whole block
+    //  Parameter target cannot changing withing a block, so this is safe
+    if (! mDryGainSmoothed.isSmoothing() && ! mWetGainSmoothed.isSmoothing())
+    {
+        FloatVectorOperations::multiply (mDryBuffer.get(),
+                                         mDryGainSmoothed.getTargetValue(),
+                                         numSamplesToRender);
+        FloatVectorOperations::copyWithMultiply (outAudio,
+                                                 inAudio,
+                                                 mWetGainSmoothed.getTargetValue(),
+                                                 numSamplesToRender);
+        FloatVectorOperations::add (outAudio, mDryBuffer.get(),
+                                    numSamplesToRender);
+    }
+    else
+    {
+        for (int i = 0; i < numSamplesToRender; ++i)
+        {
+            outAudio[i] = mDryBuffer[i] * mDryGainSmoothed.getNextValue()
+                        + inAudio[i] * mWetGainSmoothed.getNextValue();
+        }
+    }
 }
 
 void DryWetModule::setState (float dryWetPercent)
 {
-    mDryWetValue = dryWetPercent / 100.0f;      // convert from %
+    // TODO: Consider using a different mixing rule to retain volume at 50%
+
+    // Linear mixing rule
+    const float wetGain = dryWetPercent / 100.0f;   // convert from %
+    const float dryGain = 1.0f - wetGain;
+
+    mDryGainSmoothed.setTargetValue (dryGain);
+    mWetGainSmoothed.setTargetValue (wetGain);
 }
