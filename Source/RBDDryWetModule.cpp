@@ -53,25 +53,25 @@ void DryWetModule::process (const float* inAudio, float* outAudio,
 
     // If parameters are not smoothing, apply gain to the whole block
     //  Parameter target cannot changing withing a block, so this is safe
-    if (! mDryGainSmoothed.isSmoothing() && ! mWetGainSmoothed.isSmoothing())
-    {
-        FloatVectorOperations::multiply (mDryBuffer.get(),
-                                         mDryGainSmoothed.getTargetValue(),
-                                         numSamplesToRender);
-        FloatVectorOperations::copyWithMultiply (outAudio,
-                                                 inAudio,
-                                                 mWetGainSmoothed.getTargetValue(),
-                                                 numSamplesToRender);
-        FloatVectorOperations::add (outAudio, mDryBuffer.get(),
-                                    numSamplesToRender);
-    }
-    else
+    
+    if (mDryGainSmoothed.isSmoothing() || mWetGainSmoothed.isSmoothing())
     {
         for (int i = 0; i < numSamplesToRender; ++i)
         {
             outAudio[i] = mDryBuffer[i] * mDryGainSmoothed.getNextValue()
                         + inAudio[i] * mWetGainSmoothed.getNextValue();
         }
+    }
+    else
+    {
+        FloatVectorOperations::multiply (mDryBuffer.get(),
+                                         mDryGainSmoothed.getTargetValue(),
+                                         numSamplesToRender);
+        FloatVectorOperations::copyWithMultiply (outAudio, inAudio,
+                                                 mWetGainSmoothed.getTargetValue(),
+                                                 numSamplesToRender);
+        FloatVectorOperations::add (outAudio, mDryBuffer.get(),
+                                    numSamplesToRender);
     }
 }
 

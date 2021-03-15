@@ -36,8 +36,20 @@ void GainModule::reset()
 void GainModule::process (const float* inAudio, float* outAudio,
                           int numSamplesToRender)
 {
-    for (int i = 0; i < numSamplesToRender; ++i)
-        outAudio[i] = inAudio[i] * mGainSmoothed.getNextValue();
+    // If parameter is not smoothing, apply gain to the whole block
+    //  Parameter target cannot changing withing a block, so this is safe
+    
+    if (mGainSmoothed.isSmoothing())
+    {
+        for (int i = 0; i < numSamplesToRender; ++i)
+            outAudio[i] = inAudio[i] * mGainSmoothed.getNextValue();
+    }
+    else
+    {
+        FloatVectorOperations::copyWithMultiply (outAudio, inAudio,
+                                                 mGainSmoothed.getTargetValue(),
+                                                 numSamplesToRender);
+    }
 }
 
 void GainModule::setState (float gainInDecibels)
