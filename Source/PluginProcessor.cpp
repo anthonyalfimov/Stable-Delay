@@ -379,16 +379,13 @@ void ReallyBasicDelayAudioProcessor::updateParameters()
     for (int channel = 0; channel < 2; ++channel)
     {
         mInputGain[channel]->setState (mInputGainValue->load());
-
-        const float modulationOffset = (channel == 0) ? 0.0f
-                                                      : mStereoWidthValue->load();
-
         mDelay[channel]->setState (mDelayTimeValue->load(),
                                    mDelayFeedbackValue->load(),
                                    mFxTypeValue->load(),
                                    mModulationRateValue->load(),
                                    mModulationDepthValue->load(),
-                                   modulationOffset);
+                                   mStereoWidthValue->load(),
+                                   (channel != 0));
         mDryWetMixer[channel]->setState (mDryWetValue->load());
         mOutputGain[channel]->setState (mOutputGainValue->load());
     }

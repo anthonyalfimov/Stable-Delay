@@ -95,7 +95,8 @@ void DelayModule::process (const float* inAudio, float* outAudio,
 }
 
 void DelayModule::setState (float time, float feedback, float type,
-                            float modRate, float modDepth, float modOffset)
+                            float modRate, float modDepth, float modWidth,
+                            bool shouldOffsetModulation)
 {
     mTypeValue = static_cast<FxType::Index> (type);
 
@@ -126,6 +127,8 @@ void DelayModule::setState (float time, float feedback, float type,
             modAmplitude = 0.0f;    // disable modulation
             break;
     }
+
+    const float modOffset = shouldOffsetModulation ? modWidth : 0.0f;
 
     mLfo.setState (modRate, modAmplitude, modOffset);
 }

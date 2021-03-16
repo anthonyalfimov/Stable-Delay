@@ -28,7 +28,8 @@ public:
                   int numSamplesToRender) override;
 
     void setState (float time, float feedback, float type,
-                   float modRate, float modDepth, float modOffset);
+                   float modRate, float modDepth, float modWidth,
+                   bool shouldOffsetModulation);
 
 private:
     //==========================================================================
