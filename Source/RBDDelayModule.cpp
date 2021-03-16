@@ -29,7 +29,9 @@ void DelayModule::prepare (double sampleRate, int blockSize)
     mLfo.prepare (sampleRate, blockSize);
     mSaturator.prepare (sampleRate, blockSize);
 
-    mAudioBufferSize = mSampleRate * RBD::maxDelayTimeInSeconds;
+    // Add one extra sample just in case, to account for rounding mistakes, etc.
+    mAudioBufferSize = (RBD::maxDelayTimeInSeconds + maxDelayTimeAmplitude)
+                        * mSampleRate + 1;
     mAudioBuffer = std::make_unique<float[]> (mAudioBufferSize);
     mModulationBuffer = std::make_unique<float[]> (mBlockSize);
     reset();
@@ -95,7 +97,7 @@ void DelayModule::process (const float* inAudio, float* outAudio,
 }
 
 void DelayModule::setState (float time, float feedback, float type,
-                            float modRate, float modDepth, float modWidth,
+                            float modRate, float modDepth, float stereoWidth,
                             bool shouldOffsetModulation)
 {
     mTypeValue = static_cast<FxType::Index> (type);
@@ -107,7 +109,15 @@ void DelayModule::setState (float time, float feedback, float type,
         case FxType::Delay:
             mTimeSmoothed.setTargetValue (time / 1000.0);   // convert from ms to s
             mFeedbackSmoothed.setTargetValue (feedback / 100.0f);    // convert from %
-            modAmplitude = 0.0f;    // disable modulation
+            modRate = 0.05f;        // set fixed slow modulation
+
+            // Set the max modulation amplitude to 0.1 the delay time - as long
+            //  as it fits between min and max values for delay time modulation
+            //  amlitude
+            modAmplitude = (stereoWidth / 100.0f)
+                            * jlimit (minDelayTimeAmplitude,
+                                      maxDelayTimeAmplitude,
+                                      time / 10000.0f);
             break;
 
         case FxType::Chorus:
@@ -128,7 +138,7 @@ void DelayModule::setState (float time, float feedback, float type,
             break;
     }
 
-    const float modOffset = shouldOffsetModulation ? modWidth : 0.0f;
+    const float modOffset = shouldOffsetModulation ? stereoWidth : 0.0f;
 
     mLfo.setState (modRate, modAmplitude, modOffset);
 }

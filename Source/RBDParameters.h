@@ -107,7 +107,7 @@ namespace Parameter
         0.0f,   // Output Gain
         1.0f,   // Modulation Rate
         50.0f,  // Modulation Depth
-        50.0f   // Stereo Width
+        25.0f   // Stereo Width
     };
 
     inline const String Label[NumParameters]

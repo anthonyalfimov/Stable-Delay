@@ -28,7 +28,7 @@ public:
                   int numSamplesToRender) override;
 
     void setState (float time, float feedback, float type,
-                   float modRate, float modDepth, float modWidth,
+                   float modRate, float modDepth, float stereoWidth,
                    bool shouldOffsetModulation);
 
 private:
@@ -41,11 +41,12 @@ private:
 
     //==========================================================================
     // FX type constants
-    // TODO: Should the spans be type double for more LFO precision?
     inline static const double chorusCentreTime = 0.006;
     inline static const float chorusTimeAmplitude = 0.005f;
     inline static const double flangerCentreTime = 0.0027;
     inline static const float flangerTimeAmplitude = 0.0023f;
+    inline static const float maxDelayTimeAmplitude = 0.01f;
+    inline static const float minDelayTimeAmplitude = 0.0005f;
 
     //==========================================================================
     // Delay

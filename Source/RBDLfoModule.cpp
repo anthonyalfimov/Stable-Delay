@@ -34,7 +34,7 @@ void LfoModule::reset()
     // Reset smoothed parameters
     mRateSmoothed.reset (mSampleRate, 0.05f);
     mAmplitudeSmoothed.reset (mSampleRate, 0.05f);
-    mPhaseOffsetSmoothed.reset (mSampleRate, 0.05f);
+    mPhaseOffsetSmoothed.reset (mSampleRate, 0.1f);
 }
 
 void LfoModule::process (const float* /*inBuffer*/, float* outBuffer,
