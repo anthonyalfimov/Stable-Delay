@@ -93,13 +93,14 @@ private:
     //  Lifetime of these ptrs is the same at the AudioProcessorValueTreeState that
     //  stores them, so there should be no problems
     std::atomic<float>* mInputGainValue = nullptr;
-    std::atomic<float>* mModulationRateValue = nullptr;
-    std::atomic<float>* mModulationDepthValue = nullptr;
     std::atomic<float>* mDelayTimeValue = nullptr;
     std::atomic<float>* mDelayFeedbackValue = nullptr;
     std::atomic<float>* mDryWetValue = nullptr;
     std::atomic<float>* mFxTypeValue = nullptr;
     std::atomic<float>* mOutputGainValue = nullptr;
+    std::atomic<float>* mModulationRateValue = nullptr;
+    std::atomic<float>* mModulationDepthValue = nullptr;
+    std::atomic<float>* mStereoWidthValue = nullptr;
     
     std::unique_ptr<PresetManager> mPresetManager;
     
