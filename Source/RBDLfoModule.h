@@ -24,7 +24,8 @@ public:
     void process (const float* inBuffer, float* outBuffer,
                   int numSamplesToRender) override;
 
-    void setState (float rate, float amplitude, float phaseOffsetPercent);
+    void setState (float rate, float amplitude, float phaseOffsetPercent,
+                   bool shouldOffsetModulation);
     
 private:
     SmoothedValue<float, ValueSmoothingTypes::Multiplicative> mRateSmoothed;
@@ -32,5 +33,6 @@ private:
     SmoothedValue<float> mPhaseOffsetSmoothed;
 
     float mPhase = 0.0f;
-    float mHarmonicPhase = 0.0f;
+    float mAmPhase = 0.0f;
+    bool mShouldOffsetModulation = false;
 };

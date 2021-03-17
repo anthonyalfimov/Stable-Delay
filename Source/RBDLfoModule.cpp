@@ -30,7 +30,7 @@ void LfoModule::reset()
 {
     // Reset LFO phases
     mPhase = 0.0f;
-    mHarmonicPhase = 0.0f;
+    mAmPhase = 0.0f;
 
     // Reset smoothed parameters
     mRateSmoothed.reset (mSampleRate, 0.05f);
@@ -45,17 +45,19 @@ void LfoModule::process (const float* /*inBuffer*/, float* outBuffer,
 
     for (int i = 0; i < numSamplesToRender; ++i)
     {
-        const float harmonicAmplitude = 0.3f;
-        const float modulationSample
-        = (1 - harmonicAmplitude) * sinf (MathConstants<float>::twoPi * mPhase
-                                          + mPhaseOffsetSmoothed.getNextValue());
-        const float harmonicSample
-        = harmonicAmplitude * sinf (MathConstants<float>::twoPi * mHarmonicPhase);
+        const float amAmplitude = 0.3f;
+        const float phaseOffset = mPhaseOffsetSmoothed.getNextValue();
+        const float modulationPhaseOffset
+        = mShouldOffsetModulation ? phaseOffset : 0.0f;
 
+        const float modulationSample = sinf (MathConstants<float>::twoPi * mPhase
+                                             + modulationPhaseOffset);
+        const float amPhaseOffset = mShouldOffsetModulation ? 0.0f : phaseOffset;
+        const float amSample = 1.0f + amAmplitude
+        * (sinf (MathConstants<float>::twoPi * mAmPhase + amPhaseOffset) - 1.0f);
 
         // Record the LFO state in the output buffer
-        outBuffer[i] = (modulationSample + harmonicSample)
-                        * mAmplitudeSmoothed.getNextValue();
+        outBuffer[i] = modulationSample * amSample * mAmplitudeSmoothed.getNextValue();
 
         // Advance the LFO phase
         const float phaseIncrement = mRateSmoothed.getNextValue() / mSampleRate;
@@ -65,18 +67,20 @@ void LfoModule::process (const float* /*inBuffer*/, float* outBuffer,
             mPhase -= 1.0f;
 
         // Advance the extra hamonic phase
-        mHarmonicPhase += 1.33f * phaseIncrement;
+        mAmPhase += 1.33f * phaseIncrement;
 
-        if (mHarmonicPhase > 1.0f)
-            mHarmonicPhase -= 1.0f;
+        if (mAmPhase > 1.0f)
+            mAmPhase -= 1.0f;
     }
 }
 
-void LfoModule::setState (float rate, float amplitude, float phaseOffsetPercent)
+void LfoModule::setState (float rate, float amplitude, float phaseOffsetPercent,
+                          bool shouldOffsetModulation)
 {
     mRateSmoothed.setTargetValue (rate);
     mAmplitudeSmoothed.setTargetValue (amplitude);
     // Convert % value to radians (100% = pi)
     mPhaseOffsetSmoothed.setTargetValue (MathConstants<float>::pi
                                          * (phaseOffsetPercent / 100.0f));
+    mShouldOffsetModulation = shouldOffsetModulation;
 }

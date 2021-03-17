@@ -138,9 +138,8 @@ void DelayModule::setState (float time, float feedback, float type,
             break;
     }
 
-    const float modOffset = shouldOffsetModulation ? stereoWidth : 0.0f;
-
-    mLfo.setState (modRate, modAmplitude, modOffset);
+    mLfo.setState (modRate, modAmplitude, stereoWidth,
+                   shouldOffsetModulation);
 }
 
 float DelayModule::getInterpolatedSample (double delayTimeInSamples) const
