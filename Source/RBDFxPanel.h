@@ -35,6 +35,7 @@ private:
     OwnedArray<SliderLabel> mLabels;
 
     Label mFxTypeLabel { "fxType", "ERROR" };
+    Label mBuildVersionLabel { "build" };
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FxPanel)
 };

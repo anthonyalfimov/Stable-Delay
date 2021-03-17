@@ -1,22 +1,23 @@
 /*
   ==============================================================================
 
-    RBDParameterKnob.cpp
-    Created: 13 Jan 2021 9:29:21pm
-    Author:  Anthony
+    RBDParameterSlider.cpp
+    Created: 17 Mar 2021 3:31:24pm
+    Author:  Anthony Alfimov
 
   ==============================================================================
 */
 
-#include "RBDParameterKnob.h"
+#include "RBDParameterSlider.h"
 
-ParameterKnob::ParameterKnob (AudioProcessorValueTreeState& stateToControl,
-                              Parameter::Index parameterIndex)
+ParameterSlider::ParameterSlider (AudioProcessorValueTreeState& stateToControl,
+                                  Parameter::Index parameterIndex)
     : Slider (Parameter::Name[parameterIndex])
 {
-    // Set up Slider style: rotary knob
-    setSliderStyle (SliderStyle::RotaryHorizontalVerticalDrag);
+    // Set up Slider style: horizontal slider
+    setSliderStyle (SliderStyle::LinearHorizontal);
     setTextBoxStyle (Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
+    setSliderSnapsToMousePosition (false);
     auto parameter = stateToControl.getParameter (Parameter::ID[parameterIndex]);
     setTextValueSuffix (parameter->getLabel());
 
@@ -27,7 +28,7 @@ ParameterKnob::ParameterKnob (AudioProcessorValueTreeState& stateToControl,
                                                       *this);
 }
 
-ParameterKnob::~ParameterKnob()
+ParameterSlider::~ParameterSlider()
 {
-    
+
 }

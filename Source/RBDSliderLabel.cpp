@@ -10,7 +10,8 @@
 
 #include "RBDSliderLabel.h"
 
-SliderLabel::SliderLabel (Slider* ownerSlider)
+SliderLabel::SliderLabel (Slider* ownerSlider, bool onLeft)
+    : isLeftOfOwner (onLeft)
 {
     mOwnerSlider = ownerSlider;
     attachToComponent (mOwnerSlider, false);
@@ -42,11 +43,24 @@ void SliderLabel::componentMovedOrResized (Component& component,
                                            bool /*wasMoved*/,
                                            bool /*wasResized*/)
 {
-    const int width = component.getWidth();
     const int height = RBD::labelHeight;
-    const int yPosition = component.getBottom();
-    auto bounds = component.getBounds().withSizeKeepingCentre (width, height)
-                                       .withY (yPosition);
+    Rectangle<int> bounds;
+
+    if (isLeftOfOwner)
+    {
+        const int width = RBD::defaultLabelWidth;
+        const int rightPosition = component.getX();
+        bounds = component.getBounds().withSizeKeepingCentre (width, height)
+                          .withRightX (rightPosition);
+    }
+    else
+    {
+        const int width = component.getWidth();
+        const int yPosition = component.getBottom();
+        bounds = component.getBounds().withSizeKeepingCentre (width, height)
+                                      .withY (yPosition);
+    }
+
     setBounds (bounds);
 }
 

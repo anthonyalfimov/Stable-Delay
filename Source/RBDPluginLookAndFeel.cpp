@@ -18,7 +18,7 @@ PluginLookAndFeel::PluginLookAndFeel()
 
     // Store image assets
     mKnobImage = ImageCache::getFromMemory (BinaryData::RBD_Knob_80_png,
-                                              BinaryData::RBD_Knob_80_pngSize);
+                                            BinaryData::RBD_Knob_80_pngSize);
 
     // Label colours
     setColour (Label::backgroundColourId, RBD::noColour);
@@ -38,6 +38,11 @@ PluginLookAndFeel::PluginLookAndFeel()
     setColour (TextButton::buttonColourId, RBD::controlNormalColour);
     setColour (TextButton::textColourOnId, RBD::textNormalColour);
     setColour (TextButton::textColourOffId, RBD::textNormalColour);
+
+    // Temporary Slider colours (before we supply custom graphics)
+    setColour (Slider::thumbColourId, RBD::textNormalColour);
+    setColour (Slider::backgroundColourId, RBD::meterBgColour);
+    setColour (Slider::trackColourId, RBD::controlActiveColour);
 }
 
 PluginLookAndFeel::~PluginLookAndFeel()

@@ -49,3 +49,12 @@ const auto showDecimalPlaces = [] (float value, int /*maxStringLength*/)
     else
         return String (value, places);
 };
+
+template <int threshold>
+const auto showDecimalPlaceBelow = [] (float value, int /*maxStringLength*/)
+{
+    if (value < threshold)
+        return String (value, 1);
+    else
+        return String (roundToInt (value));
+};

@@ -12,6 +12,8 @@
 
 #include "RBDInterfacePanel.h"
 #include "RBDParameterComboBox.h"
+#include "RBDParameterSlider.h"
+#include "RBDSliderLabel.h"
 
 class CentrePanelMenuBar  : public InterfacePanel
 {
@@ -27,8 +29,8 @@ public:
     
 private:
     std::unique_ptr<ParameterComboBox> mFxTypeComboBox;
+    std::unique_ptr<ParameterSlider> mWidthSlider;
+    std::unique_ptr<SliderLabel> mWidthLabel;
 
-    Label mBuildVersionLabel { "build" };
-    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CentrePanelMenuBar)
 };

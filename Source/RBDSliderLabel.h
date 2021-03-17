@@ -26,7 +26,7 @@ class SliderLabel  : public Label,
                      private Timer
 {
 public:
-    SliderLabel (Slider* ownerSlider);
+    explicit SliderLabel (Slider* ownerSlider, bool onLeft = false);
     ~SliderLabel();
 
 //==============================================================================
@@ -55,6 +55,7 @@ private:
     Slider* mOwnerSlider;
 
     String mSliderName;
+    const bool isLeftOfOwner;
 
     // TODO: This time should cover double clicking
     //  Set it high enough, or, possibly, check the system setting for

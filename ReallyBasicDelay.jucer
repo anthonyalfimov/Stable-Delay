@@ -38,6 +38,10 @@
             file="Source/RBDParameterKnob.cpp"/>
       <FILE id="j10A24" name="RBDParameterKnob.h" compile="0" resource="0"
             file="Source/RBDParameterKnob.h"/>
+      <FILE id="f4gF53" name="RBDParameterSlider.cpp" compile="1" resource="0"
+            file="Source/RBDParameterSlider.cpp"/>
+      <FILE id="xjTMA1" name="RBDParameterSlider.h" compile="0" resource="0"
+            file="Source/RBDParameterSlider.h"/>
     </GROUP>
     <GROUP id="{89B33AAD-A27F-7960-6038-74F7F39F53E0}" name="Components">
       <FILE id="uEiEFY" name="RBDLevelMeter.cpp" compile="1" resource="0"

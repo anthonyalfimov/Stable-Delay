@@ -94,7 +94,7 @@ namespace Parameter
         {-24.0f, 24.0f, 0.1f, 0.6f, true}, // Output Gain
         createSkewedNormalisableRange (0.01f, 10.0f, 0.0f, 2.0f), // Modulation Rate
         {0.0f, 100.0f}, // Modulation Depth
-        {0.0f, 100.0f}  // Stereo Width
+        createSkewedNormalisableRange (0.0f, 100.0f, 0.0f, 30.0f) // Stereo Width
     };
 
     inline const float DefaultValue[NumParameters]
@@ -107,7 +107,7 @@ namespace Parameter
         0.0f,   // Output Gain
         1.0f,   // Modulation Rate
         50.0f,  // Modulation Depth
-        25.0f   // Stereo Width
+        30.0f   // Stereo Width
     };
 
     inline const String Label[NumParameters]
@@ -123,14 +123,6 @@ namespace Parameter
         " %"    // Stereo Width
     };
 
-    inline const auto stringFromTimeValue = [] (float value, int /*maxStringLength*/)
-    {
-        if (value < 100.0f)
-            return String (value, 1);
-        else
-            return String (roundToInt (value));
-    };
-
     inline const auto stringFromFxTypeValue = [] (float value, int /*maxStringLength*/)
     {
         const auto fxTypeIndex = static_cast<FxType::Index> (value);
@@ -143,14 +135,14 @@ namespace Parameter
     
     inline const stringFromValueFunction stringFromValue[NumParameters]
     {
-        nullptr,                // Input Gain
-        stringFromTimeValue,    // Time
-        showDecimalPlaces<0>,   // Feedback
-        showDecimalPlaces<0>,   // Dry Wet
-        stringFromFxTypeValue,  // Type
-        nullptr,                // Output Gain
-        showDecimalPlaces<2>,   // Modulation Rate
-        showDecimalPlaces<0>,   // Modulation Depth
-        showDecimalPlaces<0>,   // Stereo Width
+        nullptr,                    // Input Gain
+        showDecimalPlaceBelow<100>, // Time
+        showDecimalPlaces<0>,       // Feedback
+        showDecimalPlaces<0>,       // Dry Wet
+        stringFromFxTypeValue,      // Type
+        nullptr,                    // Output Gain
+        showDecimalPlaces<2>,       // Modulation Rate
+        showDecimalPlaces<0>,       // Modulation Depth
+        showDecimalPlaceBelow<10>,  // Stereo Width
     };
 } // end namespace Parameter

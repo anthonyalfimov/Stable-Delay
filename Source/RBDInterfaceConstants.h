@@ -50,6 +50,7 @@ namespace RBD
 
     // Label sizes
     inline constexpr int labelHeight = 20;
+    inline constexpr int defaultLabelWidth = defaultKnobSize;
     
     // Standard rounded corner radius
     inline constexpr float defaultCornerSize = 3.0f;
