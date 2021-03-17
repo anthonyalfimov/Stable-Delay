@@ -32,4 +32,5 @@ private:
     SmoothedValue<float> mPhaseOffsetSmoothed;
 
     float mPhase = 0.0f;
+    float mHarmonicPhase = 0.0f;
 };

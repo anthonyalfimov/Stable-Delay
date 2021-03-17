@@ -28,8 +28,9 @@ void LfoModule::prepare (double sampleRate, int blockSize)
 
 void LfoModule::reset()
 {
-    // Reset LFO phase
+    // Reset LFO phases
     mPhase = 0.0f;
+    mHarmonicPhase = 0.0f;
 
     // Reset smoothed parameters
     mRateSmoothed.reset (mSampleRate, 0.05f);
@@ -44,16 +45,30 @@ void LfoModule::process (const float* /*inBuffer*/, float* outBuffer,
 
     for (int i = 0; i < numSamplesToRender; ++i)
     {
+        const float harmonicAmplitude = 0.3f;
+        const float modulationSample
+        = (1 - harmonicAmplitude) * sinf (MathConstants<float>::twoPi * mPhase
+                                          + mPhaseOffsetSmoothed.getNextValue());
+        const float harmonicSample
+        = harmonicAmplitude * sinf (MathConstants<float>::twoPi * mHarmonicPhase);
+
+
         // Record the LFO state in the output buffer
-        outBuffer[i] = mAmplitudeSmoothed.getNextValue()
-                        * sinf (MathConstants<float>::twoPi * mPhase
-                                + mPhaseOffsetSmoothed.getNextValue());
+        outBuffer[i] = (modulationSample + harmonicSample)
+                        * mAmplitudeSmoothed.getNextValue();
 
         // Advance the LFO phase
-        mPhase += mRateSmoothed.getNextValue() / mSampleRate;
+        const float phaseIncrement = mRateSmoothed.getNextValue() / mSampleRate;
+        mPhase += phaseIncrement;
 
         if (mPhase > 1.0f)
             mPhase -= 1.0f;
+
+        // Advance the extra hamonic phase
+        mHarmonicPhase += 1.33f * phaseIncrement;
+
+        if (mHarmonicPhase > 1.0f)
+            mHarmonicPhase -= 1.0f;
     }
 }
 
