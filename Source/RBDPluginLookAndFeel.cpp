@@ -42,7 +42,7 @@ PluginLookAndFeel::PluginLookAndFeel()
     // Temporary Slider colours (before we supply custom graphics)
     setColour (Slider::thumbColourId, RBD::textNormalColour);
     setColour (Slider::backgroundColourId, RBD::meterBgColour);
-    setColour (Slider::trackColourId, RBD::controlActiveColour);
+    setColour (Slider::trackColourId, RBD::sliderTrackColour);
 }
 
 PluginLookAndFeel::~PluginLookAndFeel()

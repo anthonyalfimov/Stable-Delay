@@ -71,6 +71,9 @@ namespace RBD
     inline const Colour meterBgColour = Colour (0, 0, 0).withAlpha (0.8f);
     inline const Colour meterFillColour = Colour (125, 125, 125);
 
+    // Temporary Slider colours
+    inline const Colour sliderTrackColour = Colour (35, 35, 35);
+
     // Font
     inline const Typeface::Ptr primaryFont
         = Typeface::createSystemTypefaceFor (BinaryData::OpenSansBold_ttf,
