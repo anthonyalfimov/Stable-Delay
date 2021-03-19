@@ -50,7 +50,7 @@ private:
 
     // RMS window should be larger than the period of the lowest frequency you
     //  expect to be measuring. Larger window will result in slower response
-    inline static const float rmsWindowInSeconds = 0.1f;
+    inline static const float rmsWindowInSeconds = 0.3f;
     int mRmsBufferSize = 0;
     std::unique_ptr<float[]> mRmsBuffer;
     int mWritePosition = 0;
