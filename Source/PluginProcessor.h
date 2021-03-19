@@ -61,8 +61,8 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
     
     //==============================================================================
-    const std::atomic<float>* getInputMeterLevel (int inChannel) const;
-    const std::atomic<float>* getOutputMeterLevel (int inChannel) const;
+    MeterProbe* getInputMeterProbe (int channel) const;
+    MeterProbe* getOutputMeterProbe (int channel) const;
     
     // TODO: Should we return a reference instead here?
     PresetManager* getPresetManager() const { return mPresetManager.get(); }

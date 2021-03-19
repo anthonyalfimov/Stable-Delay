@@ -32,7 +32,7 @@ GainPanel::GainPanel (ReallyBasicDelayAudioProcessor& processor,
     addAndMakeVisible (mLabel.get());
 
     // Set up Level Meter
-    mMeter = std::make_unique<LevelMeter> (parameterIndex, mProcessor);
+    mMeter = std::make_unique<Meter> (parameterIndex, mProcessor);
 
     const int meterWidth = 56;
     const int meterGap = 20;

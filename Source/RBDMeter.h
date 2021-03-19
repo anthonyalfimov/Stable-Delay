@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    RBDLevelMeter.h
+    RBDMeter.h
     Created: 29 Jan 2021 6:29:13pm
     Author:  Anthony
 
@@ -19,27 +19,38 @@
 //  parameter that can't be changed ("analysisMeter" tag). But this would solve
 //  the question of communicating between the processor and the editor.
 
-class LevelMeter  : public Component,
-                    private Timer
+class Meter  : public Component,
+               private Timer
 {
 public:
-    LevelMeter (Parameter::Index parameterIndex,
-                ReallyBasicDelayAudioProcessor& processor);
-    ~LevelMeter();
+    Meter (Parameter::Index parameterIndex,
+           ReallyBasicDelayAudioProcessor& processor);
+    ~Meter();
 
     //==============================================================================
     /** @internal */
     void paint (Graphics& g) override;
     /** @internal */
     void timerCallback() override;
+
+    inline static const int refreshRate = 15; // Hz
         
 private:
     const Parameter::Index mParameterIndex;
-    
-    // TODO: Programmatically handle audio channels in the meter
-    //       E.g. mono, mono->stereo
-    float mCh0Level = 0.0f;
-    float mCh1Level = 0.0f;
-    
-    ReallyBasicDelayAudioProcessor& mProcessor;
+    int mNumChannels = 0;
+
+    std::vector<MeterProbe*> mMeterProbes;
+    std::vector<float> mRmsLevelsInDb;
+    std::vector<float> mPeakLevelsInDb;
+
+    bool mShouldRepaint = false;
+
+    // Note: remove static if input and output meter have different or
+    //  adjustable ranges
+    inline static const float minLevelInDb = -36.0f;
+    inline static const float maxLevelInDb = 0.0f;
+    inline static const NormalisableRange<float> meterRange
+    {
+        minLevelInDb, maxLevelInDb
+    };
 };

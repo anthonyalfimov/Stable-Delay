@@ -9,8 +9,6 @@
       <FILE id="LGGGXw" name="RBDUtilities.h" compile="0" resource="0" file="Source/RBDUtilities.h"/>
       <FILE id="kRVvrT" name="RBDAudioConstants.h" compile="0" resource="0"
             file="Source/RBDAudioConstants.h"/>
-      <FILE id="H6hnWb" name="RBDAudioUtilities.h" compile="0" resource="0"
-            file="Source/RBDAudioUtilities.h"/>
       <FILE id="FJ9rx4" name="RBDInterfaceConstants.h" compile="0" resource="0"
             file="Source/RBDInterfaceConstants.h"/>
       <FILE id="aMTu9K" name="RBDPluginLookAndFeel.cpp" compile="1" resource="0"
@@ -44,9 +42,8 @@
             file="Source/RBDParameterSlider.h"/>
     </GROUP>
     <GROUP id="{89B33AAD-A27F-7960-6038-74F7F39F53E0}" name="Components">
-      <FILE id="uEiEFY" name="RBDLevelMeter.cpp" compile="1" resource="0"
-            file="Source/RBDLevelMeter.cpp"/>
-      <FILE id="KsheeB" name="RBDLevelMeter.h" compile="0" resource="0" file="Source/RBDLevelMeter.h"/>
+      <FILE id="uEiEFY" name="RBDMeter.cpp" compile="1" resource="0" file="Source/RBDMeter.cpp"/>
+      <FILE id="KsheeB" name="RBDMeter.h" compile="0" resource="0" file="Source/RBDMeter.h"/>
       <FILE id="PFoj7C" name="RBDSliderLabel.cpp" compile="1" resource="0"
             file="Source/RBDSliderLabel.cpp"/>
       <FILE id="BHynvf" name="RBDSliderLabel.h" compile="0" resource="0"

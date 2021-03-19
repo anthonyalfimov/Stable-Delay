@@ -29,6 +29,8 @@ public:
         mBlockSize = blockSize;
     }
 
+    virtual void reset() = 0;
+    
     // TODO: Switch from raw buffer pointers to JUCE AudioBlock or similar
     //  We can pass JUCE AudioBlock objects wrapping the audio buffer,
     //  references to the audio buffer itself (bad idea?),
@@ -36,7 +38,6 @@ public:
 
     virtual void process (const float* inAudio, float* outAudio,
                           int numSamplesToRender) = 0;
-    virtual void reset() = 0;
 
 protected:
     double mSampleRate = 44100.0;

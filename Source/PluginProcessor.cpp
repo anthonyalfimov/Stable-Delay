@@ -136,9 +136,11 @@ void ReallyBasicDelayAudioProcessor::prepareToPlay (double sampleRate, int sampl
     for (int channel = 0; channel < 2; ++channel)
     {
         mInputGain[channel]->prepare (sampleRate, samplesPerBlock);
+        mInputMeterProbe[channel]->prepare (sampleRate, samplesPerBlock);
         mDelay[channel]->prepare (sampleRate, samplesPerBlock);
         mDryWetMixer[channel]->prepare (sampleRate, samplesPerBlock);
         mOutputGain[channel]->prepare (sampleRate, samplesPerBlock);
+        mOutputMeterProbe[channel]->prepare (sampleRate, samplesPerBlock);
     }
 }
 
@@ -149,9 +151,11 @@ void ReallyBasicDelayAudioProcessor::releaseResources()
     for (int channel = 0; channel < 2; ++channel)
     {
         mInputGain[channel]->reset();
+        mInputMeterProbe[channel]->reset();
         mDelay[channel]->reset();
         mDryWetMixer[channel]->reset();
         mOutputGain[channel]->reset();
+        mOutputMeterProbe[channel]->reset();
     }
 }
 
@@ -231,17 +235,23 @@ void ReallyBasicDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
 
         updateParameters();
 
+        // TODO: Should we ditch the read pointer for anything that writes data?
+        //  This should become more clear when we implement mono->stereo
+        //  channel configuration.
+
         const float* readChannelData = buffer.getReadPointer (channel);
         float* writeChannelData = buffer.getWritePointer (channel);
         const auto numSamples = buffer.getNumSamples();
 
         mInputGain[channel]->process (readChannelData, writeChannelData, numSamples);
-        mInputMeterProbe[channel]->process (readChannelData, numSamples);
+        mInputMeterProbe[channel]->process (readChannelData, writeChannelData,
+                                            numSamples);
         mDryWetMixer[channel]->pushDryBlock (readChannelData, numSamples);
         mDelay[channel]->process (readChannelData, writeChannelData, numSamples);
         mDryWetMixer[channel]->process (readChannelData, writeChannelData, numSamples);
         mOutputGain[channel]->process (readChannelData, writeChannelData, numSamples);
-        mOutputMeterProbe[channel]->process (readChannelData, numSamples);
+        mOutputMeterProbe[channel]->process (readChannelData, writeChannelData,
+                                             numSamples);
     }
 }
 
@@ -318,14 +328,14 @@ void ReallyBasicDelayAudioProcessor::setStateInformation (const void* data, int 
     }
 }
 
-const std::atomic<float>* ReallyBasicDelayAudioProcessor::getInputMeterLevel (int inChannel) const
+MeterProbe* ReallyBasicDelayAudioProcessor::getInputMeterProbe (int channel) const
 {
-    return mInputMeterProbe[inChannel]->getMeterLevel();
+    return mInputMeterProbe[channel].get();
 }
 
-const std::atomic<float>* ReallyBasicDelayAudioProcessor::getOutputMeterLevel (int inChannel) const
+MeterProbe* ReallyBasicDelayAudioProcessor::getOutputMeterProbe (int channel) const
 {
-    return mOutputMeterProbe[inChannel]->getMeterLevel();
+    return mOutputMeterProbe[channel].get();
 }
 
 void ReallyBasicDelayAudioProcessor::initialiseDSP()

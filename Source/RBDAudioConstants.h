@@ -23,7 +23,4 @@ namespace RBD
 
     inline constexpr float maxDelayTimeInSeconds = 1.0f;
     inline constexpr float maxDelayTimeInMs = maxDelayTimeInSeconds * 1000.0f;
-
-    inline constexpr float meterSmoothingCoef = 0.2f;
-    inline constexpr float minMeterDbLevel = 96.0f;
 }
