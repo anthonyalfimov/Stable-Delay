@@ -92,7 +92,6 @@ void Meter::paint (Graphics& g)
         g.fillRoundedRectangle (meterBounds.toFloat(), RBD::defaultCornerSize);
 
         // Draw peak level meter bar
-        //  Note: convertTo0to1() clamps the value to [0, 1] range
         float peakPosition = meterRange.convertTo0to1 (mPeakLevelsInDb[i]);
         int barTop = static_cast<int> (getHeight() * (1.0f - peakPosition));
         auto barBounds = meterBounds.withTop (barTop);
@@ -126,7 +125,8 @@ void Meter::timerCallback()
 
         if (peakLevelInDb > minLevelInDb)
         {
-            mPeakLevelsInDb[i] = peakLevelInDb;
+            // If we need the actual peak level, this is the place to grab it
+            mPeakLevelsInDb[i] = jmin (peakLevelInDb, maxLevelInDb);
             isSignalPreset = true;
         }
         else
@@ -140,7 +140,8 @@ void Meter::timerCallback()
 
         if (rmsLevelInDb > minLevelInDb)
         {
-            mRmsLevelsInDb[i] = rmsLevelInDb;
+            // If we need the actual peak level, this is the place to grab it
+            mRmsLevelsInDb[i] = jmin (rmsLevelInDb, maxLevelInDb);
             isSignalPreset = true;
         }
         else
