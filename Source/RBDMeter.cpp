@@ -96,7 +96,13 @@ void Meter::paint (Graphics& g)
         int barTop = static_cast<int> (getHeight() * (1.0f - peakPosition));
         auto barBounds = meterBounds.withTop (barTop);
 
-        g.setColour (RBD::meterFillColour);
+        // Peak meter fill
+        g.setColour (RBD::meterFillColour.withAlpha (0.2f));
+        g.fillRoundedRectangle (barBounds.reduced (2).toFloat(),
+                                RBD::defaultCornerSize);
+
+        // Peak meter outline
+        g.setColour (RBD::meterFillColour.withAlpha (0.65f));
         g.drawRoundedRectangle (barBounds.reduced (2).toFloat(),
                                 RBD::defaultCornerSize, 1.0f);
 
@@ -105,6 +111,7 @@ void Meter::paint (Graphics& g)
         barTop = static_cast<int> (getHeight() * (1.0f - rmsPosition));
         barBounds.setTop (barTop);
 
+        // RMS meter fill
         g.setColour (RBD::meterFillColour);
         g.fillRoundedRectangle (barBounds.reduced (2).toFloat(),
                                 RBD::defaultCornerSize);
