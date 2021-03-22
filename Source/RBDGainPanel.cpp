@@ -31,10 +31,11 @@ GainPanel::GainPanel (ReallyBasicDelayAudioProcessor& processor,
     mLabel = std::make_unique<SliderLabel> (mKnob.get());
     addAndMakeVisible (mLabel.get());
 
-    // Set up Level Meter
+    // Set up Level Meters
     mMeter = std::make_unique<Meter> (parameterIndex, mProcessor);
 
-    const int meterWidth = 56;
+    // Set meter width to 3x width of a meter channel
+    const int meterWidth = 3 * RBD::meterChannelWidth;
     const int meterGap = 20;
     auto meterBounds = mKnob->getBounds().withSizeKeepingCentre (meterWidth, 0);
     meterBounds.setTop (mKnob->getBottom() + RBD::labelHeight + meterGap);

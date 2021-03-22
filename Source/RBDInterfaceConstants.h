@@ -45,6 +45,8 @@ namespace RBD
     inline constexpr int fxPanelWidth = centrePanelWidth;
     inline constexpr int fxPanelHeight = centrePanelHeight - centrePanelMenuBarHeight;
 
+    inline constexpr int meterChannelWidth = 18;
+
     // Control sizes
     inline constexpr int defaultKnobSize = 80;
 

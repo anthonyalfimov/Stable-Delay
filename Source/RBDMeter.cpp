@@ -89,18 +89,17 @@ void Meter::paint (Graphics& g)
 {
     jassert (mNumChannels == 1 || mNumChannels == 2);   // can handle only 1 or 2 channels
 
-    // Split component width into 3 equal parts:
+    // Meter panel layout:
     //  two channels - left meter, gap, right meter
     //  one channel  - gap, meter, gap
-    const int meterWidth = getWidth() / 3;
-    auto meterBounds = getLocalBounds().withWidth (meterWidth);
+    auto meterBounds = getLocalBounds().withWidth (RBD::meterChannelWidth);
 
     if (mNumChannels == 1)
-        meterBounds.setX (meterWidth);
+        meterBounds.setX (RBD::meterChannelWidth);
 
     for (int i = 0; i < mNumChannels; ++i)
     {
-        meterBounds.setX (i * 2 * meterWidth);  // position the meter
+        meterBounds.setX (i * 2 * RBD::meterChannelWidth);  // position the meter
 
         // Fill meter background
         g.setColour (RBD::meterBgColour);
