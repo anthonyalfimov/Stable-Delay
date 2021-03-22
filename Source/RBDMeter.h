@@ -45,6 +45,7 @@ private:
 
     // Note: remove "static" if input and output meter have different or
     //  adjustable ranges
+    inline static const float meterReleaseTime = 0.2f;
     inline static const float minLevelInDb = -36.0f;
     inline static const float maxLevelInDb = 0.0f;
     inline static const NormalisableRange<float> meterRange

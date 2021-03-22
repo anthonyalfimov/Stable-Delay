@@ -53,13 +53,11 @@ Meter::Meter (Parameter::Index parameterIndex,
         meterProbe->setSuspended (false);
     }
 
-    // Initialise meter values
-    const float meterReleaseTime = 0.2f;
-
-    // Release smoothing is required for proper meter painting
-    //  Check that the number of smoothing steps is no zero
+    // Release smoothing is required for proper meter painting:
+    //  check that the number of smoothing steps is not zero
     jassert (meterReleaseTime * refreshRate >= 1.0f);
 
+    // Initialise peak levels
     mPeakLevelsInDb.resize (mNumChannels);
 
     for (auto& peakLevel : mPeakLevelsInDb)
@@ -68,6 +66,7 @@ Meter::Meter (Parameter::Index parameterIndex,
         peakLevel.setCurrentAndTargetValue (minLevelInDb);
     }
 
+    // Initialise RMS levels
     mRmsLevelsInDb.resize (mNumChannels);
 
     for (auto& rmsLevel : mRmsLevelsInDb)
