@@ -40,12 +40,10 @@ private:
     int mNumChannels = 0;
 
     std::vector<MeterProbe*> mMeterProbes;
-    std::vector<float> mRmsLevelsInDb;
-    std::vector<float> mPeakLevelsInDb;
+    std::vector<SmoothedValue<float>> mPeakLevelsInDb;
+    std::vector<SmoothedValue<float>> mRmsLevelsInDb;
 
-    bool mShouldRepaint = false;
-
-    // Note: remove static if input and output meter have different or
+    // Note: remove "static" if input and output meter have different or
     //  adjustable ranges
     inline static const float minLevelInDb = -36.0f;
     inline static const float maxLevelInDb = 0.0f;

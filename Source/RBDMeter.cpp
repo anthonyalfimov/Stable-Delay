@@ -47,18 +47,28 @@ Meter::Meter (Parameter::Index parameterIndex,
     jassert (mNumChannels == 2);    // can only handle 2 channels at the moment
 
     // Wake up meter probes
-    for (auto meterProbe : mMeterProbes)
+    for (auto& meterProbe : mMeterProbes)
     {
         jassert (meterProbe != nullptr);
         meterProbe->setSuspended (false);
     }
 
     // Initialise meter values
-    mRmsLevelsInDb.resize (mNumChannels);
-    std::fill (mRmsLevelsInDb.begin(), mRmsLevelsInDb.end(), minLevelInDb);
-
     mPeakLevelsInDb.resize (mNumChannels);
-    std::fill (mPeakLevelsInDb.begin(), mPeakLevelsInDb.end(), minLevelInDb);
+
+    for (auto& peakLevel : mPeakLevelsInDb)
+    {
+        peakLevel.reset (refreshRate, 0.2f);
+        peakLevel.setCurrentAndTargetValue (minLevelInDb);
+    }
+
+    mRmsLevelsInDb.resize (mNumChannels);
+
+    for (auto& rmsLevel : mRmsLevelsInDb)
+    {
+        rmsLevel.reset (refreshRate, 0.2f);
+        rmsLevel.setCurrentAndTargetValue (minLevelInDb);
+    }
 
     startTimerHz (refreshRate);  // start the timer
 }
@@ -66,7 +76,7 @@ Meter::Meter (Parameter::Index parameterIndex,
 Meter::~Meter()
 {
     // Suspend meter probes
-    for (auto meterProbe : mMeterProbes)
+    for (auto& meterProbe : mMeterProbes)
         meterProbe->setSuspended (true);
 }
 
@@ -92,7 +102,10 @@ void Meter::paint (Graphics& g)
         g.fillRoundedRectangle (meterBounds.toFloat(), RBD::defaultCornerSize);
 
         // Draw peak level meter bar
-        float peakPosition = meterRange.convertTo0to1 (mPeakLevelsInDb[i]);
+        // NB: Smoothing is advanced in the timer callback, here we just get the
+        //  current value
+        const float peakPosition
+        = meterRange.convertTo0to1 (mPeakLevelsInDb[i].getCurrentValue());
         int barTop = static_cast<int> (getHeight() * (1.0f - peakPosition));
         auto barBounds = meterBounds.withTop (barTop);
 
@@ -107,7 +120,10 @@ void Meter::paint (Graphics& g)
                                 RBD::defaultCornerSize, 1.0f);
 
         // Draw RMS level meter bar
-        float rmsPosition = meterRange.convertTo0to1 (mRmsLevelsInDb[i]);
+        // NB: Smoothing is advanced in the timer callback, here we just get the
+        //  current value
+        const float rmsPosition
+        = meterRange.convertTo0to1 (mRmsLevelsInDb[i].getCurrentValue());
         barTop = static_cast<int> (getHeight() * (1.0f - rmsPosition));
         barBounds.setTop (barTop);
 
@@ -121,6 +137,7 @@ void Meter::paint (Graphics& g)
 void Meter::timerCallback()
 {
     bool isSignalPreset = false;    // flag to check if significant signal detected
+    bool isSmoothing = false;       // flag to check if levels are smoothing
 
     for (int i = 0; i < mNumChannels; ++i)
     {
@@ -128,41 +145,69 @@ void Meter::timerCallback()
         const float peakLevel = mMeterProbes[i]->getPeakLevel()->load();
         mMeterProbes[i]->resetPeakLevel();  // reset stored max peak level
 
-        const float peakLevelInDb = Decibels::gainToDecibels (peakLevel);
+        float peakLevelInDb = Decibels::gainToDecibels (peakLevel);
 
         if (peakLevelInDb > minLevelInDb)
         {
-            // If we need the actual peak level, this is the place to grab it
-            mPeakLevelsInDb[i] = jmin (peakLevelInDb, maxLevelInDb);
+            /* If we need the actual peak level, this is the place to grab it */
+
+            // Clamp to meter range
+            peakLevelInDb = jmin (peakLevelInDb, maxLevelInDb);
+
+            // Immidiately jump to a higher peak, but ramp to a lower one
+            if (peakLevelInDb > mPeakLevelsInDb[i].getCurrentValue())
+                mPeakLevelsInDb[i].setCurrentAndTargetValue (peakLevelInDb);
+            else
+                mPeakLevelsInDb[i].setTargetValue (peakLevelInDb);
+
             isSignalPreset = true;
         }
         else
         {
-            mPeakLevelsInDb[i] = minLevelInDb;
+            mPeakLevelsInDb[i].setTargetValue (minLevelInDb);
+        }
+
+        if (mPeakLevelsInDb[i].isSmoothing())
+        {
+            isSmoothing = true; // indicate that there's a new value to be shown
+            mPeakLevelsInDb[i].getNextValue();  // generate next smoothed value
         }
 
         // Retrieve RMS level
         const float rmsLevel = mMeterProbes[i]->getRmsLevel()->load();
-        const float rmsLevelInDb = Decibels::gainToDecibels (rmsLevel);
+        float rmsLevelInDb = Decibels::gainToDecibels (rmsLevel);
 
         if (rmsLevelInDb > minLevelInDb)
         {
-            // If we need the actual peak level, this is the place to grab it
-            mRmsLevelsInDb[i] = jmin (rmsLevelInDb, maxLevelInDb);
+            /* If we need the actual peak level, this is the place to grab it */
+
+            // Clamp to meter range
+            rmsLevelInDb = jmin (rmsLevelInDb, maxLevelInDb);
+
+            // Immediately jump to a higher value, but ramp to a lower one
+            if (rmsLevelInDb > mRmsLevelsInDb[i].getCurrentValue())
+                mRmsLevelsInDb[i].setCurrentAndTargetValue (rmsLevelInDb);
+            else
+                mRmsLevelsInDb[i].setTargetValue (rmsLevelInDb);
+
             isSignalPreset = true;
         }
         else
         {
-            mRmsLevelsInDb[i] = minLevelInDb;
+            mRmsLevelsInDb[i].setTargetValue (minLevelInDb);
+        }
+
+        if (mRmsLevelsInDb[i].isSmoothing())
+        {
+            isSmoothing = true; // indicate that there's a new value to be shown
+            mRmsLevelsInDb[i].getNextValue();   // generate next smoothed value
         }
     }
 
-    // If no signal is present in the meters, repaint once to clear the meters
-    //  and make sure they don't get stuck on the previous non-zero value.
-    //  After that, unset mShouldRepaint to not keep repainting empty meters.
+    // Only repaint if there is significant level present in at least one of
+    //  the meters, or at least one of the meters is still smoothing and
+    //  there's a new value to be shown
 
-    if (isSignalPreset || mShouldRepaint)
+    if (isSignalPreset || isSmoothing)
         repaint();
-
-    mShouldRepaint = isSignalPreset;
 }
