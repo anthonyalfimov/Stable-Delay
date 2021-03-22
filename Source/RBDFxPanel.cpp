@@ -125,7 +125,9 @@ void FxPanel::setFxPanelStyle (FxType::Index typeIndex)
     
     // Calculate leftmost knob offset first:
     float knobOffset = -knobStep * (mKnobs.size() - 1) / 2.0f;
-        
+
+    // NB: not using auto& here because the contained objects are pointers,
+    //  so it's ok to work with copies
     for (auto knob : mKnobs)
     {
         knob->setBounds (getLocalBounds()
