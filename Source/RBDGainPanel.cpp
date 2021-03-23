@@ -34,12 +34,19 @@ GainPanel::GainPanel (ReallyBasicDelayAudioProcessor& processor,
     // Set up Level Meters
     mMeter = std::make_unique<Meter> (parameterIndex, mProcessor);
 
+    if (parameterIndex == Parameter::OutputGain)
+        mMeter->setStyle (Meter::Style::Clipping);
+    else
+        mMeter->setStyle (Meter::Style::Normal);
+
     // Set meter width to 3x width of a meter channel
     const int meterWidth = 3 * RBD::meterChannelWidth;
     const int meterGap = 20;
     auto meterBounds = mKnob->getBounds().withSizeKeepingCentre (meterWidth, 0);
     meterBounds.setTop (mKnob->getBottom() + RBD::labelHeight + meterGap);
     meterBounds.setBottom (getHeight() - meterGap);
+    // Add padding to accomodate clipping indicators
+    meterBounds.expand (Meter::padding, Meter::padding);
     mMeter->setBounds (meterBounds);
     addAndMakeVisible (mMeter.get());
 }

@@ -72,6 +72,9 @@ namespace RBD
     inline const Colour popupItemBgColour = Colour (0, 0, 0).withAlpha (0.6f);
     inline const Colour meterBgColour = Colour (0, 0, 0).withAlpha (0.8f);
     inline const Colour meterFillColour = Colour (125, 125, 125);
+    // TODO: Pick better colours for clipping and saturation
+    inline const Colour meterClippingColour = Colour (220, 40, 0);
+    inline const Colour meterSaturationColour = Colour (255, 110, 0);
 
     // Temporary Slider colours
     inline const Colour sliderTrackColour = Colour (35, 35, 35);

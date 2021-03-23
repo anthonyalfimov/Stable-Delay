@@ -27,21 +27,38 @@ public:
            ReallyBasicDelayAudioProcessor& processor);
     ~Meter();
 
+    enum class Style
+    {
+        Normal = 0,
+        Clipping,
+        Saturation
+    };
+
+    void setStyle (Style newStyle);
+
     //==============================================================================
     /** @internal */
     void paint (Graphics& g) override;
     /** @internal */
     void timerCallback() override;
+    /** @internal */
+    void mouseDown (const MouseEvent& event) override;
 
-    inline static const int refreshRate = 15; // Hz
+    inline static constexpr int refreshRate = 15; // Hz
+
+    // Additional padding to Meter component size needed to accomodate the
+    //  clipping indicator
+    inline static constexpr int padding = 4;
         
 private:
     const Parameter::Index mParameterIndex;
+    Style mStyle = Style::Normal;
     int mNumChannels = 0;
 
     std::vector<MeterProbe*> mMeterProbes;
     std::vector<SmoothedValue<float>> mPeakLevelsInDb;
     std::vector<SmoothedValue<float>> mRmsLevelsInDb;
+    std::vector<bool> mShowClippingIndicator;
 
     // Note: remove "static" if input and output meter have different or
     //  adjustable ranges

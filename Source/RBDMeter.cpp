@@ -75,6 +75,11 @@ Meter::Meter (Parameter::Index parameterIndex,
         rmsLevel.setCurrentAndTargetValue (minLevelInDb);
     }
 
+    // Initialise clipping indicators
+    mShowClippingIndicator.resize (mNumChannels);
+    std::fill (mShowClippingIndicator.begin(), mShowClippingIndicator.end(),
+               false);
+
     startTimerHz (refreshRate);  // start the timer
 }
 
@@ -85,11 +90,19 @@ Meter::~Meter()
         meterProbe->setSuspended (true);
 }
 
+void Meter::setStyle (Style newStyle)
+{
+    mStyle = newStyle;
+    std::fill (mShowClippingIndicator.begin(), mShowClippingIndicator.end(),
+               false);
+}
+
 void Meter::paint (Graphics& g)
 {
     jassert (mNumChannels == 1 || mNumChannels == 2);   // can handle 1 or 2 channels
 
-    const auto meterBounds = getLocalBounds();
+    // Remove padding added to accomodate clipping indicators
+    const auto meterBounds = getLocalBounds().reduced (padding, padding);
 
     // Meter bounds are created on the left
     auto channelBounds = meterBounds.withWidth (RBD::meterChannelWidth);
@@ -104,15 +117,54 @@ void Meter::paint (Graphics& g)
         if (i == 1)
             channelBounds.setX (meterBounds.getRight() - channelBounds.getWidth());
 
+        auto fillColour = RBD::meterFillColour;
+
+        // Retrieve peak level
+        //    NB: Smoothing is advanced in the timer callback, here we just
+        //    get the current value
+        float peakLevel = mPeakLevelsInDb[i].getCurrentValue();
+
+        // Handle clipping / saturation indication
+
+        switch (mStyle)
+        {
+            case Style::Clipping:
+                if (peakLevel > 0.0f)
+                {
+                    fillColour = RBD::meterClippingColour;
+                    mShowClippingIndicator[i] = true;
+                }
+
+                if (mShowClippingIndicator[i])
+                {
+                    const int delta = 1; // expansion amount
+                    // Keep corners consistent by changing their radius by
+                    //  the same amount as the size of the object itself
+                    const float cornerSize = RBD::defaultCornerSize + delta;
+                    g.setColour (RBD::meterClippingColour);
+
+                    g.drawRoundedRectangle (channelBounds.toFloat()
+                                            .expanded (delta - 0.5),
+                                            cornerSize, 1.0f);
+                }
+
+                break;
+
+            case Style::Saturation:
+
+                break;
+
+            default:
+                break;
+        }
+
         // Fill meter background
         g.setColour (RBD::meterBgColour);
         g.fillRoundedRectangle (channelBounds.toFloat(), RBD::defaultCornerSize);
 
         // Draw peak level meter bar
-        //      NB: Smoothing is advanced in the timer callback, here we just
-        //      get the current value
-        const float peakPosition
-        = meterRange.convertTo0to1 (mPeakLevelsInDb[i].getCurrentValue());
+        peakLevel = jmin (peakLevel, maxLevelInDb); // clamp to meter range
+        const float peakPosition = meterRange.convertTo0to1 (peakLevel);
         int barTop = static_cast<int> (meterBounds.getBottom()
                                        - meterBounds.getHeight() * peakPosition);
         auto barBounds = channelBounds.withTop (barTop);
@@ -124,7 +176,7 @@ void Meter::paint (Graphics& g)
         const float barCornerSize = RBD::defaultCornerSize - delta;
 
         // Peak meter fill
-        g.setColour (RBD::meterFillColour.withAlpha (0.2f));
+        g.setColour (fillColour.withAlpha (0.2f));
         g.fillRoundedRectangle (barBounds.reduced (delta).toFloat(),
                                 barCornerSize);
 
@@ -134,22 +186,23 @@ void Meter::paint (Graphics& g)
         //  their size (inverted), so explicitly check if we should paint it
         if (barBounds.getHeight() > 2 * delta)
         {
-            g.setColour (RBD::meterFillColour.withAlpha (0.7f));
+            g.setColour (fillColour.withAlpha (0.7f));
             g.drawRoundedRectangle (barBounds.toFloat().reduced (delta + 0.5f),
                                     barCornerSize, 1.0f);
         }
 
         // Draw RMS level meter bar
-        //      NB: Smoothing is advanced in the timer callback, here we just
-        //      get the current value
-        const float rmsPosition
-        = meterRange.convertTo0to1 (mRmsLevelsInDb[i].getCurrentValue());
+        //    NB: Smoothing is advanced in the timer callback, here we just
+        //    get the current value
+        float rmsLevel = mRmsLevelsInDb[i].getCurrentValue();
+        rmsLevel = jmin (rmsLevel, maxLevelInDb);   // clamp to meter range
+        const float rmsPosition = meterRange.convertTo0to1 (rmsLevel);
         barTop = static_cast<int> (meterBounds.getBottom()
                                    - meterBounds.getHeight() * rmsPosition);
         barBounds.setTop (barTop);
 
         // RMS meter fill
-        g.setColour (RBD::meterFillColour);
+        g.setColour (fillColour);
         g.fillRoundedRectangle (barBounds.reduced (delta).toFloat(),
                                 barCornerSize);
     }
@@ -163,18 +216,13 @@ void Meter::timerCallback()
     for (int i = 0; i < mNumChannels; ++i)
     {
         // Retrieve peak level
-        const float peakLevel = mMeterProbes[i]->getPeakLevel()->load();
+        const float peakGain = mMeterProbes[i]->getPeakLevel()->load();
         mMeterProbes[i]->resetPeakLevel();  // reset stored max peak level
 
-        float peakLevelInDb = Decibels::gainToDecibels (peakLevel);
+        float peakLevelInDb = Decibels::gainToDecibels (peakGain);
 
         if (peakLevelInDb > minLevelInDb)
         {
-            /* If we need the actual peak level, this is the place to grab it */
-
-            // Clamp to meter range
-            peakLevelInDb = jmin (peakLevelInDb, maxLevelInDb);
-
             // Immidiately jump to a higher peak, but ramp to a lower one
             if (peakLevelInDb > mPeakLevelsInDb[i].getCurrentValue())
                 mPeakLevelsInDb[i].setCurrentAndTargetValue (peakLevelInDb);
@@ -200,11 +248,6 @@ void Meter::timerCallback()
 
         if (rmsLevelInDb > minLevelInDb)
         {
-            /* If we need the actual peak level, this is the place to grab it */
-
-            // Clamp to meter range
-            rmsLevelInDb = jmin (rmsLevelInDb, maxLevelInDb);
-
             // Immediately jump to a higher value, but ramp to a lower one
             if (rmsLevelInDb > mRmsLevelsInDb[i].getCurrentValue())
                 mRmsLevelsInDb[i].setCurrentAndTargetValue (rmsLevelInDb);
@@ -231,4 +274,12 @@ void Meter::timerCallback()
 
     if (isSignalPreset || isSmoothing)
         repaint();
+}
+
+void Meter::mouseDown (const MouseEvent& /*event*/)
+{
+    // Reset clipping indicators for all channels
+    std::fill (mShowClippingIndicator.begin(), mShowClippingIndicator.end(),
+               false);
+    repaint();
 }
