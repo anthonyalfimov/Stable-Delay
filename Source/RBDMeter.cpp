@@ -89,29 +89,33 @@ void Meter::paint (Graphics& g)
 {
     jassert (mNumChannels == 1 || mNumChannels == 2);   // can handle 1 or 2 channels
 
-    // Meter panel layout:
-    //  two channels - left meter, gap, right meter
-    //  one channel  - gap, meter, gap
-    auto meterBounds = getLocalBounds().withWidth (RBD::meterChannelWidth);
+    const auto meterBounds = getLocalBounds();
 
+    // Meter bounds are created on the left
+    auto channelBounds = meterBounds.withWidth (RBD::meterChannelWidth);
+
+    // Position the mono meter in the centre
     if (mNumChannels == 1)
-        meterBounds.setX (RBD::meterChannelWidth);
+        channelBounds.setCentre (meterBounds.getCentre());
 
     for (int i = 0; i < mNumChannels; ++i)
     {
-        meterBounds.setX (i * 2 * RBD::meterChannelWidth);  // position the meter
+        // Position the right stereo meter on the right
+        if (i == 1)
+            channelBounds.setX (meterBounds.getRight() - channelBounds.getWidth());
 
         // Fill meter background
         g.setColour (RBD::meterBgColour);
-        g.fillRoundedRectangle (meterBounds.toFloat(), RBD::defaultCornerSize);
+        g.fillRoundedRectangle (channelBounds.toFloat(), RBD::defaultCornerSize);
 
         // Draw peak level meter bar
         //      NB: Smoothing is advanced in the timer callback, here we just
         //      get the current value
         const float peakPosition
         = meterRange.convertTo0to1 (mPeakLevelsInDb[i].getCurrentValue());
-        int barTop = static_cast<int> (getHeight() * (1.0f - peakPosition));
-        auto barBounds = meterBounds.withTop (barTop);
+        int barTop = static_cast<int> (meterBounds.getBottom()
+                                       - meterBounds.getHeight() * peakPosition);
+        auto barBounds = channelBounds.withTop (barTop);
 
         const int delta = 2;    // reduction amount for the meter bar size
 
@@ -125,16 +129,23 @@ void Meter::paint (Graphics& g)
                                 barCornerSize);
 
         // Peak meter outline
-        g.setColour (RBD::meterFillColour.withAlpha (0.7f));
-        g.drawRoundedRectangle (barBounds.toFloat().reduced (delta + 0.5f),
-                                barCornerSize, 1.0f);
+
+        // Rectangle outline can still be visible when bounds are reduced below
+        //  their size (inverted), so explicitly check if we should paint it
+        if (barBounds.getHeight() > 2 * delta)
+        {
+            g.setColour (RBD::meterFillColour.withAlpha (0.7f));
+            g.drawRoundedRectangle (barBounds.toFloat().reduced (delta + 0.5f),
+                                    barCornerSize, 1.0f);
+        }
 
         // Draw RMS level meter bar
         //      NB: Smoothing is advanced in the timer callback, here we just
         //      get the current value
         const float rmsPosition
         = meterRange.convertTo0to1 (mRmsLevelsInDb[i].getCurrentValue());
-        barTop = static_cast<int> (getHeight() * (1.0f - rmsPosition));
+        barTop = static_cast<int> (meterBounds.getBottom()
+                                   - meterBounds.getHeight() * rmsPosition);
         barBounds.setTop (barTop);
 
         // RMS meter fill
