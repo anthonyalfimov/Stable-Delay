@@ -87,7 +87,7 @@ Meter::~Meter()
 
 void Meter::paint (Graphics& g)
 {
-    jassert (mNumChannels == 1 || mNumChannels == 2);   // can handle only 1 or 2 channels
+    jassert (mNumChannels == 1 || mNumChannels == 2);   // can handle 1 or 2 channels
 
     // Meter panel layout:
     //  two channels - left meter, gap, right meter
@@ -106,26 +106,32 @@ void Meter::paint (Graphics& g)
         g.fillRoundedRectangle (meterBounds.toFloat(), RBD::defaultCornerSize);
 
         // Draw peak level meter bar
-        // NB: Smoothing is advanced in the timer callback, here we just get the
-        //  current value
+        //      NB: Smoothing is advanced in the timer callback, here we just
+        //      get the current value
         const float peakPosition
         = meterRange.convertTo0to1 (mPeakLevelsInDb[i].getCurrentValue());
         int barTop = static_cast<int> (getHeight() * (1.0f - peakPosition));
         auto barBounds = meterBounds.withTop (barTop);
 
+        const int delta = 2;    // reduction amount for the meter bar size
+
+        // Keep corners consistent by changing their radius by the same amount
+        //  as the size of the object itself
+        const float barCornerSize = RBD::defaultCornerSize - delta;
+
         // Peak meter fill
         g.setColour (RBD::meterFillColour.withAlpha (0.2f));
-        g.fillRoundedRectangle (barBounds.reduced (2).toFloat(),
-                                RBD::defaultCornerSize);
+        g.fillRoundedRectangle (barBounds.reduced (delta).toFloat(),
+                                barCornerSize);
 
         // Peak meter outline
-        g.setColour (RBD::meterFillColour.withAlpha (0.65f));
-        g.drawRoundedRectangle (barBounds.reduced (2).toFloat(),
-                                RBD::defaultCornerSize, 1.0f);
+        g.setColour (RBD::meterFillColour.withAlpha (0.7f));
+        g.drawRoundedRectangle (barBounds.toFloat().reduced (delta + 0.5f),
+                                barCornerSize, 1.0f);
 
         // Draw RMS level meter bar
-        // NB: Smoothing is advanced in the timer callback, here we just get the
-        //  current value
+        //      NB: Smoothing is advanced in the timer callback, here we just
+        //      get the current value
         const float rmsPosition
         = meterRange.convertTo0to1 (mRmsLevelsInDb[i].getCurrentValue());
         barTop = static_cast<int> (getHeight() * (1.0f - rmsPosition));
@@ -133,8 +139,8 @@ void Meter::paint (Graphics& g)
 
         // RMS meter fill
         g.setColour (RBD::meterFillColour);
-        g.fillRoundedRectangle (barBounds.reduced (2).toFloat(),
-                                RBD::defaultCornerSize);
+        g.fillRoundedRectangle (barBounds.reduced (delta).toFloat(),
+                                barCornerSize);
     }
 }
 
