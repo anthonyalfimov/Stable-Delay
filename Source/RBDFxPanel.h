@@ -30,7 +30,7 @@ public:
 private:
     FxType::Index mTypeIndex;
     
-    // Use an array or pointers to allow dynamically changing number of knobs
+    // Use an array of pointers to allow dynamically changing number of knobs
     OwnedArray<ParameterKnob> mKnobs;
     OwnedArray<SliderLabel> mLabels;
 
