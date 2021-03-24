@@ -49,7 +49,7 @@ Meter::Meter (Parameter::Index parameterIndex,
     }
 
     // Can only handle mono and stereo channel setup
-    jassert (mNumChannels > 0 && mNumChannels <= 2);
+    jassert (mNumChannels == 1 || mNumChannels == 2);
 
     for (auto meterChannel : mMeterChannels)
     {
@@ -82,6 +82,8 @@ void Meter::resized()
     // Position MeterChannel objects
     const int paddedWidth = RBD::meterChannelWidth + 2 * MeterChannel::padding;
 
+    // Can only handle mono and stereo channel setup
+    //  (other channel configurations will not have visible meters)
     if (mNumChannels == 1)
     {
         // Position the single mono meter in the centre
@@ -95,7 +97,6 @@ void Meter::resized()
         auto bounds = getLocalBounds().withWidth (paddedWidth);
         mMeterChannels[0]->setBounds (bounds);
         // Position the right meter on the right
-        DBG(getRight());
         bounds.setX (getWidth() - paddedWidth);
         mMeterChannels[1]->setBounds (bounds);
     }
