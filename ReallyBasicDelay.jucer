@@ -42,6 +42,10 @@
             file="Source/RBDParameterSlider.h"/>
     </GROUP>
     <GROUP id="{89B33AAD-A27F-7960-6038-74F7F39F53E0}" name="Components">
+      <FILE id="B6Bznx" name="RBDMeterChannel.cpp" compile="1" resource="0"
+            file="Source/RBDMeterChannel.cpp"/>
+      <FILE id="fLCHTh" name="RBDMeterChannel.h" compile="0" resource="0"
+            file="Source/RBDMeterChannel.h"/>
       <FILE id="uEiEFY" name="RBDMeter.cpp" compile="1" resource="0" file="Source/RBDMeter.cpp"/>
       <FILE id="KsheeB" name="RBDMeter.h" compile="0" resource="0" file="Source/RBDMeter.h"/>
       <FILE id="PFoj7C" name="RBDSliderLabel.cpp" compile="1" resource="0"

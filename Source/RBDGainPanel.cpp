@@ -35,9 +35,9 @@ GainPanel::GainPanel (ReallyBasicDelayAudioProcessor& processor,
     mMeter = std::make_unique<Meter> (parameterIndex, mProcessor);
 
     if (parameterIndex == Parameter::OutputGain)
-        mMeter->setStyle (Meter::Style::Clipping);
+        mMeter->setStyle (MeterStyle::Clipping);
     else
-        mMeter->setStyle (Meter::Style::Normal);
+        mMeter->setStyle (MeterStyle::Normal);
 
     // Set meter width to 3x width of a meter channel
     const int meterWidth = 3 * RBD::meterChannelWidth;

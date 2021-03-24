@@ -11,13 +11,9 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "RBDMeterChannel.h"
 #include "PluginProcessor.h"
 #include "RBDParameters.h"
-
-// TODO: Consider storing the channel levels in the APVTS
-//  These would need to be hidden from the host or marked as a special type of
-//  parameter that can't be changed ("analysisMeter" tag). But this would solve
-//  the question of communicating between the processor and the editor.
 
 class Meter  : public Component,
                private Timer
@@ -27,18 +23,11 @@ public:
            ReallyBasicDelayAudioProcessor& processor);
     ~Meter();
 
-    enum class Style
-    {
-        Normal = 0,
-        Clipping,
-        Saturation
-    };
+    void setStyle (MeterStyle newStyle);
 
-    void setStyle (Style newStyle);
-
-    //==============================================================================
+//==============================================================================
     /** @internal */
-    void paint (Graphics& g) override;
+    void resized() override;
     /** @internal */
     void timerCallback() override;
     /** @internal */
@@ -48,25 +37,14 @@ public:
 
     // Additional padding to Meter component size needed to accomodate the
     //  clipping indicator
-    inline static constexpr int padding = 4;
+    inline static constexpr int padding = MeterChannel::padding;
         
 private:
     const Parameter::Index mParameterIndex;
-    Style mStyle = Style::Normal;
     int mNumChannels = 0;
+    MeterStyle mStyle = MeterStyle::Normal;
 
-    std::vector<MeterProbe*> mMeterProbes;
-    std::vector<SmoothedValue<float>> mPeakLevelsInDb;
-    std::vector<SmoothedValue<float>> mRmsLevelsInDb;
-    std::vector<bool> mShowClippingIndicator;
+    OwnedArray<MeterChannel> mMeterChannels;
 
-    // Note: remove "static" if input and output meter have different or
-    //  adjustable ranges
-    inline static const float meterReleaseTime = 0.2f;
-    inline static const float minLevelInDb = -36.0f;
-    inline static const float maxLevelInDb = 0.0f;
-    inline static const NormalisableRange<float> meterRange
-    {
-        minLevelInDb, maxLevelInDb
-    };
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Meter);
 };
