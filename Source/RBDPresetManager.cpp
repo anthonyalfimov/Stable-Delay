@@ -192,8 +192,7 @@ String PresetManager::getCurrentPresetName() const
 
 void PresetManager::storeLocalPresets()
 {
-    // TODO: Should we use `clearQuick()` here to reduce allocations / deallocations?
-    mLocalPresets.clear();
+    mLocalPresets.clearQuick();
     
     // TODO: Is there a better way to handle file extentions?
     for (DirectoryEntry entry

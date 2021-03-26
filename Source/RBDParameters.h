@@ -18,11 +18,6 @@
 //  Current solution is to put a plain enum in a namespace to have name scope
 //  but keep automatic casting to int.
 
-// TODO: Consider using switching to an enum classes
-//  Together with the namespace, this would make using the enum more bulky
-//  and will require extra considerations for using it as an array index,
-//  but will eliminate potentially unsafe implicit cast to int
-
 namespace FxType
 {
     enum Index : int

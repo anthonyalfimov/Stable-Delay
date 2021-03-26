@@ -21,9 +21,14 @@ enum class MeterStyle
 };
 
 // TODO: Consider storing the channel levels in the APVTS
-//  These would need to be hidden from the host or marked as a special type of
-//  parameter that can't be changed ("analysisMeter" tag). But this would solve
-//  the question of communicating between the processor and the editor.
+//  Create a parameter with parameterCategory set to
+//  AudioProcessorParameter::inputMeter or AudioProcessorParameter::outputMeter.
+//  These categories tell the host that this parameter is a meter level value
+//  and therefore read-only. Most hosts will display these type of parameters
+//  as a meter in the generic view of the plug-in.
+//
+// However, what will happen if we add both peak and RMS levels with these
+//  categories? Will the hosts be able to handle this?
 
 class MeterChannel  : public Component
 {

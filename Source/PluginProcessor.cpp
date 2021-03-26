@@ -15,9 +15,6 @@
 AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
 {
     // TODO: (?) Change the type of the Type parameter to AudioParameterChoice
-    // TODO: (OR) Supply ValueToText function for Type parameter
-    //  This should make the host display this parameter using suitable
-    //  text labels
     
     AudioProcessorValueTreeState::ParameterLayout layout;
 

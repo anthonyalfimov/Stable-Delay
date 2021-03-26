@@ -14,7 +14,7 @@
 // The benefit of global constants is that they are all collected in one place
 // Perhaps, they could live in a relevant base class?
 
-// TODO: Do we need to namespace Audio constants? Use better namespace name? Template instead?
+// TODO: Do we need to namespace Audio constants? Use better namespace name?
 
 namespace RBD
 {

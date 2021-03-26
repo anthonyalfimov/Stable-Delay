@@ -57,9 +57,8 @@ private:
     String mSliderName;
     const bool isLeftOfOwner;
 
-    // TODO: This time should cover double clicking
-    //  Set it high enough, or, possibly, check the system setting for
-    //  double click time/speed and use that?
+    // This time should cover double clicking
+    // TODO: Consider deriving the delay time from current double click speed
     
     // Time before slider value display switches back to slider name
     inline static const int switchDelayTimeInMs = 1000 /* ms */;
