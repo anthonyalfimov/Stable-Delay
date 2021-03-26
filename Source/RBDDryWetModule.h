@@ -32,4 +32,7 @@ private:
     SmoothedValue<float> mWetGainSmoothed;
 
     std::unique_ptr<float[]> mDryBuffer;
+
+    //==========================================================================
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DryWetModule)
 };

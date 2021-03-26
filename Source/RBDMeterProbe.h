@@ -55,5 +55,9 @@ private:
     std::unique_ptr<float[]> mRmsBuffer;
     int mWritePosition = 0;
 
+    //==========================================================================
     float calculateRms() const;
+
+    //==========================================================================
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MeterProbe)
 };

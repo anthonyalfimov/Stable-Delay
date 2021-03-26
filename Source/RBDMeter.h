@@ -46,5 +46,6 @@ private:
 
     OwnedArray<MeterChannel> mMeterChannels;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Meter);
+    //==========================================================================
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Meter)
 };

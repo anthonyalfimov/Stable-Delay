@@ -59,4 +59,7 @@ private:
     
     XmlElement* mCurrentPresetXml;  // TODO: What is the point of this member?
     AudioProcessor& mProcessor;
+
+    //==========================================================================
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PresetManager)
 };

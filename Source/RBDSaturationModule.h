@@ -68,4 +68,7 @@ private:
         else
             return x * (1 - x * x / 6.75f);
     }
+
+    //==========================================================================
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SaturationModule)
 };

@@ -32,5 +32,6 @@ private:
     std::unique_ptr<ParameterSlider> mWidthSlider;
     std::unique_ptr<SliderLabel> mWidthLabel;
 
+    //==========================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CentrePanelMenuBar)
 };

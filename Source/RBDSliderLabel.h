@@ -63,4 +63,7 @@ private:
     
     // Time before slider value display switches back to slider name
     inline static const int switchDelayTimeInMs = 1000 /* ms */;
+
+    //==========================================================================
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SliderLabel)
 };

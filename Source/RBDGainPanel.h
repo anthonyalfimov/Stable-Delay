@@ -27,6 +27,7 @@ private:
     std::unique_ptr<ParameterKnob> mKnob;
     std::unique_ptr<SliderLabel> mLabel;
     std::unique_ptr<Meter> mMeter;
-    
+
+    //==========================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GainPanel)
 };

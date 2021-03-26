@@ -30,5 +30,8 @@ public:
 
 private:
     SmoothedValue<float, ValueSmoothingTypes::Multiplicative> mGainSmoothed;
+
+    //==========================================================================
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GainModule)
 };
 

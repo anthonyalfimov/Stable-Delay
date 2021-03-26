@@ -26,6 +26,7 @@ private:
     std::unique_ptr<GainPanel> mInputGainPanel;
     std::unique_ptr<GainPanel> mOutputGainPanel;
     std::unique_ptr<CentrePanel> mCentrePanel;
-    
+
+    //==========================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainPanel)
 };
