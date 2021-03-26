@@ -12,15 +12,17 @@
 #include "RBDInterfaceConstants.h"
 
 Meter::Meter (Parameter::Index parameterIndex,
-              ReallyBasicDelayAudioProcessor& processor)
-    : mParameterIndex (parameterIndex)
+              ReallyBasicDelayAudioProcessor& processor,
+              int numChannels)
+    : mNumChannels (numChannels)
 {
+    // Can only handle mono and stereo channel setup
+    jassert (mNumChannels == 1 || mNumChannels == 2);
+
     // Create and initialise MeterChannel objects
-    switch (mParameterIndex)
+    switch (parameterIndex)
     {
         case Parameter::InputGain:
-            mNumChannels = processor.getTotalNumInputChannels();
-
             for (int i = 0; i < mNumChannels; ++i)
             {
                 auto* meterProbe = processor.getInputMeterProbe (i);
@@ -31,8 +33,6 @@ Meter::Meter (Parameter::Index parameterIndex,
             break;
 
         case Parameter::OutputGain:
-            mNumChannels = processor.getTotalNumOutputChannels();
-
             for (int i = 0; i < mNumChannels; ++i)
             {
                 auto* meterProbe = processor.getOutputMeterProbe (i);
@@ -44,12 +44,8 @@ Meter::Meter (Parameter::Index parameterIndex,
 
         default:
             jassertfalse;
-            mNumChannels = 0;
             break;
     }
-
-    // Can only handle mono and stereo channel setup
-    jassert (mNumChannels == 1 || mNumChannels == 2);
 
     for (auto meterChannel : mMeterChannels)
     {

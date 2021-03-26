@@ -20,7 +20,8 @@ class Meter  : public Component,
 {
 public:
     Meter (Parameter::Index parameterIndex,
-           ReallyBasicDelayAudioProcessor& processor);
+           ReallyBasicDelayAudioProcessor& processor,
+           int numChannels);
     ~Meter();
 
     void setStyle (MeterStyle newStyle);
@@ -40,8 +41,7 @@ public:
     inline static constexpr int padding = MeterChannel::padding;
         
 private:
-    const Parameter::Index mParameterIndex;
-    int mNumChannels = 0;
+    const int mNumChannels;
     MeterStyle mStyle = MeterStyle::Normal;
 
     OwnedArray<MeterChannel> mMeterChannels;

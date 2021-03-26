@@ -32,15 +32,39 @@ GainPanel::GainPanel (ReallyBasicDelayAudioProcessor& processor,
     addAndMakeVisible (mLabel.get());
 
     // Set up Level Meters
-    mMeter = std::make_unique<Meter> (parameterIndex, mProcessor);
+    int numChannels = 0;
+    MeterStyle meterStyle = MeterStyle::Normal;
 
-    if (parameterIndex == Parameter::OutputGain)
-        mMeter->setStyle (MeterStyle::Clipping);
-    else
-        mMeter->setStyle (MeterStyle::Normal);
+    switch (parameterIndex)
+    {
+        case Parameter::InputGain:
+            numChannels = processor.getTotalNumInputChannels();
+            meterStyle = MeterStyle::Normal;
+            break;
+
+        case Parameter::OutputGain:
+            numChannels = processor.getTotalNumOutputChannels();
+            meterStyle = MeterStyle::Clipping;
+            break;
+
+        default:
+            break;
+    }
+
+    // Can only handle mono and stereo channel setup
+    jassert (numChannels == 1 || numChannels == 2);
+
+    mMeter = std::make_unique<Meter> (parameterIndex, mProcessor, numChannels);
+    mMeter->setStyle (meterStyle);
+
+    int meterWidth = 0; // no meters visible unless mono or stereo channel config
+
+    if (numChannels == 1)
+        meterWidth = RBD::meterChannelWidth;    // set up for single meter
+    else if (numChannels == 2)
+        meterWidth = 3 * RBD::meterChannelWidth;    // set up for two meters with a gap
 
     // Set meter width to 3x width of a meter channel
-    const int meterWidth = 3 * RBD::meterChannelWidth;
     const int meterGap = 20;
     auto meterBounds = mKnob->getBounds().withSizeKeepingCentre (meterWidth, 0);
     meterBounds.setTop (mKnob->getBottom() + RBD::labelHeight + meterGap);
