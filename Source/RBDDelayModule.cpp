@@ -67,7 +67,7 @@ void DelayModule::process (const float* inAudio, float* outAudio,
     jassert (isPositiveAndNotGreaterThan (numSamplesToRender, mBlockSize));
 
     // Fill modulation buffer
-    mLfo.process (mModulationBuffer.get(), mModulationBuffer.get(), mBlockSize);
+    mLfo.process (mModulationBuffer.get(), mModulationBuffer.get(), numSamplesToRender);
 
     // TODO: Consider wrapping delay buffer in an AudioBlock for processing
 
