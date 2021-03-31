@@ -155,8 +155,14 @@ void MeterChannel::paint (Graphics& g)
             break;
 
         case MeterStyle::Saturation:
-
+        {
+            // Saturation threshold is picked semi-arbitrarily
+            float saturationAmount = jmap (peakLevel, -3.0f, 0.0f, 0.0f, 1.0f);
+            saturationAmount = jlimit (0.0f, 1.0f, saturationAmount);
+            fillColour = fillColour.interpolatedWith (RBD::meterSaturationColour,
+                                                      saturationAmount);
             break;
+        }
 
         default:
             break;
