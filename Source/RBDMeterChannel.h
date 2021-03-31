@@ -57,7 +57,7 @@ public:
 
 //==============================================================================
     inline static const float minLevelInDb = -36.0f;
-    inline static const float maxLevelInDb = 0.0f;
+    inline static const float maxLevelInDb = 4.0f;
 
     // Note: we might need to add skew to the range if we add level marks.
     //  Otherwise, the range linear on dB value looks pretty natural to me.

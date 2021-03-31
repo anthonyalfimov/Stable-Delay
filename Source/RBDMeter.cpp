@@ -20,7 +20,7 @@ Meter::Meter (Parameter::Index parameterIndex,
     jassert (mNumChannels == 1 || mNumChannels == 2);
 
     // Create MeterLegend
-    auto labelLevels = {0, -6, -12, -18, -24, -30};
+    auto labelLevels = {0, -8, -16, -24, -32};
     mMeterLegend = std::make_unique<MeterLegend> (labelLevels, mNumChannels == 2);
     addAndMakeVisible (mMeterLegend.get());
     mMeterLegend->addMouseListener (this, true);
@@ -90,10 +90,17 @@ void Meter::resized()
     //  (other channel configurations will not have visible meters)
     if (mNumChannels == 1)
     {
-        // Position the single mono meter in the centre
-        auto bounds = getLocalBounds().withSizeKeepingCentre (paddedWidth,
-                                                              getHeight());
+        // Position the single mono meter in the centre on gain panel
+        auto bounds = getLocalBounds().withWidth (paddedWidth);
         mMeterChannels[0]->setBounds (bounds);
+
+        // Position the MeterLegend on the right of the MeterChannel
+        bounds.setX (mMeterChannels[0]->getRight() - MeterChannel::padding);
+        bounds.setRight (getWidth() - Meter::padding);
+        // Reduce the height of MeterLegend to match the height of the actual
+        //  MeterChannel without the padding.
+        bounds.reduce (0, MeterChannel::padding);
+        mMeterLegend->setBounds (bounds);
     }
     else if (mNumChannels == 2)
     {

@@ -46,6 +46,7 @@ namespace RBD
     inline constexpr int fxPanelHeight = centrePanelHeight - centrePanelMenuBarHeight;
 
     inline constexpr int meterChannelWidth = 18;
+    inline constexpr int meterLegendWidth = meterChannelWidth + 2;
 
     // Control sizes
     inline constexpr int defaultKnobSize = 80;
@@ -72,6 +73,7 @@ namespace RBD
     inline const Colour popupItemBgColour = Colour (0, 0, 0).withAlpha (0.6f);
     inline const Colour meterBgColour = Colour (0, 0, 0).withAlpha (0.8f);
     inline const Colour meterFillColour = Colour (125, 125, 125);
+    inline const Colour meterLegendColour = textNormalColour;
     inline const Colour meterClippingColour = Colour (0xFFDF4107);
     inline const Colour meterSaturationColour = Colour (0xFFE39105);
 

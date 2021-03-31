@@ -57,16 +57,29 @@ GainPanel::GainPanel (ReallyBasicDelayAudioProcessor& processor,
     mMeter = std::make_unique<Meter> (parameterIndex, mProcessor, numChannels);
     mMeter->setStyle (meterStyle);
 
-    int meterWidth = 0; // no meters visible unless mono or stereo channel config
+    Rectangle<int> meterBounds;
 
-    if (numChannels == 1)
-        meterWidth = RBD::meterChannelWidth;    // set up for single meter
-    else if (numChannels == 2)
-        meterWidth = 3 * RBD::meterChannelWidth;    // set up for two meters with a gap
+    if (numChannels == 1)   // set up for a single meter with legend
+    {
+        // Position the meter channel in the middle:
+        meterBounds = mKnob->getBounds()
+                             .withSizeKeepingCentre (RBD::meterChannelWidth, 0);
+        // Expand width to accomodate meter legend on the right
+        meterBounds.setWidth (RBD::meterChannelWidth + RBD::meterLegendWidth);
+    }
+    else if (numChannels == 2)  // set up for two meters with legend in the middle
+    {
+        const int meterWidth = 2 * RBD::meterChannelWidth + RBD::meterLegendWidth;
+        meterBounds = mKnob->getBounds().withSizeKeepingCentre (meterWidth, 0);
+    }
+    else
+    {
+        // Disable meter drawing if not mono or stereo channel configuration
+        meterBounds.setSize (0, 0);
+        jassertfalse;
+    }
 
-    // Set meter width to 3x width of a meter channel
     const int meterGap = 20;
-    auto meterBounds = mKnob->getBounds().withSizeKeepingCentre (meterWidth, 0);
     meterBounds.setTop (mKnob->getBottom() + RBD::labelHeight + meterGap);
     meterBounds.setBottom (getHeight() - meterGap);
     // Add padding to accomodate clipping indicators

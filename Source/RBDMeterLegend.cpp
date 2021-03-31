@@ -29,7 +29,7 @@ void MeterLabel::paint (Graphics& g)
     const int width = bounds.getWidth();
 
     // Draw label ticks
-    g.setColour (RBD::meterFillColour);
+    g.setColour (RBD::meterLegendColour);
     g.drawHorizontalLine (centreY, 0, tickLenght);  // always draw the left tick
 
     if (mIsStereo)  // draw the right tick only is stereo configuration
@@ -37,7 +37,7 @@ void MeterLabel::paint (Graphics& g)
 
     // Draw label
     g.setFont (RBD::meterFont);
-    g.setColour (RBD::meterFillColour);
+    g.setColour (RBD::meterLegendColour);
     g.drawText (mText, bounds, Justification::centred);
 }
 
