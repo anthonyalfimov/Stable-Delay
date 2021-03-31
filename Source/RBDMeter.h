@@ -12,6 +12,7 @@
 
 #include <JuceHeader.h>
 #include "RBDMeterChannel.h"
+#include "RBDMeterLegend.h"
 #include "PluginProcessor.h"
 #include "RBDParameters.h"
 
@@ -44,6 +45,7 @@ private:
     const int mNumChannels;
     MeterStyle mStyle = MeterStyle::Normal;
 
+    std::unique_ptr<MeterLegend> mMeterLegend;
     OwnedArray<MeterChannel> mMeterChannels;
 
     //==========================================================================

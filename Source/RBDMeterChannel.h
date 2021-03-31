@@ -55,6 +55,17 @@ public:
     //  the clipping indicator
     inline static constexpr int padding = 2;
 
+//==============================================================================
+    inline static const float minLevelInDb = -36.0f;
+    inline static const float maxLevelInDb = 0.0f;
+
+    // Note: we might need to add skew to the range if we add level marks.
+    //  Otherwise, the range linear on dB value looks pretty natural to me.
+    inline static const NormalisableRange<float> range
+    {
+        minLevelInDb, maxLevelInDb
+    };
+
 private:
     MeterStyle mStyle = MeterStyle::Normal;
     MeterProbe* mMeterProbe = nullptr;
@@ -67,15 +78,6 @@ private:
     // Note: remove "static" if input and output meter have different or
     //  adjustable ranges
     inline static const float meterReleaseTime = 0.2f;
-    inline static const float minLevelInDb = -36.0f;
-    inline static const float maxLevelInDb = 0.0f;
-
-    // Note: we might need to add skew to the range if we add level marks.
-    //  Otherwise, the range linear on dB value looks pretty natural to me.
-    inline static const NormalisableRange<float> meterRange
-    {
-        minLevelInDb, maxLevelInDb
-    };
 
     //==========================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MeterChannel)

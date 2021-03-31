@@ -87,4 +87,5 @@ namespace RBD
     inline const Font mainFont = Font (primaryFont).withPointHeight (11.0f);
     inline const Font titleFont = Font (primaryFont).withPointHeight (18.0f);
     inline const Font fxTypeFont = Font (primaryFont).withPointHeight (48.0f);
+    inline const Font meterFont = Font (primaryFont).withPointHeight (9.0f);
 }

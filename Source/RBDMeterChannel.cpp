@@ -168,7 +168,7 @@ void MeterChannel::paint (Graphics& g)
 
     // Draw peak level meter bar
     peakLevel = jmin (peakLevel, maxLevelInDb); // clamp to meter range
-    const float peakPosition = meterRange.convertTo0to1 (peakLevel);
+    const float peakPosition = range.convertTo0to1 (peakLevel);
     int barTop = static_cast<int> (channelBounds.getBottom()
                                    - channelBounds.getHeight() * peakPosition);
     auto barBounds = channelBounds.withTop (barTop);
@@ -199,7 +199,7 @@ void MeterChannel::paint (Graphics& g)
     //    the parent's timer callback. Here we just get the current value.
     float rmsLevel = mRmsLevelInDb.getCurrentValue();
     rmsLevel = jmin (rmsLevel, maxLevelInDb);   // clamp to meter range
-    const float rmsPosition = meterRange.convertTo0to1 (rmsLevel);
+    const float rmsPosition = range.convertTo0to1 (rmsLevel);
     barTop = static_cast<int> (channelBounds.getBottom()
                                - channelBounds.getHeight() * rmsPosition);
     barBounds.setTop (barTop);

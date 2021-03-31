@@ -46,6 +46,10 @@
             file="Source/RBDMeterChannel.cpp"/>
       <FILE id="fLCHTh" name="RBDMeterChannel.h" compile="0" resource="0"
             file="Source/RBDMeterChannel.h"/>
+      <FILE id="A7cDgc" name="RBDMeterLegend.cpp" compile="1" resource="0"
+            file="Source/RBDMeterLegend.cpp"/>
+      <FILE id="LNP47J" name="RBDMeterLegend.h" compile="0" resource="0"
+            file="Source/RBDMeterLegend.h"/>
       <FILE id="uEiEFY" name="RBDMeter.cpp" compile="1" resource="0" file="Source/RBDMeter.cpp"/>
       <FILE id="KsheeB" name="RBDMeter.h" compile="0" resource="0" file="Source/RBDMeter.h"/>
       <FILE id="PFoj7C" name="RBDSliderLabel.cpp" compile="1" resource="0"

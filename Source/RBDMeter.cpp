@@ -19,6 +19,12 @@ Meter::Meter (Parameter::Index parameterIndex,
     // Can only handle mono and stereo channel setup
     jassert (mNumChannels == 1 || mNumChannels == 2);
 
+    // Create MeterLegend
+    auto labelLevels = {0, -6, -12, -18, -24, -30};
+    mMeterLegend = std::make_unique<MeterLegend> (labelLevels, mNumChannels == 2);
+    addAndMakeVisible (mMeterLegend.get());
+    mMeterLegend->addMouseListener (this, true);
+
     // Create and initialise MeterChannel objects
     switch (parameterIndex)
     {
@@ -59,6 +65,8 @@ Meter::Meter (Parameter::Index parameterIndex,
 
 Meter::~Meter()
 {
+    mMeterLegend->removeMouseListener (this);
+
     for (auto meterChannel : mMeterChannels)
         meterChannel->removeMouseListener (this);
 }
@@ -95,6 +103,15 @@ void Meter::resized()
         // Position the right meter on the right
         bounds.setX (getWidth() - paddedWidth);
         mMeterChannels[1]->setBounds (bounds);
+
+        // Position the MeterLegend in between the channels
+        bounds.setX (mMeterChannels[0]->getRight());
+        bounds.setRight (mMeterChannels[1]->getX());
+        // Expand the width of MeterLegend to ignore the MeterChannel padding,
+        //  and reduce the height to match the height of actual MeterChannels
+        //  without the padding.
+        bounds.expand (MeterChannel::padding, -MeterChannel::padding);
+        mMeterLegend->setBounds (bounds);
     }
 }
 
