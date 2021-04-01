@@ -81,13 +81,12 @@ private:
     void updateParameters();
     
     // DSP Modules
-    // TODO: Hardcoding stereo signal here - independent gain for left and right channels. Refactor!
-    std::unique_ptr<GainModule> mInputGain[2];
-    std::unique_ptr<MeterProbe> mInputMeterProbe[2];
-    std::unique_ptr<DelayModule> mDelay[2];
-    std::unique_ptr<DryWetModule> mDryWetMixer[2];
-    std::unique_ptr<GainModule> mOutputGain[2];
-    std::unique_ptr<MeterProbe> mOutputMeterProbe[2];
+    OwnedArray<GainModule> mInputGain;
+    OwnedArray<MeterProbe> mInputMeterProbe;
+    OwnedArray<DelayModule> mDelay;
+    OwnedArray<DryWetModule> mDryWetMixer;
+    OwnedArray<GainModule> mOutputGain;
+    OwnedArray<MeterProbe> mOutputMeterProbe;
     
     // Parameter Values
     // TODO: Is there a better option than storing raw ptrs to parameter values?

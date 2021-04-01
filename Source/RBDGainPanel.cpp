@@ -38,12 +38,12 @@ GainPanel::GainPanel (ReallyBasicDelayAudioProcessor& processor,
     switch (parameterIndex)
     {
         case Parameter::InputGain:
-            numChannels = processor.getMainBusNumInputChannels();
+            numChannels = processor.getTotalNumInputChannels();
             meterStyle = MeterStyle::Normal;
             break;
 
         case Parameter::OutputGain:
-            numChannels = processor.getMainBusNumInputChannels();
+            numChannels = processor.getTotalNumOutputChannels();
             meterStyle = MeterStyle::Clipping;
             break;
 
