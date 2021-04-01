@@ -63,7 +63,8 @@ public:
     //==============================================================================
     MeterProbe* getInputMeterProbe (int channel) const;
     MeterProbe* getOutputMeterProbe (int channel) const;
-    
+
+    //==============================================================================
     // TODO: Should we return a reference instead here?
     PresetManager* getPresetManager() const { return mPresetManager.get(); }
 

@@ -170,6 +170,7 @@ bool ReallyBasicDelayAudioProcessor::isBusesLayoutSupported (const BusesLayout& 
         return false;
 
     // This checks if the input layout matches the output layout
+    // TODO: Allow not matching input and output layouts for mono->stereo operation
    #if ! JucePlugin_IsSynth
     if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
         return false;
