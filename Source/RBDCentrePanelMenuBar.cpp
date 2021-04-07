@@ -33,20 +33,23 @@ CentrePanelMenuBar::CentrePanelMenuBar (ReallyBasicDelayAudioProcessor& processo
     addAndMakeVisible (mFxTypeComboBox.get());
 
     // Set up Stereo Width Slider
-    mWidthSlider = std::make_unique<ParameterSlider> (mProcessor.parameters,
-                                                      Parameter::StereoWidth);
-    // TODO: Reposition the slider once custom graphics are introduced
-    bounds.setX (RBD::defaultLabelWidth + 11);
-    //const int sliderWidth = 200;
-    //bounds.setWidth (sliderWidth);
-    bounds.setTop (3);
-    bounds.setRight (getLocalBounds().getCentreX() + 10);
-    mWidthSlider->setBounds (bounds);
-    addAndMakeVisible (mWidthSlider.get());
+    if (mProcessor.getTotalNumOutputChannels() == 2)
+    {
+        mWidthSlider = std::make_unique<ParameterSlider> (mProcessor.parameters,
+                                                          Parameter::StereoWidth);
+        // TODO: Reposition the slider once custom graphics are introduced
+        bounds.setX (RBD::defaultLabelWidth + 11);
+        //const int sliderWidth = 200;
+        //bounds.setWidth (sliderWidth);
+        bounds.setTop (3);
+        bounds.setRight (getLocalBounds().getCentreX() + 10);
+        mWidthSlider->setBounds (bounds);
+        addAndMakeVisible (mWidthSlider.get());
 
-    // Set up Stereo Width Slider label
-    mWidthLabel = std::make_unique<SliderLabel> (mWidthSlider.get(), true);
-    addAndMakeVisible (mWidthLabel.get());
+        // Set up Stereo Width Slider label
+        mWidthLabel = std::make_unique<SliderLabel> (mWidthSlider.get(), true);
+        addAndMakeVisible (mWidthLabel.get());
+    }
 }
 
 CentrePanelMenuBar::~CentrePanelMenuBar()

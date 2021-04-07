@@ -406,13 +406,16 @@ void ReallyBasicDelayAudioProcessor::updateParameters()
     for (auto inputGain : mInputGain)
         inputGain->setState (mInputGainValue->load());
 
+    const float stereoWidth
+    = (getTotalNumOutputChannels() == 2) ? mStereoWidthValue->load() : 0.0f;
+
     for (int channel = 0; channel < mDelay.size(); ++channel)
         mDelay[channel]->setState (mDelayTimeValue->load(),
                                    mDelayFeedbackValue->load(),
                                    mFxTypeValue->load(),
                                    mModulationRateValue->load(),
                                    mModulationDepthValue->load(),
-                                   mStereoWidthValue->load(),
+                                   stereoWidth,
                                    (channel != 0));
 
     for (auto dryWetMixer : mDryWetMixer)
