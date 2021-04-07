@@ -3,7 +3,8 @@
 <JUCERPROJECT id="adi9B3" name="ReallyBasicDelay" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="1" displaySplashScreen="1" jucerFormatVersion="1"
               pluginFormats="buildAU,buildVST3" pluginVST3Category="Delay,Fx"
-              pluginCode="Rbd0" cppLanguageStandard="17">
+              pluginCode="Rbd2" cppLanguageStandard="17" pluginManufacturer="Weird Numbers"
+              pluginManufacturerCode="Wenu">
   <MAINGROUP id="xBPHQW" name="ReallyBasicDelay">
     <GROUP id="{5289F700-E4EF-5ABA-1C4B-03009BE23305}" name="Utilities">
       <FILE id="LGGGXw" name="RBDUtilities.h" compile="0" resource="0" file="Source/RBDUtilities.h"/>
