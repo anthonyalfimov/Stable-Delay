@@ -183,18 +183,14 @@ bool ReallyBasicDelayAudioProcessor::isBusesLayoutSupported (const BusesLayout& 
     juce::ignoreUnused (layouts);
     return true;
   #else
-    // This is the place where you check if the layout is supported.
-    // In this template code we only support mono or stereo.
+    // Support mono & stereo layout for output bus
     if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono()
      && layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
         return false;
 
-    // This checks if the input layout matches the output layout
-    // TODO: Allow not matching input and output layouts for mono->stereo operation
-   #if ! JucePlugin_IsSynth
-    if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
+    // Input bus should not have more channels than output bus
+    if (layouts.getMainOutputChannels() < layouts.getMainInputChannels())
         return false;
-   #endif
 
     return true;
   #endif
@@ -203,11 +199,12 @@ bool ReallyBasicDelayAudioProcessor::isBusesLayoutSupported (const BusesLayout& 
 
 void ReallyBasicDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    // Denormals are temporarily disabled when this object is created at the beginning of
-    // the process block and re-enabled when it's destroyed at the end of the process
-    // block. Therefore, anything that happens within the process block doesn't need
-    // to disable denormals - they won't be re-enabled until the end of the process
-    // block.
+    /* Denormals are temporarily disabled when this object is created at the
+       beginning of the process block and re-enabled when it's destroyed at the
+       end of the process block. Therefore, anything that happens within the
+       process block doesn't need to disable denormals - they won't be
+       re-enabled until the end of the process block.
+    */
     juce::ScopedNoDenormals noDenormals;
 
     // TODO: Update parameter values only when it's needed
@@ -222,37 +219,39 @@ void ReallyBasicDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
         cannot interrupt the processing and change the values in the middle
         of it. Is this correct?
     */
-
     updateParameters();
 
-    auto totalNumInputChannels  = getTotalNumInputChannels();
-    auto totalNumOutputChannels = getTotalNumOutputChannels();
+    const auto totalNumInputChannels  = getTotalNumInputChannels();
+    const auto totalNumOutputChannels = getTotalNumOutputChannels();
+    const auto numSamples = buffer.getNumSamples();
 
-    // In case we have more outputs than inputs, this code clears any output
-    // channels that didn't contain input data, (because these aren't
-    // guaranteed to be empty - they may contain garbage).
-    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-        buffer.clear (i, 0, buffer.getNumSamples());
-
+    // Processing for input channels:
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
-        // TODO: Should we ditch the read pointer for anything that writes data?
-        //  This should become more clear when we implement mono->stereo
-        //  channel configuration.
+        float* channelData = buffer.getWritePointer (channel);
 
-        const float* readChannelData = buffer.getReadPointer (channel);
-        float* writeChannelData = buffer.getWritePointer (channel);
-        const auto numSamples = buffer.getNumSamples();
+        mInputGain[channel]->process (channelData, channelData, numSamples);
+        mInputMeterProbe[channel]->process (channelData, channelData, numSamples);
+    }
 
-        mInputGain[channel]->process (readChannelData, writeChannelData, numSamples);
-        mInputMeterProbe[channel]->process (readChannelData, writeChannelData,
-                                            numSamples);
-        mDryWetMixer[channel]->pushDryBlock (readChannelData, numSamples);
-        mDelay[channel]->process (readChannelData, writeChannelData, numSamples);
-        mDryWetMixer[channel]->process (readChannelData, writeChannelData, numSamples);
-        mOutputGain[channel]->process (readChannelData, writeChannelData, numSamples);
-        mOutputMeterProbe[channel]->process (readChannelData, writeChannelData,
-                                             numSamples);
+    // If we have more output channels than input channels, copy data from the
+    //  first input channel to all extra output channels
+    for (int channel = totalNumInputChannels; channel < totalNumOutputChannels;
+         ++channel)
+    {
+        buffer.copyFrom (channel, 0, buffer, 0, 0, numSamples);
+    }
+
+    // Processing for output channels:
+    for (int channel = 0; channel < totalNumOutputChannels; ++channel)
+    {
+        float* channelData = buffer.getWritePointer (channel);
+
+        mDryWetMixer[channel]->pushDryBlock (channelData, numSamples);
+        mDelay[channel]->process (channelData, channelData, numSamples);
+        mDryWetMixer[channel]->process (channelData, channelData, numSamples);
+        mOutputGain[channel]->process (channelData, channelData, numSamples);
+        mOutputMeterProbe[channel]->process (channelData, channelData, numSamples);
     }
 }
 
