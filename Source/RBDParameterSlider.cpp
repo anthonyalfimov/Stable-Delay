@@ -14,15 +14,18 @@ ParameterSlider::ParameterSlider (AudioProcessorValueTreeState& stateToControl,
                                   Parameter::Index parameterIndex)
     : Slider (Parameter::Name[parameterIndex])
 {
+    jassert (stateToControl.getParameter (Parameter::ID[parameterIndex]) != nullptr);
+
     // Set up Slider style: horizontal slider
     setSliderStyle (SliderStyle::LinearHorizontal);
     setTextBoxStyle (Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
     setSliderSnapsToMousePosition (false);
-    auto parameter = stateToControl.getParameter (Parameter::ID[parameterIndex]);
-    jassert (parameter != nullptr);
 
-    if (parameter != nullptr)
+    if (auto parameter = stateToControl.getParameter (Parameter::ID[parameterIndex]);
+        parameter != nullptr)
+    {
         setTextValueSuffix (parameter->getLabel());
+    }
 
     // Set up attachment
     using SliderAttachment = AudioProcessorValueTreeState::SliderAttachment;

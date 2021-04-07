@@ -14,14 +14,17 @@ ParameterKnob::ParameterKnob (AudioProcessorValueTreeState& stateToControl,
                               Parameter::Index parameterIndex)
     : Slider (Parameter::Name[parameterIndex])
 {
+    jassert (stateToControl.getParameter (Parameter::ID[parameterIndex]) != nullptr);
+
     // Set up Slider style: rotary knob
     setSliderStyle (SliderStyle::RotaryHorizontalVerticalDrag);
     setTextBoxStyle (Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
-    auto parameter = stateToControl.getParameter (Parameter::ID[parameterIndex]);
-    jassert (parameter != nullptr);
 
-    if (parameter != nullptr)
+    if (auto parameter = stateToControl.getParameter (Parameter::ID[parameterIndex]);
+        parameter != nullptr)
+    {
         setTextValueSuffix (parameter->getLabel());
+    }
 
     // Set up attachment
     using SliderAttachment = AudioProcessorValueTreeState::SliderAttachment;
