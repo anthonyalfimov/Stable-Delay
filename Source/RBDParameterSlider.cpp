@@ -19,7 +19,10 @@ ParameterSlider::ParameterSlider (AudioProcessorValueTreeState& stateToControl,
     setTextBoxStyle (Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
     setSliderSnapsToMousePosition (false);
     auto parameter = stateToControl.getParameter (Parameter::ID[parameterIndex]);
-    setTextValueSuffix (parameter->getLabel());
+    jassert (parameter != nullptr);
+
+    if (parameter != nullptr)
+        setTextValueSuffix (parameter->getLabel());
 
     // Set up attachment
     using SliderAttachment = AudioProcessorValueTreeState::SliderAttachment;

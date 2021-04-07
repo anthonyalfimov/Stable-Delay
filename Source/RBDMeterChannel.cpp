@@ -14,9 +14,9 @@
 MeterChannel::MeterChannel (MeterProbe* meterProbe, int refreshRate)
     : mMeterProbe (meterProbe), mRefreshRate (refreshRate)
 {
-    // Wake up the meter probe
     jassert (mMeterProbe != nullptr);
-    mMeterProbe->setSuspended (false);
+    if (mMeterProbe != nullptr)
+        mMeterProbe->setSuspended (false);
 
     // Release smoothing is required for proper meter painting:
     //  check that the number of smoothing steps is not zero
@@ -34,13 +34,14 @@ MeterChannel::MeterChannel (MeterProbe* meterProbe, int refreshRate)
 MeterChannel::~MeterChannel()
 {
     // Suspend the meter probe
-    mMeterProbe->setSuspended (true);
+    if (mMeterProbe != nullptr)
+        mMeterProbe->setSuspended (true);
 }
 
 void MeterChannel::setStyle (MeterStyle newStyle)
 {
     mStyle = newStyle;
-    mShowClippingIndicator = false;
+    resetClippingIndicator();
 }
 
 void MeterChannel::resetClippingIndicator()
@@ -51,6 +52,9 @@ void MeterChannel::resetClippingIndicator()
 
 void MeterChannel::update()
 {
+    if (mMeterProbe == nullptr)
+        return;
+
     bool isSignalPreset = false;    // flag to check if significant signal detected
     bool isSmoothing = false;       // flag to check if levels are smoothing
 

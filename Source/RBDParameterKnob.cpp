@@ -18,7 +18,10 @@ ParameterKnob::ParameterKnob (AudioProcessorValueTreeState& stateToControl,
     setSliderStyle (SliderStyle::RotaryHorizontalVerticalDrag);
     setTextBoxStyle (Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
     auto parameter = stateToControl.getParameter (Parameter::ID[parameterIndex]);
-    setTextValueSuffix (parameter->getLabel());
+    jassert (parameter != nullptr);
+
+    if (parameter != nullptr)
+        setTextValueSuffix (parameter->getLabel());
 
     // Set up attachment
     using SliderAttachment = AudioProcessorValueTreeState::SliderAttachment;

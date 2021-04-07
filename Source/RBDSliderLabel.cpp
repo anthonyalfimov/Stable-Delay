@@ -11,9 +11,9 @@
 #include "RBDSliderLabel.h"
 
 SliderLabel::SliderLabel (Slider* ownerSlider, bool onLeft)
-    : isLeftOfOwner (onLeft)
+    : mOwnerSlider (ownerSlider), isLeftOfOwner (onLeft)
 {
-    mOwnerSlider = ownerSlider;
+    jassert (mOwnerSlider != nullptr);
     attachToComponent (mOwnerSlider, false);
 
     if (mOwnerSlider != nullptr)
