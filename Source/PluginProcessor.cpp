@@ -97,9 +97,7 @@ bool ReallyBasicDelayAudioProcessor::isMidiEffect() const
 
 double ReallyBasicDelayAudioProcessor::getTailLengthSeconds() const
 {
-    // Jules recommened to put a worst-case scenario const here, because
-    //  changing it dynamically could cause issues in some hosts
-    return 0.0;
+    return 4.0;
 }
 
 int ReallyBasicDelayAudioProcessor::getNumPrograms()
