@@ -31,7 +31,7 @@ PresetManager::~PresetManager()
     
 }
 
-void PresetManager::createXmlForPreset (XmlElement* outElement)
+void PresetManager::createXmlForPreset (XmlElement* outElement) const
 {
     // Note: we can't access mProcessor->parameters here because mProcessor is
     //  a base class pointer and current scope is not aware of

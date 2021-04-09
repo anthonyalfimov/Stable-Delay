@@ -15,8 +15,6 @@
 #include "RBDMeterProbe.h"
 #include "RBDPresetManager.h"
 
-#warning Check what methods and variables can be made const
-
 //==============================================================================
 /**
 */

@@ -31,7 +31,7 @@ public:
     PresetManager (AudioProcessor& processor);
     ~PresetManager();
     
-    void createXmlForPreset (XmlElement* outElement);
+    void createXmlForPreset (XmlElement* outElement) const;
     void loadPresetFromXml (XmlElement* inElement);
     
     int getNumberOfPresets() const;
