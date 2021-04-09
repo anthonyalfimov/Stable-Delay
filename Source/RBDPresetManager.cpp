@@ -52,7 +52,7 @@ void PresetManager::createXmlForPreset (XmlElement* outElement)
         
         // Handle failed downcast
         if (parameterWithID == nullptr)
-            break;
+            continue;
 
         // MARK: getValue() returns a 0to1 range
         outElement->setAttribute (parameterWithID->paramID,
@@ -95,7 +95,7 @@ void PresetManager::loadPresetFromXml (XmlElement* inElement)
             
             // Handle failed downcast
             if (parameterWithID == nullptr)
-                break;
+                continue;
 
             // MARK: setValueNotifyingHost() expects 0to1 range
             if (name == parameterWithID->paramID)
