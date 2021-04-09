@@ -82,7 +82,7 @@ namespace Parameter
     inline const NormalisableRange<float> Range[NumParameters]
     {
         {-24.0f, 24.0f, 0.1f, 0.6f, true}, // Input Gain
-        createSkewedNormalisableRange (1.0f, RBD::maxDelayTimeInMs, 0.0f, 200.0f), // Time
+        createSkewedNormalisableRange (1.0f, RBD::maxDelayTimeInMs, 0.0f, 200.0f),// Time
         createSkewedNormalisableRange (0.0f, 120.0f, 0.0f, 50.0f),// Feedback
         {0.0f, 100.0f}, // Dry Wet
         {0.0f, 2.0f, 1.0f}, // Type

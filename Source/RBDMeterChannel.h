@@ -75,7 +75,7 @@ private:
     
     // Note: remove "static" if input and output meter have different or
     //  adjustable ranges
-    inline static const float meterReleaseTime = 0.2f;
+    inline static const float meterReleaseTime = 0.2f; // seconds
 
     //==========================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MeterChannel)

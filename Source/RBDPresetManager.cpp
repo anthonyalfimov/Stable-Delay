@@ -54,7 +54,7 @@ void PresetManager::createXmlForPreset (XmlElement* outElement) const
         if (parameterWithID == nullptr)
             continue;
 
-        // MARK: getValue() returns a 0to1 range
+        // NB: getValue() returns a 0to1 range
         outElement->setAttribute (parameterWithID->paramID,
                                   parameterWithID->getValue());
     }
@@ -97,7 +97,7 @@ void PresetManager::loadPresetFromXml (XmlElement* inElement)
             if (parameterWithID == nullptr)
                 continue;
 
-            // MARK: setValueNotifyingHost() expects 0to1 range
+            // NB: setValueNotifyingHost() expects 0to1 range
             if (name == parameterWithID->paramID)
                 parameterWithID->setValueNotifyingHost (value);
         }
