@@ -39,7 +39,7 @@ GainPanel::GainPanel (ReallyBasicDelayAudioProcessor& processor,
     {
         case Parameter::InputGain:
             numChannels = processor.getTotalNumInputChannels();
-            meterStyle = MeterStyle::Normal;
+            meterStyle = MeterStyle::Saturation;
             break;
 
         case Parameter::OutputGain:

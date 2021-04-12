@@ -12,6 +12,11 @@
 
 #include "RBDDspModule.h"
 
+// TODO: Consider templating the Saturation Module class
+//  If we don't need to switch the saturation curve during runtime, we can
+//  template this class so that instantiations are created only for curves
+//  we use. This will avoid runtime checks of the curve type.
+
 enum class SaturationCurve
 {
     /**

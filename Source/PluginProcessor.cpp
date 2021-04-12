@@ -143,6 +143,12 @@ void ReallyBasicDelayAudioProcessor::prepareToPlay (double sampleRate, int sampl
     for (auto dryWetMixer : mDryWetMixer)
         dryWetMixer->prepare (sampleRate, samplesPerBlock);
 
+    for (auto outputClipper : mOutputClipper)
+    {
+        outputClipper->setState (SaturationCurve::gamma);
+        outputClipper->prepare (sampleRate, samplesPerBlock);
+    }
+
     for (auto outputGain : mOutputGain)
         outputGain->prepare (sampleRate, samplesPerBlock);
 
@@ -166,6 +172,9 @@ void ReallyBasicDelayAudioProcessor::releaseResources()
 
     for (auto dryWetMixer : mDryWetMixer)
         dryWetMixer->reset();
+
+    for (auto outputClipper : mOutputClipper)
+        outputClipper->reset();
 
     for (auto outputGain : mOutputGain)
         outputGain->reset();
@@ -248,6 +257,7 @@ void ReallyBasicDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
         mDryWetMixer[channel]->pushDryBlock (channelData, numSamples);
         mDelay[channel]->process (channelData, channelData, numSamples);
         mDryWetMixer[channel]->process (channelData, channelData, numSamples);
+        mOutputClipper[channel]->process(channelData, channelData, numSamples);
         mOutputGain[channel]->process (channelData, channelData, numSamples);
         mOutputMeterProbe[channel]->process (channelData, channelData, numSamples);
     }
@@ -362,6 +372,7 @@ void ReallyBasicDelayAudioProcessor::initialiseDSP()
     {
         mDelay.add (std::make_unique<DelayModule>());
         mDryWetMixer.add (std::make_unique<DryWetModule>());
+        mOutputClipper.add (std::make_unique<SaturationModule>());
         mOutputGain.add (std::make_unique<GainModule>());
         mOutputMeterProbe.add (std::make_unique<MeterProbe>());
     }

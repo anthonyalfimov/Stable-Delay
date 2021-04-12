@@ -13,6 +13,7 @@
 #include "RBDDelayModule.h"
 #include "RBDDryWetModule.h"
 #include "RBDMeterProbe.h"
+#include "RBDSaturationModule.h"
 #include "RBDPresetManager.h"
 
 //==============================================================================
@@ -83,6 +84,7 @@ private:
     OwnedArray<MeterProbe> mInputMeterProbe;
     OwnedArray<DelayModule> mDelay;
     OwnedArray<DryWetModule> mDryWetMixer;
+    OwnedArray<SaturationModule> mOutputClipper;
     OwnedArray<GainModule> mOutputGain;
     OwnedArray<MeterProbe> mOutputMeterProbe;
     

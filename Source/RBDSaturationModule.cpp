@@ -29,17 +29,17 @@ void SaturationModule::process (const float* inAudio, float* outAudio,
     {
         case SaturationCurve::alpha:
             for (int i = 0; i < numSamplesToRender; ++i)
-            outAudio[i] = saturateAlpha (inAudio[i]);
+                outAudio[i] = saturateAlpha (inAudio[i]);
             break;
 
         case SaturationCurve::beta:
             for (int i = 0; i < numSamplesToRender; ++i)
-            outAudio[i] = saturateBeta (inAudio[i]);
+                outAudio[i] = saturateBeta (inAudio[i]);
             break;
 
         case SaturationCurve::gamma:
             for (int i = 0; i < numSamplesToRender; ++i)
-            outAudio[i] = saturateGamma (inAudio[i]);
+                outAudio[i] = saturateGamma (inAudio[i]);
             break;
 
         default:
