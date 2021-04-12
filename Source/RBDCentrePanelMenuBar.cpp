@@ -32,23 +32,24 @@ CentrePanelMenuBar::CentrePanelMenuBar (ReallyBasicDelayAudioProcessor& processo
     mFxTypeComboBox->setBounds (bounds);
     addAndMakeVisible (mFxTypeComboBox.get());
 
-    // Set up Stereo Width Slider
+    // Set up Stereo Spread Slider
     if (mProcessor.getTotalNumOutputChannels() == 2)
     {
-        mWidthSlider = std::make_unique<ParameterSlider> (mProcessor.parameters,
-                                                          Parameter::StereoWidth);
+        mSpreadSlider = std::make_unique<ParameterSlider> (mProcessor.parameters,
+                                                           Parameter::StereoSpread);
+
         // TODO: Reposition the slider once custom graphics are introduced
         bounds.setX (RBD::defaultLabelWidth + 11);
         //const int sliderWidth = 200;
         //bounds.setWidth (sliderWidth);
         bounds.setTop (3);
         bounds.setRight (getLocalBounds().getCentreX() + 10);
-        mWidthSlider->setBounds (bounds);
-        addAndMakeVisible (mWidthSlider.get());
+        mSpreadSlider->setBounds (bounds);
+        addAndMakeVisible (mSpreadSlider.get());
 
-        // Set up Stereo Width Slider label
-        mWidthLabel = std::make_unique<SliderLabel> (mWidthSlider.get(), true);
-        addAndMakeVisible (mWidthLabel.get());
+        // Set up Stereo Spread Slider label
+        mSpreadLabel = std::make_unique<SliderLabel> (mSpreadSlider.get(), true);
+        addAndMakeVisible (mSpreadLabel.get());
     }
 }
 

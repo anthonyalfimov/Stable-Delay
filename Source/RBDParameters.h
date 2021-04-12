@@ -47,7 +47,7 @@ namespace Parameter
         OutputGain,
         ModulationRate,
         ModulationDepth,
-        StereoWidth,
+        StereoSpread,
         NumParameters
     };
 
@@ -63,7 +63,7 @@ namespace Parameter
         "OutputGain",
         "ModulationRate",
         "ModulationDepth",
-        "StereoWidth"
+        "StereoSpread"
     };
 
     inline const String Name[NumParameters]
@@ -76,7 +76,7 @@ namespace Parameter
         "Output Gain",
         "Rate",
         "Depth",
-        "Width"
+        "Spread"
     };
 
     inline const NormalisableRange<float> Range[NumParameters]
@@ -89,7 +89,7 @@ namespace Parameter
         {-24.0f, 24.0f, 0.1f, 0.6f, true}, // Output Gain
         createSkewedNormalisableRange (0.01f, 10.0f, 0.0f, 2.0f), // Modulation Rate
         {0.0f, 100.0f}, // Modulation Depth
-        createSkewedNormalisableRange (0.0f, 100.0f, 0.0f, 30.0f) // Stereo Width
+        createSkewedNormalisableRange (0.0f, 100.0f, 0.0f, 30.0f) // Stereo Spread
     };
 
     inline const float DefaultValue[NumParameters]
@@ -102,7 +102,7 @@ namespace Parameter
         0.0f,   // Output Gain
         1.0f,   // Modulation Rate
         50.0f,  // Modulation Depth
-        30.0f   // Stereo Width
+        30.0f   // Stereo Spread
     };
 
     inline const String Label[NumParameters]
@@ -115,7 +115,7 @@ namespace Parameter
         " dB",  // Output Gain
         " Hz",  // Modulation Rate
         " %",   // Modulation Depth
-        " %"    // Stereo Width
+        " %"    // Stereo Spread
     };
 
     inline const auto stringFromFxTypeValue = [] (float value, int /*maxStringLength*/)
@@ -138,6 +138,6 @@ namespace Parameter
         nullptr,                    // Output Gain
         showDecimalPlaces<2>,       // Modulation Rate
         showDecimalPlaces<0>,       // Modulation Depth
-        showDecimalPlaceBelow<10>,  // Stereo Width
+        showDecimalPlaceBelow<10>,  // Stereo Spread
     };
 } // end namespace Parameter

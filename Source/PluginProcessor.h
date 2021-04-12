@@ -98,7 +98,7 @@ private:
     std::atomic<float>* mOutputGainValue = nullptr;
     std::atomic<float>* mModulationRateValue = nullptr;
     std::atomic<float>* mModulationDepthValue = nullptr;
-    std::atomic<float>* mStereoWidthValue = nullptr;
+    std::atomic<float>* mStereoSpreadValue = nullptr;
     
     std::unique_ptr<PresetManager> mPresetManager;
     
