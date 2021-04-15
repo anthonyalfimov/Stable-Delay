@@ -91,6 +91,7 @@ void MeterChannel::update()
 
     // Retrieve RMS level value
     const float rmsLevel = mMeterProbe->getRmsLevel()->load();
+    mMeterProbe->resetRmsLevel();   // reset RMS level in case plugin is bypassed
     float rmsLevelInDb = Decibels::gainToDecibels (rmsLevel);
 
     // Update smoothed RMS level value

@@ -33,11 +33,31 @@ public:
         need real-time peak data. This ensures that the meter will not miss
         peaks that occur between meter repaints.
 
-        If you need to retrieve the highest peak value since the start of
-        playback, you should not call resetPeakLevel().
+        If you need to retrieve the highest peak value since plugin initialisation,
+        you should not call resetPeakLevel().
     */
     const std::atomic<float>* getPeakLevel() const { return &mPeakLevel; }
+
+    /** Resets the stored maximum peak level to 0 (gain units).
+
+        @Discussion
+        If you want getPeakLevel() to return the maximum peak level since last
+        retrieval, you need to call resetPeakLevel() after every retrieval.
+        Without resetting the peak level, getPeakLevel() returns the highest
+        peak since plugin initialisation.
+    */
     void resetPeakLevel() { mPeakLevel.store (0.0f); }
+
+    /** Resets the stored RMS level to 0 (gain units).
+
+        @Discussion
+        Unlike peak level, RMS doesn't have to be reset after every retrieval
+        for real-time measurements. However, you need to call this after
+        calling getRmsLevel() if you want the RMS level reading to decay to 0
+        when processBlock is not being called (e.g. when plugin is bypassed
+        by the host).
+    */
+    void resetRmsLevel() { mRmsLevel.store (0.0f); }
 
     void setSuspended (bool isSuspended) { mIsSuspended.store (isSuspended); }
 
