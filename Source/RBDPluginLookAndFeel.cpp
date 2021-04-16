@@ -12,13 +12,16 @@
 
 PluginLookAndFeel::PluginLookAndFeel()
 {
-    // TODO: What's the difference from loading the image from file vs embedding it?
-    // TODO: Kadenze image file size was smaller. Does it matter?
-    //  Should we compress it more?
+    // TODO: What's the difference b/w loading the image from file and embedding it?
+    
+    // TODO: Consider reducing image size to reduce memory footprint
+    //  Our image assets are ~2.4 Mb
+    //  - Use a single image of the knob and a strip of "marks"
+    //  - Use a single image of the knob and a vector procedural mark
 
     // Store image assets
-    mKnobImage = ImageCache::getFromMemory (BinaryData::RBD_Knob_80_png,
-                                            BinaryData::RBD_Knob_80_pngSize);
+    mKnobImage = ImageCache::getFromMemory (BinaryData::RBD_Knob_80_2x_png,
+                                            BinaryData::RBD_Knob_80_2x_pngSize);
 
     // Label colours
     setColour (Label::backgroundColourId, RBD::noColour);
