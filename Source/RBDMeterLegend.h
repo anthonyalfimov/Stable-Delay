@@ -12,6 +12,8 @@
 
 #include <JuceHeader.h>
 
+// TODO: Consider using setBufferedToImage() since legend doesn't change
+
 class MeterLabel  : public Component
 {
 public:

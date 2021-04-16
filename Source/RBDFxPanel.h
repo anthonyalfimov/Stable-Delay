@@ -32,7 +32,6 @@ private:
     
     // Use an array of pointers to allow dynamically changing number of knobs
     OwnedArray<ParameterKnob> mKnobs;
-    OwnedArray<SliderLabel> mLabels;
 
     Label mFxTypeLabel { "fxType", "ERROR" };
     Label mBuildVersionLabel { "build" };

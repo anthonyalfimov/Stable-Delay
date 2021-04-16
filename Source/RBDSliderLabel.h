@@ -14,7 +14,7 @@
 #include "RBDInterfaceConstants.h"
 
 /**
-    A component that displays Slider name or Slider value, is the value is
+    A component that displays Slider name or Slider value, if the value is
     being changed. Label background becomes highlighted when the mouse is over
     the parent Slider, but not the Label itself.
 

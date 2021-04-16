@@ -79,17 +79,32 @@ namespace Parameter
         "Spread"
     };
 
+    // TODO: DRY generation of ranges and ticks from min, max and mid values
+    //  Ranges and ticks are pretty WET, we can generate these based on
+    //  min and max value and the mid-point value. It should be possible to
+    //  not specify the mid value, in which case it's calculated from min and
+    //  max
+
     inline const NormalisableRange<float> Range[NumParameters]
     {
-        {-24.0f, 24.0f, 0.1f, 0.6f, true}, // Input Gain
-        createSkewedNormalisableRange (1.0f, RBD::maxDelayTimeInMs, 0.0f, 200.0f),// Time
-        createSkewedNormalisableRange (0.0f, 120.0f, 0.0f, 50.0f),// Feedback
-        {0.0f, 100.0f}, // Dry Wet
-        {0.0f, 2.0f, 1.0f}, // Type
-        {-24.0f, 24.0f, 0.1f, 0.6f, true}, // Output Gain
-        createSkewedNormalisableRange (0.01f, 10.0f, 0.0f, 2.0f), // Modulation Rate
-        {0.0f, 100.0f}, // Modulation Depth
-        createSkewedNormalisableRange (0.0f, 100.0f, 0.0f, 30.0f) // Stereo Spread
+        // Input Gain:
+        {-24.0f, 24.0f, 0.1f, 0.6f, true},
+        // Time:
+        createSkewedNormalisableRange (1.0f, RBD::maxDelayTimeInMs, 0.0f, 200.0f),
+        // Feedback:
+        createSkewedNormalisableRange (0.0f, 120.0f, 0.0f, 50.0f),
+        // Dry Wet Mix:
+        {0.0f, 100.0f},
+        // Type:
+        {0.0f, 2.0f, 1.0f},
+        // Output Gain:
+        {-24.0f, 24.0f, 0.1f, 0.6f, true},
+        // Modulation Rate:
+        createSkewedNormalisableRange (0.01f, 10.0f, 0.0f, 2.0f),
+        // Modulation Depth:
+        {0.0f, 100.0f},
+        // Stereo Spread:
+        createSkewedNormalisableRange (0.0f, 100.0f, 0.0f, 30.0f)
     };
 
     inline const float DefaultValue[NumParameters]
@@ -139,5 +154,51 @@ namespace Parameter
         showDecimalPlaces<2>,       // Modulation Rate
         showDecimalPlaces<0>,       // Modulation Depth
         showDecimalPlaceBelow<10>,  // Stereo Spread
+    };
+
+    inline const std::vector<float> majorTicks[NumParameters]
+    {
+        // Input Gain:
+        {-24.0f, 24.0f, 0.0f},
+        // Time:
+        {1.0f, RBD::maxDelayTimeInMs, 200.0f},
+        // Feedback:
+        {0.0f, 120.0f, 50.0f},
+        // Dry Wet:
+        {0.0f, 100.0f, 50.0f},
+        // Type:
+        {},
+        // Output Gain:
+        {-24.0f, 24.0f, 0.0f},
+        // Modulation Rate:
+        {0.01f, 10.0f, 2.0f},
+        // Modulation Depth:
+        {0.0f, 100.0f, 50.0f},
+        // Stereo Spread:
+        {}
+    };
+
+    // MARK: THIS IS REALLY WET. SHAME
+
+    inline const std::vector<float> minorTicks[NumParameters]
+    {
+        // Input Gain:
+        {1, -1, 3, -3, 6, -6, 12, -12},
+        // Time:
+        {10, 100, 500},
+        // Feedback:
+        {10, 20, 30, 40, 60, 70, 80, 90, 100, 110},
+        // Dry Wet:
+        {10, 20, 30, 40, 60, 70, 80, 90},
+        // Type:
+        {},
+        // Output Gain:
+        {1, -1, 3, -3, 6, -6, 12, -12},
+        // Modulation Rate:
+        {},
+        // Modulation Depth:
+        {10, 20, 30, 40, 60, 70, 80, 90},
+        // Stereo Spread:
+        {}
     };
 } // end namespace Parameter

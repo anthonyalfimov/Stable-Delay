@@ -61,56 +61,45 @@ FxPanel::~FxPanel()
 void FxPanel::setFxPanelStyle (FxType::Index typeIndex)
 {
     mTypeIndex = typeIndex;
-    mLabels.clear();
     mKnobs.clear();
 
     // Add controls based on the FxType
     switch (mTypeIndex)
     {
         case FxType::Delay:
-            mKnobs.add (std::make_unique<ParameterKnob>
-                                          (mProcessor.parameters,
-                                           Parameter::DelayTime));
+            mKnobs.add (std::make_unique<ParameterKnob> (mProcessor.parameters,
+                                                         Parameter::DelayTime));
 
-            mKnobs.add (std::make_unique<ParameterKnob>
-                                          (mProcessor.parameters,
-                                           Parameter::DelayFeedback));
+            mKnobs.add (std::make_unique<ParameterKnob> (mProcessor.parameters,
+                                                         Parameter::DelayFeedback));
             
-            mKnobs.add (std::make_unique<ParameterKnob>
-                                          (mProcessor.parameters,
-                                           Parameter::DryWet));
+            mKnobs.add (std::make_unique<ParameterKnob> (mProcessor.parameters,
+                                                         Parameter::DryWet));
             break;
 
         case FxType::Chorus:
-            mKnobs.add (std::make_unique<ParameterKnob>
-                                          (mProcessor.parameters,
-                                           Parameter::ModulationRate));
+            mKnobs.add (std::make_unique<ParameterKnob> (mProcessor.parameters,
+                                                         Parameter::ModulationRate));
             
-            mKnobs.add (std::make_unique<ParameterKnob>
-                                          (mProcessor.parameters,
-                                           Parameter::ModulationDepth));
+            mKnobs.add (std::make_unique<ParameterKnob> (mProcessor.parameters,
+                                                         Parameter::ModulationDepth));
             
-            mKnobs.add (std::make_unique<ParameterKnob>
-                                          (mProcessor.parameters,
-                                           Parameter::DryWet));
+            mKnobs.add (std::make_unique<ParameterKnob> (mProcessor.parameters,
+                                                         Parameter::DryWet));
             break;
             
         case FxType::Flanger:
-            mKnobs.add (std::make_unique<ParameterKnob>
-                                          (mProcessor.parameters,
-                                           Parameter::ModulationRate));
+            mKnobs.add (std::make_unique<ParameterKnob> (mProcessor.parameters,
+                                                         Parameter::ModulationRate));
             
-            mKnobs.add (std::make_unique<ParameterKnob>
-                                          (mProcessor.parameters,
-                                           Parameter::ModulationDepth));
+            mKnobs.add (std::make_unique<ParameterKnob> (mProcessor.parameters,
+                                                         Parameter::ModulationDepth));
             
-            mKnobs.add (std::make_unique<ParameterKnob>
-                                          (mProcessor.parameters,
-                                           Parameter::DelayFeedback));
+            mKnobs.add (std::make_unique<ParameterKnob> (mProcessor.parameters,
+                                                         Parameter::DelayFeedback));
             
-            mKnobs.add (std::make_unique<ParameterKnob>
-                                          (mProcessor.parameters,
-                                           Parameter::DryWet));
+            mKnobs.add (std::make_unique<ParameterKnob> (mProcessor.parameters,
+                                                         Parameter::DryWet));
             break;
             
         default:
@@ -119,7 +108,6 @@ void FxPanel::setFxPanelStyle (FxType::Index typeIndex)
             break;
     }
     
-    const int knobSize = RBD::defaultKnobSize;
     const float knobPadding = 0.5f;
     const float knobStep = 1.0f + knobPadding;
     
@@ -130,14 +118,16 @@ void FxPanel::setFxPanelStyle (FxType::Index typeIndex)
     //  so it's ok to work with copies
     for (auto knob : mKnobs)
     {
-        knob->setBounds (getLocalBounds()
-                           .withSizeKeepingCentre (knobSize, knobSize)
-                           .translated (knobOffset * knobSize, 15.0f));
+        auto bounds = getLocalBounds()
+                            .withSizeKeepingCentre (RBD::knobSize, RBD::knobSize)
+                            .translated (knobOffset * RBD::knobSize, 15.0f);
+        bounds.setHeight (RBD::knobSize + RBD::labelHeight);
+
+        knob->setBounds (bounds);
         
         knobOffset += knobStep;     // update offset for the next knob
         
         addAndMakeVisible (knob);
-        addAndMakeVisible (mLabels.add (std::make_unique<SliderLabel> (knob)));
     }
 
     setName (FxType::Label[mTypeIndex]);    // update panel name to reflect FX type
@@ -147,6 +137,7 @@ void FxPanel::setFxPanelStyle (FxType::Index typeIndex)
 
 void FxPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
 {
-    const auto newTypeIndex = static_cast<FxType::Index> (comboBoxThatHasChanged->getSelectedItemIndex());
+    const auto newTypeIndex
+    = static_cast<FxType::Index> (comboBoxThatHasChanged->getSelectedItemIndex());
     setFxPanelStyle (newTypeIndex);
 }

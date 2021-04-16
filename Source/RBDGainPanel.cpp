@@ -22,14 +22,12 @@ GainPanel::GainPanel (ReallyBasicDelayAudioProcessor& processor,
     mKnob = std::make_unique<ParameterKnob> (mProcessor.parameters,
                                              parameterIndex);
 
-    const int knobSize = RBD::defaultKnobSize;
-    mKnob->setBounds (getLocalBounds().withSizeKeepingCentre (knobSize, knobSize)
-                                      .withY (20));
+    const int knobWidth = RBD::knobSize;
+    const int knobHeight = RBD::knobSize + RBD::labelHeight;
+    const auto knobBounds
+    = getLocalBounds().withSizeKeepingCentre (knobWidth, knobHeight).withY (20);
+    mKnob->setBounds (knobBounds);
     addAndMakeVisible (mKnob.get());
-
-    // Set up Gain knob label
-    mLabel = std::make_unique<SliderLabel> (mKnob.get());
-    addAndMakeVisible (mLabel.get());
 
     // Set up Level Meters
     int numChannels = 0;
@@ -80,7 +78,7 @@ GainPanel::GainPanel (ReallyBasicDelayAudioProcessor& processor,
     }
 
     const int meterGap = 20;
-    meterBounds.setTop (mKnob->getBottom() + RBD::labelHeight + meterGap);
+    meterBounds.setTop (mKnob->getBottom() + meterGap);
     meterBounds.setBottom (getHeight() - meterGap);
     // Add padding to accomodate clipping indicators
     meterBounds.expand (Meter::padding, Meter::padding);

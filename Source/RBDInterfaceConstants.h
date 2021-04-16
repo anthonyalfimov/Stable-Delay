@@ -49,11 +49,11 @@ namespace RBD
     inline constexpr int meterLegendWidth = meterChannelWidth + 2;
 
     // Control sizes
-    inline constexpr int defaultKnobSize = 80;
+    inline constexpr int knobSize = 80;
 
     // Label sizes
     inline constexpr int labelHeight = 20;
-    inline constexpr int defaultLabelWidth = defaultKnobSize;
+    inline constexpr int defaultLabelWidth = knobSize;
     
     // Standard rounded corner radius
     inline constexpr float defaultCornerSize = 3.0f;
@@ -69,6 +69,7 @@ namespace RBD
     inline const Colour controlHoverColour = Colour (0, 0, 0).withAlpha (0.8f);
     inline const Colour controlActiveColour = Colour (105, 105, 105).withAlpha (0.3f);
     inline const Colour controlOutlineColour = noColour;
+    inline const Colour sliderTickColour = Colour (242, 242, 242);
     inline const Colour popupBgColour = Colour (40, 40, 40);
     inline const Colour popupItemBgColour = Colour (0, 0, 0).withAlpha (0.6f);
     inline const Colour meterBgColour = Colour (0, 0, 0).withAlpha (0.8f);

@@ -13,7 +13,6 @@
 #include "RBDInterfacePanel.h"
 #include "RBDParameters.h"
 #include "RBDParameterKnob.h"
-#include "RBDSliderLabel.h"
 #include "RBDMeter.h"
 
 class GainPanel  : public InterfacePanel
@@ -25,7 +24,6 @@ public:
     
 private:
     std::unique_ptr<ParameterKnob> mKnob;
-    std::unique_ptr<SliderLabel> mLabel;
     std::unique_ptr<Meter> mMeter;
 
     //==========================================================================
