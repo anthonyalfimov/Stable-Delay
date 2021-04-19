@@ -88,7 +88,7 @@ namespace Parameter
     inline const NormalisableRange<float> Range[NumParameters]
     {
         // Input Gain:
-        {-24.0f, 24.0f, 0.1f, 0.6f, true},
+        {-24.0f, 24.0f, 0.1f, 0.55f, true},
         // Time:
         createSkewedNormalisableRange (1.0f, RBD::maxDelayTimeInMs, 0.0f, 200.0f),
         // Feedback:
@@ -98,7 +98,7 @@ namespace Parameter
         // Type:
         {0.0f, 2.0f, 1.0f},
         // Output Gain:
-        {-24.0f, 24.0f, 0.1f, 0.6f, true},
+        {-24.0f, 24.0f, 0.1f, 0.55f, true},
         // Modulation Rate:
         createSkewedNormalisableRange (0.01f, 10.0f, 0.0f, 2.0f),
         // Modulation Depth:
@@ -161,7 +161,7 @@ namespace Parameter
         // Input Gain:
         {-24.0f, 24.0f, 0.0f},
         // Time:
-        {1.0f, RBD::maxDelayTimeInMs, 200.0f},
+        {1.0f, RBD::maxDelayTimeInMs, 10.0f, 100.0f},
         // Feedback:
         {0.0f, 120.0f, 50.0f},
         // Dry Wet:
@@ -171,7 +171,7 @@ namespace Parameter
         // Output Gain:
         {-24.0f, 24.0f, 0.0f},
         // Modulation Rate:
-        {0.01f, 10.0f, 2.0f},
+        {0.01f, 10.0f, 0.1f, 1.0f},
         // Modulation Depth:
         {0.0f, 100.0f, 50.0f},
         // Stereo Spread:
@@ -183,9 +183,9 @@ namespace Parameter
     inline const std::vector<float> minorTicks[NumParameters]
     {
         // Input Gain:
-        {1, -1, 3, -3, 6, -6, 12, -12},
+        {1, 4, 8, 12, 16, 20, -1, -4, -8, -12, -16, -20},
         // Time:
-        {10, 100, 500},
+        {3, 30, 60, 200, 300, 400, 500, 600, 700, 800, 900},
         // Feedback:
         {10, 20, 30, 40, 60, 70, 80, 90, 100, 110},
         // Dry Wet:
@@ -193,9 +193,9 @@ namespace Parameter
         // Type:
         {},
         // Output Gain:
-        {1, -1, 3, -3, 6, -6, 12, -12},
+        {1, 4, 8, 12, 16, 20, -1, -4, -8, -12, -16, -20},
         // Modulation Rate:
-        {},
+        {0.03f, 0.3f, 0.6f, 2, 3, 4, 5, 6, 7, 8, 9},
         // Modulation Depth:
         {10, 20, 30, 40, 60, 70, 80, 90},
         // Stereo Spread:
