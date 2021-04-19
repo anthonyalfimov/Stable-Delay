@@ -51,6 +51,7 @@ namespace RBD
 
     // Control sizes
     inline constexpr int knobSize = 80;
+    inline const Point<float> tickShadowOffset (0.7f, 0.7f);
 
     // Label sizes
     inline constexpr int labelHeight = 20;
@@ -80,6 +81,7 @@ namespace RBD
     inline const Colour meterLegendColour = textNormalColour;
     inline const Colour meterClippingColour = Colour (0xFFDF4107);
     inline const Colour meterSaturationColour = Colour (0xFFE39105);
+    inline const Colour shadowColour = Colour (0, 0, 0).withAlpha (0.25f);
     // Temporary Slider colours
     inline const Colour sliderTrackColour = Colour (35, 35, 35);
 

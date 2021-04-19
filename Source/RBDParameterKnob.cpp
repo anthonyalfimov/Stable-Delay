@@ -29,40 +29,59 @@ KnobScale::KnobScale (Slider& parentSlider, Parameter::Index parameterIndex)
     const auto [minAngle, maxAngle, other] = parentSlider.getRotaryParameters();
     ignoreUnused (other);
 
-    for (auto majorTickValue : majorTickValues)
     {
-        const float value0to1 = range.convertTo0to1 (majorTickValue);
-        const float angle = jmap (value0to1, minAngle, maxAngle);
+        Path minorTicks;
 
-        mMajorTicks.startNewSubPath (origin.getPointOnCircumference (tickStart,
-                                                                     angle));
-        mMajorTicks.lineTo (origin.getPointOnCircumference (majorTickEnd,
-                                                            angle));
+        for (auto minorTickValue : minorTickValues)
+        {
+            const float value0to1 = range.convertTo0to1 (minorTickValue);
+            const float angle = jmap (value0to1, minAngle, maxAngle);
+
+            Line tick (origin.getPointOnCircumference (tickStart, angle),
+                       origin.getPointOnCircumference (minorTickEnd, angle));
+
+            minorTicks.addLineSegment (tick, minorTickThickness);
+        }
+
+        mTicks.addPath (minorTicks
+                        .createPathWithRoundedCorners (minorTickThickness / 2.0f));
     }
 
-    for (auto minorTickValue : minorTickValues)
     {
-        const float value0to1 = range.convertTo0to1 (minorTickValue);
-        const float angle = jmap (value0to1, minAngle, maxAngle);
+        Path majorTicks;
 
-        mMinorTicks.startNewSubPath (origin.getPointOnCircumference (tickStart,
-                                                                     angle));
-        mMinorTicks.lineTo (origin.getPointOnCircumference (minorTickEnd,
-                                                            angle));
+        for (auto majorTickValue : majorTickValues)
+        {
+            const float value0to1 = range.convertTo0to1 (majorTickValue);
+            const float angle = jmap (value0to1, minAngle, maxAngle);
+
+            Line tick (origin.getPointOnCircumference (tickStart, angle),
+                       origin.getPointOnCircumference (majorTickEnd, angle));
+
+            majorTicks.addLineSegment (tick, majorTickThickness);
+        }
+
+        mTicks.addPath (majorTicks
+                        .createPathWithRoundedCorners (majorTickThickness / 2.0f));
     }
+
+    mTickShadow = mTicks;
+    mTickShadow.applyTransform (AffineTransform::translation (RBD::tickShadowOffset));
+    mTickShadow.addRectangle (mTickShadow.getBounds().expanded (2.0f));
+    mTickShadow.setUsingNonZeroWinding (false);
 }
 
 void KnobScale::paint (Graphics& g)
 {
     g.setColour (RBD::sliderTickColour);
+    g.fillPath (mTicks);
 
-    g.strokePath (mMajorTicks, PathStrokeType (majorTickThickness,
-                                               PathStrokeType::curved,
-                                               PathStrokeType::rounded));
+    // Reset the following changes to the graphics context at the end of the scope
+    Graphics::ScopedSaveState saveState (g);
+    g.reduceClipRegion (mTicks);  // set clip region to the knob mark
 
-    g.strokePath (mMinorTicks, PathStrokeType (minorTickThickness,
-                                               PathStrokeType::curved,
-                                               PathStrokeType::rounded));
+    g.setColour (RBD::shadowColour);
+    g.fillPath (mTickShadow);
 }
 
 //==============================================================================

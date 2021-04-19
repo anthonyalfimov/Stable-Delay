@@ -27,12 +27,12 @@ public:
     void paint (Graphics& g) override;
 
 private:
-    Path mMajorTicks;
-    Path mMinorTicks;
+    Path mTicks;
+    Path mTickShadow;
 
-    inline static const float tickStart = 29.6f;
+    inline static const float tickStart = 29.0f;
 
-    inline static const float majorTickEnd = 38.0f;
+    inline static const float majorTickEnd = 38.6f;
     inline static const float majorTickThickness = 1.8f;
 
     inline static const float minorTickEnd = majorTickEnd - 2.0f;

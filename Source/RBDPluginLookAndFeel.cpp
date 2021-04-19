@@ -203,20 +203,29 @@ void PluginLookAndFeel::drawRotarySlider (Graphics& g,
     const float angle = jmap (sliderPosProportional, rotaryStartAngle, rotaryEndAngle);
     const auto origin = bounds.getCentre();
 
+    // TODO: Test the performance of adding line segment and rounding its corners
+    //  If this is slow, look for alternatives: drawing a rounded rectangle,
+    //  creating the path object in the ctor and then applying a rotation
+    //  affine transformation to position it when drawing, etc.
     Path markPath;
-    markPath.startNewSubPath (origin.getPointOnCircumference (knobMarkStart + knobMarkThickness / 2,
-                                                              angle));
-    markPath.lineTo (origin.getPointOnCircumference (knobMarkEnd - knobMarkThickness / 2,
-                                                     angle));
+    markPath.addLineSegment ({ origin.getPointOnCircumference (knobMarkStart, angle),
+                               origin.getPointOnCircumference (knobMarkEnd, angle) },
+                             knobMarkThickness);
+    markPath = markPath.createPathWithRoundedCorners (knobMarkThickness / 2.0f);
 
     g.setColour (RBD::sliderTickColour);
-    g.strokePath (markPath, PathStrokeType (knobMarkThickness,
-                                            PathStrokeType::curved,
-                                            PathStrokeType::rounded));
+    g.fillPath (markPath);
 
+    // Reset the following changes to the graphics context at the end of the scope
+    Graphics::ScopedSaveState saveState (g);
+    g.reduceClipRegion (markPath);  // set clip region to the knob mark
 
-    
-
+    Path shadowPath (markPath);
+    shadowPath.applyTransform (AffineTransform::translation (RBD::tickShadowOffset));
+    shadowPath.addRectangle (shadowPath.getBounds().expanded (2.0f));
+    shadowPath.setUsingNonZeroWinding (false);
+    g.setColour (RBD::shadowColour);
+    g.fillPath (shadowPath);
 }
 
 
