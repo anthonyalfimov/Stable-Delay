@@ -186,26 +186,37 @@ void PluginLookAndFeel::drawComboBox (Graphics& g, int width, int height,
 void PluginLookAndFeel::drawRotarySlider (Graphics& g,
                                           int x, int y, int width, int height,
                                           float sliderPosProportional,
-                                          float /*rotaryStartAngle*/,
-                                          float /*rotaryEndAngle*/,
+                                          float rotaryStartAngle,
+                                          float rotaryEndAngle,
                                           Slider& /*slider*/)
 {
-    const int numFrames = mKnobImage.getHeight() / mKnobImage.getWidth();
-    const int frameIndex = static_cast<int> (std::ceil (sliderPosProportional * (numFrames - 1)));
 
+    // Draw raster knob image
     const int diameter = jmin (width, height);
-    auto bounds = Rectangle<int> (x, y, width, height).withSizeKeepingCentre (diameter, diameter);
+    auto bounds
+    = Rectangle<int> (x, y, width, height).withSizeKeepingCentre (diameter, diameter);
 
     g.setOpacity (1.0f);    // Make sure the image is drawn opaque
-    g.drawImage (mKnobImage,  // Image
-                 bounds.getX(), // Destination X
-                 bounds.getY(), // Destination Y
-                 bounds.getWidth(), // Destination width
-                 bounds.getHeight(),    // Destination height
-                 0, // Source X
-                 frameIndex * mKnobImage.getWidth(),  // Source Y
-                 mKnobImage.getWidth(),   // Source width
-                 mKnobImage.getWidth());  // Source height
+    g.drawImage (mKnobImage, bounds.toFloat());
+
+    // Draw knob mark
+    const float angle = jmap (sliderPosProportional, rotaryStartAngle, rotaryEndAngle);
+    const auto origin = bounds.getCentre();
+
+    Path markPath;
+    markPath.startNewSubPath (origin.getPointOnCircumference (knobMarkStart + knobMarkThickness / 2,
+                                                              angle));
+    markPath.lineTo (origin.getPointOnCircumference (knobMarkEnd - knobMarkThickness / 2,
+                                                     angle));
+
+    g.setColour (RBD::sliderTickColour);
+    g.strokePath (markPath, PathStrokeType (knobMarkThickness,
+                                            PathStrokeType::curved,
+                                            PathStrokeType::rounded));
+
+
+    
+
 }
 
 

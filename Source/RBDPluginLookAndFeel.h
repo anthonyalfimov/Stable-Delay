@@ -67,7 +67,13 @@ public:
                            float rotaryEndAngle, Slider& slider) override;
     
 private:
+//= SLIDERS ====================================================================
+
     // NB! Image object dynamically allocates memory for the image data,
     //  so we create it as a contained object, not a pointer!
     Image mKnobImage;
+
+    inline static const float knobMarkThickness = 2.3f;
+    inline static const float knobMarkStart = 7.0f;
+    inline static const float knobMarkEnd = 16.0f;
 };
