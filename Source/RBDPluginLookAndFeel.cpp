@@ -14,11 +14,6 @@ PluginLookAndFeel::PluginLookAndFeel()
 {
     // TODO: What's the difference b/w loading the image from file and embedding it?
     
-    // TODO: Consider reducing image size to reduce memory footprint
-    //  Our image assets are ~2.4 Mb
-    //  - Use a single image of the knob and a strip of "marks"
-    //  - Use a single image of the knob and a vector procedural mark
-
     // Store image assets
     mKnobImage = ImageCache::getFromMemory (BinaryData::RBD_Knob_80_2x_png,
                                             BinaryData::RBD_Knob_80_2x_pngSize);
@@ -133,7 +128,7 @@ void PluginLookAndFeel::drawPopupMenuItem (Graphics& g, const Rectangle<int>& ar
     g.setColour (textColour);
     g.setFont (RBD::mainFont);
 
-    // TODO: Check the bounds for the text - do they make sense?
+    // Offset the text
     bounds.setLeft (10);
     bounds.setY (1);
 
