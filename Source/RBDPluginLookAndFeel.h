@@ -13,9 +13,13 @@
 #include <JuceHeader.h>
 #include "RBDInterfaceConstants.h"
 
-// TODO: Move towards using the LookAndFeel facilities more
-//  E.g. when drawing a button, the text could be drawn using Label painting
-//  method. A lot of methods that we override have parameters that we don't use,
+// TODO: Use custom LookAndFeel class to handle all painting in the plugin
+//  Go beyond the already defined drawing methods of LookAndFeel_V4 and add
+//  new ones for custom component classes of the plugin like meters, etc.
+//  Copy the pattern that L&F classes use with standard JUCE components.
+//  When all painting is handled by L&F, the interface and colour constants
+//  should reside inside this class as well.
+//  A lot of paint methods that we override have parameters that we don't use,
 //  but, perhaps, should.
 
 class PluginLookAndFeel  : public LookAndFeel_V4

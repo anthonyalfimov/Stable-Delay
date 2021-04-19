@@ -12,10 +12,6 @@
 
 #include <JuceHeader.h>
 
-// TODO: Do we need global constants, or can we place them as members somewhere?
-// The benefit of global constants is that they are all collected in one place
-//  Perhaps, they could live in a relevant base class?
-
 // TODO: Do we need to namespace Interface constants? Use better namespace name?
 
 namespace RBD
@@ -45,6 +41,11 @@ namespace RBD
     inline constexpr int fxPanelWidth = centrePanelWidth;
     inline constexpr int fxPanelHeight = centrePanelHeight - centrePanelMenuBarHeight;
 
+    // TODO: Move component size constants into the LookAndFeel class
+    //  Once all component drawing is handled by the custom L&F class,
+    //  these constants can be safely moved inside that class.
+
+    // Meter sizes
     inline constexpr int meterChannelWidth = 18;
     inline constexpr int meterLegendWidth = meterChannelWidth + 2;
 
@@ -58,8 +59,10 @@ namespace RBD
     // Standard rounded corner radius
     inline constexpr float defaultCornerSize = 3.0f;
     
-    // TODO: Move colour and font global constants into LookAndFeel class
-    //  Aim to use ColourIds as much as possible
+    // TODO: Move colour and font global constants into the LookAndFeel class
+    //  Once all component drawing is handled by the custom L&F class,
+    //  these constants can be safely moved inside that class.
+    //  Aim to use ColourIds more as well.
 
     inline const Colour noColour = Colour (0, 0, 0).withAlpha (0.0f);
     inline const Colour textNormalColour = Colour (105, 105, 105);
@@ -77,7 +80,6 @@ namespace RBD
     inline const Colour meterLegendColour = textNormalColour;
     inline const Colour meterClippingColour = Colour (0xFFDF4107);
     inline const Colour meterSaturationColour = Colour (0xFFE39105);
-
     // Temporary Slider colours
     inline const Colour sliderTrackColour = Colour (35, 35, 35);
 
