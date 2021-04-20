@@ -7,6 +7,8 @@
               pluginManufacturerCode="Wenu" companyName="Weird Numbers">
   <MAINGROUP id="xBPHQW" name="ReallyBasicDelay">
     <GROUP id="{5289F700-E4EF-5ABA-1C4B-03009BE23305}" name="Utilities">
+      <FILE id="Me2ZnU" name="PiecewiseRange.h" compile="0" resource="0"
+            file="Source/PiecewiseRange.h"/>
       <FILE id="LGGGXw" name="RBDUtilities.h" compile="0" resource="0" file="Source/RBDUtilities.h"/>
       <FILE id="kRVvrT" name="RBDAudioConstants.h" compile="0" resource="0"
             file="Source/RBDAudioConstants.h"/>

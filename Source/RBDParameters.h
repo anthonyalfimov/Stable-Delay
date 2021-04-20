@@ -12,6 +12,7 @@
 
 #include "RBDUtilities.h"
 #include "RBDAudioConstants.h"
+#include "PiecewiseRange.h"
 
 // One of the main uses for these enums is to serve as named array indices.
 //  Therefore, I don't want to have to cast it to int every time.
@@ -34,6 +35,13 @@ namespace FxType
         "FLANGER"
     };
 } // end namespace FxType
+
+// TODO: Consider turning the Parameter namespace into a class
+//  This will allow to have direct control over the lifetime of the contained
+//  objects, which is becoming more important as these objects become more
+//  complex.
+//  This class would contain the ParameterLayout generating method, and would be
+//  instantiated in the PluginProcessor.
 
 namespace Parameter
 {
@@ -85,12 +93,26 @@ namespace Parameter
     //  not specify the mid value, in which case it's calculated from min and
     //  max
 
+    inline const PiecewiseRange<float, 3> timeRange
+    {
+        { { 1.0f, 10.0f, 0.0f, 0.8f }, 0.15f },
+        { { 10.0f, 100.0f }, 0.4f },
+        { { 100.0f, RBD::maxDelayTimeInMs }, 1.0f }
+    };
+
+    inline const PiecewiseRange<float, 3> rateRange
+    {
+        { { 0.01f, 0.1f, 0.0f, 0.8f }, 0.15f },
+        { { 0.1f, 1.0f }, 0.4f },
+        { { 1.0f, 10.0f }, 1.0f }
+    };
+
     inline const NormalisableRange<float> Range[NumParameters]
     {
         // Input Gain:
         {-24.0f, 24.0f, 0.1f, 0.55f, true},
         // Time:
-        createSkewedNormalisableRange (1.0f, RBD::maxDelayTimeInMs, 0.0f, 200.0f),
+        timeRange.getNormalisableRange(),
         // Feedback:
         createSkewedNormalisableRange (0.0f, 120.0f, 0.0f, 50.0f),
         // Dry Wet Mix:
@@ -100,7 +122,7 @@ namespace Parameter
         // Output Gain:
         {-24.0f, 24.0f, 0.1f, 0.55f, true},
         // Modulation Rate:
-        createSkewedNormalisableRange (0.01f, 10.0f, 0.0f, 2.0f),
+        rateRange.getNormalisableRange(),
         // Modulation Depth:
         {0.0f, 100.0f},
         // Stereo Spread:
@@ -178,14 +200,12 @@ namespace Parameter
         {}
     };
 
-    // MARK: THIS IS REALLY WET. SHAME
-
     inline const std::initializer_list<float> minorTicks[NumParameters]
     {
         // Input Gain:
         {1, 4, 8, 12, 16, 20, -1, -4, -8, -12, -16, -20},
         // Time:
-        {3, 30, 60, 200, 300, 400, 500, 600, 700, 800, 900},
+        {5, 40, 70, 200, 300, 400, 500, 600, 700, 800, 900},
         // Feedback:
         {10, 20, 30, 40, 60, 70, 80, 90, 100, 110},
         // Dry Wet:
@@ -195,7 +215,7 @@ namespace Parameter
         // Output Gain:
         {1, 4, 8, 12, 16, 20, -1, -4, -8, -12, -16, -20},
         // Modulation Rate:
-        {0.03f, 0.3f, 0.6f, 2, 3, 4, 5, 6, 7, 8, 9},
+        {0.05f, 0.4f, 0.7f, 2, 3, 4, 5, 6, 7, 8, 9},
         // Modulation Depth:
         {10, 20, 30, 40, 60, 70, 80, 90},
         // Stereo Spread:
