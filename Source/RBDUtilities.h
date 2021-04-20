@@ -52,7 +52,7 @@ const auto showDecimalPlaces = [] (float value, int /*maxStringLength*/)
 template <int threshold>
 const auto showDecimalPlaceBelow = [] (float value, int /*maxStringLength*/)
 {
-    if (value < threshold)
+    if (value < (threshold - 0.05f))    // account for the String ctor rounding
         return String (value, 1);
     else
         return String (roundToInt (value));
