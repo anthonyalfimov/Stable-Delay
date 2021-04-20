@@ -156,7 +156,7 @@ namespace Parameter
         showDecimalPlaceBelow<10>,  // Stereo Spread
     };
 
-    inline const std::vector<float> majorTicks[NumParameters]
+    inline const std::initializer_list<float> majorTicks[NumParameters]
     {
         // Input Gain:
         {-24.0f, 24.0f, 0.0f},
@@ -180,7 +180,7 @@ namespace Parameter
 
     // MARK: THIS IS REALLY WET. SHAME
 
-    inline const std::vector<float> minorTicks[NumParameters]
+    inline const std::initializer_list<float> minorTicks[NumParameters]
     {
         // Input Gain:
         {1, 4, 8, 12, 16, 20, -1, -4, -8, -12, -16, -20},
