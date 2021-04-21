@@ -107,10 +107,17 @@ namespace Parameter
         { { 1.0f, 10.0f }, 1.0f }
     };
 
+    inline const PiecewiseRange<float, 3> gainRange
+    {
+        { { -24.0f, -4.0f, 0.1f }, 0.35f },
+        { { -4.0f, 4.0f, 0.1f, 0.5f, true }, 0.65f },
+        { { 4.0f, 24.0f, 0.1f }, 1.0f }
+    };
+
     inline const NormalisableRange<float> Range[NumParameters]
     {
         // Input Gain:
-        {-24.0f, 24.0f, 0.1f, 0.55f, true},
+        gainRange.getNormalisableRange(),
         // Time:
         timeRange.getNormalisableRange(),
         // Feedback:
@@ -120,7 +127,7 @@ namespace Parameter
         // Type:
         {0.0f, 2.0f, 1.0f},
         // Output Gain:
-        {-24.0f, 24.0f, 0.1f, 0.55f, true},
+        gainRange.getNormalisableRange(),
         // Modulation Rate:
         rateRange.getNormalisableRange(),
         // Modulation Depth:
