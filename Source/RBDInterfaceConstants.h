@@ -73,7 +73,8 @@ namespace RBD
     inline const Colour controlHoverColour = Colour (0, 0, 0).withAlpha (0.8f);
     inline const Colour controlActiveColour = Colour (105, 105, 105).withAlpha (0.3f);
     inline const Colour controlOutlineColour = noColour;
-    inline const Colour sliderTickColour = Colour (242, 242, 242);
+    inline const Colour sliderMarkColour = Colour (242, 242, 242);
+    inline const Colour sliderTickColour = Colour (232, 232, 232);
     inline const Colour popupBgColour = Colour (40, 40, 40);
     inline const Colour popupItemBgColour = Colour (0, 0, 0).withAlpha (0.6f);
     inline const Colour meterBgColour = Colour (0, 0, 0).withAlpha (0.8f);
@@ -81,7 +82,7 @@ namespace RBD
     inline const Colour meterLegendColour = textNormalColour;
     inline const Colour meterClippingColour = Colour (0xFFDF4107);
     inline const Colour meterSaturationColour = Colour (0xFFE39105);
-    inline const Colour shadowColour = Colour (0, 0, 0).withAlpha (0.25f);
+    inline const Colour shadowColour = Colour (0, 0, 0).withAlpha (0.27f);
     // Temporary Slider colours
     inline const Colour sliderTrackColour = Colour (35, 35, 35);
 

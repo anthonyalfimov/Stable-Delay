@@ -208,7 +208,7 @@ void PluginLookAndFeel::drawRotarySlider (Graphics& g,
                              knobMarkThickness);
     markPath = markPath.createPathWithRoundedCorners (knobMarkThickness / 2.0f);
 
-    g.setColour (RBD::sliderTickColour);
+    g.setColour (RBD::sliderMarkColour);
     g.fillPath (markPath);
 
     // Reset the following changes to the graphics context at the end of the scope
