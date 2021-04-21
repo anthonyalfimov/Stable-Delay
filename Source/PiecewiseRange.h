@@ -29,6 +29,11 @@ public:
         lifespan of this object should be no less than of the generated
         NormalisableRange objects.
 
+        NB! The interval of the generated range will be set to the smallest
+        interval of its segments. While snapping to legal values in the
+        generated range will use the interval value of the appropriate segment,
+        some JUCE facilities can access the interval member directly.
+
         @param segmentList A list of std::pairs: NormalisableRange of the segment and the top limit of the segment's proportion range. The last pair's limit must be 1.
     */
     PiecewiseRange (std::initializer_list<RangeLimitPair> segmentList)
@@ -49,9 +54,17 @@ public:
             mSegments[index].proportionStart = previousLimit;
             mSegments[index].proportionEnd = limit;
 
-            // Ensure continuity of segments
-            if (index != 0)
+            if (index == 0)
             {
+                interval = mSegments[index].interval;
+            }
+            else
+            {
+                // Set global interval to the smallest of segment intervals
+                if (interval > mSegments[index].interval)
+                    interval = mSegments[index].interval;
+
+                // Ensure continuity of segments
                 jassert (previousRangeEnd == mSegments[index].start);
                 mSegments[index].start = previousRangeEnd;
             }
@@ -74,9 +87,13 @@ public:
     //==========================================================================
     RangeType getNormalisableRange() const
     {
-        return RangeType (start, end,
-                          convertFrom0To1Func, convertTo0To1Func,
-                          snapToLegalValueFunc);
+        RangeType outputRange (start, end,
+                               convertFrom0To1Func, convertTo0To1Func,
+                               snapToLegalValueFunc);
+
+        outputRange.interval = interval;
+
+        return outputRange;
     }
 
     //==========================================================================
@@ -129,6 +146,7 @@ public:
 private:
     ValueType start = 0;
     ValueType end = 1;
+    ValueType interval = 0;
 
     struct RangeSegment  : public RangeType
     {
