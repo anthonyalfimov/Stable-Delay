@@ -46,6 +46,8 @@ public:
 private:
     OwnedArray<MeterLabel> mLabels;
 
+    inline static constexpr int labelHeight = 11;
+
     //==========================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MeterLegend)
 };

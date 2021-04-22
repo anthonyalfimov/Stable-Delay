@@ -59,7 +59,7 @@ MeterLegend::MeterLegend (std::initializer_list<int> labelLevels, bool isStereo)
 
 void MeterLegend::resized()
 {
-    Rectangle<int> bounds (0, 0, getWidth(), 11);
+    Rectangle<int> bounds (0, 0, getWidth(), labelHeight);
     const int centreX = bounds.getCentreX();
 
     for (auto& label : mLabels)
