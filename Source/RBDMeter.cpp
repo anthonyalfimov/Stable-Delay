@@ -98,8 +98,8 @@ void Meter::resized()
         bounds.setX (mMeterChannels[0]->getRight() - MeterChannel::padding);
         bounds.setRight (getWidth() - Meter::padding);
         // Reduce the height of MeterLegend to match the height of the actual
-        //  MeterChannel without the padding.
-        bounds.reduce (0, MeterChannel::padding);
+        //  MeterChannel bar without the padding.
+        bounds.reduce (0, MeterChannel::padding + MeterChannel::inset);
         mMeterLegend->setBounds (bounds);
     }
     else if (mNumChannels == 2)
@@ -115,9 +115,10 @@ void Meter::resized()
         bounds.setX (mMeterChannels[0]->getRight());
         bounds.setRight (mMeterChannels[1]->getX());
         // Expand the width of MeterLegend to ignore the MeterChannel padding,
-        //  and reduce the height to match the height of actual MeterChannels
-        //  without the padding.
-        bounds.expand (MeterChannel::padding, -MeterChannel::padding);
+        //  and reduce the height to match the height of actual MeterChannel
+        //  bars without the padding.
+        bounds.expand (MeterChannel::padding,
+                       -(MeterChannel::padding + MeterChannel::inset));
         mMeterLegend->setBounds (bounds);
     }
 }

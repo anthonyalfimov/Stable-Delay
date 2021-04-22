@@ -177,31 +177,28 @@ void MeterChannel::paint (Graphics& g)
     g.setColour (RBD::meterBgColour);
     g.fillRoundedRectangle (channelBounds.toFloat(), RBD::defaultCornerSize);
 
+    // Meter bar parameters
+    // Keep corners consistent by changing their radius by the same amount
+    //  as the size of the object itself
+    const float barCornerSize = RBD::defaultCornerSize - inset;
+
     // Draw peak level meter bar
     peakLevel = jmin (peakLevel, maxLevelInDb); // clamp to meter range
     const float peakPosition = range.convertTo0to1 (peakLevel);
-    int barTop = static_cast<int> (channelBounds.getBottom()
-                                   - channelBounds.getHeight() * peakPosition);
-    auto barBounds = channelBounds.withTop (barTop);
-
-    const int delta = 2;    // reduction amount for the meter bar size
-
-    // Keep corners consistent by changing their radius by the same amount
-    //  as the size of the object itself
-    const float barCornerSize = RBD::defaultCornerSize - delta;
+    auto barBounds = channelBounds.reduced (inset); // reset meter bar bounds
+    int barTop = static_cast<int> (barBounds.getBottom()
+                                   - barBounds.getHeight() * peakPosition);
+    barBounds.setTop (barTop);  // set peak meter bar top position
 
     // Peak meter fill
     g.setColour (fillColour.withAlpha (0.2f));
-    g.fillRoundedRectangle (barBounds.reduced (delta).toFloat(), barCornerSize);
+    g.fillRoundedRectangle (barBounds.toFloat(), barCornerSize);
 
     // Peak meter outline
-
-    // Rectangle outline can still be visible when bounds are reduced below
-    //  their size (inverted), so explicitly check if we should paint it
-    if (barBounds.getHeight() > 2 * delta)
+    if (barBounds.getHeight() > 0)
     {
         g.setColour (fillColour.withAlpha (0.7f));
-        g.drawRoundedRectangle (barBounds.toFloat().reduced (delta + 0.5f),
+        g.drawRoundedRectangle (barBounds.toFloat().reduced (0.5f),
                                 barCornerSize, 1.0f);
     }
 
@@ -211,13 +208,14 @@ void MeterChannel::paint (Graphics& g)
     float rmsLevel = mRmsLevelInDb.getCurrentValue();
     rmsLevel = jmin (rmsLevel, maxLevelInDb);   // clamp to meter range
     const float rmsPosition = range.convertTo0to1 (rmsLevel);
-    barTop = static_cast<int> (channelBounds.getBottom()
-                               - channelBounds.getHeight() * rmsPosition);
-    barBounds.setTop (barTop);
+    barBounds = channelBounds.reduced (inset);  // reset meter bar bounds
+    barTop = static_cast<int> (barBounds.getBottom()
+                               - barBounds.getHeight() * rmsPosition);
+    barBounds.setTop (barTop);  // set RMS meter bar top position
 
     // RMS meter fill
     g.setColour (fillColour);
-    g.fillRoundedRectangle (barBounds.reduced (delta).toFloat(),
+    g.fillRoundedRectangle (barBounds.toFloat(),
                             barCornerSize);
 }
 

@@ -55,6 +55,9 @@ public:
     //  the clipping indicator
     inline static constexpr int padding = 2;
 
+    // Reduction amount for the bounds of the meter bars inside the meter channel
+    inline static constexpr int inset = 2;
+
 //==============================================================================
     inline static const float minLevelInDb = -36.0f;
     inline static const float maxLevelInDb = 4.0f;
