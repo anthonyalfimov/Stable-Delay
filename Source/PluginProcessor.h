@@ -94,7 +94,8 @@ private:
     //  stores them, so there should be no problems
     std::atomic<float>* mInputGainValue = nullptr;
     std::atomic<float>* mDelayTimeValue = nullptr;
-    std::atomic<float>* mDelayFeedbackValue = nullptr;
+    std::atomic<float>* mFeedbackValue = nullptr;
+    std::atomic<float>* mInvertFeedbackValue = nullptr;
     std::atomic<float>* mDryWetValue = nullptr;
     std::atomic<float>* mFxTypeValue = nullptr;
     std::atomic<float>* mOutputGainValue = nullptr;

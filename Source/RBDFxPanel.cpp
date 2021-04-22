@@ -71,7 +71,7 @@ void FxPanel::setFxPanelStyle (FxType::Index typeIndex)
                                                          Parameter::DelayTime));
 
             mKnobs.add (std::make_unique<ParameterKnob> (mProcessor.parameters,
-                                                         Parameter::DelayFeedback));
+                                                         Parameter::Feedback));
             
             mKnobs.add (std::make_unique<ParameterKnob> (mProcessor.parameters,
                                                          Parameter::DryWet));
@@ -96,7 +96,7 @@ void FxPanel::setFxPanelStyle (FxType::Index typeIndex)
                                                          Parameter::ModulationDepth));
             
             mKnobs.add (std::make_unique<ParameterKnob> (mProcessor.parameters,
-                                                         Parameter::DelayFeedback));
+                                                         Parameter::Feedback));
             
             mKnobs.add (std::make_unique<ParameterKnob> (mProcessor.parameters,
                                                          Parameter::DryWet));

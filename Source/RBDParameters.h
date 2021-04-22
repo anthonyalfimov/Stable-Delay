@@ -36,6 +36,22 @@ namespace FxType
     };
 } // end namespace FxType
 
+namespace Toggle
+{
+    enum Index : int
+    {
+        Off = 0,
+        On  = 1
+    };
+
+    inline const StringArray Label
+    {
+        "OFF",
+        "ON"
+    };
+
+} // end namespace Toggle
+
 // TODO: Consider turning the Parameter namespace into a class
 //  This will allow to have direct control over the lifetime of the contained
 //  objects, which is becoming more important as these objects become more
@@ -49,7 +65,8 @@ namespace Parameter
     {
         InputGain = 0,
         DelayTime,
-        DelayFeedback,
+        Feedback,
+        InvertFeedback,
         DryWet,
         FxType,
         OutputGain,
@@ -66,6 +83,7 @@ namespace Parameter
         "InputGain",
         "Time",
         "Feedback",
+        "InvertFeedback",
         "Mix",
         "Type",
         "OutputGain",
@@ -79,6 +97,7 @@ namespace Parameter
         "Input Gain",
         "Time",
         "Feedback",
+        "Invert",
         "Mix",
         "Type",
         "Output Gain",
@@ -122,6 +141,8 @@ namespace Parameter
         timeRange.getNormalisableRange(),
         // Feedback:
         createSkewedNormalisableRange (0.0f, 120.0f, 0.0f, 50.0f),
+        // Invert Feedback:
+        {0.0f, 1.0f, 1.0f},
         // Dry Wet Mix:
         {0.0f, 100.0f},
         // Type:
@@ -141,6 +162,7 @@ namespace Parameter
         0.0f,   // Input Gain
         100.0f, // Time
         50.0f,  // Feedback
+        0.0f,   // Invert Feedback
         50.0f,  // Dry Wet
         0.0f,   // Type
         0.0f,   // Output Gain
@@ -154,6 +176,7 @@ namespace Parameter
         " dB",  // Input Gain
         " ms",  // Time
         " %",   // Feedback
+        "",     // Invert Feedback
         " %",   // Dry Wet
         "",     // Type
         " dB",  // Output Gain
@@ -169,6 +192,13 @@ namespace Parameter
         return FxType::Label[fxTypeIndex];
     };
 
+    inline const auto stringFromToggleValue = [] (float value, int /*maxStringLength*/)
+    {
+        const auto toggleIndex = static_cast<Toggle::Index> (value);
+
+        return Toggle::Label[toggleIndex];
+    };
+
     using stringFromValueFunction = std::function<String(float value,
                                                          int maxStringLength)>;
     
@@ -177,6 +207,7 @@ namespace Parameter
         nullptr,                    // Input Gain
         showDecimalPlaceBelow<100>, // Time
         showDecimalPlaces<0>,       // Feedback
+        stringFromToggleValue,      // Invert Feedback
         showDecimalPlaces<0>,       // Dry Wet
         stringFromFxTypeValue,      // Type
         nullptr,                    // Output Gain
@@ -193,6 +224,8 @@ namespace Parameter
         {1.0f, RBD::maxDelayTimeInMs, 10.0f, 100.0f},
         // Feedback:
         {0.0f, 120.0f, 50.0f},
+        // Invert Feedback:
+        {},
         // Dry Wet:
         {0.0f, 100.0f, 50.0f},
         // Type:
@@ -215,6 +248,8 @@ namespace Parameter
         {5, 40, 70, 200, 300, 400, 500, 600, 700, 800, 900},
         // Feedback:
         {10, 20, 30, 40, 60, 70, 80, 90, 100, 110},
+        // Invert Feedback:
+        {},
         // Dry Wet:
         {10, 20, 30, 40, 60, 70, 80, 90},
         // Type:

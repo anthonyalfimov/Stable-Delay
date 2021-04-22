@@ -391,8 +391,10 @@ void ReallyBasicDelayAudioProcessor::initialiseParameters()
     = parameters.getRawParameterValue (Parameter::ID[Parameter::InputGain]);
     mDelayTimeValue
     = parameters.getRawParameterValue (Parameter::ID[Parameter::DelayTime]);
-    mDelayFeedbackValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::DelayFeedback]);
+    mFeedbackValue
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::Feedback]);
+    mInvertFeedbackValue
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::InvertFeedback]);
     mDryWetValue
     = parameters.getRawParameterValue (Parameter::ID[Parameter::DryWet]);
     mFxTypeValue
@@ -414,12 +416,16 @@ void ReallyBasicDelayAudioProcessor::updateParameters()
     for (auto inputGain : mInputGain)
         inputGain->setState (mInputGainValue->load());
 
+    const float feedbackFactor
+    = (mInvertFeedbackValue->load() == Toggle::On) ? -1.0f : 1.0f;
+    const float feedback = feedbackFactor * mFeedbackValue->load();
+
     const float stereoSpread
     = (getTotalNumOutputChannels() == 2) ? mStereoSpreadValue->load() : 0.0f;
 
     for (int channel = 0; channel < mDelay.size(); ++channel)
         mDelay[channel]->setState (mDelayTimeValue->load(),
-                                   mDelayFeedbackValue->load(),
+                                   feedback,
                                    mFxTypeValue->load(),
                                    mModulationRateValue->load(),
                                    mModulationDepthValue->load(),
