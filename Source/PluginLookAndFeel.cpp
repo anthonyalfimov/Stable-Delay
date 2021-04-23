@@ -13,7 +13,10 @@
 PluginLookAndFeel::PluginLookAndFeel()
 {
     // TODO: What's the difference b/w loading the image from file and embedding it?
-    
+    //  E.g., using ImageCache::getFromFile(const File &file)
+    //  Look at JUCE's DemoRunner image handling, in particular
+    //  Image getImageFromAssets (const char* assetName) utility function
+
     // Store image assets
     mKnobImage = ImageCache::getFromMemory (BinaryData::RBD_Knob_80_2x_png,
                                             BinaryData::RBD_Knob_80_2x_pngSize);

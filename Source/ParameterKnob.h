@@ -15,7 +15,6 @@
 #include "SliderLabel.h"
 
 // TODO: Consider using setBufferedToImage() since scale doesn't change
-// TODO: Consider using setComponentEffect() for drop shadow
 
 class KnobScale  : public Component
 {
@@ -54,7 +53,6 @@ private:
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> mAttachment;
     std::unique_ptr<KnobScale> mScale;
     std::unique_ptr<SliderLabel> mLabel;
-
 
     //==========================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ParameterKnob)
