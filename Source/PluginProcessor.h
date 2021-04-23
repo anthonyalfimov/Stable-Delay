@@ -9,12 +9,12 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "RBDGainModule.h"
-#include "RBDDelayModule.h"
-#include "RBDDryWetModule.h"
-#include "RBDMeterProbe.h"
-#include "RBDSaturationModule.h"
-#include "RBDPresetManager.h"
+#include "GainModule.h"
+#include "MeterProbe.h"
+#include "DelayModule.h"
+#include "DryWetModule.h"
+#include "SaturationModule.h"
+#include "PresetManager.h"
 
 //==============================================================================
 /**

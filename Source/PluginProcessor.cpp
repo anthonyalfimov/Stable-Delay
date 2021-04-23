@@ -8,7 +8,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-#include "RBDParameters.h"
+#include "Parameters.h"
 
 //==============================================================================
 // This creates the plugin parameter layout

@@ -10,8 +10,8 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
-#include "RBDMainPanel.h"
-#include "RBDPluginLookAndFeel.h"
+#include "MainPanel.h"
+#include "PluginLookAndFeel.h"
 
 //==============================================================================
 /**

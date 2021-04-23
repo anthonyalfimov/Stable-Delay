@@ -7,106 +7,89 @@
               pluginManufacturerCode="Wenu" companyName="Weird Numbers">
   <MAINGROUP id="xBPHQW" name="ReallyBasicDelay">
     <GROUP id="{5289F700-E4EF-5ABA-1C4B-03009BE23305}" name="Utilities">
+      <FILE id="kRVvrT" name="AudioConstants.h" compile="0" resource="0"
+            file="Source/AudioConstants.h"/>
+      <FILE id="FJ9rx4" name="InterfaceConstants.h" compile="0" resource="0"
+            file="Source/InterfaceConstants.h"/>
+      <FILE id="LGGGXw" name="Utilities.h" compile="0" resource="0" file="Source/Utilities.h"/>
       <FILE id="Me2ZnU" name="PiecewiseRange.h" compile="0" resource="0"
             file="Source/PiecewiseRange.h"/>
-      <FILE id="LGGGXw" name="RBDUtilities.h" compile="0" resource="0" file="Source/RBDUtilities.h"/>
-      <FILE id="kRVvrT" name="RBDAudioConstants.h" compile="0" resource="0"
-            file="Source/RBDAudioConstants.h"/>
-      <FILE id="FJ9rx4" name="RBDInterfaceConstants.h" compile="0" resource="0"
-            file="Source/RBDInterfaceConstants.h"/>
-      <FILE id="aMTu9K" name="RBDPluginLookAndFeel.cpp" compile="1" resource="0"
-            file="Source/RBDPluginLookAndFeel.cpp"/>
-      <FILE id="GRKCGg" name="RBDPluginLookAndFeel.h" compile="0" resource="0"
-            file="Source/RBDPluginLookAndFeel.h"/>
-      <FILE id="fjYt20" name="RBDParameters.h" compile="0" resource="0" file="Source/RBDParameters.h"/>
+      <FILE id="aMTu9K" name="PluginLookAndFeel.cpp" compile="1" resource="0"
+            file="Source/PluginLookAndFeel.cpp"/>
+      <FILE id="GRKCGg" name="PluginLookAndFeel.h" compile="0" resource="0"
+            file="Source/PluginLookAndFeel.h"/>
+      <FILE id="fjYt20" name="Parameters.h" compile="0" resource="0" file="Source/Parameters.h"/>
     </GROUP>
     <GROUP id="{6FDFCE5E-A25F-B71C-4766-D652B9DE2C74}" name="Managers">
-      <FILE id="Qr8RHf" name="RBDPresetManager.cpp" compile="1" resource="0"
-            file="Source/RBDPresetManager.cpp"/>
-      <FILE id="agqbzc" name="RBDPresetManager.h" compile="0" resource="0"
-            file="Source/RBDPresetManager.h"/>
+      <FILE id="Qr8RHf" name="PresetManager.cpp" compile="1" resource="0"
+            file="Source/PresetManager.cpp"/>
+      <FILE id="agqbzc" name="PresetManager.h" compile="0" resource="0" file="Source/PresetManager.h"/>
     </GROUP>
     <GROUP id="{195656B5-0487-FECC-6F4E-58DC537044AA}" name="Parameter Control">
-      <FILE id="XrGQNb" name="RBDHighlightableComboBox.cpp" compile="1" resource="0"
-            file="Source/RBDHighlightableComboBox.cpp"/>
-      <FILE id="aov2Gv" name="RBDHighlightableComboBox.h" compile="0" resource="0"
-            file="Source/RBDHighlightableComboBox.h"/>
-      <FILE id="SWzc8U" name="RBDParameterComboBox.cpp" compile="1" resource="0"
-            file="Source/RBDParameterComboBox.cpp"/>
-      <FILE id="PWCrOy" name="RBDParameterComboBox.h" compile="0" resource="0"
-            file="Source/RBDParameterComboBox.h"/>
-      <FILE id="EO4I3l" name="RBDParameterKnob.cpp" compile="1" resource="0"
-            file="Source/RBDParameterKnob.cpp"/>
-      <FILE id="j10A24" name="RBDParameterKnob.h" compile="0" resource="0"
-            file="Source/RBDParameterKnob.h"/>
-      <FILE id="f4gF53" name="RBDParameterSlider.cpp" compile="1" resource="0"
-            file="Source/RBDParameterSlider.cpp"/>
-      <FILE id="xjTMA1" name="RBDParameterSlider.h" compile="0" resource="0"
-            file="Source/RBDParameterSlider.h"/>
+      <FILE id="XrGQNb" name="HighlightableComboBox.cpp" compile="1" resource="0"
+            file="Source/HighlightableComboBox.cpp"/>
+      <FILE id="aov2Gv" name="HighlightableComboBox.h" compile="0" resource="0"
+            file="Source/HighlightableComboBox.h"/>
+      <FILE id="SWzc8U" name="ParameterComboBox.cpp" compile="1" resource="0"
+            file="Source/ParameterComboBox.cpp"/>
+      <FILE id="PWCrOy" name="ParameterComboBox.h" compile="0" resource="0"
+            file="Source/ParameterComboBox.h"/>
+      <FILE id="EO4I3l" name="ParameterKnob.cpp" compile="1" resource="0"
+            file="Source/ParameterKnob.cpp"/>
+      <FILE id="j10A24" name="ParameterKnob.h" compile="0" resource="0" file="Source/ParameterKnob.h"/>
+      <FILE id="f4gF53" name="ParameterSlider.cpp" compile="1" resource="0"
+            file="Source/ParameterSlider.cpp"/>
+      <FILE id="xjTMA1" name="ParameterSlider.h" compile="0" resource="0"
+            file="Source/ParameterSlider.h"/>
     </GROUP>
     <GROUP id="{89B33AAD-A27F-7960-6038-74F7F39F53E0}" name="Components">
-      <FILE id="B6Bznx" name="RBDMeterChannel.cpp" compile="1" resource="0"
-            file="Source/RBDMeterChannel.cpp"/>
-      <FILE id="fLCHTh" name="RBDMeterChannel.h" compile="0" resource="0"
-            file="Source/RBDMeterChannel.h"/>
-      <FILE id="A7cDgc" name="RBDMeterLegend.cpp" compile="1" resource="0"
-            file="Source/RBDMeterLegend.cpp"/>
-      <FILE id="LNP47J" name="RBDMeterLegend.h" compile="0" resource="0"
-            file="Source/RBDMeterLegend.h"/>
-      <FILE id="uEiEFY" name="RBDMeter.cpp" compile="1" resource="0" file="Source/RBDMeter.cpp"/>
-      <FILE id="KsheeB" name="RBDMeter.h" compile="0" resource="0" file="Source/RBDMeter.h"/>
-      <FILE id="PFoj7C" name="RBDSliderLabel.cpp" compile="1" resource="0"
-            file="Source/RBDSliderLabel.cpp"/>
-      <FILE id="BHynvf" name="RBDSliderLabel.h" compile="0" resource="0"
-            file="Source/RBDSliderLabel.h"/>
+      <FILE id="B6Bznx" name="MeterChannel.cpp" compile="1" resource="0"
+            file="Source/MeterChannel.cpp"/>
+      <FILE id="fLCHTh" name="MeterChannel.h" compile="0" resource="0" file="Source/MeterChannel.h"/>
+      <FILE id="A7cDgc" name="MeterLegend.cpp" compile="1" resource="0" file="Source/MeterLegend.cpp"/>
+      <FILE id="LNP47J" name="MeterLegend.h" compile="0" resource="0" file="Source/MeterLegend.h"/>
+      <FILE id="uEiEFY" name="Meter.cpp" compile="1" resource="0" file="Source/Meter.cpp"/>
+      <FILE id="KsheeB" name="Meter.h" compile="0" resource="0" file="Source/Meter.h"/>
+      <FILE id="PFoj7C" name="SliderLabel.cpp" compile="1" resource="0" file="Source/SliderLabel.cpp"/>
+      <FILE id="BHynvf" name="SliderLabel.h" compile="0" resource="0" file="Source/SliderLabel.h"/>
     </GROUP>
     <GROUP id="{B55B2190-C0A4-3B41-2D50-0A81E5CC3764}" name="Panels">
-      <FILE id="CLsfpr" name="RBDInterfacePanel.cpp" compile="1" resource="0"
-            file="Source/RBDInterfacePanel.cpp"/>
-      <FILE id="qCxFj2" name="RBDInterfacePanel.h" compile="0" resource="0"
-            file="Source/RBDInterfacePanel.h"/>
-      <FILE id="bKu8kC" name="RBDMainPanel.cpp" compile="1" resource="0"
-            file="Source/RBDMainPanel.cpp"/>
-      <FILE id="QigLtG" name="RBDMainPanel.h" compile="0" resource="0" file="Source/RBDMainPanel.h"/>
-      <FILE id="VWxUmE" name="RBDTopPanel.cpp" compile="1" resource="0" file="Source/RBDTopPanel.cpp"/>
-      <FILE id="g9X9uf" name="RBDTopPanel.h" compile="0" resource="0" file="Source/RBDTopPanel.h"/>
-      <FILE id="sy0sG4" name="RBDGainPanel.cpp" compile="1" resource="0"
-            file="Source/RBDGainPanel.cpp"/>
-      <FILE id="Z4WLtd" name="RBDGainPanel.h" compile="0" resource="0" file="Source/RBDGainPanel.h"/>
-      <FILE id="FILMYm" name="RBDCentrePanel.cpp" compile="1" resource="0"
-            file="Source/RBDCentrePanel.cpp"/>
-      <FILE id="MzBUkA" name="RBDCentrePanel.h" compile="0" resource="0"
-            file="Source/RBDCentrePanel.h"/>
-      <FILE id="z6yyW3" name="RBDCentrePanelMenuBar.cpp" compile="1" resource="0"
-            file="Source/RBDCentrePanelMenuBar.cpp"/>
-      <FILE id="XDpY2r" name="RBDCentrePanelMenuBar.h" compile="0" resource="0"
-            file="Source/RBDCentrePanelMenuBar.h"/>
-      <FILE id="bTPdDn" name="RBDFxPanel.cpp" compile="1" resource="0" file="Source/RBDFxPanel.cpp"/>
-      <FILE id="vazdPS" name="RBDFxPanel.h" compile="0" resource="0" file="Source/RBDFxPanel.h"/>
+      <FILE id="CLsfpr" name="InterfacePanel.cpp" compile="1" resource="0"
+            file="Source/InterfacePanel.cpp"/>
+      <FILE id="qCxFj2" name="InterfacePanel.h" compile="0" resource="0"
+            file="Source/InterfacePanel.h"/>
+      <FILE id="bKu8kC" name="MainPanel.cpp" compile="1" resource="0" file="Source/MainPanel.cpp"/>
+      <FILE id="QigLtG" name="MainPanel.h" compile="0" resource="0" file="Source/MainPanel.h"/>
+      <FILE id="VWxUmE" name="TopPanel.cpp" compile="1" resource="0" file="Source/TopPanel.cpp"/>
+      <FILE id="g9X9uf" name="TopPanel.h" compile="0" resource="0" file="Source/TopPanel.h"/>
+      <FILE id="sy0sG4" name="GainPanel.cpp" compile="1" resource="0" file="Source/GainPanel.cpp"/>
+      <FILE id="Z4WLtd" name="GainPanel.h" compile="0" resource="0" file="Source/GainPanel.h"/>
+      <FILE id="FILMYm" name="CentrePanel.cpp" compile="1" resource="0" file="Source/CentrePanel.cpp"/>
+      <FILE id="MzBUkA" name="CentrePanel.h" compile="0" resource="0" file="Source/CentrePanel.h"/>
+      <FILE id="z6yyW3" name="CentrePanelMenuBar.cpp" compile="1" resource="0"
+            file="Source/CentrePanelMenuBar.cpp"/>
+      <FILE id="XDpY2r" name="CentrePanelMenuBar.h" compile="0" resource="0"
+            file="Source/CentrePanelMenuBar.h"/>
+      <FILE id="bTPdDn" name="FxPanel.cpp" compile="1" resource="0" file="Source/FxPanel.cpp"/>
+      <FILE id="vazdPS" name="FxPanel.h" compile="0" resource="0" file="Source/FxPanel.h"/>
     </GROUP>
     <GROUP id="{0EB6A607-778D-EA62-AAC3-98B7C537EEED}" name="DSP">
-      <FILE id="pQH5KF" name="RBDDspModule.h" compile="0" resource="0" file="Source/RBDDspModule.h"/>
-      <FILE id="RKl3Qe" name="RBDGainModule.cpp" compile="1" resource="0"
-            file="Source/RBDGainModule.cpp"/>
-      <FILE id="miQHTD" name="RBDGainModule.h" compile="0" resource="0" file="Source/RBDGainModule.h"/>
-      <FILE id="gYeDeC" name="RBDLfoModule.cpp" compile="1" resource="0"
-            file="Source/RBDLfoModule.cpp"/>
-      <FILE id="AF9TA9" name="RBDLfoModule.h" compile="0" resource="0" file="Source/RBDLfoModule.h"/>
-      <FILE id="yrs5AZ" name="RBDDelayModule.cpp" compile="1" resource="0"
-            file="Source/RBDDelayModule.cpp"/>
-      <FILE id="Hz1C1r" name="RBDDelayModule.h" compile="0" resource="0"
-            file="Source/RBDDelayModule.h"/>
-      <FILE id="Caouf7" name="RBDDryWetModule.cpp" compile="1" resource="0"
-            file="Source/RBDDryWetModule.cpp"/>
-      <FILE id="tle1Tc" name="RBDDryWetModule.h" compile="0" resource="0"
-            file="Source/RBDDryWetModule.h"/>
-      <FILE id="p0iOWO" name="RBDSaturationModule.cpp" compile="1" resource="0"
-            file="Source/RBDSaturationModule.cpp"/>
-      <FILE id="UBI3Fy" name="RBDSaturationModule.h" compile="0" resource="0"
-            file="Source/RBDSaturationModule.h"/>
-      <FILE id="dzLL5s" name="RBDMeterProbe.cpp" compile="1" resource="0"
-            file="Source/RBDMeterProbe.cpp"/>
-      <FILE id="EMC7Qe" name="RBDMeterProbe.h" compile="0" resource="0" file="Source/RBDMeterProbe.h"/>
+      <FILE id="pQH5KF" name="DspModule.h" compile="0" resource="0" file="Source/DspModule.h"/>
+      <FILE id="RKl3Qe" name="GainModule.cpp" compile="1" resource="0" file="Source/GainModule.cpp"/>
+      <FILE id="miQHTD" name="GainModule.h" compile="0" resource="0" file="Source/GainModule.h"/>
+      <FILE id="gYeDeC" name="LfoModule.cpp" compile="1" resource="0" file="Source/LfoModule.cpp"/>
+      <FILE id="AF9TA9" name="LfoModule.h" compile="0" resource="0" file="Source/LfoModule.h"/>
+      <FILE id="yrs5AZ" name="DelayModule.cpp" compile="1" resource="0" file="Source/DelayModule.cpp"/>
+      <FILE id="Hz1C1r" name="DelayModule.h" compile="0" resource="0" file="Source/DelayModule.h"/>
+      <FILE id="Caouf7" name="DryWetModule.cpp" compile="1" resource="0"
+            file="Source/DryWetModule.cpp"/>
+      <FILE id="tle1Tc" name="DryWetModule.h" compile="0" resource="0" file="Source/DryWetModule.h"/>
+      <FILE id="p0iOWO" name="SaturationModule.cpp" compile="1" resource="0"
+            file="Source/SaturationModule.cpp"/>
+      <FILE id="UBI3Fy" name="SaturationModule.h" compile="0" resource="0"
+            file="Source/SaturationModule.h"/>
+      <FILE id="dzLL5s" name="MeterProbe.cpp" compile="1" resource="0" file="Source/MeterProbe.cpp"/>
+      <FILE id="EMC7Qe" name="MeterProbe.h" compile="0" resource="0" file="Source/MeterProbe.h"/>
     </GROUP>
     <GROUP id="{99CE85E1-9C82-51EF-B1FE-A81D24CFC764}" name="Source">
       <FILE id="q3whJb" name="PluginProcessor.cpp" compile="1" resource="0"
