@@ -74,6 +74,7 @@
       <FILE id="vazdPS" name="FxPanel.h" compile="0" resource="0" file="Source/FxPanel.h"/>
     </GROUP>
     <GROUP id="{0EB6A607-778D-EA62-AAC3-98B7C537EEED}" name="DSP">
+      <FILE id="PCyj4b" name="DspModule.cpp" compile="1" resource="0" file="Source/DspModule.cpp"/>
       <FILE id="pQH5KF" name="DspModule.h" compile="0" resource="0" file="Source/DspModule.h"/>
       <FILE id="RKl3Qe" name="GainModule.cpp" compile="1" resource="0" file="Source/GainModule.cpp"/>
       <FILE id="miQHTD" name="GainModule.h" compile="0" resource="0" file="Source/GainModule.h"/>

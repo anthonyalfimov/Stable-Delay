@@ -37,8 +37,3 @@ ParameterComboBox::ParameterComboBox (AudioProcessorValueTreeState& stateToContr
                                                         Parameter::ID[parameterIndex],
                                                         *this);
 }
-
-ParameterComboBox::~ParameterComboBox()
-{
-    
-}

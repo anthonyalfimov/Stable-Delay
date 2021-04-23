@@ -33,8 +33,3 @@ ParameterSlider::ParameterSlider (AudioProcessorValueTreeState& stateToControl,
                                                       Parameter::ID[parameterIndex],
                                                       *this);
 }
-
-ParameterSlider::~ParameterSlider()
-{
-
-}

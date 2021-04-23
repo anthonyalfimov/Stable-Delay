@@ -17,11 +17,6 @@ HighlightableComboBox::HighlightableComboBox (const String& componentName)
     
 }
 
-HighlightableComboBox::~HighlightableComboBox()
-{
-
-}
-
 //==============================================================================
 void HighlightableComboBox::mouseEnter (const MouseEvent& event)
 {

@@ -10,14 +10,14 @@
 
 #include "DryWetModule.h"
 
-DryWetModule::DryWetModule()
+void DryWetModule::setState (float dryWetPercent)
 {
+    const float wetValue = dryWetPercent / 100.0f;   // convert from %
+    const float dryValue = 1.0f - wetValue;
 
-}
-
-DryWetModule::~DryWetModule()
-{
-
+    // Using 3 dB panning rule
+    mWetGainSmoothed.setTargetValue (std::sqrt (wetValue));
+    mDryGainSmoothed.setTargetValue (std::sqrt (dryValue));
 }
 
 void DryWetModule::prepare (double sampleRate, int blockSize)
@@ -73,14 +73,4 @@ void DryWetModule::process (const float* inAudio, float* outAudio,
         FloatVectorOperations::add (outAudio, mDryBuffer.get(),
                                     numSamplesToRender);
     }
-}
-
-void DryWetModule::setState (float dryWetPercent)
-{
-    const float wetValue = dryWetPercent / 100.0f;   // convert from %
-    const float dryValue = 1.0f - wetValue;
-
-    // Using 3 dB panning rule
-    mWetGainSmoothed.setTargetValue (std::sqrt (wetValue));
-    mDryGainSmoothed.setTargetValue (std::sqrt (dryValue));
 }

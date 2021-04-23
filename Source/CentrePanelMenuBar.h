@@ -18,9 +18,9 @@
 class CentrePanelMenuBar  : public InterfacePanel
 {
 public:
-    CentrePanelMenuBar (ReallyBasicDelayAudioProcessor& processor);
-    ~CentrePanelMenuBar();
-    
+    explicit CentrePanelMenuBar (ReallyBasicDelayAudioProcessor& processor);
+
+//==============================================================================
     // These are here because mFxTypeComboBox is a private member of this class
     /** @internal */
     void addFxTypeComboBoxListener (ComboBox::Listener* inListener);
@@ -32,6 +32,6 @@ private:
     std::unique_ptr<ParameterSlider> mSpreadSlider;
     std::unique_ptr<SliderLabel> mSpreadLabel;
 
-    //==========================================================================
+//==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CentrePanelMenuBar)
 };

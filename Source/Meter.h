@@ -25,6 +25,7 @@ public:
            int numChannels);
     ~Meter();
 
+//==============================================================================
     void setStyle (MeterStyle newStyle);
 
 //==============================================================================
@@ -35,6 +36,7 @@ public:
     /** @internal */
     void mouseDown (const MouseEvent& event) override;
 
+//==============================================================================
     inline static constexpr int refreshRate = 15; // Hz
 
     // Additional padding to Meter component size needed to accomodate the
@@ -48,6 +50,6 @@ private:
     std::unique_ptr<MeterLegend> mMeterLegend;
     OwnedArray<MeterChannel> mMeterChannels;
 
-    //==========================================================================
+//==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Meter)
 };

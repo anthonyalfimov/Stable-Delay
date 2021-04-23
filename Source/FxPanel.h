@@ -19,11 +19,12 @@ class FxPanel  : public InterfacePanel,
                  public ComboBox::Listener
 {
 public:
-    FxPanel (ReallyBasicDelayAudioProcessor& processor);
-    ~FxPanel();
-    
+    explicit FxPanel (ReallyBasicDelayAudioProcessor& processor);
+
+//==============================================================================
     void setFxPanelStyle (FxType::Index typeIndex);
-    
+
+//==============================================================================
     /** @internal */
     void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
     
@@ -36,6 +37,6 @@ private:
     Label mFxTypeLabel { "fxType", "ERROR" };
     Label mBuildVersionLabel { "build" };
 
-    //==========================================================================
+//==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FxPanel)
 };

@@ -85,8 +85,3 @@ GainPanel::GainPanel (ReallyBasicDelayAudioProcessor& processor,
     mMeter->setBounds (meterBounds);
     addAndMakeVisible (mMeter.get());
 }
-
-GainPanel::~GainPanel()
-{
-    
-}

@@ -17,13 +17,13 @@
 class CentrePanel  : public InterfacePanel
 {
 public:
-    CentrePanel (ReallyBasicDelayAudioProcessor& processor);
+    explicit CentrePanel (ReallyBasicDelayAudioProcessor& processor);
     ~CentrePanel();
     
 private:
     std::unique_ptr<CentrePanelMenuBar> mMenuBar;
     std::unique_ptr<FxPanel> mFxPanel;
 
-    //==========================================================================
+//==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CentrePanel)
 };

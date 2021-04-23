@@ -28,15 +28,19 @@
 class PresetManager
 {
 public:
-    PresetManager (AudioProcessor& processor);
-    ~PresetManager();
-    
+    /** Creates the preset manager for the give Audio Processor.
+    */
+    explicit PresetManager (AudioProcessor& processor);
+
+//==============================================================================
     void createXmlForPreset (XmlElement* outElement) const;
     void loadPresetFromXml (XmlElement* inElement);
-    
+
+//==============================================================================
     int getNumberOfPresets() const;
     String getPresetName (int inPresetIndex) const;
-    
+
+//==============================================================================
     void createNewPreset();
     void savePreset();
     void saveAsPreset (String inPresetName);
@@ -44,6 +48,7 @@ public:
     bool isCurrentPresetSaved() const;
     String getCurrentPresetName() const;
 
+//==============================================================================
     static inline const String presetFileExtention = ".rbdf";
     static inline const String untitledPresetName = "Untitled";
     
@@ -60,6 +65,6 @@ private:
     XmlElement* mCurrentPresetXml;  // TODO: What is the point of this member?
     AudioProcessor& mProcessor;
 
-    //==========================================================================
+//==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PresetManager)
 };

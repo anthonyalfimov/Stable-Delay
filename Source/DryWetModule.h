@@ -16,8 +16,12 @@
 class DryWetModule  : public DspModule
 {
 public:
-    DryWetModule();
-    ~DryWetModule();
+    DryWetModule() = default;
+
+//==============================================================================
+    void setState (float dryWetPercent);
+    
+//==============================================================================
 
     void prepare (double sampleRate, int blockSize) override;
     void reset() override;
@@ -25,14 +29,13 @@ public:
     void process (const float* inAudio, float* outAudio,
                   int numSamplesToRender) override;
 
-    void setState (float dryWetPercent);
-
 private:
     SmoothedValue<float> mDryGainSmoothed;
     SmoothedValue<float> mWetGainSmoothed;
 
+//==============================================================================
     std::unique_ptr<float[]> mDryBuffer;
 
-    //==========================================================================
+//==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DryWetModule)
 };

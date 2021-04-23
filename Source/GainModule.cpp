@@ -10,14 +10,10 @@
 
 #include "GainModule.h"
 
-GainModule::GainModule()
+void GainModule::setState (float gainInDecibels)
 {
-    
-}
-
-GainModule::~GainModule()
-{
-    
+    // Convert from decibels
+    mGainSmoothed.setTargetValue (Decibels::decibelsToGain (gainInDecibels));
 }
 
 void GainModule::prepare (double sampleRate, int blockSize)
@@ -49,11 +45,5 @@ void GainModule::process (const float* inAudio, float* outAudio,
                                                  mGainSmoothed.getTargetValue(),
                                                  numSamplesToRender);
     }
-}
-
-void GainModule::setState (float gainInDecibels)
-{
-    // Convert from decibels
-    mGainSmoothed.setTargetValue (Decibels::decibelsToGain (gainInDecibels));
 }
 

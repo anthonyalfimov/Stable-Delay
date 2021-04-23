@@ -57,12 +57,9 @@ private:
     String mSliderName;
     const bool isLeftOfOwner;
 
-    // This time should cover double clicking
-    // TODO: Consider deriving the delay time from current double click speed
-    
     // Time before slider value display switches back to slider name
     inline static const int switchDelayTimeInMs = 1000 /* ms */;
 
-    //==========================================================================
+//==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SliderLabel)
 };

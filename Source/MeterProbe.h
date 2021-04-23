@@ -16,14 +16,18 @@
 class MeterProbe  : public DspModule
 {
 public:
-    MeterProbe();
-    ~MeterProbe();
+    MeterProbe() = default;
 
+//==============================================================================
+    void setSuspended (bool isSuspended) { mIsSuspended.store (isSuspended); }
+    
+//==============================================================================
     void prepare (double sampleRate, int blockSize) override;
     void reset() override;
     void process (const float* inAudio, float* outAudio,
                   int numSamplesToRender) override;
 
+//==============================================================================
     const std::atomic<float>* getRmsLevel() const { return &mRmsLevel; }
 
     /** Returns the maximum peak level observed since the last peak level reset.
@@ -59,8 +63,6 @@ public:
     */
     void resetRmsLevel() { mRmsLevel.store (0.0f); }
 
-    void setSuspended (bool isSuspended) { mIsSuspended.store (isSuspended); }
-
 private:
     // Flag that allows to suspend the metering (e.g. when Editor is destroyed)
     std::atomic<bool> mIsSuspended = true;
@@ -68,6 +70,7 @@ private:
     std::atomic<float> mRmsLevel = 0.0f;
     std::atomic<float> mPeakLevel = 0.0f;
 
+//==============================================================================
     // RMS window should be larger than the period of the lowest frequency you
     //  expect to be measuring. Larger window will result in slower response
     inline static const float rmsWindowInSeconds = 0.3f;
@@ -75,9 +78,9 @@ private:
     std::unique_ptr<float[]> mRmsBuffer;
     int mWritePosition = 0;
 
-    //==========================================================================
+//==============================================================================
     float calculateRms() const;
 
-    //==========================================================================
+//==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MeterProbe)
 };

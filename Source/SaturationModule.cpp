@@ -11,16 +11,10 @@
 #include <JuceHeader.h>
 #include "SaturationModule.h"
 
-SaturationModule::SaturationModule()
+void SaturationModule::setState (SaturationCurve curveToUse)
 {
-
+    mMode = curveToUse;
 }
-
-SaturationModule::~SaturationModule()
-{
-
-}
-
 
 void SaturationModule::process (const float* inAudio, float* outAudio,
                                 int numSamplesToRender)
@@ -52,11 +46,5 @@ void SaturationModule::process (const float* inAudio, float* outAudio,
 void SaturationModule::reset()
 {
 
-}
-
-
-void SaturationModule::setState (SaturationCurve curveToUse)
-{
-    mMode = curveToUse;
 }
 

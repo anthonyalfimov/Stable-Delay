@@ -53,11 +53,6 @@ CentrePanelMenuBar::CentrePanelMenuBar (ReallyBasicDelayAudioProcessor& processo
     }
 }
 
-CentrePanelMenuBar::~CentrePanelMenuBar()
-{
-    
-}
-
 void CentrePanelMenuBar::addFxTypeComboBoxListener (ComboBox::Listener* inListener)
 {
     mFxTypeComboBox->addListener (inListener);

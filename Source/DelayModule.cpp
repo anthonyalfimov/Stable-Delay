@@ -17,9 +17,51 @@ DelayModule::DelayModule()
     mSaturator.setState (SaturationCurve::beta);
 }
 
-DelayModule::~DelayModule()
+void DelayModule::setState (float time, float feedback, float type,
+                            float modRate, float modDepth, float stereoWidth,
+                            bool shouldOffsetModulation)
 {
-    
+    mTypeValue = static_cast<FxType::Index> (type);
+
+    float modAmplitude;
+
+    switch (mTypeValue)
+    {
+        case FxType::Delay:
+            mTimeSmoothed.setTargetValue (time / 1000.0);   // convert from ms to s
+            mFeedbackSmoothed.setTargetValue (feedback / 100.0f);    // convert from %
+            modRate = 0.05f;        // set fixed slow modulation
+
+            // Set the max modulation amplitude to 0.1 the delay time - as long
+            //  as it fits between min and max values for delay time modulation
+            //  amlitude
+            modAmplitude = (stereoWidth / 100.0f)
+                            * jlimit (minDelayTimeAmplitude,
+                                      maxDelayTimeAmplitude,
+                                      time / 10000.0f);
+            break;
+
+        case FxType::Chorus:
+            mTimeSmoothed.setTargetValue (chorusCentreTime);
+            mFeedbackSmoothed.setTargetValue (0.0f);    // disable feedback
+            modAmplitude = chorusTimeAmplitude * modDepth / 100.0f;  // convert from %
+            break;
+
+        case FxType::Flanger:
+            mTimeSmoothed.setTargetValue (flangerCentreTime);
+            mFeedbackSmoothed.setTargetValue (feedback / 100.0f);    // convert from %
+            modAmplitude = flangerTimeAmplitude * modDepth / 100.0f; // convert from %
+            break;
+
+        default:
+            jassertfalse;
+            modAmplitude = 0.0f;    // disable modulation
+            break;
+    }
+
+    const float modOffset = shouldOffsetModulation ? stereoWidth : 0.0f;
+
+    mLfo.setState (modRate, modAmplitude, modOffset);
 }
 
 void DelayModule::prepare (double sampleRate, int blockSize)
@@ -94,53 +136,6 @@ void DelayModule::process (const float* inAudio, float* outAudio,
     // ADVANCE THE WRITE HEAD
         mWritePosition = (mWritePosition + 1) % mAudioBufferSize;
     }
-}
-
-void DelayModule::setState (float time, float feedback, float type,
-                            float modRate, float modDepth, float stereoWidth,
-                            bool shouldOffsetModulation)
-{
-    mTypeValue = static_cast<FxType::Index> (type);
-
-    float modAmplitude;
-
-    switch (mTypeValue)
-    {
-        case FxType::Delay:
-            mTimeSmoothed.setTargetValue (time / 1000.0);   // convert from ms to s
-            mFeedbackSmoothed.setTargetValue (feedback / 100.0f);    // convert from %
-            modRate = 0.05f;        // set fixed slow modulation
-
-            // Set the max modulation amplitude to 0.1 the delay time - as long
-            //  as it fits between min and max values for delay time modulation
-            //  amlitude
-            modAmplitude = (stereoWidth / 100.0f)
-                            * jlimit (minDelayTimeAmplitude,
-                                      maxDelayTimeAmplitude,
-                                      time / 10000.0f);
-            break;
-
-        case FxType::Chorus:
-            mTimeSmoothed.setTargetValue (chorusCentreTime);
-            mFeedbackSmoothed.setTargetValue (0.0f);    // disable feedback
-            modAmplitude = chorusTimeAmplitude * modDepth / 100.0f;  // convert from %
-            break;
-
-        case FxType::Flanger:
-            mTimeSmoothed.setTargetValue (flangerCentreTime);
-            mFeedbackSmoothed.setTargetValue (feedback / 100.0f);    // convert from %
-            modAmplitude = flangerTimeAmplitude * modDepth / 100.0f; // convert from %
-            break;
-
-        default:
-            jassertfalse;
-            modAmplitude = 0.0f;    // disable modulation
-            break;
-    }
-
-    const float modOffset = shouldOffsetModulation ? stereoWidth : 0.0f;
-
-    mLfo.setState (modRate, modAmplitude, modOffset);
 }
 
 float DelayModule::getInterpolatedSample (double delayTimeInSamples) const

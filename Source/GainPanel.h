@@ -20,12 +20,11 @@ class GainPanel  : public InterfacePanel
 public:
     GainPanel (ReallyBasicDelayAudioProcessor& processor,
                Parameter::Index parameterIndex);
-    ~GainPanel();
     
 private:
     std::unique_ptr<ParameterKnob> mKnob;
     std::unique_ptr<Meter> mMeter;
 
-    //==========================================================================
+//==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GainPanel)
 };

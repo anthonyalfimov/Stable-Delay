@@ -16,24 +16,26 @@
 class LfoModule  : public DspModule
 {
 public:
-    LfoModule();
-    ~LfoModule();
+    LfoModule() = default;
 
+//==============================================================================
+    void setState (float rate, float amplitude, float phaseOffsetPercent);
+
+//==============================================================================
     void prepare (double sampleRate, int blockSize) override;
     void reset() override;
     void process (const float* inBuffer, float* outBuffer,
                   int numSamplesToRender) override;
 
-    void setState (float rate, float amplitude, float phaseOffsetPercent);
-    
 private:
     SmoothedValue<float, ValueSmoothingTypes::Multiplicative> mRateSmoothed;
     SmoothedValue<float> mAmplitudeSmoothed;
     SmoothedValue<float> mPhaseOffsetSmoothed;
 
+//==============================================================================
     float mPhase = 0.0f;
     float mHarmonicPhase = 0.0f;
 
-    //==========================================================================
+//==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LfoModule)
 };

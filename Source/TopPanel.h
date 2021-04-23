@@ -18,9 +18,9 @@ class TopPanel  : public InterfacePanel,
                   public ComboBox::Listener
 {
 public:
-    TopPanel (ReallyBasicDelayAudioProcessor& processor);
-    ~TopPanel();
-    
+    explicit TopPanel (ReallyBasicDelayAudioProcessor& processor);
+
+//==============================================================================
     /** @internal */
     void buttonClicked (Button* buttonThatWasPressed) override;
     /** @internal */
@@ -35,6 +35,6 @@ private:
 
     Label mTitleLabel { "title", "Really Basic Delay" };
 
-    //==========================================================================
+//==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TopPanel)
 };

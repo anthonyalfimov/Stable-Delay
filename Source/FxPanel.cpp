@@ -52,11 +52,6 @@ FxPanel::FxPanel (ReallyBasicDelayAudioProcessor& processor)
     mBuildVersionLabel.setBounds (labelBounds);
     addAndMakeVisible (mBuildVersionLabel);
 }
-
-FxPanel::~FxPanel()
-{
-    
-}
     
 void FxPanel::setFxPanelStyle (FxType::Index typeIndex)
 {

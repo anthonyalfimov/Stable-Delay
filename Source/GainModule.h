@@ -16,22 +16,21 @@
 class GainModule  : public DspModule
 {
 public:
-    // TODO: Is there a reason to explicitely provide empty ctor and dtor?
+    GainModule() = default;
 
-    GainModule();
-    ~GainModule();
+//==============================================================================
+    void setState (float gainInDecibels);
 
+//==============================================================================
     void prepare (double sampleRate, int blockSize) override;
     void reset() override;
     void process (const float* inAudio, float* outAudio,
                   int numSamplesToRender) override;
 
-    void setState (float gainInDecibels);
-
 private:
     SmoothedValue<float, ValueSmoothingTypes::Multiplicative> mGainSmoothed;
 
-    //==========================================================================
+//==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GainModule)
 };
 

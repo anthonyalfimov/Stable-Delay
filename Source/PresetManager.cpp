@@ -26,11 +26,6 @@ PresetManager::PresetManager (AudioProcessor& processor)
     storeLocalPresets();
 }
 
-PresetManager::~PresetManager()
-{
-    
-}
-
 void PresetManager::createXmlForPreset (XmlElement* outElement) const
 {
     // Note: we can't access mProcessor->parameters here because mProcessor is

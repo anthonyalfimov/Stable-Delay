@@ -18,8 +18,7 @@
 class MainPanel  : public InterfacePanel
 {
 public:
-    MainPanel (ReallyBasicDelayAudioProcessor& processor);
-    ~MainPanel();
+    explicit MainPanel (ReallyBasicDelayAudioProcessor& processor);
     
 private:
     std::unique_ptr<TopPanel> mTopPanel;
@@ -27,6 +26,6 @@ private:
     std::unique_ptr<GainPanel> mOutputGainPanel;
     std::unique_ptr<CentrePanel> mCentrePanel;
 
-    //==========================================================================
+//==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainPanel)
 };

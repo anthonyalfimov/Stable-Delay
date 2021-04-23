@@ -46,11 +46,6 @@ PluginLookAndFeel::PluginLookAndFeel()
     setColour (Slider::trackColourId, RBD::sliderTrackColour);
 }
 
-PluginLookAndFeel::~PluginLookAndFeel()
-{
-
-}
-
 //= LABELS =====================================================================
 
 void PluginLookAndFeel::drawLabel (Graphics& g, Label& label)

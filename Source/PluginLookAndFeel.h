@@ -25,9 +25,9 @@
 class PluginLookAndFeel  : public LookAndFeel_V4
 {
 public:
+    /** Creates PluginLookAndFeel objects and intialises its values and assets.
+    */
     PluginLookAndFeel();
-    
-    ~PluginLookAndFeel();
 
 //= LABELS =====================================================================
 
@@ -76,4 +76,7 @@ private:
     inline static const float knobMarkThickness = 2.3f;
     inline static const float knobMarkStart = 7.0f;
     inline static const float knobMarkEnd = 16.0f;
+
+//==============================================================================
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginLookAndFeel)
 };

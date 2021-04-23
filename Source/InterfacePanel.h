@@ -24,15 +24,17 @@
 class InterfacePanel  : public Component
 {
 public:
-    InterfacePanel (ReallyBasicDelayAudioProcessor& processor);
+    explicit InterfacePanel (ReallyBasicDelayAudioProcessor& processor);
     virtual ~InterfacePanel() = 0;
-    
+
+//==============================================================================
+    /** @internal */
     void paint (Graphics& g) override;
     
 protected:
     ReallyBasicDelayAudioProcessor& mProcessor;
     
 private:
-    //==========================================================================
+//==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (InterfacePanel)
 };

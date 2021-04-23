@@ -15,8 +15,8 @@
 class HighlightableComboBox  : public ComboBox
 {
 public:
-    HighlightableComboBox (const String& componentName = {});
-    virtual ~HighlightableComboBox();
+    explicit HighlightableComboBox (const String& componentName = {});
+    virtual ~HighlightableComboBox() = default;
 
 //==============================================================================
     /** @internal */
@@ -27,6 +27,6 @@ public:
     void mouseUp (const MouseEvent& event) override;
 
 private:
-    //==========================================================================
+//==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HighlightableComboBox)
 };

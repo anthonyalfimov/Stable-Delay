@@ -16,13 +16,33 @@
 //==============================================================================
 //  MeterLabel
 
-MeterLabel::MeterLabel (int levelValue, bool isStereo)
+class MeterLegend::MeterLabel  : public Component
+{
+public:
+    explicit MeterLabel (int levelValue, bool isStereo = true);
+    const int level;
+
+//==============================================================================
+    /** @internal */
+    void paint (Graphics& g) override;
+
+private:
+    const String mText;
+    const bool mIsStereo;
+
+    inline static const int tickLenght = 3;
+
+//==============================================================================
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MeterLabel)
+};
+
+MeterLegend::MeterLabel::MeterLabel (int levelValue, bool isStereo)
     : level (levelValue), mText (abs (levelValue)), mIsStereo (isStereo)
 {
 
 }
 
-void MeterLabel::paint (Graphics& g)
+void MeterLegend::MeterLabel::paint (Graphics& g)
 {
     const auto bounds = getLocalBounds();
     const int centreY = bounds.getCentreY();
@@ -46,6 +66,8 @@ void MeterLabel::paint (Graphics& g)
 
 MeterLegend::MeterLegend (std::initializer_list<int> labelLevels, bool isStereo)
 {
+    // TODO: Consider using setBufferedToImage() since legend doesn't change
+
     // Construct a set from the passed list to sort it and remove duplicates
     std::set<int> values (labelLevels);
 
@@ -56,6 +78,9 @@ MeterLegend::MeterLegend (std::initializer_list<int> labelLevels, bool isStereo)
                                                                           isStereo)));
     }
 }
+
+// Dtor must be not inline to be aware of MeterLabel definition
+MeterLegend::~MeterLegend() = default;
 
 void MeterLegend::resized()
 {

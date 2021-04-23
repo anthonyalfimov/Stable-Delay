@@ -84,7 +84,7 @@ public:
         end = previousRangeEnd;
     }
 
-    //==========================================================================
+//==============================================================================
     RangeType getNormalisableRange() const
     {
         RangeType outputRange (start, end,
@@ -96,7 +96,7 @@ public:
         return outputRange;
     }
 
-    //==========================================================================
+//==============================================================================
     using ValueRemapFunction = std::function<ValueType(ValueType rangeStart,
                                                        ValueType rangeEnd,
                                                        ValueType valueToRemap)>;
@@ -148,6 +148,7 @@ private:
     ValueType end = 1;
     ValueType interval = 0;
 
+//==============================================================================
     struct RangeSegment  : public RangeType
     {
         /** Creates a range segment that spans the whole 0 to 1 proportion
@@ -155,14 +156,27 @@ private:
         */
         RangeSegment() = default;
 
-        RangeSegment (const RangeType& range) : RangeType (range) {}
-        RangeSegment (RangeType&& range) : RangeType (range) {}
-
         //======================================================================
         RangeSegment (const RangeSegment&) = default;
         RangeSegment& operator= (const RangeSegment&) = default;
         RangeSegment (RangeSegment&&) = default;
         RangeSegment& operator= (RangeSegment&&) = default;
+
+        //======================================================================
+        RangeSegment (const RangeType& range) : RangeType (range) {}
+        RangeSegment (RangeType&& range) : RangeType (range) {}
+
+        RangeSegment& operator= (const RangeType& range)
+        {
+            RangeType::operator= (range);
+            return *this;
+        }
+
+        RangeSegment& operator= (RangeType&& range)
+        {
+            RangeType::operator= (range);
+            return *this;
+        }
 
         //======================================================================
         ValueType convertTo0to1Segment (ValueType value) const noexcept
@@ -187,4 +201,6 @@ private:
     };
 
     std::array<RangeSegment, Size> mSegments;
+//==============================================================================
+    JUCE_DECLARE_NON_COPYABLE (PiecewiseRange)
 };

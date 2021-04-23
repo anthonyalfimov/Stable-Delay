@@ -16,8 +16,10 @@
 
 KnobScale::KnobScale (Slider& parentSlider, Parameter::Index parameterIndex)
 {
-    // TODO: Size should be set by the parent knob for flexibility
+    // TODO: Size should be set by the parent component for flexibility
     setSize (RBD::knobSize, RBD::knobSize);
+
+    // TODO: Consider using setBufferedToImage() since scale doesn't change
 
     // Retrieve parameter properties
     const auto& majorTickValues = Parameter::majorTicks[parameterIndex];
@@ -136,9 +138,4 @@ ParameterKnob::ParameterKnob (AudioProcessorValueTreeState& stateToControl,
     // Create label
     mLabel = std::make_unique<SliderLabel> (mSlider.get());
     addAndMakeVisible (mLabel.get());
-}
-
-ParameterKnob::~ParameterKnob()
-{
-    
 }

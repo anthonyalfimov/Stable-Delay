@@ -12,42 +12,23 @@
 
 #include <JuceHeader.h>
 
-// TODO: Consider using setBufferedToImage() since legend doesn't change
-
-class MeterLabel  : public Component
-{
-public:
-    explicit MeterLabel (int levelValue, bool isStereo = true);
-    const int level;
-
-//==============================================================================
-    /** @internal */
-    void paint (Graphics& g) override;
-
-private:
-    const String mText;
-    const bool mIsStereo;
-
-    inline static const int tickLenght = 3;
-    
-    //==========================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MeterLabel)
-};
-
 class MeterLegend  : public Component
 {
 public:
     MeterLegend (std::initializer_list<int> labelLevels, bool isStereo = true);
+    ~MeterLegend(); // Dtor must be not inline to be aware of MeterLabel definition
     
 //==============================================================================
     /** @internal */
     void resized() override;
 
 private:
+    class MeterLabel;
     OwnedArray<MeterLabel> mLabels;
 
+//==============================================================================
     inline static constexpr int labelHeight = 11;
 
-    //==========================================================================
+//==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MeterLegend)
 };

@@ -20,35 +20,36 @@ class DelayModule  : public DspModule
 {
 public:
     DelayModule();
-    ~DelayModule();
 
+//==============================================================================
+    void setState (float time, float feedback, float type,
+                   float modRate, float modDepth, float stereoWidth,
+                   bool shouldOffsetModulation);
+    
+//==============================================================================
     void prepare (double sampleRate, int blockSize) override;
     void reset() override;
     void process (const float* inAudio, float* outAudio,
                   int numSamplesToRender) override;
 
-    void setState (float time, float feedback, float type,
-                   float modRate, float modDepth, float stereoWidth,
-                   bool shouldOffsetModulation);
-
 private:
-    //==========================================================================
+//==============================================================================
     // Parameters
     // TODO: Is there actual benefit from type double for delay time?
     SmoothedValue<double, ValueSmoothingTypes::Multiplicative> mTimeSmoothed;
     SmoothedValue<float> mFeedbackSmoothed;
     FxType::Index mTypeValue = FxType::Delay;
 
-    //==========================================================================
+//==============================================================================
     // FX type constants
-    inline static const double chorusCentreTime = 0.006;
-    inline static const float chorusTimeAmplitude = 0.005f;
-    inline static const double flangerCentreTime = 0.0027;
-    inline static const float flangerTimeAmplitude = 0.0023f;
-    inline static const float maxDelayTimeAmplitude = 0.01f;
-    inline static const float minDelayTimeAmplitude = 0.0005f;
+    inline static constexpr double chorusCentreTime = 0.006;
+    inline static constexpr float chorusTimeAmplitude = 0.005f;
+    inline static constexpr double flangerCentreTime = 0.0027;
+    inline static constexpr float flangerTimeAmplitude = 0.0023f;
+    inline static constexpr float maxDelayTimeAmplitude = 0.01f;
+    inline static constexpr float minDelayTimeAmplitude = 0.0005f;
 
-    //==========================================================================
+//==============================================================================
     // Delay
 
     // TODO: Consider a better data structure for holding the delay buffer
@@ -68,16 +69,16 @@ private:
 
     float getInterpolatedSample (double delayTimeInSamples) const;
 
-    //==========================================================================
+//==============================================================================
     // LFO
     LfoModule mLfo;
     std::unique_ptr<float[]> mModulationBuffer;
 
-    //==========================================================================
+//==============================================================================
     // Saturation
     SaturationModule mSaturator;
 
-    //==========================================================================
+//==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DelayModule)
 };
 

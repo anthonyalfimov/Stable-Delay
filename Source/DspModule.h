@@ -20,15 +20,8 @@ public:
     DspModule() = default;
     virtual ~DspModule() = default;
 
-    virtual void prepare (double sampleRate, int blockSize)
-    {
-        jassert (sampleRate > 0.0);
-        jassert (blockSize > 0);
-
-        mSampleRate = sampleRate;
-        mBlockSize = blockSize;
-    }
-
+//==============================================================================
+    virtual void prepare (double sampleRate, int blockSize);
     virtual void reset() = 0;
     
     // TODO: Switch from raw buffer pointers to JUCE AudioBlock or similar

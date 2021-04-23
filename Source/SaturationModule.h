@@ -39,19 +39,21 @@ enum class SaturationCurve
 class SaturationModule  : public DspModule
 {
 public:
-    SaturationModule();
-    ~SaturationModule();
+    SaturationModule() = default;
+
+//==============================================================================
+    void setState (SaturationCurve curveToUse);
+    
+//==============================================================================
 
     void process (const float* inAudio, float* outAudio,
                   int numSamplesToRender) override;
     void reset() override;
 
-    void setState (SaturationCurve curveToUse);
-
 private:
     SaturationCurve mMode = SaturationCurve::beta;
 
-    //==========================================================================
+//==============================================================================
     // Saturation Curves
 
     float saturateAlpha (float x)
@@ -74,6 +76,6 @@ private:
             return x * (1 - x * x / 6.75f);
     }
 
-    //==========================================================================
+//==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SaturationModule)
 };

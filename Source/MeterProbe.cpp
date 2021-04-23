@@ -10,16 +10,6 @@
 
 #include "MeterProbe.h"
 
-MeterProbe::MeterProbe()
-{
-
-}
-
-MeterProbe::~MeterProbe()
-{
-
-}
-
 void MeterProbe::prepare (double sampleRate, int blockSize)
 {
     DspModule::prepare (sampleRate, blockSize);

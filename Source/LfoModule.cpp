@@ -10,14 +10,13 @@
 
 #include "LfoModule.h"
 
-LfoModule::LfoModule()
+void LfoModule::setState (float rate, float amplitude, float phaseOffsetPercent)
 {
-    
-}
-
-LfoModule::~LfoModule()
-{
-
+    mRateSmoothed.setTargetValue (rate);
+    mAmplitudeSmoothed.setTargetValue (amplitude);
+    // Convert % value to radians (100% = pi)
+    mPhaseOffsetSmoothed.setTargetValue (MathConstants<float>::pi
+                                         * (phaseOffsetPercent / 100.0f));
 }
 
 void LfoModule::prepare (double sampleRate, int blockSize)
@@ -70,13 +69,4 @@ void LfoModule::process (const float* /*inBuffer*/, float* outBuffer,
         if (mHarmonicPhase > 1.0f)
             mHarmonicPhase -= 1.0f;
     }
-}
-
-void LfoModule::setState (float rate, float amplitude, float phaseOffsetPercent)
-{
-    mRateSmoothed.setTargetValue (rate);
-    mAmplitudeSmoothed.setTargetValue (amplitude);
-    // Convert % value to radians (100% = pi)
-    mPhaseOffsetSmoothed.setTargetValue (MathConstants<float>::pi
-                                         * (phaseOffsetPercent / 100.0f));
 }

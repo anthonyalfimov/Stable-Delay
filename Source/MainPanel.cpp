@@ -34,8 +34,3 @@ MainPanel::MainPanel (ReallyBasicDelayAudioProcessor& processor)
     mOutputGainPanel->setTopRightPosition (getRight(), mTopPanel->getBottom());
     addAndMakeVisible (mOutputGainPanel.get());
 }
-
-MainPanel::~MainPanel()
-{
-    
-}

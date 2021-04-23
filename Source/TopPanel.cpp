@@ -67,11 +67,6 @@ TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor)
     addAndMakeVisible (mTitleLabel);
 }
 
-TopPanel::~TopPanel()
-{
-    
-}
-
 void TopPanel::buttonClicked (Button* buttonThatWasPressed)
 {
     PresetManager* presetManager = mProcessor.getPresetManager();
