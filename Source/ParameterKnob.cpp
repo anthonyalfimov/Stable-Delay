@@ -31,6 +31,12 @@ KnobScale::KnobScale (Slider& parentSlider, Parameter::Index parameterIndex)
     const auto [minAngle, maxAngle, other] = parentSlider.getRotaryParameters();
     ignoreUnused (other);
 
+    // NOTE: Instead of adding line segments to the path and then rounding the
+    //  corners, we could create a PathStrokeType object and use its
+    //  PathStrokeType::createStrokedPath() method to generate the tick shapes.
+    //  In this case, we need to offset the path end positions to account for
+    //  the rounded end caps that stick beyond the end point.
+
     {
         Path minorTicks;
 
