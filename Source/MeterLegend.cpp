@@ -79,7 +79,7 @@ MeterLegend::MeterLegend (std::initializer_list<int> labelLevels, bool isStereo)
     }
 }
 
-// Dtor must be not inline to be aware of MeterLabel definition
+// Dtor must not be inline to be aware of MeterLabel definition
 MeterLegend::~MeterLegend() = default;
 
 void MeterLegend::resized()

@@ -16,7 +16,7 @@ class MeterLegend  : public Component
 {
 public:
     MeterLegend (std::initializer_list<int> labelLevels, bool isStereo = true);
-    ~MeterLegend(); // Dtor must be not inline to be aware of MeterLabel definition
+    ~MeterLegend(); // dtor must be not inline to be aware of MeterLabel definition
     
 //==============================================================================
     /** @internal */
