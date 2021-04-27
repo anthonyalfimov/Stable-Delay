@@ -51,6 +51,7 @@ namespace RBD
 
     // Control sizes
     inline constexpr int knobSize = 80;
+    inline constexpr int toggleHeight = 20;
     inline const Point<float> tickShadowOffset (0.7f, 0.7f);
 
     // Label sizes

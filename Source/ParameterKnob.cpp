@@ -9,6 +9,7 @@
 */
 
 #include "ParameterKnob.h"
+#include "ParameterToggle.h"
 #include "InterfaceConstants.h"
 
 //==============================================================================
@@ -93,12 +94,51 @@ void KnobScale::paint (Graphics& g)
 }
 
 //==============================================================================
+//  ParameterKnob::ConnectedToggle
+
+class ParameterKnob::ConnectedToggle  : public ParameterToggle
+{
+public:
+    ConnectedToggle (AudioProcessorValueTreeState& stateToControl,
+                     Parameter::Index parameterIndex);
+
+protected:
+//==============================================================================
+    /** @internal */
+    void paintButton (Graphics& g,
+                      bool shouldDrawButtonAsHighlighted,
+                      bool shouldDrawButtonAsDown) override;
+
+private:
+//==============================================================================
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ConnectedToggle)
+};
+
+ParameterKnob
+::ConnectedToggle::ConnectedToggle (AudioProcessorValueTreeState& stateToControl,
+                                    Parameter::Index parameterIndex)
+    : ParameterToggle (stateToControl, parameterIndex)
+{
+}
+
+void ParameterKnob::ConnectedToggle::paintButton (Graphics& g,
+                                                  bool shouldDrawButtonAsHighlighted,
+                                                  bool shouldDrawButtonAsDown)
+{
+    getLookAndFeel().drawToggleButton (g,
+                                       *this,
+                                       shouldDrawButtonAsHighlighted,
+                                       shouldDrawButtonAsDown);
+}
+
+//==============================================================================
 //  ParameterKnob
 
 ParameterKnob::ParameterKnob (AudioProcessorValueTreeState& stateToControl,
-                              Parameter::Index parameterIndex)
+                              Parameter::Index knobParameterIndex)
 {
-    const auto parameter = stateToControl.getParameter (Parameter::ID[parameterIndex]);
+    const auto parameter
+    = stateToControl.getParameter (Parameter::ID[knobParameterIndex]);
 
     if (parameter == nullptr)
     {
@@ -108,10 +148,10 @@ ParameterKnob::ParameterKnob (AudioProcessorValueTreeState& stateToControl,
 
     // Set up component
     setSize (RBD::knobSize, RBD::knobSize + RBD::labelHeight);
-    setName (Parameter::Name[parameterIndex] + "Control");
+    setName (Parameter::Name[knobParameterIndex] + "Control");
 
     // Create and set up Slider as a rotary knob
-    mSlider = std::make_unique<Slider> (Parameter::Name[parameterIndex]);
+    mSlider = std::make_unique<Slider> (Parameter::Name[knobParameterIndex]);
     mSlider->setSliderStyle (Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     mSlider->setTextBoxStyle (Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
     mSlider->setTextValueSuffix (parameter->getLabel());
@@ -132,11 +172,11 @@ ParameterKnob::ParameterKnob (AudioProcessorValueTreeState& stateToControl,
     // Create Slider Attachment
     using SliderAttachment = AudioProcessorValueTreeState::SliderAttachment;
     mAttachment = std::make_unique<SliderAttachment> (stateToControl,
-                                                      Parameter::ID[parameterIndex],
+                                                      Parameter::ID[knobParameterIndex],
                                                       *mSlider);
 
     // Create and set up knob scale
-    mScale = std::make_unique<KnobScale> (*mSlider, parameterIndex);
+    mScale = std::make_unique<KnobScale> (*mSlider, knobParameterIndex);
     mScale->setBounds (0, 0, RBD::knobSize, RBD::knobSize);
     addAndMakeVisible (mScale.get());
     mScale->toBehind (mSlider.get());   // place scale ticks behind slider
@@ -145,3 +185,34 @@ ParameterKnob::ParameterKnob (AudioProcessorValueTreeState& stateToControl,
     mLabel = std::make_unique<SliderLabel> (mSlider.get());
     addAndMakeVisible (mLabel.get());
 }
+
+ParameterKnob::ParameterKnob (AudioProcessorValueTreeState& stateToControl,
+                              Parameter::Index knobParameterIndex,
+                              Parameter::Index toggleParameterIndex)
+    : ParameterKnob (stateToControl, knobParameterIndex)
+{
+    if (toggleParameterIndex == knobParameterIndex
+        || stateToControl.getParameter (Parameter::ID[toggleParameterIndex]) == nullptr)
+    {
+        jassertfalse;
+        return;
+    }
+
+    // Extend bounds to house connected toggle
+    setSize (getWidth(), getHeight() + RBD::toggleHeight);
+
+    // Create connected toggle
+    mToggle = std::make_unique<ConnectedToggle> (stateToControl,
+                                                 toggleParameterIndex);
+    const auto bounds
+    = getLocalBounds().withHeight (RBD::toggleHeight + RBD::defaultCornerSize)
+                      .withBottomY (getBottom());
+    mToggle->setBounds (bounds);
+    addAndMakeVisible (mToggle.get());
+    mToggle->toBehind (mLabel.get());   // place toggle behind knob label
+
+    mHasToggle = true;
+}
+
+// Dtor must be not inline to be aware of ConnectedToggle definition
+ParameterKnob::~ParameterKnob() = default;

@@ -41,6 +41,10 @@
             file="Source/ParameterSlider.cpp"/>
       <FILE id="xjTMA1" name="ParameterSlider.h" compile="0" resource="0"
             file="Source/ParameterSlider.h"/>
+      <FILE id="Y2DPiq" name="ParameterToggle.cpp" compile="1" resource="0"
+            file="Source/ParameterToggle.cpp"/>
+      <FILE id="suoF7V" name="ParameterToggle.h" compile="0" resource="0"
+            file="Source/ParameterToggle.h"/>
     </GROUP>
     <GROUP id="{89B33AAD-A27F-7960-6038-74F7F39F53E0}" name="Components">
       <FILE id="B6Bznx" name="MeterChannel.cpp" compile="1" resource="0"

@@ -34,8 +34,9 @@ FxPanel::FxPanel (ReallyBasicDelayAudioProcessor& processor)
     const auto selectedTypeIndex = static_cast<FxType::Index> (fxTypeParameter->get());
     setFxPanelStyle (selectedTypeIndex);
 
-    // Set up Build Version Label
-    // TODO: Enable build stamp only for the debug version, or remove later
+    // TODO: Move build stamp to the "About" window
+    /*
+     // Set up Build Version Label
     mBuildVersionLabel.setFont (RBD::mainFont);
     mBuildVersionLabel.setJustificationType (Justification::centred);
     mBuildVersionLabel.setColour (Label::textColourId,
@@ -51,6 +52,7 @@ FxPanel::FxPanel (ReallyBasicDelayAudioProcessor& processor)
                                 .withBottomY (getHeight() - 7);
     mBuildVersionLabel.setBounds (labelBounds);
     addAndMakeVisible (mBuildVersionLabel);
+    */
 }
     
 void FxPanel::setFxPanelStyle (FxType::Index typeIndex)
@@ -66,7 +68,8 @@ void FxPanel::setFxPanelStyle (FxType::Index typeIndex)
                                                          Parameter::DelayTime));
 
             mKnobs.add (std::make_unique<ParameterKnob> (mProcessor.parameters,
-                                                         Parameter::Feedback));
+                                                         Parameter::Feedback,
+                                                         Parameter::InvertFeedback));
             
             mKnobs.add (std::make_unique<ParameterKnob> (mProcessor.parameters,
                                                          Parameter::DryWet));
@@ -91,7 +94,8 @@ void FxPanel::setFxPanelStyle (FxType::Index typeIndex)
                                                          Parameter::ModulationDepth));
             
             mKnobs.add (std::make_unique<ParameterKnob> (mProcessor.parameters,
-                                                         Parameter::Feedback));
+                                                         Parameter::Feedback,
+                                                         Parameter::InvertFeedback));
             
             mKnobs.add (std::make_unique<ParameterKnob> (mProcessor.parameters,
                                                          Parameter::DryWet));
@@ -116,7 +120,11 @@ void FxPanel::setFxPanelStyle (FxType::Index typeIndex)
         auto bounds = getLocalBounds()
                             .withSizeKeepingCentre (RBD::knobSize, RBD::knobSize)
                             .translated (knobOffset * RBD::knobSize, 15.0f);
-        bounds.setHeight (RBD::knobSize + RBD::labelHeight);
+
+        if (knob->hasToggle())
+            bounds.setHeight (RBD::knobSize + RBD::labelHeight + RBD::toggleHeight);
+        else
+            bounds.setHeight (RBD::knobSize + RBD::labelHeight);
 
         knob->setBounds (bounds);
         

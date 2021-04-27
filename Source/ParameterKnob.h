@@ -49,14 +49,28 @@ private:
 class ParameterKnob  : public Component
 {
 public:
+    /** Create knob object with scale and label.
+    */
     ParameterKnob (AudioProcessorValueTreeState& stateToControl,
-                   Parameter::Index parameterIndex);
+                   Parameter::Index knobParameterIndex);
+    /** Create knob object wiwth scale, label, and a connected toggle.
+    */
+    ParameterKnob (AudioProcessorValueTreeState& stateToControl,
+                   Parameter::Index knobParameterIndex,
+                   Parameter::Index toggleParameterIndex);
+    ~ParameterKnob(); // dtor must not be inline to be aware of ConnectedToggle definition
+
+    bool hasToggle() const { return mHasToggle; }
 
 private:
     std::unique_ptr<Slider> mSlider;
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> mAttachment;
     std::unique_ptr<KnobScale> mScale;
     std::unique_ptr<SliderLabel> mLabel;
+
+    bool mHasToggle = false;
+    class ConnectedToggle;
+    std::unique_ptr<ConnectedToggle> mToggle;
 
 //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ParameterKnob)
