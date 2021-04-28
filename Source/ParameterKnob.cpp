@@ -110,6 +110,8 @@ protected:
                       bool shouldDrawButtonAsDown) override;
 
 private:
+    Path getToggleShape (Rectangle<float> bounds, float inset, bool isClosed) const;
+
 //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ConnectedToggle)
 };
@@ -125,10 +127,66 @@ void ParameterKnob::ConnectedToggle::paintButton (Graphics& g,
                                                   bool shouldDrawButtonAsHighlighted,
                                                   bool shouldDrawButtonAsDown)
 {
-    getLookAndFeel().drawToggleButton (g,
-                                       *this,
-                                       shouldDrawButtonAsHighlighted,
-                                       shouldDrawButtonAsDown);
+    Colour bgColour = /*shouldDrawButtonAsHighlighted ? RBD::controlHoverColour
+                                                    :*/ Colour (0, 0, 0).withAlpha (0.1f);
+
+    if (getToggleState())
+        bgColour = RBD::controlActiveColour;
+
+    Path background = getToggleShape (getLocalBounds().toFloat(), 0.0f, true);
+    g.setColour (bgColour);
+    g.fillPath (background);
+
+    // TODO: use clipping to draw background inset by 1 / whatever the thickness
+
+    // Reset the following changes to the graphics context at the end of the scope
+    Graphics::ScopedSaveState saveState (g);
+    g.reduceClipRegion (background);  // set clip region to the knob mark
+
+    Colour outlineColour = /*shouldDrawButtonAsHighlighted ? RBD::controlHoverColour
+                                                         :*/ Colour (36, 36, 36);
+    Path outline = getToggleShape (getLocalBounds().toFloat(), 0.5f, false);
+    g.setColour (outlineColour);
+    g.strokePath (outline, PathStrokeType (1.0f, PathStrokeType::mitered));
+}
+
+Path ParameterKnob::ConnectedToggle::getToggleShape (Rectangle<float> bounds,
+                                                     float inset,
+                                                     bool isClosed) const
+{
+    const float x0 = bounds.getX() + inset;
+    const float y0 = bounds.getY();
+    const float x1 = bounds.getRight() - inset;
+    const float y1 = bounds.getBottom() - inset;
+
+    const float cs = RBD::defaultCornerSize;
+    const float cs45 = cs * 0.45f;
+
+    Path shape;
+
+    shape.startNewSubPath (x0, y0);
+    shape.lineTo (x0, y1 - cs);
+    shape.cubicTo (x0, y1 - cs45,
+                   x0 + cs45, y1,
+                   x0 + cs, y1);
+    shape.lineTo (x1 - cs, y1);
+    shape.cubicTo (x1 - cs45, y1,
+                   x1, y1 - cs45,
+                   x1, y1 - cs);
+    shape.lineTo (x1, y0);
+
+    if (! isClosed)
+        return shape;
+
+    shape.cubicTo (x1, y0 + cs - cs45,
+                   x1 - cs45, y0 + cs,
+                   x1 - cs, y0 + cs);
+    shape.lineTo (x0 + cs, y0 + cs);
+    shape.cubicTo (x0 + cs45, y0 + cs,
+                   x0, y0 + cs - cs45,
+                   x0, y0);
+
+    return shape;
 }
 
 //==============================================================================

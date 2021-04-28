@@ -119,7 +119,7 @@ void FxPanel::setFxPanelStyle (FxType::Index typeIndex)
     {
         auto bounds = getLocalBounds()
                             .withSizeKeepingCentre (RBD::knobSize, RBD::knobSize)
-                            .translated (knobOffset * RBD::knobSize, 15.0f);
+                            .translated (knobOffset * RBD::knobSize, 10.0f);
 
         if (knob->hasToggle())
             bounds.setHeight (RBD::knobSize + RBD::labelHeight + RBD::toggleHeight);
