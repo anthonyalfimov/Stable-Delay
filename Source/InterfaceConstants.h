@@ -64,7 +64,7 @@ namespace RBD
     // TODO: Move colour and font global constants into the LookAndFeel class
     //  Once all component drawing is handled by the custom L&F class,
     //  these constants can be safely moved inside that class.
-    //  Aim to use ColourIds more as well.
+    //  Colours should be implemented using custom ColourIDs.
 
     inline const Colour noColour = Colour (0, 0, 0).withAlpha (0.0f);
     inline const Colour textNormalColour = Colour (110, 110, 110);
