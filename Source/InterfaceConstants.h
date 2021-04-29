@@ -74,6 +74,9 @@ namespace RBD
     inline const Colour controlHoverColour = Colour (0, 0, 0).withAlpha (0.8f);
     inline const Colour controlActiveColour = Colour (105, 105, 105).withAlpha (0.3f);
     inline const Colour controlOutlineColour = noColour;
+    inline const Colour toggleNormalColour = Colour (0, 0, 0).withAlpha (0.1f);
+    inline const Colour toggleHoverColour = controlHoverColour;
+    inline const Colour toggleHandleColour = Colour (125, 125, 125);
     inline const Colour sliderMarkColour = Colour (242, 242, 242);
     inline const Colour sliderTickColour = Colour (232, 232, 232);
     inline const Colour popupBgColour = Colour (40, 40, 40);

@@ -121,33 +121,87 @@ ParameterKnob
                                     Parameter::Index parameterIndex)
     : ParameterToggle (stateToControl, parameterIndex)
 {
+    setClickingTogglesState (true);
 }
 
 void ParameterKnob::ConnectedToggle::paintButton (Graphics& g,
                                                   bool shouldDrawButtonAsHighlighted,
                                                   bool shouldDrawButtonAsDown)
 {
-    Colour bgColour = /*shouldDrawButtonAsHighlighted ? RBD::controlHoverColour
-                                                    :*/ Colour (0, 0, 0).withAlpha (0.1f);
+    const auto bounds = getLocalBounds().toFloat();
+    const float outlineSize = 1.0f;
+
+    Path background = getToggleShape (bounds, 0.0f, true);
+    Path clippingMask = getToggleShape (bounds, outlineSize, false);
+
+    g.saveState();
+    g.reduceClipRegion (clippingMask);  // clip to not paint under outline
+    Colour backgroundColour = shouldDrawButtonAsHighlighted ? RBD::toggleHoverColour
+                                                            : RBD::toggleNormalColour;
+    g.setColour (backgroundColour);
+    g.fillPath (background);
+    g.restoreState();
+
+    Path outline = getToggleShape (bounds, outlineSize / 2.0f, false);
+
+    g.saveState();
+    g.reduceClipRegion (background);    // clip to not paint under label
+    Colour outlineColour = RBD::controlNormalColour;
+    g.setColour (outlineColour);
+    g.strokePath (outline, PathStrokeType (outlineSize, PathStrokeType::mitered));
+    g.restoreState();
+
+    // TODO: Clean up and refactor onward!
+
+    const auto buttonBounds = getLocalBounds().withTop (RBD::defaultCornerSize);
+    
+    Font font (RBD::mainFont);
+
+    const int textWidth = font.getStringWidth (getButtonText());
+    const int toggleWidth = 16;
+    const int toggleHeight = 10;
+    const int gap = 8;
+
+    int edgeOffset = buttonBounds.getWidth() - textWidth - toggleWidth - gap;
+    edgeOffset = edgeOffset / 2;
+
+    auto textBounds = buttonBounds.withWidth (textWidth). withX (edgeOffset);
+
+    g.setFont (font);
+    Colour textColour = RBD::textNormalColour;
+    g.setColour (textColour);
+    g.drawText (getButtonText(), textBounds, Justification::centredLeft);
+
+    auto toggleBounds = buttonBounds.withSizeKeepingCentre (toggleWidth, toggleHeight)
+                                    .withRightX (buttonBounds.getRight() - edgeOffset);
+
+    g.setColour (RBD::controlNormalColour);
+    g.fillRoundedRectangle (toggleBounds.toFloat(), 2.0f);
+
+    Colour toggleColour = RBD::toggleHandleColour;
+    g.setColour (toggleColour);
+    g.drawRoundedRectangle (toggleBounds.toFloat().reduced (0.5f), 2.0f, 1.0f);
+
+    auto handleBounds = toggleBounds.reduced (2);
 
     if (getToggleState())
-        bgColour = RBD::controlActiveColour;
+    {
+        g.setColour (toggleColour.withAlpha (0.5f));
+        g.fillRoundedRectangle (handleBounds.toFloat(), 1.0f);
 
-    Path background = getToggleShape (getLocalBounds().toFloat(), 0.0f, true);
-    g.setColour (bgColour);
-    g.fillPath (background);
+        handleBounds = handleBounds.withWidth (6).withRightX (handleBounds.getRight());
 
-    // TODO: use clipping to draw background inset by 1 / whatever the thickness
+        g.setColour (RBD::controlNormalColour);
+        g.drawRoundedRectangle (handleBounds.toFloat().expanded (0.5f), 1.0f, 1.0f);
 
-    // Reset the following changes to the graphics context at the end of the scope
-    Graphics::ScopedSaveState saveState (g);
-    g.reduceClipRegion (background);  // set clip region to the knob mark
-
-    Colour outlineColour = /*shouldDrawButtonAsHighlighted ? RBD::controlHoverColour
-                                                         :*/ Colour (36, 36, 36);
-    Path outline = getToggleShape (getLocalBounds().toFloat(), 0.5f, false);
-    g.setColour (outlineColour);
-    g.strokePath (outline, PathStrokeType (1.0f, PathStrokeType::mitered));
+        g.setColour (toggleColour);
+        g.fillRoundedRectangle (handleBounds.toFloat(), 1.0f);
+    }
+    else
+    {
+        g.setColour (toggleColour);
+        g.fillRoundedRectangle (handleBounds.withWidth (6).toFloat(), 1.0f);
+    }
 }
 
 Path ParameterKnob::ConnectedToggle::getToggleShape (Rectangle<float> bounds,
