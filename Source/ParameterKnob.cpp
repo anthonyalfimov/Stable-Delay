@@ -105,28 +105,41 @@ public:
 protected:
 //==============================================================================
     /** @internal */
-    void paintButton (Graphics& g,
-                      bool shouldDrawButtonAsHighlighted,
-                      bool shouldDrawButtonAsDown) override;
+    void paintButton (Graphics& g, bool shouldDrawButtonAsHighlighted,
+                                   bool shouldDrawButtonAsDown) override;
 
 private:
+    // TODO: Move these methods to the custom LookAndFeel class
+    void drawToggleBackground (Graphics& g, bool shouldDrawButtonAsHighlighted,
+                                            bool shouldDrawButtonAsDown);
+    void drawToggleText (Graphics& g, bool shouldDrawButtonAsHighlighted,
+                                      bool shouldDrawButtonAsDown);
+
+//==============================================================================
     Path getToggleShape (Rectangle<float> bounds, float inset, bool isClosed) const;
 
 //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ConnectedToggle)
 };
 
-ParameterKnob
-::ConnectedToggle::ConnectedToggle (AudioProcessorValueTreeState& stateToControl,
-                                    Parameter::Index parameterIndex)
+ParameterKnob::ConnectedToggle
+::ConnectedToggle (AudioProcessorValueTreeState& stateToControl,
+                   Parameter::Index parameterIndex)
     : ParameterToggle (stateToControl, parameterIndex)
 {
-    setClickingTogglesState (true);
 }
 
-void ParameterKnob::ConnectedToggle::paintButton (Graphics& g,
-                                                  bool shouldDrawButtonAsHighlighted,
-                                                  bool shouldDrawButtonAsDown)
+void ParameterKnob::ConnectedToggle
+::paintButton (Graphics& g, bool shouldDrawButtonAsHighlighted,
+                            bool shouldDrawButtonAsDown)
+{
+    drawToggleBackground (g, shouldDrawButtonAsHighlighted, shouldDrawButtonAsDown);
+    drawToggleText (g, shouldDrawButtonAsHighlighted, shouldDrawButtonAsDown);
+}
+
+void ParameterKnob::ConnectedToggle
+::drawToggleBackground (Graphics& g, bool shouldDrawButtonAsHighlighted,
+                                     bool shouldDrawButtonAsDown)
 {
     const auto bounds = getLocalBounds().toFloat();
     const float outlineSize = 1.0f;
@@ -135,7 +148,7 @@ void ParameterKnob::ConnectedToggle::paintButton (Graphics& g,
     Path clippingMask = getToggleShape (bounds, outlineSize, false);
 
     g.saveState();
-    g.reduceClipRegion (clippingMask);  // clip to not paint under outline
+    g.reduceClipRegion (clippingMask);  // clip to not paint under the outline
     Colour backgroundColour = shouldDrawButtonAsHighlighted ? RBD::toggleHoverColour
                                                             : RBD::toggleNormalColour;
     g.setColour (backgroundColour);
@@ -145,16 +158,21 @@ void ParameterKnob::ConnectedToggle::paintButton (Graphics& g,
     Path outline = getToggleShape (bounds, outlineSize / 2.0f, false);
 
     g.saveState();
-    g.reduceClipRegion (background);    // clip to not paint under label
+    g.reduceClipRegion (background);    // clip to not paint under the label
     Colour outlineColour = RBD::controlNormalColour;
     g.setColour (outlineColour);
     g.strokePath (outline, PathStrokeType (outlineSize, PathStrokeType::mitered));
     g.restoreState();
+}
 
-    // TODO: Clean up and refactor onward!
+void ParameterKnob::ConnectedToggle
+::drawToggleText (Graphics& g, bool shouldDrawButtonAsHighlighted,
+                               bool shouldDrawButtonAsDown)
+{
+    // TODO: Clean up and refactor!
 
-    const auto buttonBounds = getLocalBounds().withTop (RBD::defaultCornerSize);
-    
+    const auto bounds = getLocalBounds().withTop (RBD::defaultCornerSize);
+
     Font font (RBD::mainFont);
 
     const int textWidth = font.getStringWidth (getButtonText());
@@ -162,18 +180,17 @@ void ParameterKnob::ConnectedToggle::paintButton (Graphics& g,
     const int toggleHeight = 10;
     const int gap = 8;
 
-    int edgeOffset = buttonBounds.getWidth() - textWidth - toggleWidth - gap;
-    edgeOffset = edgeOffset / 2;
+    int edgeOffset = (bounds.getWidth() - textWidth - toggleWidth - gap) / 2;
 
-    auto textBounds = buttonBounds.withWidth (textWidth). withX (edgeOffset);
+    auto textBounds = bounds.withWidth (textWidth). withX (edgeOffset);
 
     g.setFont (font);
     Colour textColour = RBD::textNormalColour;
     g.setColour (textColour);
     g.drawText (getButtonText(), textBounds, Justification::centredLeft);
 
-    auto toggleBounds = buttonBounds.withSizeKeepingCentre (toggleWidth, toggleHeight)
-                                    .withRightX (buttonBounds.getRight() - edgeOffset);
+    auto toggleBounds = bounds.withSizeKeepingCentre (toggleWidth, toggleHeight)
+                                    .withRightX (bounds.getRight() - edgeOffset);
 
     g.setColour (RBD::controlNormalColour);
     g.fillRoundedRectangle (toggleBounds.toFloat(), 2.0f);
@@ -186,7 +203,7 @@ void ParameterKnob::ConnectedToggle::paintButton (Graphics& g,
 
     if (getToggleState())
     {
-        g.setColour (toggleColour.withAlpha (0.5f));
+        g.setColour (toggleColour.darker (0.5f));
         g.fillRoundedRectangle (handleBounds.toFloat(), 1.0f);
 
         handleBounds = handleBounds.withWidth (6).withRightX (handleBounds.getRight());
@@ -204,9 +221,8 @@ void ParameterKnob::ConnectedToggle::paintButton (Graphics& g,
     }
 }
 
-Path ParameterKnob::ConnectedToggle::getToggleShape (Rectangle<float> bounds,
-                                                     float inset,
-                                                     bool isClosed) const
+Path ParameterKnob::ConnectedToggle
+::getToggleShape (Rectangle<float> bounds, float inset, bool isClosed) const
 {
     const float x0 = bounds.getX() + inset;
     const float y0 = bounds.getY();

@@ -13,7 +13,7 @@
 #include <JuceHeader.h>
 #include "Parameters.h"
 
-class ParameterToggle  : public ToggleButton
+class ParameterToggle  : public Button
 {
 public:
     ParameterToggle (AudioProcessorValueTreeState& stateToControl,

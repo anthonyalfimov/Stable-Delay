@@ -12,8 +12,10 @@
 
 ParameterToggle::ParameterToggle (AudioProcessorValueTreeState& stateToControl,
                                   Parameter::Index parameterIndex)
-    : ToggleButton (Parameter::Name[parameterIndex])
+    : Button (Parameter::Name[parameterIndex])
 {
+    setClickingTogglesState (true); // set up as toggle
+
     jassert (stateToControl.getParameter (Parameter::ID[parameterIndex]) != nullptr);
 
     // Set up attachment
