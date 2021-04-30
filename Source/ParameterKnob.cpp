@@ -109,14 +109,23 @@ protected:
                                    bool shouldDrawButtonAsDown) override;
 
 private:
-    // TODO: Move these methods to the custom LookAndFeel class
-    void drawToggleBackground (Graphics& g, bool shouldDrawButtonAsHighlighted,
-                                            bool shouldDrawButtonAsDown);
-    void drawToggleText (Graphics& g, bool shouldDrawButtonAsHighlighted,
-                                      bool shouldDrawButtonAsDown);
+    // Toggle "handle" properties
+    int mHandlePosition = 0;
+
+    inline static constexpr int handleSize = 6;
+    inline static constexpr int minHandlePosition = 0;
+    inline static constexpr int maxHandlePosition = handleSize;
 
 //==============================================================================
-    Path getToggleShape (Rectangle<float> bounds, float inset, bool isClosed) const;
+    // TODO: Move these methods to the custom LookAndFeel class
+
+    void drawBackground (Graphics& g, bool shouldDrawButtonAsHighlighted,
+                                      bool shouldDrawButtonAsDown);
+    void drawTextAndToggle (Graphics& g, bool shouldDrawButtonAsHighlighted,
+                                         bool shouldDrawButtonAsDown);
+
+//==============================================================================
+    Path getButtonShape (Rectangle<float> bounds, float inset, bool isClosed) const;
 
 //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ConnectedToggle)
@@ -127,25 +136,32 @@ ParameterKnob::ConnectedToggle
                    Parameter::Index parameterIndex)
     : ParameterToggle (stateToControl, parameterIndex)
 {
+    onStateChange = [this] ()
+    {
+        mHandlePosition = getToggleState() ? maxHandlePosition : minHandlePosition;
+        this->repaint();
+    };
+
+    mHandlePosition = getToggleState() ? maxHandlePosition : minHandlePosition;
 }
 
 void ParameterKnob::ConnectedToggle
 ::paintButton (Graphics& g, bool shouldDrawButtonAsHighlighted,
                             bool shouldDrawButtonAsDown)
 {
-    drawToggleBackground (g, shouldDrawButtonAsHighlighted, shouldDrawButtonAsDown);
-    drawToggleText (g, shouldDrawButtonAsHighlighted, shouldDrawButtonAsDown);
+    drawBackground (g, shouldDrawButtonAsHighlighted, shouldDrawButtonAsDown);
+    drawTextAndToggle (g, shouldDrawButtonAsHighlighted, shouldDrawButtonAsDown);
 }
 
 void ParameterKnob::ConnectedToggle
-::drawToggleBackground (Graphics& g, bool shouldDrawButtonAsHighlighted,
-                                     bool shouldDrawButtonAsDown)
+::drawBackground (Graphics& g, bool shouldDrawButtonAsHighlighted,
+                               bool shouldDrawButtonAsDown)
 {
     const auto bounds = getLocalBounds().toFloat();
     const float outlineSize = 1.0f;
 
-    Path background = getToggleShape (bounds, 0.0f, true);
-    Path clippingMask = getToggleShape (bounds, outlineSize, false);
+    Path background = getButtonShape (bounds, 0.0f, true);
+    Path clippingMask = getButtonShape (bounds, outlineSize, false);
 
     g.saveState();
     g.reduceClipRegion (clippingMask);  // clip to not paint under the outline
@@ -155,7 +171,7 @@ void ParameterKnob::ConnectedToggle
     g.fillPath (background);
     g.restoreState();
 
-    Path outline = getToggleShape (bounds, outlineSize / 2.0f, false);
+    Path outline = getButtonShape (bounds, outlineSize / 2.0f, false);
 
     g.saveState();
     g.reduceClipRegion (background);    // clip to not paint under the label
@@ -166,63 +182,71 @@ void ParameterKnob::ConnectedToggle
 }
 
 void ParameterKnob::ConnectedToggle
-::drawToggleText (Graphics& g, bool shouldDrawButtonAsHighlighted,
-                               bool shouldDrawButtonAsDown)
+::drawTextAndToggle (Graphics& g, bool shouldDrawButtonAsHighlighted,
+                                  bool shouldDrawButtonAsDown)
 {
-    // TODO: Clean up and refactor!
+    // Toggle properties
+    const int borderSize = 2;   // border around the toggle handle
+    const int toggleWidth = handleSize + maxHandlePosition + 2 * borderSize;
+    const int toggleHeight = handleSize + 2 * borderSize;
 
-    const auto bounds = getLocalBounds().withTop (RBD::defaultCornerSize);
-
+    // Text properties
     Font font (RBD::mainFont);
-
     const int textWidth = font.getStringWidth (getButtonText());
-    const int toggleWidth = 16;
-    const int toggleHeight = 10;
-    const int gap = 8;
 
-    int edgeOffset = (bounds.getWidth() - textWidth - toggleWidth - gap) / 2;
+    // Text and toggle position
+    const int gap = 8;      // gap between the text and the toggle
+    //  Actual button bounds not covered by the label above:
+    const auto bounds = getLocalBounds().withTop (RBD::defaultCornerSize);
+    //  Padding both sides of the text+toggle group:
+    int padding = (bounds.getWidth() - textWidth - toggleWidth - gap) / 2;
 
-    auto textBounds = bounds.withWidth (textWidth). withX (edgeOffset);
-
+    // Draw text
+    auto textBounds = bounds.withWidth (textWidth). withX (padding);
     g.setFont (font);
     Colour textColour = RBD::textNormalColour;
     g.setColour (textColour);
     g.drawText (getButtonText(), textBounds, Justification::centredLeft);
 
+    // Draw toggle background
     auto toggleBounds = bounds.withSizeKeepingCentre (toggleWidth, toggleHeight)
-                                    .withRightX (bounds.getRight() - edgeOffset);
-
-    g.setColour (RBD::controlNormalColour);
+                              .withRightX (bounds.getRight() - padding);
+    Colour toggleShadow = RBD::controlNormalColour;
+    g.setColour (toggleShadow);
     g.fillRoundedRectangle (toggleBounds.toFloat(), 2.0f);
 
+    // Draw toggle border
     Colour toggleColour = RBD::toggleHandleColour;
     g.setColour (toggleColour);
     g.drawRoundedRectangle (toggleBounds.toFloat().reduced (0.5f), 2.0f, 1.0f);
 
-    auto handleBounds = toggleBounds.reduced (2);
+    // Draw toggle handle
 
-    if (getToggleState())
+    //  Bounds of the handle track
+    auto handleBounds = toggleBounds.reduced (borderSize)
+                                    .withWidth (handleSize + mHandlePosition);
+
+    //  Draw handle track if it's visible
+    if (mHandlePosition > 0)
     {
         g.setColour (toggleColour.darker (0.5f));
         g.fillRoundedRectangle (handleBounds.toFloat(), 1.0f);
 
-        handleBounds = handleBounds.withWidth (6).withRightX (handleBounds.getRight());
-
-        g.setColour (RBD::controlNormalColour);
-        g.drawRoundedRectangle (handleBounds.toFloat().expanded (0.5f), 1.0f, 1.0f);
-
-        g.setColour (toggleColour);
-        g.fillRoundedRectangle (handleBounds.toFloat(), 1.0f);
+        // Reduce the handle track bounds to the size of the handle itself
+        handleBounds.removeFromLeft (mHandlePosition);
     }
-    else
-    {
-        g.setColour (toggleColour);
-        g.fillRoundedRectangle (handleBounds.withWidth (6).toFloat(), 1.0f);
-    }
+
+    //  Handle shadow
+    g.setColour (toggleShadow);
+    g.drawRoundedRectangle (handleBounds.toFloat().expanded (0.5f), 1.0f, 1.0f);
+
+    //  Handle
+    g.setColour (toggleColour);
+    g.fillRoundedRectangle (handleBounds.toFloat(), 1.0f);
 }
 
 Path ParameterKnob::ConnectedToggle
-::getToggleShape (Rectangle<float> bounds, float inset, bool isClosed) const
+::getButtonShape (Rectangle<float> bounds, float inset, bool isClosed) const
 {
     const float x0 = bounds.getX() + inset;
     const float y0 = bounds.getY();
