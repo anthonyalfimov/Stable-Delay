@@ -96,25 +96,32 @@ void KnobScale::paint (Graphics& g)
 //==============================================================================
 //  ParameterKnob::ConnectedToggle
 
-class ParameterKnob::ConnectedToggle  : public ParameterToggle
+class ParameterKnob::ConnectedToggle  : public ParameterToggle,
+                                        private Timer
 {
 public:
     ConnectedToggle (AudioProcessorValueTreeState& stateToControl,
                      Parameter::Index parameterIndex);
 
-protected:
-//==============================================================================
-    /** @internal */
-    void paintButton (Graphics& g, bool shouldDrawButtonAsHighlighted,
-                                   bool shouldDrawButtonAsDown) override;
-
 private:
     // Toggle "handle" properties
     int mHandlePosition = 0;
+    int mTargetHandlePosition = 0;
 
     inline static constexpr int handleSize = 6;
+    inline static constexpr int handleStep = 2;
     inline static constexpr int minHandlePosition = 0;
-    inline static constexpr int maxHandlePosition = handleSize;
+    inline static constexpr int maxHandlePosition = 3 * handleStep;
+
+//==============================================================================
+    inline static constexpr int refreshRate = 30; // Hz
+
+//==============================================================================
+    /** @internal */
+    void timerCallback() override;
+    /** @internal */
+    void paintButton (Graphics& g, bool shouldDrawButtonAsHighlighted,
+                                   bool shouldDrawButtonAsDown) override;
 
 //==============================================================================
     // TODO: Move these methods to the custom LookAndFeel class
@@ -136,13 +143,35 @@ ParameterKnob::ConnectedToggle
                    Parameter::Index parameterIndex)
     : ParameterToggle (stateToControl, parameterIndex)
 {
+    // Initialise toggle position
+    mTargetHandlePosition = getToggleState() ? maxHandlePosition : minHandlePosition;
+    mHandlePosition = mTargetHandlePosition;
+
+    // Toggle animation code requires the handle step to be a divisor of the
+    //  handle track length
+    jassert (((maxHandlePosition - minHandlePosition) % handleStep) == 0);
+
+    // Start animation if the target handle position changed
     onStateChange = [this] ()
     {
-        mHandlePosition = getToggleState() ? maxHandlePosition : minHandlePosition;
-        this->repaint();
-    };
+        mTargetHandlePosition = getToggleState() ? maxHandlePosition : minHandlePosition;
 
-    mHandlePosition = getToggleState() ? maxHandlePosition : minHandlePosition;
+        if (! isTimerRunning() && (mHandlePosition != mTargetHandlePosition))
+            startTimerHz (refreshRate);
+    };
+}
+
+void ParameterKnob::ConnectedToggle::timerCallback()
+{
+    if (mHandlePosition < mTargetHandlePosition)
+        mHandlePosition += handleStep;
+    else if (mHandlePosition > mTargetHandlePosition)
+        mHandlePosition -= handleStep;
+
+    if (mHandlePosition == mTargetHandlePosition)
+        stopTimer();
+
+    repaint();
 }
 
 void ParameterKnob::ConnectedToggle
@@ -236,11 +265,11 @@ void ParameterKnob::ConnectedToggle
         handleBounds.removeFromLeft (mHandlePosition);
     }
 
-    //  Handle shadow
+    //  Draw handle shadow
     g.setColour (toggleShadow);
     g.drawRoundedRectangle (handleBounds.toFloat().expanded (0.5f), 1.0f, 1.0f);
 
-    //  Handle
+    //  Draw handle
     g.setColour (toggleColour);
     g.fillRoundedRectangle (handleBounds.toFloat(), 1.0f);
 }
