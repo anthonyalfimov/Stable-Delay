@@ -13,17 +13,19 @@
 ReallyBasicDelayAudioProcessorEditor::ReallyBasicDelayAudioProcessorEditor (ReallyBasicDelayAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
+    // Set up Editor attributes
     setSize (RBD::mainPanelWidth, RBD::mainPanelHeight);
-    
+
+    // Set up Look And Feel
     mLookAndFeel = std::make_unique<PluginLookAndFeel> ();
-    setLookAndFeel (mLookAndFeel.get());    // set Look And Feel for the editor and its children
-    LookAndFeel::setDefaultLookAndFeel (mLookAndFeel.get());    // set default for all components
-    
+    //  Set Look And Feel for the editor and its children
+    setLookAndFeel (mLookAndFeel.get());
+    //  Set Look And Feel for all components
+    LookAndFeel::setDefaultLookAndFeel (mLookAndFeel.get());
+
+    // Set up Main Panel
     mMainPanel = std::make_unique<MainPanel> (audioProcessor);
     addAndMakeVisible (mMainPanel.get());
-    
-    mBackgroundImage = ImageCache::getFromMemory (BinaryData::RBD_BG_2x_png,
-                                                  BinaryData::RBD_BG_2x_pngSize);
 }
 
 ReallyBasicDelayAudioProcessorEditor::~ReallyBasicDelayAudioProcessorEditor()
@@ -36,8 +38,10 @@ ReallyBasicDelayAudioProcessorEditor::~ReallyBasicDelayAudioProcessorEditor()
 //==============================================================================
 void ReallyBasicDelayAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    g.setOpacity (1.0f);    // Make sure the image is drawn opaque
-    g.drawImage (mBackgroundImage, getLocalBounds().toFloat());
+    // TODO: Consider adding fitting background fill
+    //  Reaper can forcefully resize the editor, revealing the bg colour.
+    //  It would be neat to set the bg colour to something that matches our
+    //  bg image.
 }
 
 void ReallyBasicDelayAudioProcessorEditor::resized()

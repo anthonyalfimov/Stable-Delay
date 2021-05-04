@@ -22,17 +22,14 @@ public:
     ReallyBasicDelayAudioProcessorEditor (ReallyBasicDelayAudioProcessor&);
     ~ReallyBasicDelayAudioProcessorEditor() override;
 
-    //==============================================================================
-    void paint (juce::Graphics&) override;
+//==============================================================================
+    void paint (juce::Graphics& g) override;
     void resized() override;
 
 private:
     std::unique_ptr<MainPanel> mMainPanel;
     std::unique_ptr<PluginLookAndFeel> mLookAndFeel;
-    
-    // TODO: Why are we drawing it here and not in the MainPanel?
-    Image mBackgroundImage;
-    
+  
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     ReallyBasicDelayAudioProcessor& audioProcessor;
