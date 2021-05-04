@@ -41,6 +41,9 @@ namespace RBD
     inline constexpr int fxPanelWidth = centrePanelWidth;
     inline constexpr int fxPanelHeight = centrePanelHeight - centrePanelMenuBarHeight;
 
+    inline constexpr int aboutPanelWidth = 350;
+    inline constexpr int aboutPanelHeight = 200;
+
     // TODO: Move component size constants into the LookAndFeel class
     //  Once all component drawing is handled by the custom L&F class,
     //  these constants can be safely moved inside that class.

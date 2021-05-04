@@ -33,26 +33,6 @@ FxPanel::FxPanel (ReallyBasicDelayAudioProcessor& processor)
 
     const auto selectedTypeIndex = static_cast<FxType::Index> (fxTypeParameter->get());
     setFxPanelStyle (selectedTypeIndex);
-
-    // TODO: Move build stamp to the "About" window
-    /*
-     // Set up Build Version Label
-    mBuildVersionLabel.setFont (RBD::mainFont);
-    mBuildVersionLabel.setJustificationType (Justification::centred);
-    mBuildVersionLabel.setColour (Label::textColourId,
-                                  RBD::textNormalColour.withAlpha (0.25f));
-    const auto buildDate = Time::getCompilationDate();
-    mBuildVersionLabel.setText ("Build: "
-                                + buildDate.toString (true, true, false, true),
-                                dontSendNotification);
-    mBuildVersionLabel.setBorderSize ({ 1, 15, 1, 15 });
-
-    const auto labelBounds = getLocalBounds()
-                                .withSizeKeepingCentre (200, RBD::labelHeight)
-                                .withBottomY (getHeight() - 7);
-    mBuildVersionLabel.setBounds (labelBounds);
-    addAndMakeVisible (mBuildVersionLabel);
-    */
 }
     
 void FxPanel::setFxPanelStyle (FxType::Index typeIndex)

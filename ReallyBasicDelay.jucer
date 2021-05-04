@@ -76,6 +76,8 @@
             file="Source/CentrePanelMenuBar.h"/>
       <FILE id="bTPdDn" name="FxPanel.cpp" compile="1" resource="0" file="Source/FxPanel.cpp"/>
       <FILE id="vazdPS" name="FxPanel.h" compile="0" resource="0" file="Source/FxPanel.h"/>
+      <FILE id="GAFLM8" name="AboutPanel.cpp" compile="1" resource="0" file="Source/AboutPanel.cpp"/>
+      <FILE id="uAriaI" name="AboutPanel.h" compile="0" resource="0" file="Source/AboutPanel.h"/>
     </GROUP>
     <GROUP id="{0EB6A607-778D-EA62-AAC3-98B7C537EEED}" name="DSP">
       <FILE id="PCyj4b" name="DspModule.cpp" compile="1" resource="0" file="Source/DspModule.cpp"/>
