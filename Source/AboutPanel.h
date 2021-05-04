@@ -29,6 +29,7 @@ private:
     Label mAuthorLabel { "author", "Developed by Anthony Alfimov" };
     Label mLicenseLabel { "license", "> License info goes here <" };
 
+    // TODO: Update custom LookAndFeel with methods for HyperlinkButton
     HyperlinkButton mSourceButton { "Source Code", URL ("https://juce.com") };
     
 //==============================================================================
