@@ -103,6 +103,17 @@ void TopPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
         presetManager->loadPreset (index);
     }
 }
+
+Component*  TopPanel::addTitleMouseListener (MouseListener* listener)
+{
+    mTitleLabel.addMouseListener (listener, false);
+    return &mTitleLabel;
+}
+
+void TopPanel::removeTitleMouseListener (MouseListener* listener)
+{
+    mTitleLabel.removeMouseListener (listener);
+}
     
 void TopPanel::displaySaveAsPopup()
 {

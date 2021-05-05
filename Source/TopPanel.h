@@ -25,6 +25,14 @@ public:
     void buttonClicked (Button* buttonThatWasPressed) override;
     /** @internal */
     void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
+//==============================================================================
+    /** @internal
+        Registers a listener to be told when mouse events occur in the Title
+        Label. Returns the address of the Title Label you registered with.
+    */
+    Component* addTitleMouseListener (MouseListener* listener);
+    /** @internal */
+    void removeTitleMouseListener (MouseListener* listener);
     
 private:
     void displaySaveAsPopup();

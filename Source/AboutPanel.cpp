@@ -11,12 +11,12 @@
 #include "AboutPanel.h"
 #include "InterfaceConstants.h"
 
-AboutPanel::AboutPanel()
-{
-    // Set up Panel attributes
-    setSize (RBD::aboutPanelWidth, RBD::aboutPanelHeight);
-    setName ("AboutPanel");
+//==============================================================================
+//  AboutPanel::InfoBox
+//==============================================================================
 
+AboutPanel::InfoBox::InfoBox()
+{
     // Set up the Title Label
     mTitleLabel.setFont (RBD::titleFont);
     mTitleLabel.setJustificationType (Justification::topLeft);
@@ -41,7 +41,7 @@ AboutPanel::AboutPanel()
     addAndMakeVisible (mSourceButton);
 }
 
-void AboutPanel::resized()
+void AboutPanel::InfoBox::resized()
 {
     auto bounds = getLocalBounds().reduced (10);
 
@@ -56,9 +56,45 @@ void AboutPanel::resized()
     mLicenseLabel.setBounds (bounds.removeFromBottom (textHeight));
 }
 
+void AboutPanel::InfoBox::paint (Graphics& g)
+{
+    auto bounds = getLocalBounds().toFloat();
+    auto cornerSize = RBD::defaultCornerSize * 2.0f;
+    g.setColour (RBD::aboutPanelBgColour);
+    g.fillRoundedRectangle (bounds, cornerSize);
+
+    g.setColour (RBD::textNormalColour);
+    bounds.reduce (5.5, 5.5);
+    g.drawRoundedRectangle (bounds, RBD::defaultCornerSize, 1.0f);
+}
+
+//==============================================================================
+//  AboutPanel
+//==============================================================================
+
+AboutPanel::AboutPanel (std::unique_ptr<AboutPanel>& owner)
+    : mOwner (owner)
+{
+    // Set up Panel attributes
+    setName ("AboutPanel");
+
+    // Set up the InfoBox
+    addAndMakeVisible (mInfoBox);
+}
+
+void AboutPanel::resized()
+{
+    auto bounds = getLocalBounds().withSizeKeepingCentre (RBD::aboutPanelWidth,
+                                                          RBD::aboutPanelHeight);
+    mInfoBox.setBounds (bounds);
+}
+
 void AboutPanel::paint (Graphics& g)
 {
-    auto border = getLocalBounds().toFloat().reduced (5.5);
-    g.setColour (RBD::textNormalColour);
-    g.drawRoundedRectangle (border, RBD::defaultCornerSize * 2.0f, 1.0f);
+    g.fillAll (RBD::aboutPanelDimColour);
+}
+
+void AboutPanel::mouseDown (const MouseEvent& event)
+{
+    mOwner.reset();
 }
