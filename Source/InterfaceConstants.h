@@ -73,6 +73,7 @@ namespace RBD
     inline const Colour textNormalColour = Colour (110, 110, 110);
     inline const Colour textActiveColour = Colour (125, 125, 125);
     inline const Colour textFxTypeColour = Colour (105, 105, 105).withAlpha (0.3f);
+    inline const Colour textLinkColour = Colour (105, 115, 140);
     inline const Colour controlNormalColour = Colour (0, 0, 0).withAlpha (0.3f);
     inline const Colour controlHoverColour = Colour (0, 0, 0).withAlpha (0.8f);
     inline const Colour controlActiveColour = Colour (105, 105, 105).withAlpha (0.3f);
@@ -105,4 +106,5 @@ namespace RBD
     inline const Font titleFont = Font (primaryFont).withPointHeight (18.0f);
     inline const Font fxTypeFont = Font (primaryFont).withPointHeight (48.0f);
     inline const Font meterFont = Font (primaryFont).withPointHeight (9.0f);
+    inline const Font descriptorFont = Font (primaryFont).withPointHeight (12.0f);
 }

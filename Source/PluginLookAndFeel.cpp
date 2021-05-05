@@ -40,6 +40,9 @@ PluginLookAndFeel::PluginLookAndFeel()
     setColour (TextButton::textColourOnId, RBD::textNormalColour);
     setColour (TextButton::textColourOffId, RBD::textNormalColour);
 
+    // HyperlinkButton colours
+    setColour (HyperlinkButton::textColourId, RBD::textLinkColour);
+
     // Temporary Slider colours (before we supply custom graphics)
     setColour (Slider::thumbColourId, RBD::textNormalColour);
     setColour (Slider::backgroundColourId, RBD::meterBgColour);
