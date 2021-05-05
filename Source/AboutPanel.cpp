@@ -11,12 +11,12 @@
 #include "AboutPanel.h"
 #include "InterfaceConstants.h"
 
-//==============================================================================
-//  AboutPanel::InfoBox
-//==============================================================================
-
-AboutPanel::InfoBox::InfoBox()
+AboutPanel::AboutPanel (std::unique_ptr<AboutPanel>& owner)
+    : mOwner (owner)
 {
+    // Set up Panel attributes
+    setName ("AboutPanel");
+
     // Set up the Title Label
     mTitleLabel.setFont (RBD::titleFont);
     mTitleLabel.setJustificationType (Justification::topLeft);
@@ -41,9 +41,12 @@ AboutPanel::InfoBox::InfoBox()
     addAndMakeVisible (mSourceButton);
 }
 
-void AboutPanel::InfoBox::resized()
+void AboutPanel::resized()
 {
-    auto bounds = getLocalBounds().reduced (10);
+    mBackground = getLocalBounds().withSizeKeepingCentre (RBD::aboutPanelWidth,
+                                                          RBD::aboutPanelHeight);
+
+    auto bounds = mBackground.reduced (10);
 
     auto titleHeight = 30;
     auto textHeight = 20;
@@ -56,42 +59,22 @@ void AboutPanel::InfoBox::resized()
     mLicenseLabel.setBounds (bounds.removeFromBottom (textHeight));
 }
 
-void AboutPanel::InfoBox::paint (Graphics& g)
-{
-    auto bounds = getLocalBounds().toFloat();
-    auto cornerSize = RBD::defaultCornerSize * 2.0f;
-    g.setColour (RBD::aboutPanelBgColour);
-    g.fillRoundedRectangle (bounds, cornerSize);
-
-    g.setColour (RBD::textNormalColour);
-    bounds.reduce (5.5, 5.5);
-    g.drawRoundedRectangle (bounds, RBD::defaultCornerSize, 1.0f);
-}
-
-//==============================================================================
-//  AboutPanel
-//==============================================================================
-
-AboutPanel::AboutPanel (std::unique_ptr<AboutPanel>& owner)
-    : mOwner (owner)
-{
-    // Set up Panel attributes
-    setName ("AboutPanel");
-
-    // Set up the InfoBox
-    addAndMakeVisible (mInfoBox);
-}
-
-void AboutPanel::resized()
-{
-    auto bounds = getLocalBounds().withSizeKeepingCentre (RBD::aboutPanelWidth,
-                                                          RBD::aboutPanelHeight);
-    mInfoBox.setBounds (bounds);
-}
-
 void AboutPanel::paint (Graphics& g)
 {
+    // Dim the rest of the UI:
     g.fillAll (RBD::aboutPanelDimColour);
+
+    // Draw About panel background:
+    auto bounds = mBackground.toFloat();
+    auto outerCornerSize = RBD::defaultCornerSize * 2.0f;
+    g.setColour (RBD::aboutPanelBgColour);
+    g.fillRoundedRectangle (bounds, outerCornerSize);
+
+    // Draw About Panel border:
+    bounds.reduce (5.5, 5.5);
+    auto innerCornerSize = RBD::defaultCornerSize;
+    g.setColour (RBD::textNormalColour);
+    g.drawRoundedRectangle (bounds, innerCornerSize, 1.0f);
 }
 
 void AboutPanel::mouseDown (const MouseEvent& event)
