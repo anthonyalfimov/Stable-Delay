@@ -49,11 +49,13 @@ private:
 class ParameterKnob  : public Component
 {
 public:
-    /** Create knob object with scale and label.
+    /**
+        Create knob object with scale and label.
     */
     ParameterKnob (AudioProcessorValueTreeState& stateToControl,
                    Parameter::Index knobParameterIndex);
-    /** Create knob object wiwth scale, label, and a connected toggle.
+    /**
+        Create knob object wiwth scale, label, and a connected toggle.
     */
     ParameterKnob (AudioProcessorValueTreeState& stateToControl,
                    Parameter::Index knobParameterIndex,

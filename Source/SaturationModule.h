@@ -20,18 +20,18 @@
 enum class SaturationCurve
 {
     /**
-     Fast rational approximation of tanh(x) saturation curve.
-     The most shallow curve, resulting in most level loss.
+        Fast rational approximation of tanh(x) saturation curve.
+        The most shallow curve, resulting in most level loss.
     */
     alpha,
     /**
-     The simplest rational saturation surve with intermediate
-     steepness and gentle wave folding (single fold only).
+        The simplest rational saturation surve with intermediate
+        steepness and gentle wave folding (single fold only).
     */
     beta,
     /**
-     The steepest saturation curve, resulting in the least level loss.
-     Flat top, so no folding. Intended for output soft clipping.
+        The steepest saturation curve, resulting in the least level loss.
+        Flat top, so no folding. Intended for output soft clipping.
     */
     gamma
 };

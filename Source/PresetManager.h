@@ -28,7 +28,8 @@
 class PresetManager
 {
 public:
-    /** Creates the preset manager for the give Audio Processor.
+    /**
+        Creates the preset manager for the give Audio Processor.
     */
     explicit PresetManager (AudioProcessor& processor);
 

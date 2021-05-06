@@ -19,7 +19,8 @@ public:
     using RangeType = NormalisableRange<ValueType>;
     using RangeLimitPair = std::pair<RangeType, ValueType>;
 
-    /** Creates an object that can generate a NormalisableRange pieced together
+    /**
+        Creates an object that can generate a NormalisableRange pieced together
         from multiple segments. Each segment is represented by its own
         NormalisableRange object.
 
@@ -153,7 +154,8 @@ private:
 //==============================================================================
     struct RangeSegment  : public RangeType
     {
-        /** Creates a range segment that spans the whole 0 to 1 proportion
+        /**
+            Creates a range segment that spans the whole 0 to 1 proportion
             range and uses the default NormalisableRange object.
         */
         RangeSegment() = default;

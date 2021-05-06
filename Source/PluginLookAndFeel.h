@@ -25,7 +25,8 @@
 class PluginLookAndFeel  : public LookAndFeel_V4
 {
 public:
-    /** Creates PluginLookAndFeel objects and intialises its values and assets.
+    /**
+        Creates PluginLookAndFeel objects and intialises its values and assets.
     */
     PluginLookAndFeel();
 

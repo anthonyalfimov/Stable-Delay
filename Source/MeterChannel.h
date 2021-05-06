@@ -40,7 +40,8 @@ public:
     void setStyle (MeterStyle newStyle);
     void resetClippingIndicator();
 
-    /** Update channel meter reading.
+    /**
+        Update channel meter reading.
 
         @Discussion
         Timer callback in the meter object should call this function at the

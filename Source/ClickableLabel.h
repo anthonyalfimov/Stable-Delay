@@ -19,8 +19,10 @@ public:
                     const String& labelText = String());
 
 //==============================================================================
-    /** You can assign a lambda to this callback object to have it called when
-        the label is clicked. */
+    /**
+        You can assign a lambda to this callback object to have it called when
+        the label is clicked.
+    */
     std::function<void()> onClick;
 
 protected:

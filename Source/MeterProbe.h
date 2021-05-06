@@ -30,7 +30,8 @@ public:
 //==============================================================================
     const std::atomic<float>* getRmsLevel() const { return &mRmsLevel; }
 
-    /** Returns the maximum peak level observed since the last peak level reset.
+    /**
+        Returns the maximum peak level observed since the last peak level reset.
 
         @Discussion
         Make sure to call resetPeakLevel() after retrieving a peak level if you
@@ -42,7 +43,8 @@ public:
     */
     const std::atomic<float>* getPeakLevel() const { return &mPeakLevel; }
 
-    /** Resets the stored maximum peak level to 0 (gain units).
+    /**
+        Resets the stored maximum peak level to 0 (gain units).
 
         @Discussion
         If you want getPeakLevel() to return the maximum peak level since last
@@ -52,7 +54,8 @@ public:
     */
     void resetPeakLevel() { mPeakLevel.store (0.0f); }
 
-    /** Resets the stored RMS level to 0 (gain units).
+    /**
+        Resets the stored RMS level to 0 (gain units).
 
         @Discussion
         Unlike peak level, RMS doesn't have to be reset after every retrieval

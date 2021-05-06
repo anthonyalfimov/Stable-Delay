@@ -23,7 +23,6 @@
     skew factor based on a value that should be the centre of the range.
 
     @param centrePointValue this must be greater than the start of the range and less than the end.
-
 */
 template <typename Type>
 NormalisableRange<Type> createSkewedNormalisableRange (Type rangeStart,
