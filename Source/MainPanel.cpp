@@ -29,10 +29,16 @@ MainPanel::MainPanel (ReallyBasicDelayAudioProcessor& processor)
     //  the resized() method!
 
     // Set up Top Panel
-    mTopPanel = std::make_unique<TopPanel> (processor);
+    auto onTitleClick = [this] ()   // create AboutPanel when Title is clicked
+    {
+        mAboutPanel = std::make_unique<AboutPanel> (mAboutPanel);
+        mAboutPanel->setBounds (getLocalBounds());
+        addAndMakeVisible (mAboutPanel.get());
+    };
+    
+    mTopPanel = std::make_unique<TopPanel> (processor, onTitleClick);
     mTopPanel->setTopLeftPosition (0, 0);
     addAndMakeVisible (mTopPanel.get());
-    mAboutPanelTrigger = mTopPanel->addTitleMouseListener (this);
 
     // Set up Input Panel
     mInputGainPanel = std::make_unique<GainPanel> (processor, Parameter::InputGain);
@@ -55,24 +61,9 @@ MainPanel::MainPanel (ReallyBasicDelayAudioProcessor& processor)
                                                   BinaryData::RBD_BG_2x_pngSize);
 }
 
-MainPanel::~MainPanel()
-{
-    mTopPanel->removeTitleMouseListener (this);
-}
-
 void MainPanel::paint (Graphics& g)
 {
     // Draw background image
     g.setOpacity (1.0f);    // Make sure the image is drawn opaque
     g.drawImage (mBackgroundImage, getLocalBounds().toFloat());
-}
-
-void MainPanel::mouseDown (const MouseEvent& event)
-{
-    if (event.eventComponent != mAboutPanelTrigger)
-        return;
-
-    mAboutPanel = std::make_unique<AboutPanel> (mAboutPanel);
-    mAboutPanel->setBounds (getLocalBounds());
-    addAndMakeVisible (mAboutPanel.get());
 }

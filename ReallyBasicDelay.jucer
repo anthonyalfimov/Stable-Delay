@@ -54,6 +54,10 @@
       <FILE id="LNP47J" name="MeterLegend.h" compile="0" resource="0" file="Source/MeterLegend.h"/>
       <FILE id="uEiEFY" name="Meter.cpp" compile="1" resource="0" file="Source/Meter.cpp"/>
       <FILE id="KsheeB" name="Meter.h" compile="0" resource="0" file="Source/Meter.h"/>
+      <FILE id="syZfVc" name="ClickableLabel.cpp" compile="1" resource="0"
+            file="Source/ClickableLabel.cpp"/>
+      <FILE id="Xir4s6" name="ClickableLabel.h" compile="0" resource="0"
+            file="Source/ClickableLabel.h"/>
       <FILE id="PFoj7C" name="SliderLabel.cpp" compile="1" resource="0" file="Source/SliderLabel.cpp"/>
       <FILE id="BHynvf" name="SliderLabel.h" compile="0" resource="0" file="Source/SliderLabel.h"/>
     </GROUP>

@@ -97,6 +97,8 @@ public:
     }
 
 //==============================================================================
+    // TODO: Capture `WeakReference<Component> myself (this)` instead
+
     using ValueRemapFunction = std::function<ValueType(ValueType rangeStart,
                                                        ValueType rangeEnd,
                                                        ValueType valueToRemap)>;

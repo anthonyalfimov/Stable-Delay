@@ -10,7 +10,8 @@
 
 #include "TopPanel.h"
 
-TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor)
+TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor,
+                    std::function<void()> onTitleClick)
     : InterfacePanel (processor)
 {
     // Set up Panel attributes
@@ -58,6 +59,7 @@ TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor)
     addAndMakeVisible (mSaveAsPreset.get());
 
     // Set up the Title Label
+    mTitleLabel.onClick = onTitleClick; // set up callback for clicking the title
     mTitleLabel.setFont (RBD::titleFont);
     mTitleLabel.setJustificationType (Justification::centredRight);
     mTitleLabel.setBorderSize ({ 1, padding, 1, padding });
@@ -103,17 +105,6 @@ void TopPanel::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
         
         presetManager->loadPreset (index);
     }
-}
-
-Component*  TopPanel::addTitleMouseListener (MouseListener* listener)
-{
-    mTitleLabel.addMouseListener (listener, false);
-    return &mTitleLabel;
-}
-
-void TopPanel::removeTitleMouseListener (MouseListener* listener)
-{
-    mTitleLabel.removeMouseListener (listener);
 }
     
 void TopPanel::displaySaveAsPopup()
