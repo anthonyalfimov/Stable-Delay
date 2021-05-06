@@ -22,8 +22,7 @@ TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor)
     const int presetListWidth = 200;
     
     mPresetList = std::make_unique<HighlightableComboBox> ("PresetList");
-    Rectangle<int> bounds
-    = getLocalBounds().withSizeKeepingCentre (presetListWidth, height);
+    auto bounds = getLocalBounds().withSizeKeepingCentre (presetListWidth, height);
     mPresetList->setBounds (bounds);
     mPresetList->addListener (this);
     addAndMakeVisible (mPresetList.get());
@@ -31,14 +30,14 @@ TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor)
 
     // Set up the Preset Manager buttons
     const int buttonWidth = 65;
-    const int buttonStartX = 10;
+    const int padding = 10;
     
     // TODO: Repetitive button initialisation - can we make it more dry?
     //  OwnedArray of buttons and StringArray of labels?
     
     mNewPreset = std::make_unique<TextButton>();
     bounds.setWidth (buttonWidth);
-    bounds.setX (buttonStartX);
+    bounds.setX (padding);
     mNewPreset->setBounds (bounds);
     mNewPreset->setButtonText ("NEW");
     mNewPreset->addListener (this);
@@ -61,8 +60,10 @@ TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor)
     // Set up the Title Label
     mTitleLabel.setFont (RBD::titleFont);
     mTitleLabel.setJustificationType (Justification::centredRight);
-    mTitleLabel.setBorderSize ({ 1, 10, 1, 10 });
-    auto titleLabelBounds = getLocalBounds().withLeft (mPresetList->getRight());
+    mTitleLabel.setBorderSize ({ 1, padding, 1, padding });
+    int titleWidth = RBD::titleFont.getStringWidth (mTitleLabel.getText())
+                    + 2 * padding;
+    auto titleLabelBounds = getLocalBounds().removeFromRight (titleWidth);
     mTitleLabel.setBounds (titleLabelBounds);
     addAndMakeVisible (mTitleLabel);
 }
