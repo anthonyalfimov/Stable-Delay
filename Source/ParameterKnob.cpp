@@ -104,14 +104,15 @@ public:
                      Parameter::Index parameterIndex);
 
 private:
-    // Toggle "handle" properties
-    int mHandlePosition = 0;
-    int mTargetHandlePosition = 0;
+    // Toggle handle properties
+    int mHandleStep = 0;        // actual handle animation step
+    int mTargetHandleStep = 0;  // target handle animation step
+
+    inline static constexpr int minHandleStep = 0;
+    inline static constexpr int maxHandleStep = 3;
+    inline static constexpr int handleStepSize = 2; // animation step size in pixels
 
     inline static constexpr int handleSize = 6;
-    inline static constexpr int handleStep = 2;
-    inline static constexpr int minHandlePosition = 0;
-    inline static constexpr int maxHandlePosition = 3 * handleStep;
 
 //==============================================================================
     inline static constexpr int refreshRate = 30; // Hz
@@ -144,31 +145,27 @@ ParameterKnob::ConnectedToggle
     : ParameterToggle (stateToControl, parameterIndex)
 {
     // Initialise toggle position
-    mTargetHandlePosition = getToggleState() ? maxHandlePosition : minHandlePosition;
-    mHandlePosition = mTargetHandlePosition;
-
-    // Toggle animation code requires the handle step to be a divisor of the
-    //  handle track length
-    jassert (((maxHandlePosition - minHandlePosition) % handleStep) == 0);
+    mTargetHandleStep = getToggleState() ? maxHandleStep : minHandleStep;
+    mHandleStep = mTargetHandleStep;
 
     // Start animation if the target handle position changed
     onStateChange = [this] ()
     {
-        mTargetHandlePosition = getToggleState() ? maxHandlePosition : minHandlePosition;
+        mTargetHandleStep = getToggleState() ? maxHandleStep : minHandleStep;
 
-        if (! isTimerRunning() && (mHandlePosition != mTargetHandlePosition))
+        if (! isTimerRunning() && (mHandleStep != mTargetHandleStep))
             startTimerHz (refreshRate);
     };
 }
 
 void ParameterKnob::ConnectedToggle::timerCallback()
 {
-    if (mHandlePosition < mTargetHandlePosition)
-        mHandlePosition += handleStep;
-    else if (mHandlePosition > mTargetHandlePosition)
-        mHandlePosition -= handleStep;
+    if (mHandleStep < mTargetHandleStep)
+        ++mHandleStep;
+    else if (mHandleStep > mTargetHandleStep)
+        --mHandleStep;
 
-    if (mHandlePosition == mTargetHandlePosition)
+    if (mHandleStep == mTargetHandleStep)
         stopTimer();
 
     repaint();
@@ -216,7 +213,7 @@ void ParameterKnob::ConnectedToggle
 {
     // Toggle properties
     const int borderSize = 2;   // border around the toggle handle
-    const int toggleWidth = handleSize + maxHandlePosition + 2 * borderSize;
+    const int toggleWidth = handleSize + maxHandleStep * handleStepSize + 2 * borderSize;
     const int toggleHeight = handleSize + 2 * borderSize;
 
     // Text properties
@@ -252,17 +249,18 @@ void ParameterKnob::ConnectedToggle
     // Draw toggle handle
 
     //  Bounds of the handle track
+    int handleOffset = mHandleStep * handleStepSize;    // find offset in pixels
     auto handleBounds = toggleBounds.reduced (borderSize)
-                                    .withWidth (handleSize + mHandlePosition);
+                                    .withWidth (handleSize + handleOffset);
 
     //  Draw handle track if it's visible
-    if (mHandlePosition > 0)
+    if (handleOffset > 0)
     {
         g.setColour (toggleColour.darker (0.5f));
         g.fillRoundedRectangle (handleBounds.toFloat(), 1.0f);
 
         // Reduce the handle track bounds to the size of the handle itself
-        handleBounds.removeFromLeft (mHandlePosition);
+        handleBounds.removeFromLeft (handleOffset);
     }
 
     //  Draw handle shadow
