@@ -18,6 +18,16 @@ MainPanel::MainPanel (ReallyBasicDelayAudioProcessor& processor)
     setSize (RBD::mainPanelWidth, RBD::mainPanelHeight);
     setName ("MainPanel");
 
+    // TODO: Split the main panel between sub-panels usign removeFromTop(), etc.
+    //  Define positions and sizes of all UI panels by subdividing the main
+    //  panel. This will reduce the number of interface size constants we need
+    //  and prepare the UI to be scalable. Aim at using relative sizes for the
+    //  size constants.
+    //
+    //  NB! This will require to change most of the UI panels so that they don't
+    //  position their elements in their constructors, but instead do this in
+    //  the resized() method!
+
     // Set up Top Panel
     mTopPanel = std::make_unique<TopPanel> (processor);
     mTopPanel->setTopLeftPosition (0, 0);

@@ -331,7 +331,6 @@ void ReallyBasicDelayAudioProcessor::setStateInformation (const void* data, int 
     }
     else
     {
-    // TODO: nullptr can be returned if data is corrupted, send an error instead
         jassertfalse;
     }
 }

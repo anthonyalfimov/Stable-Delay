@@ -12,12 +12,8 @@
 
 #include <JuceHeader.h>
 
-// TODO: Do we need to namespace Interface constants? Use better namespace name?
-
 namespace RBD
 {
-    // TODO: Can we drop size constants by creating panels with relative sizes?
-
     // C++17 "inline" keyword ensures that only one copy of the constant
     //  is created for the whole project
 
