@@ -12,7 +12,7 @@
 
 #include "InterfacePanel.h"
 #include "HighlightableComboBox.h"
-#include "ClickableLabel.h"
+#include "MouseEventInvoker.h"
 
 class TopPanel  : public InterfacePanel,
                   public Button::Listener,
@@ -20,7 +20,7 @@ class TopPanel  : public InterfacePanel,
 {
 public:
     explicit TopPanel (ReallyBasicDelayAudioProcessor& processor,
-                       std::function<void()> onTitleClick);
+                       std::function<void (const MouseEvent&)> onTitleClick);
 
 //==============================================================================
     /** @internal */
@@ -35,7 +35,8 @@ private:
     std::unique_ptr<HighlightableComboBox> mPresetList;
     std::unique_ptr<TextButton> mNewPreset, mSavePreset, mSaveAsPreset;
 
-    ClickableLabel mTitleLabel { "title", "Really Basic Delay" };
+    MouseEventInvoker mTitleMouseEventInvoker;
+    Label mTitleLabel { "title", "Really Basic Delay" };
 
 //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TopPanel)

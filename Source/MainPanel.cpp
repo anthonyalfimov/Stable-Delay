@@ -29,7 +29,8 @@ MainPanel::MainPanel (ReallyBasicDelayAudioProcessor& processor)
     //  the resized() method!
 
     // Set up Top Panel
-    auto onTitleClick = [this] ()   // create AboutPanel when Title is clicked
+    //  Lambda callback to create AboutPanel when Title is clicked
+    auto onTitleClick = [this] (const MouseEvent& /*event*/)
     {
         mAboutPanel = std::make_unique<AboutPanel> (mAboutPanel);
         mAboutPanel->setBounds (getLocalBounds());

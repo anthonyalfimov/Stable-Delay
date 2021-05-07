@@ -11,7 +11,7 @@
 #include "TopPanel.h"
 
 TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor,
-                    std::function<void()> onTitleClick)
+                    std::function<void (const MouseEvent&)> onTitleClick)
     : InterfacePanel (processor)
 {
     // Set up Panel attributes
@@ -59,7 +59,6 @@ TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor,
     addAndMakeVisible (mSaveAsPreset.get());
 
     // Set up the Title Label
-    mTitleLabel.onClick = onTitleClick; // set up callback for clicking the title
     mTitleLabel.setFont (RBD::titleFont);
     mTitleLabel.setJustificationType (Justification::centredRight);
     mTitleLabel.setBorderSize ({ 1, padding, 1, padding });
@@ -68,6 +67,10 @@ TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor,
     auto titleLabelBounds = getLocalBounds().removeFromRight (titleWidth);
     mTitleLabel.setBounds (titleLabelBounds);
     addAndMakeVisible (mTitleLabel);
+
+    // Set up Title Label mouse events callbacks
+    mTitleMouseEventInvoker.onMouseDown = onTitleClick;
+    mTitleLabel.addMouseListener (&mTitleMouseEventInvoker, false);
 }
 
 void TopPanel::buttonClicked (Button* buttonThatWasPressed)
