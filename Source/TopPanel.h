@@ -11,7 +11,6 @@
 #pragma once
 
 #include "InterfacePanel.h"
-#include "HighlightableComboBox.h"
 #include "MouseEventInvoker.h"
 
 class TopPanel  : public InterfacePanel,
@@ -31,8 +30,10 @@ public:
 private:
     void displaySaveAsPopup();
     void updatePresetList();
-    
-    std::unique_ptr<HighlightableComboBox> mPresetList;
+
+    MouseEventInvoker mPresetListMouseEventInvoker;
+    std::unique_ptr<ComboBox> mPresetList;
+
     std::unique_ptr<TextButton> mNewPreset, mSavePreset, mSaveAsPreset;
 
     MouseEventInvoker mTitleMouseEventInvoker;

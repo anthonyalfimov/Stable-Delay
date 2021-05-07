@@ -28,10 +28,6 @@
       <FILE id="agqbzc" name="PresetManager.h" compile="0" resource="0" file="Source/PresetManager.h"/>
     </GROUP>
     <GROUP id="{195656B5-0487-FECC-6F4E-58DC537044AA}" name="Parameter Control">
-      <FILE id="XrGQNb" name="HighlightableComboBox.cpp" compile="1" resource="0"
-            file="Source/HighlightableComboBox.cpp"/>
-      <FILE id="aov2Gv" name="HighlightableComboBox.h" compile="0" resource="0"
-            file="Source/HighlightableComboBox.h"/>
       <FILE id="SWzc8U" name="ParameterComboBox.cpp" compile="1" resource="0"
             file="Source/ParameterComboBox.cpp"/>
       <FILE id="PWCrOy" name="ParameterComboBox.h" compile="0" resource="0"

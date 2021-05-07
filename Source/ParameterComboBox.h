@@ -10,14 +10,12 @@
 
 #pragma once
 
-#include "HighlightableComboBox.h"
+#include "MouseEventInvoker.h"
 #include "Parameters.h"
 
-class ParameterComboBox  : public HighlightableComboBox
+class ParameterComboBox  : public ComboBox
 {
 public:
-    ParameterComboBox (AudioProcessorValueTreeState& stateToControl,
-                       Parameter::Index parameterIndex);
     ParameterComboBox (AudioProcessorValueTreeState& stateToControl,
                        Parameter::Index parameterIndex,
                        const StringArray& itemList,
@@ -25,6 +23,9 @@ public:
     
 private:
     std::unique_ptr<AudioProcessorValueTreeState::ComboBoxAttachment> mAttachment;
+    
+//==============================================================================
+    MouseEventInvoker mMouseEventInvoker;
 
 //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ParameterComboBox)

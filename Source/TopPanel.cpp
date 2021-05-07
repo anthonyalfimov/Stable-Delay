@@ -22,12 +22,26 @@ TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor,
     const int height = 25;
     const int presetListWidth = 200;
     
-    mPresetList = std::make_unique<HighlightableComboBox> ("PresetList");
+    mPresetList = std::make_unique<ComboBox> ("PresetList");
     auto bounds = getLocalBounds().withSizeKeepingCentre (presetListWidth, height);
     mPresetList->setBounds (bounds);
     mPresetList->addListener (this);
     addAndMakeVisible (mPresetList.get());
     updatePresetList();
+
+    // Set up Preset List mouse event callbacks
+    WeakReference<Component> presetListWeakReference (mPresetList.get());
+    auto repaintPresetList = [presetListWeakReference] (const MouseEvent& event)
+    {
+        if (presetListWeakReference != nullptr)
+            presetListWeakReference->repaint();
+    };
+
+    mPresetListMouseEventInvoker.onMouseEnter = repaintPresetList;
+    mPresetListMouseEventInvoker.onMouseExit = repaintPresetList;
+    mPresetListMouseEventInvoker.onMouseUp = repaintPresetList;
+
+    mPresetList->addMouseListener (&mPresetListMouseEventInvoker, true);
 
     // Set up the Preset Manager buttons
     const int buttonWidth = 65;
