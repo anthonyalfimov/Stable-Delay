@@ -44,6 +44,7 @@ public:
                                bool shouldDrawButtonAsDown) override;
 
 //= POPUP MENUS ================================================================
+    // TODO: Make the popup list semi-transparent, with rounded corners
 
     void drawPopupMenuItem (Graphics& g, const Rectangle<int>& area,
                             bool isSeparator, bool isActive,
@@ -53,7 +54,6 @@ public:
                             const Colour* passedTextColour) override;
 
 //= COMBOBOXES =================================================================
-    // TODO: Make the popup list semi-transparent, with rounded corners
 
     Font getComboBoxFont (ComboBox& comboBox) override;
     

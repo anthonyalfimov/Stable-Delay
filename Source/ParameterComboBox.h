@@ -16,6 +16,16 @@
 class ParameterComboBox  : public ComboBox
 {
 public:
+    /**
+        Create a ComboBox that will be attached to the parameter in
+        stateToControl that is identified by the parameterIndex.
+
+        @Discussion
+        Initial ComboBox update happens when attachment is created, so all
+        ComboBox items must be supplied to the constructor. The constructor
+        adds the supplied items to the ComboBox, and then creates the parameter
+        attachment.
+    */
     ParameterComboBox (AudioProcessorValueTreeState& stateToControl,
                        Parameter::Index parameterIndex,
                        const StringArray& itemList,
