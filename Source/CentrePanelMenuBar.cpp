@@ -18,20 +18,6 @@ CentrePanelMenuBar::CentrePanelMenuBar (ReallyBasicDelayAudioProcessor& processo
     setSize (RBD::centrePanelMenuBarWidth, RBD::centrePanelMenuBarHeight);
     setName ("CenterMenu");
 
-    // Set up FX Type ComboBox
-
-    // Note: Initial ComboBox update happens when attachment is created
-    //  Using the ParameterComboBox ctor that takes the item list allows to
-    //  add the items before the attachment is created and ComboBox is updated
-
-    mFxTypeComboBox = std::make_unique<ParameterComboBox> (mProcessor.parameters,
-                                                           Parameter::FxType,
-                                                           FxType::Label);
-    const int comboBoxWidth = 95;
-    auto bounds = getLocalBounds().withLeft (getWidth() - comboBoxWidth);
-    mFxTypeComboBox->setBounds (bounds);
-    addAndMakeVisible (mFxTypeComboBox.get());
-
     // Set up Stereo Spread Slider
     if (mProcessor.getTotalNumOutputChannels() == 2)
     {
@@ -39,7 +25,7 @@ CentrePanelMenuBar::CentrePanelMenuBar (ReallyBasicDelayAudioProcessor& processo
                                                            Parameter::StereoSpread);
 
         // TODO: Reposition the slider once custom graphics are introduced
-        bounds.setX (RBD::defaultLabelWidth + 11);
+        auto bounds = getLocalBounds().withX (RBD::defaultLabelWidth + 11);
         //const int sliderWidth = 200;
         //bounds.setWidth (sliderWidth);
         bounds.setTop (3);
@@ -51,14 +37,4 @@ CentrePanelMenuBar::CentrePanelMenuBar (ReallyBasicDelayAudioProcessor& processo
         mSpreadLabel = std::make_unique<SliderLabel> (mSpreadSlider.get(), true);
         addAndMakeVisible (mSpreadLabel.get());
     }
-}
-
-void CentrePanelMenuBar::addFxTypeComboBoxListener (ComboBox::Listener* inListener)
-{
-    mFxTypeComboBox->addListener (inListener);
-}
-
-void CentrePanelMenuBar::removeFxTypeComboBoxListener (ComboBox::Listener* inListener)
-{
-    mFxTypeComboBox->removeListener (inListener);
 }

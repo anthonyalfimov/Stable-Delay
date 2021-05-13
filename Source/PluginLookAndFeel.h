@@ -55,11 +55,21 @@ public:
 
 //= COMBOBOXES =================================================================
 
-    Font getComboBoxFont (ComboBox& comboBox) override;
-    
+    inline static const int comboBoxButtonWidth = 40;
+    inline static const int largeComboBoxMinHeight = 40;
+
     void drawComboBox (Graphics& g, int width, int height, bool isButtonDown,
                        int buttonX, int buttonY, int buttonW, int buttonH,
                        ComboBox& comboBox) override;
+
+    // TODO: Check using int vs float bounds on a low-res monitor
+    void drawComboBoxButton (Graphics& g, bool isButtonDown,
+                             Rectangle<float> buttonBounds,
+                             ComboBox& comboBox);
+
+    Font getComboBoxFont (ComboBox& comboBox) override;
+
+    void positionComboBoxText (ComboBox& comboBox, Label& label) override;
     
 //= SLIDERS ====================================================================
 

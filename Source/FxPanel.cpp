@@ -10,6 +10,7 @@
 
 #include "FxPanel.h"
 #include "Parameters.h"
+#include "PluginLookAndFeel.h"
 
 FxPanel::FxPanel (ReallyBasicDelayAudioProcessor& processor)
     : InterfacePanel (processor)
@@ -17,12 +18,29 @@ FxPanel::FxPanel (ReallyBasicDelayAudioProcessor& processor)
     // Set up Panel attributes
     setSize (RBD::fxPanelWidth, RBD::fxPanelHeight);
 
-    // Set up the FX Type Label
-    mFxTypeLabel.setFont (RBD::fxTypeFont);
-    mFxTypeLabel.setJustificationType (Justification::centred);
-    mFxTypeLabel.setColour (Label::textColourId, RBD::textFxTypeColour);
-    mFxTypeLabel.setBounds (getLocalBounds().withHeight (80));
-    addAndMakeVisible (mFxTypeLabel);
+    // Set up FX Type ComboBox
+    mFxTypeComboBox = std::make_unique<ParameterComboBox> (mProcessor.parameters,
+                                                           Parameter::FxType,
+                                                           FxType::Label);
+
+    auto compareFxTypeStringLWidth = [] (const String& a, const String& b)
+    {
+        return RBD::largeFont.getStringWidth (a) < RBD::largeFont.getStringWidth (b);
+    };
+
+    StringRef longestFxType = *std::max_element (FxType::Label.begin(),
+                                                 FxType::Label.end(),
+                                                 compareFxTypeStringLWidth);
+
+    auto comboBoxTextWidth = RBD::largeFont.getStringWidth (longestFxType) + 18;
+    auto comboBoxHeight = 53;
+    auto bounds = getLocalBounds().removeFromTop (80)
+                    .withSizeKeepingCentre (comboBoxTextWidth, comboBoxHeight);
+    bounds.setWidth (comboBoxTextWidth + PluginLookAndFeel::comboBoxButtonWidth);
+    mFxTypeComboBox->setBounds (bounds);
+    mFxTypeComboBox->setJustificationType (Justification::centred);
+    addAndMakeVisible (mFxTypeComboBox.get());
+    mFxTypeComboBox->addListener (this);
 
     // Set up initial Panel Style
     auto* fxTypeParameter = dynamic_cast<AudioParameterFloat*>
@@ -114,7 +132,6 @@ void FxPanel::setFxPanelStyle (FxType::Index typeIndex)
     }
 
     setName (FxType::Label[mTypeIndex]);    // update panel name to reflect FX type
-    mFxTypeLabel.setText (getName(), dontSendNotification); // update label text
     repaint();
 }
 

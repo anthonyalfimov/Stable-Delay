@@ -9,6 +9,7 @@
 */
 
 #include "ParameterComboBox.h"
+#include "InterfaceConstants.h"
 
 ParameterComboBox::ParameterComboBox (AudioProcessorValueTreeState& stateToControl,
                                       Parameter::Index parameterIndex,
@@ -35,4 +36,7 @@ ParameterComboBox::ParameterComboBox (AudioProcessorValueTreeState& stateToContr
     mMouseEventInvoker.onMouseUp = repaintComboBox;
 
     addMouseListener (&mMouseEventInvoker, true);
+
+    // Set up style
+    setColour (ComboBox::textColourId, RBD::textFxTypeColour);
 }

@@ -23,11 +23,4 @@ CentrePanel::CentrePanel (ReallyBasicDelayAudioProcessor& processor)
     mFxPanel = std::make_unique<FxPanel> (processor);
     mFxPanel->setTopLeftPosition (0, mMenuBar->getBottom());
     addAndMakeVisible (mFxPanel.get());
-    
-    mMenuBar->addFxTypeComboBoxListener (mFxPanel.get());
-}
-
-CentrePanel::~CentrePanel()
-{
-    mMenuBar->removeFxTypeComboBoxListener (mFxPanel.get());
 }

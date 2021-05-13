@@ -138,43 +138,88 @@ void PluginLookAndFeel::drawPopupMenuItem (Graphics& g, const Rectangle<int>& ar
 
 //= COMBOBOXES =================================================================
 
-Font PluginLookAndFeel::getComboBoxFont (ComboBox& /*comboBox*/)
-{
-    return RBD::mainFont;
-}
-
 void PluginLookAndFeel::drawComboBox (Graphics& g, int width, int height,
-                                      bool /*isButtonDown*/,
-                                      int /*buttonX*/, int /*buttonY*/,
-                                      int /*buttonW*/, int /*buttonH*/,
+                                      bool isButtonDown,
+                                      int buttonX, int buttonY,
+                                      int buttonW, int buttonH,
                                       ComboBox& comboBox)
 {
-    const Rectangle<float> comboBoxBounds (0.0f, 0.0f, width, height);
+    Rectangle<int> buttonBounds (buttonX, buttonY, buttonW, buttonH);
+    bool shouldHighlight
+    = comboBox.isPopupActive() || comboBox.isMouseOverOrDragging (true);
 
-    // TODO: Set the comboBox colour in the mouse callbacks rather than here
-    const Colour comboBoxColour
-    = (comboBox.isPopupActive() || comboBox.isMouseOverOrDragging (true))
-                                            ? RBD::controlHoverColour
-                                            : RBD::controlNormalColour;
-    g.setColour (comboBoxColour);
-    g.fillRoundedRectangle (comboBoxBounds, RBD::defaultCornerSize);
+    const Colour comboBoxColour = shouldHighlight ? RBD::controlHoverColour
+                                                  : RBD::controlNormalColour;
 
-    const Rectangle<float> arrowBounds (comboBoxBounds.withWidth (20.0f)
-                                            .withRightX (width - 10.0f));
+    if (comboBox.getHeight() >= largeComboBoxMinHeight)
+    {
+        Rectangle<float> textBounds (0.0f, 0.0f, width - 40, height);
+        g.setColour (RBD::toggleNormalColour);
+        g.fillRoundedRectangle (textBounds, RBD::defaultCornerSize * 2);
+
+        const Colour buttonColour = shouldHighlight ? RBD::controlHoverColour
+                                                    : RBD::noColour;
+        const int buttonSize = comboBoxButtonWidth - 10;
+        g.setColour (buttonColour);
+        g.fillRoundedRectangle (buttonBounds.withSizeKeepingCentre (buttonSize, buttonSize).toFloat(), RBD::defaultCornerSize);
+    }
+    else
+    {
+
+        g.setColour (comboBoxColour);
+        g.fillRoundedRectangle (0.0f, 0.0f, width, height, RBD::defaultCornerSize);
+    }
+
+    drawComboBoxButton (g, isButtonDown, buttonBounds.toFloat(), comboBox);
+}
+
+void PluginLookAndFeel::drawComboBoxButton (Graphics& g, bool isButtonDown,
+                                            Rectangle<float> bounds,
+                                            ComboBox& comboBox)
+{
+    const int halfWidth = 7;    // half of the arrow's width
+    const int halfHeight = 2;   // half of the arrow's height
 
     // Create arrow shape
     Path arrow;
-    arrow.startNewSubPath (arrowBounds.getX() + 3.0f,
-                           arrowBounds.getCentreY() - 2.0f);
-    arrow.lineTo (arrowBounds.getCentreX(), arrowBounds.getCentreY() + 2.0f);
-    arrow.lineTo (arrowBounds.getRight() - 3.0f, arrowBounds.getCentreY() - 2.0f);
-
+    arrow.startNewSubPath (bounds.getCentreX() - halfWidth,
+                           bounds.getCentreY() - halfHeight);
+    arrow.lineTo (bounds.getCentreX(), bounds.getCentreY() + halfHeight);
+    arrow.lineTo (bounds.getCentreX() + halfWidth, bounds.getCentreY() - halfHeight);
 
     const Colour arrowColour
     = comboBox.findColour (ComboBox::arrowColourId)
                           .withAlpha (comboBox.isPopupActive() ? 0.9f : 0.5f);
     g.setColour (arrowColour);
-    g.strokePath (arrow, PathStrokeType (2.0f));
+    g.strokePath (arrow, PathStrokeType (2.0f,
+                                         PathStrokeType::mitered,
+                                         PathStrokeType::rounded));
+}
+
+Font PluginLookAndFeel::getComboBoxFont (ComboBox& comboBox)
+{
+    if (comboBox.getHeight() >= largeComboBoxMinHeight)
+        return RBD::largeFont;
+
+    return RBD::mainFont;
+}
+
+void PluginLookAndFeel::positionComboBoxText (ComboBox& comboBox, Label& label)
+{
+    // TODO: Vertical size reduction here is just for the popup line height
+    //  Instead of using the comboBox label height to control the popup line
+    //  height, we should address it directly and avoid this reduction.
+
+    label.setBounds (0, 1,
+                     comboBox.getWidth() - comboBoxButtonWidth,
+                     comboBox.getHeight() - 2);
+
+    label.setFont (getComboBoxFont (comboBox));
+
+    if (comboBox.getHeight() >= largeComboBoxMinHeight)
+        label.setBorderSize ({ 0, 0, 3, 2 });
+    else
+        label.setBorderSize ({ 1, 6, 1, 6 });
 }
 
 //= SLIDERS ====================================================================

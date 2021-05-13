@@ -18,7 +18,6 @@ class CentrePanel  : public InterfacePanel
 {
 public:
     explicit CentrePanel (ReallyBasicDelayAudioProcessor& processor);
-    ~CentrePanel();
     
 private:
     std::unique_ptr<CentrePanelMenuBar> mMenuBar;

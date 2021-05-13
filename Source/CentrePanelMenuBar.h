@@ -11,7 +11,6 @@
 #pragma once
 
 #include "InterfacePanel.h"
-#include "ParameterComboBox.h"
 #include "ParameterSlider.h"
 #include "SliderLabel.h"
 
@@ -19,16 +18,8 @@ class CentrePanelMenuBar  : public InterfacePanel
 {
 public:
     explicit CentrePanelMenuBar (ReallyBasicDelayAudioProcessor& processor);
-
-//==============================================================================
-    // These are here because mFxTypeComboBox is a private member of this class
-    /** @internal */
-    void addFxTypeComboBoxListener (ComboBox::Listener* inListener);
-    /** @internal */
-    void removeFxTypeComboBoxListener (ComboBox::Listener* inListener);
     
 private:
-    std::unique_ptr<ParameterComboBox> mFxTypeComboBox;
     std::unique_ptr<ParameterSlider> mSpreadSlider;
     std::unique_ptr<SliderLabel> mSpreadLabel;
 
