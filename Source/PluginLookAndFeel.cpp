@@ -187,6 +187,12 @@ void PluginLookAndFeel::drawComboBoxButton (Graphics& g, bool isButtonDown,
     arrow.lineTo (bounds.getCentreX(), bounds.getCentreY() + halfHeight);
     arrow.lineTo (bounds.getCentreX() + halfWidth, bounds.getCentreY() - halfHeight);
 
+    // TODO: Fix arrow colour dimming when comboBox is highlighted
+    //  Using a transparent colour for the arrow means that the darker colour
+    //  of the highlight dims the arrow. We should switch to opaque colours
+    //  to prevent this.
+    // TODO: Consider using the FxType text colour for the FxType comboBox arrow
+    
     const Colour arrowColour
     = comboBox.findColour (ComboBox::arrowColourId)
                           .withAlpha (comboBox.isPopupActive() ? 0.9f : 0.5f);
