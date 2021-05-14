@@ -58,13 +58,15 @@ public:
     inline static const int comboBoxButtonWidth = 40;
     inline static const int largeComboBoxMinHeight = 40;
 
+    inline static const int comboBoxTextHorizontalOffset = 4;
+    inline static const int comboBoxTextVerticalOffset = 3;
+
     void drawComboBox (Graphics& g, int width, int height, bool isButtonDown,
                        int buttonX, int buttonY, int buttonW, int buttonH,
                        ComboBox& comboBox) override;
 
-    // TODO: Check using int vs float bounds on a low-res monitor
     void drawComboBoxButton (Graphics& g, bool isButtonDown,
-                             Rectangle<float> buttonBounds,
+                             int buttonX, int buttonY, int buttonW, int buttonH,
                              ComboBox& comboBox);
 
     Font getComboBoxFont (ComboBox& comboBox) override;

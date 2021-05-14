@@ -32,11 +32,12 @@ FxPanel::FxPanel (ReallyBasicDelayAudioProcessor& processor)
                                                  FxType::Label.end(),
                                                  compareFxTypeStringLWidth);
 
-    auto comboBoxTextWidth = RBD::largeFont.getStringWidth (longestFxType) + 18;
-    auto comboBoxHeight = 53;
-    auto bounds = getLocalBounds().removeFromTop (80)
-                    .withSizeKeepingCentre (comboBoxTextWidth, comboBoxHeight);
-    bounds.setWidth (comboBoxTextWidth + PluginLookAndFeel::comboBoxButtonWidth);
+    auto comboBoxWidth = RBD::largeFont.getStringWidth (longestFxType)
+                        + PluginLookAndFeel::comboBoxTextHorizontalOffset
+                        + 2 * PluginLookAndFeel::comboBoxButtonWidth;
+    auto comboBoxHeight = 50;
+    auto bounds = getLocalBounds().withSizeKeepingCentre (comboBoxWidth, comboBoxHeight);
+    bounds.setY (20);
     mFxTypeComboBox->setBounds (bounds);
     mFxTypeComboBox->setJustificationType (Justification::centred);
     addAndMakeVisible (mFxTypeComboBox.get());
@@ -117,7 +118,7 @@ void FxPanel::setFxPanelStyle (FxType::Index typeIndex)
     {
         auto bounds = getLocalBounds()
                             .withSizeKeepingCentre (RBD::knobSize, RBD::knobSize)
-                            .translated (knobOffset * RBD::knobSize, 10.0f);
+                            .translated (knobOffset * RBD::knobSize, 15.0f);
 
         if (knob->hasToggle())
             bounds.setHeight (RBD::knobSize + RBD::labelHeight + RBD::toggleHeight);
@@ -125,7 +126,7 @@ void FxPanel::setFxPanelStyle (FxType::Index typeIndex)
             bounds.setHeight (RBD::knobSize + RBD::labelHeight);
 
         knob->setBounds (bounds);
-        
+
         knobOffset += knobStep;     // update offset for the next knob
         
         addAndMakeVisible (knob);

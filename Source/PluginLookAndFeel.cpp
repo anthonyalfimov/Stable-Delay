@@ -144,39 +144,39 @@ void PluginLookAndFeel::drawComboBox (Graphics& g, int width, int height,
                                       int buttonW, int buttonH,
                                       ComboBox& comboBox)
 {
-    Rectangle<int> buttonBounds (buttonX, buttonY, buttonW, buttonH);
+    // TODO: Consider resolving highlight status in mouse callbacks
+    //  If we check whether the comboBox should be highlighted in mouse
+    //  callbacks like it is done with SliderLabel class, we only need to
+    //  get the respective colourID colour and paint the comboBox here.
+    //  The specific colour would be set in mouse callbacks, and it can be
+    //  different for different subclasses.
+
     bool shouldHighlight
     = comboBox.isPopupActive() || comboBox.isMouseOverOrDragging (true);
 
     const Colour comboBoxColour = shouldHighlight ? RBD::controlHoverColour
                                                   : RBD::controlNormalColour;
+    g.setColour (comboBoxColour);
+    g.fillRoundedRectangle (0.0f, 0.0f, width, height, RBD::defaultCornerSize);
 
-    if (comboBox.getHeight() >= largeComboBoxMinHeight)
-    {
-        Rectangle<float> textBounds (0.0f, 0.0f, width - 40, height);
-        g.setColour (RBD::toggleNormalColour);
-        g.fillRoundedRectangle (textBounds, RBD::defaultCornerSize * 2);
+    // MARK: Begin debug paint
+    Rectangle<int> textBorder (0, 0, width, height);
+    textBorder.reduce (comboBoxButtonWidth + 4, 8);
+    g.setColour (Colours::hotpink);
+    //g.fillRect (textBorder);
+    // MARK: End debug paint
 
-        const Colour buttonColour = shouldHighlight ? RBD::controlHoverColour
-                                                    : RBD::noColour;
-        const int buttonSize = comboBoxButtonWidth - 10;
-        g.setColour (buttonColour);
-        g.fillRoundedRectangle (buttonBounds.withSizeKeepingCentre (buttonSize, buttonSize).toFloat(), RBD::defaultCornerSize);
-    }
-    else
-    {
-
-        g.setColour (comboBoxColour);
-        g.fillRoundedRectangle (0.0f, 0.0f, width, height, RBD::defaultCornerSize);
-    }
-
-    drawComboBoxButton (g, isButtonDown, buttonBounds.toFloat(), comboBox);
+    drawComboBoxButton (g, isButtonDown, buttonX, buttonY, buttonW, buttonH,
+                        comboBox);
 }
 
 void PluginLookAndFeel::drawComboBoxButton (Graphics& g, bool isButtonDown,
-                                            Rectangle<float> bounds,
+                                            int buttonX, int buttonY,
+                                            int buttonW, int buttonH,
                                             ComboBox& comboBox)
 {
+    // TODO: Check using int vs float bounds on a low-res monitor
+    Rectangle<float> bounds (buttonX, buttonY, buttonW, buttonH);
     const int halfWidth = 7;    // half of the arrow's width
     const int halfHeight = 2;   // half of the arrow's height
 
@@ -206,20 +206,30 @@ Font PluginLookAndFeel::getComboBoxFont (ComboBox& comboBox)
 
 void PluginLookAndFeel::positionComboBoxText (ComboBox& comboBox, Label& label)
 {
+    label.setFont (getComboBoxFont (comboBox));
+
     // TODO: Vertical size reduction here is just for the popup line height
     //  Instead of using the comboBox label height to control the popup line
     //  height, we should address it directly and avoid this reduction.
 
-    label.setBounds (0, 1,
-                     comboBox.getWidth() - comboBoxButtonWidth,
-                     comboBox.getHeight() - 2);
-
-    label.setFont (getComboBoxFont (comboBox));
+    auto bounds = comboBox.getLocalBounds().reduced (0, 1);
+    bounds.removeFromRight (comboBoxButtonWidth);
 
     if (comboBox.getHeight() >= largeComboBoxMinHeight)
-        label.setBorderSize ({ 0, 0, 3, 2 });
+    {
+        // Large comboBox text is centred, so add same padding on the left
+        bounds.removeFromLeft (comboBoxButtonWidth);
+        // Use borders to compensate for the intrinsic font offsets
+        const int bottomBorder = comboBoxTextVerticalOffset;
+        const int rightBorder = comboBoxTextHorizontalOffset;
+        label.setBorderSize ({ 0, 0, bottomBorder, rightBorder });
+    }
     else
+    {
         label.setBorderSize ({ 1, 6, 1, 6 });
+    }
+
+    label.setBounds (bounds);
 }
 
 //= SLIDERS ====================================================================
@@ -268,5 +278,3 @@ void PluginLookAndFeel::drawRotarySlider (Graphics& g,
     g.setColour (RBD::shadowColour);
     g.fillPath (shadowPath);
 }
-
-
