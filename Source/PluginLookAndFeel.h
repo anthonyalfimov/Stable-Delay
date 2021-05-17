@@ -44,10 +44,11 @@ public:
                                bool shouldDrawButtonAsDown) override;
 
 //= POPUP MENUS ================================================================
-    // TODO: Make the popup list semi-transparent, with rounded corners
 
     inline static const int popupMenuItemHeight = 24;
     inline static const int largePopupMenuItemHeight = 50;
+
+    void drawPopupMenuBackground (Graphics& g, int width, int height) override;
 
     Font getPopupMenuFont() override;
 

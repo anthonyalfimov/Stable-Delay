@@ -109,6 +109,20 @@ void PluginLookAndFeel::drawButtonBackground (Graphics& g, Button& button,
 
 //= POPUP MENUS ================================================================
 
+// NOTE: Making the popup bg colour transparent will switch the MenuWindow to
+//       being transparent (if desktop supports that).
+//       If you want to use rounded corners or force the component to use
+//       transparency regardless of desktop (e.g. if you're parenting the
+//       popup to the editor), call the `preparePopupMenuWindow()` method
+//       to manually set it as not opaque.
+
+void PluginLookAndFeel::drawPopupMenuBackground (Graphics& g, int width, int height)
+{
+    g.setColour (findColour (PopupMenu::backgroundColourId));
+    //g.fillRoundedRectangle (0, 0, width, height, RBD::defaultCornerSize);
+    g.fillAll();
+}
+
 Font PluginLookAndFeel::getPopupMenuFont()
 {
     return RBD::mainFont;
