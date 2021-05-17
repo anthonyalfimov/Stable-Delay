@@ -109,6 +109,11 @@ void PluginLookAndFeel::drawButtonBackground (Graphics& g, Button& button,
 
 //= POPUP MENUS ================================================================
 
+Font PluginLookAndFeel::getPopupMenuFont()
+{
+    return RBD::mainFont;
+}
+
 void PluginLookAndFeel::drawPopupMenuItem (Graphics& g, const Rectangle<int>& area,
                                            bool /*isSeparator*/, bool /*isActive*/,
                                            bool isHighlighted, bool isTicked,
@@ -127,13 +132,53 @@ void PluginLookAndFeel::drawPopupMenuItem (Graphics& g, const Rectangle<int>& ar
 
     Colour textColour = isTicked ? RBD::textActiveColour : RBD::textNormalColour;
     g.setColour (textColour);
-    g.setFont (RBD::mainFont);
 
-    // Offset the text
-    bounds.setLeft (10);
-    bounds.setY (1);
+    if (area.getHeight() >= largePopupMenuItemHeight)
+    {   // Large popup
+        g.setFont (RBD::largeFont);
+        g.drawFittedText (text, bounds, Justification::centred, 1, 1.0f);
+    }
+    else
+    {   // Normal popup
+        auto tickBounds = bounds.removeFromLeft (bounds.getHeight());
 
-    g.drawFittedText (text, bounds, Justification::left, 1);
+        if (isTicked)
+        {
+            g.setColour (RBD::toggleHandleColour);
+            tickBounds = tickBounds.withSizeKeepingCentre (6, 6);
+            g.fillRoundedRectangle (tickBounds.toFloat(), 1.0f);
+        }
+
+        g.setFont (RBD::mainFont);
+        g.drawFittedText (text, bounds, Justification::centredLeft, 1, 1.0f);
+    }
+}
+
+void PluginLookAndFeel::getIdealPopupMenuItemSize (const String& /*text*/,
+                                                   bool isSeparator,
+                                                   int standardMenuItemHeight,
+                                                   int& /*idealWidth*/,
+                                                   int& idealHeight)
+{
+    // NB: Currently not setting the ideal width to keep the width fixed
+
+    // TODO: Set ideal width based on the passed text for preset manager sub-menus
+    //  Currently we don't have a need for dynamic adjustment of menu width
+    //  for its content. But a preset manager, especially its sub-menus,
+    //  could definitely benefit from that. Is it possible to keep the main menu
+    //  a fixed width, while make all sub-menus dynamically sized?
+
+    const float fontHeight = getPopupMenuFont().getHeight();
+
+    if (isSeparator)
+    {
+        idealHeight = (standardMenuItemHeight > 0) ? standardMenuItemHeight / 2
+                                                   : roundToInt (fontHeight);
+        return;
+    }
+
+    idealHeight = (standardMenuItemHeight > 0) ? standardMenuItemHeight
+                                               : roundToInt (fontHeight * 1.75f);
 }
 
 //= COMBOBOXES =================================================================
@@ -154,9 +199,8 @@ void PluginLookAndFeel::drawComboBox (Graphics& g, int width, int height,
     bool shouldHighlight
     = comboBox.isPopupActive() || comboBox.isMouseOverOrDragging (true);
 
-    const Colour comboBoxColour
-    = shouldHighlight ? RBD::controlHoverColour
-                      : comboBox.findColour (ComboBox::backgroundColourId);
+    const Colour comboBoxColour = shouldHighlight ? RBD::controlHoverColour
+                                : comboBox.findColour (ComboBox::backgroundColourId);
     g.setColour (comboBoxColour);
     g.fillRoundedRectangle (0.0f, 0.0f, width, height, RBD::defaultCornerSize);
 
@@ -167,9 +211,8 @@ void PluginLookAndFeel::drawComboBox (Graphics& g, int width, int height,
     //g.fillRect (textBorder);
     // MARK: End debug paint
 
-    const Colour arrowColour
-    = comboBox.isPopupActive() ? RBD::arrowActiveColour
-                               : comboBox.findColour (ComboBox::arrowColourId);
+    const Colour arrowColour = comboBox.isPopupActive() ? RBD::arrowActiveColour
+                             : comboBox.findColour (ComboBox::arrowColourId);
     drawComboBoxButton (g, arrowColour, buttonX, buttonY, buttonW, buttonH);
 }
 
@@ -206,16 +249,12 @@ void PluginLookAndFeel::positionComboBoxText (ComboBox& comboBox, Label& label)
 {
     label.setFont (getComboBoxFont (comboBox));
 
-    // TODO: Vertical size reduction here is just for the popup line height
-    //  Instead of using the comboBox label height to control the popup line
-    //  height, we should address it directly and avoid this reduction.
-
-    auto bounds = comboBox.getLocalBounds().reduced (0, 1);
+    auto bounds = comboBox.getLocalBounds();
     bounds.removeFromRight (comboBoxButtonWidth);
 
     if (comboBox.getHeight() >= largeComboBoxMinHeight)
-    {
-        // Large comboBox text is centred, so add same padding on the left
+    {   // Large ComboBox
+        // Text is centred, so add the same padding on the left
         bounds.removeFromLeft (comboBoxButtonWidth);
         // Use borders to compensate for the intrinsic font offsets
         const int bottomBorder = comboBoxTextVerticalOffset;
@@ -223,11 +262,33 @@ void PluginLookAndFeel::positionComboBoxText (ComboBox& comboBox, Label& label)
         label.setBorderSize ({ 0, 0, bottomBorder, rightBorder });
     }
     else
-    {
+    {   // Normal ComboBox
         label.setBorderSize ({ 1, 6, 1, 6 });
     }
 
     label.setBounds (bounds);
+}
+
+PopupMenu::Options PluginLookAndFeel::getOptionsForComboBoxPopupMenu (ComboBox& comboBox,
+                                                                      Label& label)
+{
+    int itemHeight = 0;
+
+    if (comboBox.getHeight() >= largeComboBoxMinHeight)
+    {   // Large ComboBox
+        itemHeight = largePopupMenuItemHeight;
+    }
+    else
+    {   // Normal ComboBox
+        itemHeight = popupMenuItemHeight;
+    }
+
+    return PopupMenu::Options().withTargetComponent (&comboBox)
+                               .withItemThatMustBeVisible (comboBox.getSelectedId())
+                               .withInitiallySelectedItem (comboBox.getSelectedId())
+                               .withMinimumWidth (comboBox.getWidth())
+                               .withMaximumNumColumns (1)
+                               .withStandardItemHeight (itemHeight);
 }
 
 //= SLIDERS ====================================================================

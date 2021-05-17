@@ -46,12 +46,23 @@ public:
 //= POPUP MENUS ================================================================
     // TODO: Make the popup list semi-transparent, with rounded corners
 
+    inline static const int popupMenuItemHeight = 24;
+    inline static const int largePopupMenuItemHeight = 50;
+
+    Font getPopupMenuFont() override;
+
     void drawPopupMenuItem (Graphics& g, const Rectangle<int>& area,
                             bool isSeparator, bool isActive,
                             bool isHighlighted, bool isTicked, bool hasSubMenu,
                             const String& text, const String& shortcutKeyText,
                             const Drawable* icon,
                             const Colour* textColourToUse) override;
+
+    void getIdealPopupMenuItemSize (const String& text,
+                                    bool isSeparator,
+                                    int standardMenuItemHeight,
+                                    int& idealWidth,
+                                    int& idealHeight) override;
 
 //= COMBOBOXES =================================================================
 
@@ -65,13 +76,15 @@ public:
                        int buttonX, int buttonY, int buttonW, int buttonH,
                        ComboBox& comboBox) override;
 
-    void drawComboBoxButton (Graphics& g, bool isButtonDown,
-                             int buttonX, int buttonY, int buttonW, int buttonH,
-                             ComboBox& comboBox);
+    void drawComboBoxButton (Graphics& g, Colour arrowColour,
+                             int buttonX, int buttonY, int buttonW, int buttonH);
 
     Font getComboBoxFont (ComboBox& comboBox) override;
 
     void positionComboBoxText (ComboBox& comboBox, Label& label) override;
+
+    PopupMenu::Options getOptionsForComboBoxPopupMenu (ComboBox& comboBox,
+                                                       Label& label) override;
     
 //= SLIDERS ====================================================================
 
