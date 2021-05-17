@@ -51,7 +51,7 @@ public:
                             bool isHighlighted, bool isTicked, bool hasSubMenu,
                             const String& text, const String& shortcutKeyText,
                             const Drawable* icon,
-                            const Colour* passedTextColour) override;
+                            const Colour* textColourToUse) override;
 
 //= COMBOBOXES =================================================================
 

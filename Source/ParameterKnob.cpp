@@ -191,7 +191,7 @@ void ParameterKnob::ConnectedToggle
 
     g.saveState();
     g.reduceClipRegion (clippingMask);  // clip to not paint under the outline
-    Colour backgroundColour = shouldDrawButtonAsHighlighted ? RBD::toggleHoverColour
+    Colour backgroundColour = shouldDrawButtonAsHighlighted ? RBD::controlHoverColour
                                                             : RBD::toggleNormalColour;
     g.setColour (backgroundColour);
     g.fillPath (background);

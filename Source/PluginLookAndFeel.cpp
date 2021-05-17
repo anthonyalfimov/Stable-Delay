@@ -29,7 +29,7 @@ PluginLookAndFeel::PluginLookAndFeel()
     // ComboBox colours
     setColour (ComboBox::backgroundColourId, RBD::controlNormalColour);
     setColour (ComboBox::outlineColourId, RBD::controlOutlineColour);
-    setColour (ComboBox::arrowColourId, RBD::textNormalColour);
+    setColour (ComboBox::arrowColourId, RBD::arrowNormalColour);
     setColour (ComboBox::textColourId, RBD::textNormalColour);
 
     // Popup colours (for comboBox popup)
@@ -115,7 +115,7 @@ void PluginLookAndFeel::drawPopupMenuItem (Graphics& g, const Rectangle<int>& ar
                                            bool /*hasSubMenu*/, const String& text,
                                            const String& /*shortcutKeyText*/,
                                            const Drawable* /*icon*/,
-                                           const Colour* /*passedTextColour*/)
+                                           const Colour* /*textColourToUse*/)
 {
     Rectangle<int> bounds (area);   // create editable copy of passed bounds to adjust
     bounds.removeFromBottom (1);
@@ -154,8 +154,9 @@ void PluginLookAndFeel::drawComboBox (Graphics& g, int width, int height,
     bool shouldHighlight
     = comboBox.isPopupActive() || comboBox.isMouseOverOrDragging (true);
 
-    const Colour comboBoxColour = shouldHighlight ? RBD::controlHoverColour
-                                                  : RBD::controlNormalColour;
+    const Colour comboBoxColour
+    = shouldHighlight ? RBD::controlHoverColour
+                      : comboBox.findColour (ComboBox::backgroundColourId);
     g.setColour (comboBoxColour);
     g.fillRoundedRectangle (0.0f, 0.0f, width, height, RBD::defaultCornerSize);
 
@@ -166,14 +167,15 @@ void PluginLookAndFeel::drawComboBox (Graphics& g, int width, int height,
     //g.fillRect (textBorder);
     // MARK: End debug paint
 
-    drawComboBoxButton (g, isButtonDown, buttonX, buttonY, buttonW, buttonH,
-                        comboBox);
+    const Colour arrowColour
+    = comboBox.isPopupActive() ? RBD::arrowActiveColour
+                               : comboBox.findColour (ComboBox::arrowColourId);
+    drawComboBoxButton (g, arrowColour, buttonX, buttonY, buttonW, buttonH);
 }
 
-void PluginLookAndFeel::drawComboBoxButton (Graphics& g, bool isButtonDown,
+void PluginLookAndFeel::drawComboBoxButton (Graphics& g, Colour arrowColour,
                                             int buttonX, int buttonY,
-                                            int buttonW, int buttonH,
-                                            ComboBox& comboBox)
+                                            int buttonW, int buttonH)
 {
     // TODO: Check using int vs float bounds on a low-res monitor
     Rectangle<float> bounds (buttonX, buttonY, buttonW, buttonH);
@@ -187,19 +189,9 @@ void PluginLookAndFeel::drawComboBoxButton (Graphics& g, bool isButtonDown,
     arrow.lineTo (bounds.getCentreX(), bounds.getCentreY() + halfHeight);
     arrow.lineTo (bounds.getCentreX() + halfWidth, bounds.getCentreY() - halfHeight);
 
-    // TODO: Fix arrow colour dimming when comboBox is highlighted
-    //  Using a transparent colour for the arrow means that the darker colour
-    //  of the highlight dims the arrow. We should switch to opaque colours
-    //  to prevent this.
-    // TODO: Consider using the FxType text colour for the FxType comboBox arrow
-    
-    const Colour arrowColour
-    = comboBox.findColour (ComboBox::arrowColourId)
-                          .withAlpha (comboBox.isPopupActive() ? 0.9f : 0.5f);
     g.setColour (arrowColour);
-    g.strokePath (arrow, PathStrokeType (2.0f,
-                                         PathStrokeType::mitered,
-                                         PathStrokeType::rounded));
+    g.strokePath (arrow, PathStrokeType (2.0f, PathStrokeType::mitered,
+                                               PathStrokeType::rounded));
 }
 
 Font PluginLookAndFeel::getComboBoxFont (ComboBox& comboBox)
