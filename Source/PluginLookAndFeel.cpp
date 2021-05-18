@@ -234,7 +234,6 @@ void PluginLookAndFeel::drawComboBoxButton (Graphics& g, Colour arrowColour,
                                             int buttonX, int buttonY,
                                             int buttonW, int buttonH)
 {
-    // TODO: Check using int vs float bounds on a low-res monitor
     Rectangle<float> bounds (buttonX, buttonY, buttonW, buttonH);
     const int halfWidth = 7;    // half of the arrow's width
     const int halfHeight = 2;   // half of the arrow's height
