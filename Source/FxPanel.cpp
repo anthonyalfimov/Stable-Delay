@@ -23,19 +23,8 @@ FxPanel::FxPanel (ReallyBasicDelayAudioProcessor& processor)
                                                            Parameter::FxType,
                                                            FxType::Label);
 
-    auto compareFxTypeStringLWidth = [] (const String& a, const String& b)
-    {
-        return RBD::largeFont.getStringWidth (a) < RBD::largeFont.getStringWidth (b);
-    };
-
-    StringRef longestFxType = *std::max_element (FxType::Label.begin(),
-                                                 FxType::Label.end(),
-                                                 compareFxTypeStringLWidth);
-
-    auto comboBoxWidth = RBD::largeFont.getStringWidth (longestFxType)
-                        + PluginLookAndFeel::comboBoxTextHorizontalOffset
-                        + 2 * PluginLookAndFeel::comboBoxButtonWidth;
-    auto comboBoxHeight = 50;
+    const int comboBoxWidth = 300;
+    const int comboBoxHeight = 50;
     auto bounds = getLocalBounds().withSizeKeepingCentre (comboBoxWidth, comboBoxHeight);
     bounds.setY (20);
     mFxTypeComboBox->setBounds (bounds);
