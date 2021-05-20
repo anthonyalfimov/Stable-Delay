@@ -9,6 +9,7 @@
 */
 
 #include "PluginLookAndFeel.h"
+#include "MainPanel.h"
 
 PluginLookAndFeel::PluginLookAndFeel()
 {
@@ -144,11 +145,12 @@ void PluginLookAndFeel::drawPopupMenuItem (Graphics& g, const Rectangle<int>& ar
     g.setColour (fillColour);
     g.fillRect (bounds);
 
-    Colour textColour = isTicked ? RBD::textActiveColour : RBD::textNormalColour;
-    g.setColour (textColour);
-
     if (area.getHeight() >= largePopupMenuItemHeight)
     {   // Large popup
+        bounds.removeFromBottom (comboBoxTextVerticalOffset);
+        bounds.removeFromRight (comboBoxTextHorizontalOffset);
+        Colour textColour = isTicked ? RBD::textNormalColour : RBD::textFxTypeColour;
+        g.setColour (textColour);
         g.setFont (RBD::largeFont);
         g.drawFittedText (text, bounds, Justification::centred, 1, 1.0f);
     }
@@ -158,11 +160,13 @@ void PluginLookAndFeel::drawPopupMenuItem (Graphics& g, const Rectangle<int>& ar
 
         if (isTicked)
         {
-            g.setColour (RBD::toggleHandleColour);
             tickBounds = tickBounds.withSizeKeepingCentre (6, 6);
+            g.setColour (RBD::toggleHandleColour);
             g.fillRoundedRectangle (tickBounds.toFloat(), 1.0f);
         }
 
+        Colour textColour = isTicked ? RBD::textActiveColour : RBD::textNormalColour;
+        g.setColour (textColour);
         g.setFont (RBD::mainFont);
         g.drawFittedText (text, bounds, Justification::centredLeft, 1, 1.0f);
     }
@@ -286,22 +290,33 @@ PopupMenu::Options PluginLookAndFeel::getOptionsForComboBoxPopupMenu (ComboBox& 
                                                                       Label& label)
 {
     int itemHeight = 0;
-
+    int width = comboBox.getWidth();
+    auto screenArea = comboBox.localAreaToGlobal (comboBox.getLocalBounds());
+    
     if (comboBox.getHeight() >= largeComboBoxMinHeight)
     {   // Large ComboBox
         itemHeight = largePopupMenuItemHeight;
+        width -= 2 * comboBoxButtonWidth;
+        screenArea.setSize (0, 0);
+        screenArea.translate (comboBoxButtonWidth, -2);
     }
     else
     {   // Normal ComboBox
         itemHeight = popupMenuItemHeight;
     }
 
+    // TODO: Specify parent only when this ptr is not null!
+    auto* parent = comboBox.findParentComponentOfClass<MainPanel>();
+    jassert (parent != nullptr);
+
     return PopupMenu::Options().withTargetComponent (&comboBox)
                                .withItemThatMustBeVisible (comboBox.getSelectedId())
                                .withInitiallySelectedItem (comboBox.getSelectedId())
-                               .withMinimumWidth (comboBox.getWidth())
                                .withMaximumNumColumns (1)
-                               .withStandardItemHeight (itemHeight);
+                               .withMinimumWidth (width)
+                               .withStandardItemHeight (itemHeight)
+                               .withTargetScreenArea (screenArea)
+                               .withParentComponent (parent);
 }
 
 //= SLIDERS ====================================================================
