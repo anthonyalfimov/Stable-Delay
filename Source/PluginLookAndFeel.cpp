@@ -138,8 +138,8 @@ void PluginLookAndFeel::drawPopupMenuItem (Graphics& g, const Rectangle<int>& ar
 {
     Rectangle<int> bounds (area);   // create editable copy of passed bounds to adjust
     bounds.removeFromBottom (1);
-    Colour fillColour = isHighlighted ? RBD::controlActiveColour
-                                      : RBD::popupItemBgColour;
+    Colour fillColour = isHighlighted ? RBD::popupItemHoverColour
+                                      : RBD::popupItemColour;
 
     g.setColour (fillColour);
     g.fillRect (bounds);

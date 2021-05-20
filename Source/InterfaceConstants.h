@@ -81,9 +81,10 @@ namespace RBD
     inline const Colour sliderMarkColour = Colour (242, 242, 242);
     inline const Colour sliderTickColour = Colour (232, 232, 232);
     inline const Colour popupBgColour = Colour (40, 40, 40);
-    inline const Colour popupItemBgColour = Colour (0, 0, 0).withAlpha (0.6f);
+    inline const Colour popupItemColour = Colour (26, 26, 26);
+    inline const Colour popupItemHoverColour = Colour (11, 11, 11);
     inline const Colour aboutPanelBgColour = Colour (50, 50, 50);
-    inline const Colour aboutPanelDimColour = Colour (0, 0, 0).withAlpha (0.6f);
+    inline const Colour aboutPanelDimColour = Colour (0, 0, 0).withAlpha (0.4f);
     inline const Colour meterBgColour = Colour (0, 0, 0).withAlpha (0.8f);
     inline const Colour meterFillColour = Colour (125, 125, 125);
     inline const Colour meterLegendColour = textNormalColour;
