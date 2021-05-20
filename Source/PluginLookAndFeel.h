@@ -46,7 +46,7 @@ public:
 //= POPUP MENUS ================================================================
 
     inline static const int popupMenuItemHeight = 24;
-    inline static const int largePopupMenuItemHeight = 50;
+    inline static const int largePopupMenuItemHeight = 51;
 
     void drawPopupMenuBackground (Graphics& g, int width, int height) override;
 
@@ -70,8 +70,8 @@ public:
     inline static const int comboBoxButtonWidth = 40;
     inline static const int largeComboBoxMinHeight = 40;
 
-    inline static const int comboBoxTextHorizontalOffset = 4;
-    inline static const int comboBoxTextVerticalOffset = 3;
+    inline static const int comboBoxTextHorizontalOffset = 3;
+    inline static const int comboBoxTextVerticalOffset = 2;
 
     void drawComboBox (Graphics& g, int width, int height, bool isButtonDown,
                        int buttonX, int buttonY, int buttonW, int buttonH,
