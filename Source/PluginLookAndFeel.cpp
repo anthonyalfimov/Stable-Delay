@@ -33,8 +33,9 @@ PluginLookAndFeel::PluginLookAndFeel()
     setColour (ComboBox::arrowColourId, RBD::arrowNormalColour);
     setColour (ComboBox::textColourId, RBD::textNormalColour);
 
-    // Popup colours (for comboBox popup)
+    // Popup colours
     setColour (PopupMenu::backgroundColourId, RBD::popupBgColour);
+    setColour (PopupMenu::textColourId, RBD::textNormalColour);
 
     // TextButton colours
     setColour (TextButton::buttonColourId, RBD::controlNormalColour);
@@ -48,6 +49,29 @@ PluginLookAndFeel::PluginLookAndFeel()
     setColour (Slider::thumbColourId, RBD::textNormalColour);
     setColour (Slider::backgroundColourId, RBD::meterBgColour);
     setColour (Slider::trackColourId, RBD::sliderTrackColour);
+}
+
+//= UTILITIES ==================================================================
+
+void PluginLookAndFeel::drawUpDownArrowButton (Graphics& g, Colour arrowColour,
+                                               bool isUpArrow,
+                                               int buttonX, int buttonY,
+                                               int buttonW, int buttonH)
+{
+    Rectangle<float> bounds (buttonX, buttonY, buttonW, buttonH);
+    const int halfWidth = 7;    // half of the arrow's width
+    const int halfHeight = isUpArrow ? -2 : 2;   // half of the arrow's height
+
+    // Create arrow shape
+    Path arrow;
+    arrow.startNewSubPath (bounds.getCentreX() - halfWidth,
+                           bounds.getCentreY() - halfHeight);
+    arrow.lineTo (bounds.getCentreX(), bounds.getCentreY() + halfHeight);
+    arrow.lineTo (bounds.getCentreX() + halfWidth, bounds.getCentreY() - halfHeight);
+
+    g.setColour (arrowColour);
+    g.strokePath (arrow, PathStrokeType (2.0f, PathStrokeType::mitered,
+                                               PathStrokeType::rounded));
 }
 
 //= LABELS =====================================================================
@@ -172,6 +196,26 @@ void PluginLookAndFeel::drawPopupMenuItem (Graphics& g, const Rectangle<int>& ar
     }
 }
 
+void PluginLookAndFeel::drawPopupMenuUpDownArrow (Graphics& g,
+                                                  int width, int height,
+                                                  bool isScrollUpArrow)
+{
+    const auto bgColour = RBD::popupItemColour;
+
+    const float gradientStartY = 0.5f * height;
+    const float gradientEndY = isScrollUpArrow ? height : 0.0f;
+
+    g.setGradientFill (ColourGradient (bgColour,
+                                       0.0f, gradientStartY,
+                                       bgColour.withAlpha (0.0f),
+                                       0.0f, gradientEndY,
+                                       false));
+    g.fillRect (0, 0, width , height);
+
+    const auto arrowColour = findColour (PopupMenu::textColourId);
+    drawUpDownArrowButton (g, arrowColour, isScrollUpArrow, 0, 0, width, height);
+}
+
 void PluginLookAndFeel::getIdealPopupMenuItemSize (const String& /*text*/,
                                                    bool isSeparator,
                                                    int standardMenuItemHeight,
@@ -231,27 +275,7 @@ void PluginLookAndFeel::drawComboBox (Graphics& g, int width, int height,
 
     const Colour arrowColour = comboBox.isPopupActive() ? RBD::arrowActiveColour
                              : comboBox.findColour (ComboBox::arrowColourId);
-    drawComboBoxButton (g, arrowColour, buttonX, buttonY, buttonW, buttonH);
-}
-
-void PluginLookAndFeel::drawComboBoxButton (Graphics& g, Colour arrowColour,
-                                            int buttonX, int buttonY,
-                                            int buttonW, int buttonH)
-{
-    Rectangle<float> bounds (buttonX, buttonY, buttonW, buttonH);
-    const int halfWidth = 7;    // half of the arrow's width
-    const int halfHeight = 2;   // half of the arrow's height
-
-    // Create arrow shape
-    Path arrow;
-    arrow.startNewSubPath (bounds.getCentreX() - halfWidth,
-                           bounds.getCentreY() - halfHeight);
-    arrow.lineTo (bounds.getCentreX(), bounds.getCentreY() + halfHeight);
-    arrow.lineTo (bounds.getCentreX() + halfWidth, bounds.getCentreY() - halfHeight);
-
-    g.setColour (arrowColour);
-    g.strokePath (arrow, PathStrokeType (2.0f, PathStrokeType::mitered,
-                                               PathStrokeType::rounded));
+    drawUpDownArrowButton (g, arrowColour, false, buttonX, buttonY, buttonW, buttonH);
 }
 
 Font PluginLookAndFeel::getComboBoxFont (ComboBox& comboBox)

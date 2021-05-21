@@ -30,6 +30,13 @@ public:
     */
     PluginLookAndFeel();
 
+//= UTILITIES ==================================================================
+
+    void drawUpDownArrowButton (Graphics& g, Colour arrowColour,
+                                bool isUpArrow,
+                                int buttonX, int buttonY,
+                                int buttonW, int buttonH);
+
 //= LABELS =====================================================================
 
      void drawLabel (Graphics& g, Label& label) override;
@@ -59,11 +66,12 @@ public:
                             const Drawable* icon,
                             const Colour* textColourToUse) override;
 
-    void getIdealPopupMenuItemSize (const String& text,
-                                    bool isSeparator,
+    void drawPopupMenuUpDownArrow (Graphics& g, int width, int height,
+                                   bool isScrollUpArrow) override;
+
+    void getIdealPopupMenuItemSize (const String& text, bool isSeparator,
                                     int standardMenuItemHeight,
-                                    int& idealWidth,
-                                    int& idealHeight) override;
+                                    int& idealWidth, int& idealHeight) override;
 
 //= COMBOBOXES =================================================================
 
@@ -76,9 +84,6 @@ public:
     void drawComboBox (Graphics& g, int width, int height, bool isButtonDown,
                        int buttonX, int buttonY, int buttonW, int buttonH,
                        ComboBox& comboBox) override;
-
-    void drawComboBoxButton (Graphics& g, Colour arrowColour,
-                             int buttonX, int buttonY, int buttonW, int buttonH);
 
     Font getComboBoxFont (ComboBox& comboBox) override;
 
