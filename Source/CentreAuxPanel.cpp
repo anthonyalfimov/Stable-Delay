@@ -1,22 +1,22 @@
 /*
   ==============================================================================
 
-    CenterPanelMenuBar.cpp
+    CentreAuxPanel.cpp
     Created: 11 Jan 2021 4:32:37pm
     Author:  Anthony
 
   ==============================================================================
 */
 
-#include "CentrePanelMenuBar.h"
+#include "CentreAuxPanel.h"
 #include "Parameters.h"
 
-CentrePanelMenuBar::CentrePanelMenuBar (ReallyBasicDelayAudioProcessor& processor)
+CentreAuxPanel::CentreAuxPanel (ReallyBasicDelayAudioProcessor& processor)
     : InterfacePanel (processor)
 {
     // Set up Panel attributes
     setSize (RBD::centrePanelMenuBarWidth, RBD::centrePanelMenuBarHeight);
-    setName ("CenterMenu");
+    setName ("CentreAuxPanel");
 
     // Set up Stereo Spread Slider
     if (mProcessor.getTotalNumOutputChannels() == 2)

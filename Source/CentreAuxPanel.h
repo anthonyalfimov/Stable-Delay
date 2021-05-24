@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    CenterPanelMenuBar.h
+    CentreAuxPanel.h
     Created: 11 Jan 2021 4:32:37pm
     Author:  Anthony
 
@@ -14,15 +14,15 @@
 #include "ParameterSlider.h"
 #include "SliderLabel.h"
 
-class CentrePanelMenuBar  : public InterfacePanel
+class CentreAuxPanel  : public InterfacePanel
 {
 public:
-    explicit CentrePanelMenuBar (ReallyBasicDelayAudioProcessor& processor);
+    explicit CentreAuxPanel (ReallyBasicDelayAudioProcessor& processor);
     
 private:
     std::unique_ptr<ParameterSlider> mSpreadSlider;
     std::unique_ptr<SliderLabel> mSpreadLabel;
 
 //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CentrePanelMenuBar)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CentreAuxPanel)
 };

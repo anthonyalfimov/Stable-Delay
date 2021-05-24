@@ -68,10 +68,10 @@
       <FILE id="Z4WLtd" name="GainPanel.h" compile="0" resource="0" file="Source/GainPanel.h"/>
       <FILE id="FILMYm" name="CentrePanel.cpp" compile="1" resource="0" file="Source/CentrePanel.cpp"/>
       <FILE id="MzBUkA" name="CentrePanel.h" compile="0" resource="0" file="Source/CentrePanel.h"/>
-      <FILE id="z6yyW3" name="CentrePanelMenuBar.cpp" compile="1" resource="0"
-            file="Source/CentrePanelMenuBar.cpp"/>
-      <FILE id="XDpY2r" name="CentrePanelMenuBar.h" compile="0" resource="0"
-            file="Source/CentrePanelMenuBar.h"/>
+      <FILE id="z6yyW3" name="CentreAuxPanel.cpp" compile="1" resource="0"
+            file="Source/CentreAuxPanel.cpp"/>
+      <FILE id="XDpY2r" name="CentreAuxPanel.h" compile="0" resource="0"
+            file="Source/CentreAuxPanel.h"/>
       <FILE id="bTPdDn" name="FxPanel.cpp" compile="1" resource="0" file="Source/FxPanel.cpp"/>
       <FILE id="vazdPS" name="FxPanel.h" compile="0" resource="0" file="Source/FxPanel.h"/>
       <FILE id="GAFLM8" name="AboutPanel.cpp" compile="1" resource="0" file="Source/AboutPanel.cpp"/>

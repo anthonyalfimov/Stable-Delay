@@ -16,7 +16,7 @@ CentrePanel::CentrePanel (ReallyBasicDelayAudioProcessor& processor)
     setSize (RBD::centrePanelWidth, RBD::centrePanelWidth);
     setName ("CenterPanel");
     
-    mMenuBar = std::make_unique<CentrePanelMenuBar> (processor);
+    mMenuBar = std::make_unique<CentreAuxPanel> (processor);
     mMenuBar->setTopLeftPosition (0, 0);
     addAndMakeVisible (mMenuBar.get());
     
