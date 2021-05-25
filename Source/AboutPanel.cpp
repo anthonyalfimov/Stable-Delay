@@ -84,7 +84,7 @@ void AboutPanel::paint (Graphics& g)
     g.drawRoundedRectangle (bounds, innerCornerSize, 1.0f);
 }
 
-void AboutPanel::mouseDown (const MouseEvent& event)
+void AboutPanel::mouseDown (const MouseEvent& /*event*/)
 {
     mOwner.reset();
 }

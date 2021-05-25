@@ -15,7 +15,7 @@
 class AboutPanel  : public Component
 {
 public:
-    AboutPanel (std::unique_ptr<AboutPanel>& owner);
+    explicit AboutPanel (std::unique_ptr<AboutPanel>& owner);
 
 //==============================================================================
     /** @internal */
