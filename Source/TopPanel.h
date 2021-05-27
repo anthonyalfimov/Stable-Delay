@@ -11,6 +11,7 @@
 #pragma once
 
 #include "InterfacePanel.h"
+#include "TitleComponent.h"
 #include "MouseEventInvoker.h"
 
 class TopPanel  : public InterfacePanel,
@@ -18,8 +19,7 @@ class TopPanel  : public InterfacePanel,
                   public ComboBox::Listener
 {
 public:
-    explicit TopPanel (ReallyBasicDelayAudioProcessor& processor,
-                       std::function<void (const MouseEvent&)> onTitleClick);
+    explicit TopPanel (ReallyBasicDelayAudioProcessor& processor);
 
 //==============================================================================
     /** @internal */
@@ -36,8 +36,7 @@ private:
 
     std::unique_ptr<TextButton> mNewPreset, mSavePreset, mSaveAsPreset;
 
-    MouseEventInvoker mTitleMouseEventInvoker;
-    Label mTitleLabel { "title", "Really Basic Delay" };
+    std::unique_ptr<TitleComponent> mTitleComponent;
 
 //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TopPanel)

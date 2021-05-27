@@ -10,20 +10,18 @@
 
 #pragma once
 
-#include <JuceHeader.h>
+#include "PopupComponent.h"
 
-class AboutPanel  : public Component
+class AboutPanel final : public PopupComponent
 {
 public:
-    explicit AboutPanel (std::unique_ptr<AboutPanel>& owner);
+    AboutPanel (Component* parentComponent, std::unique_ptr<PopupComponent>& owner);
 
 //==============================================================================
     /** @internal */
     void resized() override;
     /** @internal */
     void paint (Graphics& g) override;
-    /** @internal */
-    void mouseDown (const MouseEvent& event) override;
 
 private:
     Rectangle<int> mBackground;
@@ -34,9 +32,6 @@ private:
 
     HyperlinkButton mSourceButton { "Source Code",
                                     URL ("https://github.com/anthonyalfimov") };
-
-//==============================================================================
-    std::unique_ptr<AboutPanel>& mOwner;
 
 //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AboutPanel)

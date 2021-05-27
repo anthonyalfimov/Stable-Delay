@@ -45,6 +45,10 @@
             file="Source/ParameterToggle.h"/>
     </GROUP>
     <GROUP id="{89B33AAD-A27F-7960-6038-74F7F39F53E0}" name="Components">
+      <FILE id="xr1yTr" name="PopupComponent.cpp" compile="1" resource="0"
+            file="Source/PopupComponent.cpp"/>
+      <FILE id="m3TsWr" name="PopupComponent.h" compile="0" resource="0"
+            file="Source/PopupComponent.h"/>
       <FILE id="B6Bznx" name="MeterChannel.cpp" compile="1" resource="0"
             file="Source/MeterChannel.cpp"/>
       <FILE id="fLCHTh" name="MeterChannel.h" compile="0" resource="0" file="Source/MeterChannel.h"/>
@@ -54,6 +58,10 @@
       <FILE id="KsheeB" name="Meter.h" compile="0" resource="0" file="Source/Meter.h"/>
       <FILE id="PFoj7C" name="SliderLabel.cpp" compile="1" resource="0" file="Source/SliderLabel.cpp"/>
       <FILE id="BHynvf" name="SliderLabel.h" compile="0" resource="0" file="Source/SliderLabel.h"/>
+      <FILE id="tRraXF" name="TitleComponent.cpp" compile="1" resource="0"
+            file="Source/TitleComponent.cpp"/>
+      <FILE id="XMJD3r" name="TitleComponent.h" compile="0" resource="0"
+            file="Source/TitleComponent.h"/>
     </GROUP>
     <GROUP id="{B55B2190-C0A4-3B41-2D50-0A81E5CC3764}" name="Panels">
       <FILE id="CLsfpr" name="InterfacePanel.cpp" compile="1" resource="0"

@@ -11,11 +11,13 @@
 #include "AboutPanel.h"
 #include "InterfaceConstants.h"
 
-AboutPanel::AboutPanel (std::unique_ptr<AboutPanel>& owner)
-    : mOwner (owner)
+AboutPanel::AboutPanel (Component* parentComponent,
+                        std::unique_ptr<PopupComponent>& owner)
+    : PopupComponent (parentComponent, owner)
 {
     // Set up Panel attributes
     setName ("AboutPanel");
+    updateBounds();
 
     // Set up the Title Label
     mTitleLabel.setFont (RBD::titleFont);
@@ -82,9 +84,4 @@ void AboutPanel::paint (Graphics& g)
     auto innerCornerSize = RBD::defaultCornerSize;
     g.setColour (RBD::textNormalColour);
     g.drawRoundedRectangle (bounds, innerCornerSize, 1.0f);
-}
-
-void AboutPanel::mouseDown (const MouseEvent& /*event*/)
-{
-    mOwner.reset();
 }

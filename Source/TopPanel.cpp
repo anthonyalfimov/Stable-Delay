@@ -10,8 +10,7 @@
 
 #include "TopPanel.h"
 
-TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor,
-                    std::function<void (const MouseEvent&)> onTitleClick)
+TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor)
     : InterfacePanel (processor)
 {
     // Set up Panel attributes
@@ -31,7 +30,7 @@ TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor,
 
     // Set up Preset List mouse event callbacks
     WeakReference<Component> presetListWeakReference (mPresetList.get());
-    auto repaintPresetList = [presetListWeakReference] (const MouseEvent& event)
+    auto repaintPresetList = [presetListWeakReference] (const MouseEvent& /*event*/)
     {
         if (presetListWeakReference != nullptr)
             presetListWeakReference->repaint();
@@ -39,7 +38,7 @@ TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor,
 
     mPresetListMouseEventInvoker.onMouseEnter = repaintPresetList;
     mPresetListMouseEventInvoker.onMouseExit = repaintPresetList;
-    mPresetListMouseEventInvoker.onMouseUp = repaintPresetList;
+    //mPresetListMouseEventInvoker.onMouseUp = repaintPresetList;
 
     mPresetList->addMouseListener (&mPresetListMouseEventInvoker, true);
 
@@ -73,18 +72,11 @@ TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor,
     addAndMakeVisible (mSaveAsPreset.get());
 
     // Set up the Title Label
-    mTitleLabel.setFont (RBD::titleFont);
-    mTitleLabel.setJustificationType (Justification::centredRight);
-    mTitleLabel.setBorderSize ({ 1, padding, 1, padding });
-    int titleWidth = RBD::titleFont.getStringWidth (mTitleLabel.getText())
-                    + 2 * padding;
-    auto titleLabelBounds = getLocalBounds().removeFromRight (titleWidth);
-    mTitleLabel.setBounds (titleLabelBounds);
-    addAndMakeVisible (mTitleLabel);
-
-    // Set up Title Label mouse events callbacks
-    mTitleMouseEventInvoker.onMouseDown = onTitleClick;
-    mTitleLabel.addMouseListener (&mTitleMouseEventInvoker, false);
+    mTitleComponent = std::make_unique<TitleComponent>();
+    bounds = getLocalBounds().withLeft (mPresetList->getRight());
+    bounds.removeFromRight (padding);
+    mTitleComponent->setBounds (bounds);
+    addAndMakeVisible (mTitleComponent.get());
 }
 
 void TopPanel::buttonClicked (Button* buttonThatWasPressed)

@@ -30,7 +30,6 @@ private:
     std::unique_ptr<GainPanel> mInputGainPanel;
     std::unique_ptr<GainPanel> mOutputGainPanel;
     std::unique_ptr<CentrePanel> mCentrePanel;
-    std::unique_ptr<AboutPanel> mAboutPanel;
 
 //==============================================================================
     Image mBackgroundImage;
