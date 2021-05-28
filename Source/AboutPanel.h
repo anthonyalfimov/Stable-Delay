@@ -10,12 +10,12 @@
 
 #pragma once
 
-#include "PopupComponent.h"
+#include "PopupPanel.h"
 
-class AboutPanel final : public PopupComponent
+class AboutPanel final : public PopupPanel
 {
 public:
-    AboutPanel (Component* parentComponent, std::unique_ptr<PopupComponent>& owner);
+    AboutPanel (std::unique_ptr<PopupPanel>& owner);
 
 //==============================================================================
     /** @internal */

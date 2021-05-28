@@ -11,7 +11,7 @@
 #pragma once
 
 #include "InterfacePanel.h"
-#include "TitleComponent.h"
+#include "TitleLogo.h"
 #include "MouseEventInvoker.h"
 
 class TopPanel  : public InterfacePanel,
@@ -36,7 +36,7 @@ private:
 
     std::unique_ptr<TextButton> mNewPreset, mSavePreset, mSaveAsPreset;
 
-    std::unique_ptr<TitleComponent> mTitleComponent;
+    std::unique_ptr<TitleLogo> mTitleLogo;
 
 //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TopPanel)

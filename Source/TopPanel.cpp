@@ -71,12 +71,12 @@ TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor)
     mSaveAsPreset->addListener (this);
     addAndMakeVisible (mSaveAsPreset.get());
 
-    // Set up the Title Label
-    mTitleComponent = std::make_unique<TitleComponent>();
+    // Set up the Title Logo
+    mTitleLogo = std::make_unique<TitleLogo>();
     bounds = getLocalBounds().withLeft (mPresetList->getRight());
     bounds.removeFromRight (padding);
-    mTitleComponent->setBounds (bounds);
-    addAndMakeVisible (mTitleComponent.get());
+    mTitleLogo->setBounds (bounds);
+    addAndMakeVisible (mTitleLogo.get());
 }
 
 void TopPanel::buttonClicked (Button* buttonThatWasPressed)

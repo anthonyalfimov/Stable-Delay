@@ -28,10 +28,10 @@
       <FILE id="agqbzc" name="PresetManager.h" compile="0" resource="0" file="Source/PresetManager.h"/>
     </GROUP>
     <GROUP id="{195656B5-0487-FECC-6F4E-58DC537044AA}" name="Parameter Control">
-      <FILE id="SWzc8U" name="ParameterComboBox.cpp" compile="1" resource="0"
-            file="Source/ParameterComboBox.cpp"/>
-      <FILE id="PWCrOy" name="ParameterComboBox.h" compile="0" resource="0"
-            file="Source/ParameterComboBox.h"/>
+      <FILE id="SWzc8U" name="ParameterDropdown.cpp" compile="1" resource="0"
+            file="Source/ParameterDropdown.cpp"/>
+      <FILE id="PWCrOy" name="ParameterDropdown.h" compile="0" resource="0"
+            file="Source/ParameterDropdown.h"/>
       <FILE id="EO4I3l" name="ParameterKnob.cpp" compile="1" resource="0"
             file="Source/ParameterKnob.cpp"/>
       <FILE id="j10A24" name="ParameterKnob.h" compile="0" resource="0" file="Source/ParameterKnob.h"/>
@@ -45,10 +45,6 @@
             file="Source/ParameterToggle.h"/>
     </GROUP>
     <GROUP id="{89B33AAD-A27F-7960-6038-74F7F39F53E0}" name="Components">
-      <FILE id="xr1yTr" name="PopupComponent.cpp" compile="1" resource="0"
-            file="Source/PopupComponent.cpp"/>
-      <FILE id="m3TsWr" name="PopupComponent.h" compile="0" resource="0"
-            file="Source/PopupComponent.h"/>
       <FILE id="B6Bznx" name="MeterChannel.cpp" compile="1" resource="0"
             file="Source/MeterChannel.cpp"/>
       <FILE id="fLCHTh" name="MeterChannel.h" compile="0" resource="0" file="Source/MeterChannel.h"/>
@@ -58,16 +54,16 @@
       <FILE id="KsheeB" name="Meter.h" compile="0" resource="0" file="Source/Meter.h"/>
       <FILE id="PFoj7C" name="SliderLabel.cpp" compile="1" resource="0" file="Source/SliderLabel.cpp"/>
       <FILE id="BHynvf" name="SliderLabel.h" compile="0" resource="0" file="Source/SliderLabel.h"/>
-      <FILE id="tRraXF" name="TitleComponent.cpp" compile="1" resource="0"
-            file="Source/TitleComponent.cpp"/>
-      <FILE id="XMJD3r" name="TitleComponent.h" compile="0" resource="0"
-            file="Source/TitleComponent.h"/>
+      <FILE id="tRraXF" name="TitleLogo.cpp" compile="1" resource="0" file="Source/TitleLogo.cpp"/>
+      <FILE id="XMJD3r" name="TitleLogo.h" compile="0" resource="0" file="Source/TitleLogo.h"/>
     </GROUP>
     <GROUP id="{B55B2190-C0A4-3B41-2D50-0A81E5CC3764}" name="Panels">
       <FILE id="CLsfpr" name="InterfacePanel.cpp" compile="1" resource="0"
             file="Source/InterfacePanel.cpp"/>
       <FILE id="qCxFj2" name="InterfacePanel.h" compile="0" resource="0"
             file="Source/InterfacePanel.h"/>
+      <FILE id="xr1yTr" name="PopupPanel.cpp" compile="1" resource="0" file="Source/PopupPanel.cpp"/>
+      <FILE id="m3TsWr" name="PopupPanel.h" compile="0" resource="0" file="Source/PopupPanel.h"/>
       <FILE id="bKu8kC" name="MainPanel.cpp" compile="1" resource="0" file="Source/MainPanel.cpp"/>
       <FILE id="QigLtG" name="MainPanel.h" compile="0" resource="0" file="Source/MainPanel.h"/>
       <FILE id="VWxUmE" name="TopPanel.cpp" compile="1" resource="0" file="Source/TopPanel.cpp"/>

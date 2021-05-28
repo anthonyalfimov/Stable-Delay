@@ -11,13 +11,11 @@
 #include "AboutPanel.h"
 #include "InterfaceConstants.h"
 
-AboutPanel::AboutPanel (Component* parentComponent,
-                        std::unique_ptr<PopupComponent>& owner)
-    : PopupComponent (parentComponent, owner)
+AboutPanel::AboutPanel (std::unique_ptr<PopupPanel>& owner)
+    : PopupPanel (owner)
 {
     // Set up Panel attributes
     setName ("AboutPanel");
-    updateBounds();
 
     // Set up the Title Label
     mTitleLabel.setFont (RBD::titleFont);

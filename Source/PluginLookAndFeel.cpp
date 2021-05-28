@@ -134,17 +134,9 @@ void PluginLookAndFeel::drawButtonBackground (Graphics& g, Button& button,
 
 //= POPUP MENUS ================================================================
 
-// NOTE: Making the popup bg colour transparent will switch the MenuWindow to
-//       being transparent (if desktop supports that).
-//       If you want to use rounded corners or force the component to use
-//       transparency regardless of desktop (e.g. if you're parenting the
-//       popup to the editor), call the `preparePopupMenuWindow()` method
-//       to manually set it as not opaque.
-
 void PluginLookAndFeel::drawPopupMenuBackground (Graphics& g, int width, int height)
 {
     g.setColour (findColour (PopupMenu::backgroundColourId));
-    //g.fillRoundedRectangle (0, 0, width, height, RBD::defaultCornerSize);
     g.fillAll();
 }
 
@@ -169,31 +161,19 @@ void PluginLookAndFeel::drawPopupMenuItem (Graphics& g, const Rectangle<int>& ar
     g.setColour (fillColour);
     g.fillRect (bounds);
 
-    if (area.getHeight() >= largePopupMenuItemHeight)
-    {   // Large popup
-        bounds.removeFromBottom (comboBoxTextVerticalOffset);
-        bounds.removeFromRight (comboBoxTextHorizontalOffset);
-        Colour textColour = isTicked ? RBD::textNormalColour : RBD::textFxTypeColour;
-        g.setColour (textColour);
-        g.setFont (RBD::largeFont);
-        g.drawFittedText (text, bounds, Justification::centred, 1, 1.0f);
-    }
-    else
-    {   // Normal popup
-        auto tickBounds = bounds.removeFromLeft (bounds.getHeight());
+    auto tickBounds = bounds.removeFromLeft (bounds.getHeight());
 
-        if (isTicked)
-        {
-            tickBounds = tickBounds.withSizeKeepingCentre (6, 6);
-            g.setColour (RBD::toggleHandleColour);
-            g.fillRoundedRectangle (tickBounds.toFloat(), 1.0f);
-        }
-
-        Colour textColour = isTicked ? RBD::textActiveColour : RBD::textNormalColour;
-        g.setColour (textColour);
-        g.setFont (RBD::mainFont);
-        g.drawFittedText (text, bounds, Justification::centredLeft, 1, 1.0f);
+    if (isTicked)
+    {
+        tickBounds = tickBounds.withSizeKeepingCentre (6, 6);
+        g.setColour (RBD::toggleHandleColour);
+        g.fillRoundedRectangle (tickBounds.toFloat(), 1.0f);
     }
+
+    Colour textColour = isTicked ? RBD::textActiveColour : RBD::textNormalColour;
+    g.setColour (textColour);
+    g.setFont (getPopupMenuFont());
+    g.drawFittedText (text, bounds, Justification::centredLeft, 1, 1.0f);
 }
 
 void PluginLookAndFeel::drawPopupMenuUpDownArrow (Graphics& g,
@@ -313,23 +293,9 @@ void PluginLookAndFeel::positionComboBoxText (ComboBox& comboBox, Label& label)
 PopupMenu::Options PluginLookAndFeel::getOptionsForComboBoxPopupMenu (ComboBox& comboBox,
                                                                       Label& label)
 {
-    int itemHeight = 0;
+    int itemHeight = popupMenuItemHeight;
     int width = comboBox.getWidth();
-    auto screenArea = comboBox.localAreaToGlobal (comboBox.getLocalBounds());
-    
-    if (comboBox.getHeight() >= largeComboBoxMinHeight)
-    {   // Large ComboBox
-        itemHeight = largePopupMenuItemHeight;
-        width -= 2 * comboBoxButtonWidth;
-        screenArea.setSize (0, 0);
-        screenArea.translate (comboBoxButtonWidth, -2);
-    }
-    else
-    {   // Normal ComboBox
-        itemHeight = popupMenuItemHeight;
-    }
 
-    // TODO: Specify parent only when this ptr is not null!
     auto* parent = comboBox.findParentComponentOfClass<MainPanel>();
     jassert (parent != nullptr);
 
@@ -339,7 +305,6 @@ PopupMenu::Options PluginLookAndFeel::getOptionsForComboBoxPopupMenu (ComboBox& 
                                .withMaximumNumColumns (1)
                                .withMinimumWidth (width)
                                .withStandardItemHeight (itemHeight)
-                               .withTargetScreenArea (screenArea)
                                .withParentComponent (parent);
 }
 

@@ -53,7 +53,6 @@ public:
 //= POPUP MENUS ================================================================
 
     inline static const int popupMenuItemHeight = 24;
-    inline static const int largePopupMenuItemHeight = 51;
 
     void drawPopupMenuBackground (Graphics& g, int width, int height) override;
 

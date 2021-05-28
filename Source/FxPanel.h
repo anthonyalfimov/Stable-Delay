@@ -11,7 +11,7 @@
 #pragma once
 
 #include "InterfacePanel.h"
-#include "ParameterComboBox.h"
+#include "ParameterDropdown.h"
 #include "ParameterKnob.h"
 #include "SliderLabel.h"
 #include "Parameters.h"
@@ -32,7 +32,7 @@ public:
 private:
     FxType::Index mTypeIndex;
 
-    std::unique_ptr<ParameterComboBox> mFxTypeComboBox;
+    std::unique_ptr<ParameterDropdown> mFxTypeComboBox;
     
     // Use an array of pointers to allow dynamically changing number of knobs
     OwnedArray<ParameterKnob> mKnobs;

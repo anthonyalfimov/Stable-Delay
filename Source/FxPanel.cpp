@@ -19,7 +19,7 @@ FxPanel::FxPanel (ReallyBasicDelayAudioProcessor& processor)
     setSize (RBD::fxPanelWidth, RBD::fxPanelHeight);
 
     // Set up FX Type ComboBox
-    mFxTypeComboBox = std::make_unique<ParameterComboBox> (mProcessor.parameters,
+    mFxTypeComboBox = std::make_unique<ParameterDropdown> (mProcessor.parameters,
                                                            Parameter::FxType,
                                                            FxType::Label);
 

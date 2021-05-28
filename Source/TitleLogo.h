@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    TitleComponent.h
+    TitleLogo.h
     Created: 27 May 2021 4:51:55pm
     Author:  Anthony Alfimov
 
@@ -14,10 +14,10 @@
 #include "MouseEventInvoker.h"
 #include "AboutPanel.h"
 
-class TitleComponent  : public Component
+class TitleLogo  : public Component
 {
 public:
-    TitleComponent();
+    TitleLogo();
 
 //==============================================================================
     /** @internal */
@@ -27,8 +27,8 @@ private:
     MouseEventInvoker mLabelMouseEventInvoker;
     Label mTitleLabel { "title", "Really Basic Delay" };
 
-    std::unique_ptr<PopupComponent> mAboutPanel;
+    std::unique_ptr<PopupPanel> mAboutPanel;
 
 //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TitleComponent)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TitleLogo)
 };

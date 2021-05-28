@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    PopupComponent.h
+    PopupPanel.h
     Created: 27 May 2021 4:14:54pm
     Author:  Anthony Alfimov
 
@@ -17,19 +17,23 @@
     and self-destructs on mouse click.
 
     @Discussion
-    You must call the updateBounds() method after creating an object of this
-    class (or in the constructor of your derived class) to initialise the bounds.
+    You must call the updateBounds() method after adding an object of this
+    class to a parent.
 */
-class PopupComponent  : public Component
+class PopupPanel  : public Component
 {
 public:
-    PopupComponent (Component* parentComponent,
-                    std::unique_ptr<PopupComponent>& owner);
+    PopupPanel (std::unique_ptr<PopupPanel>& owner);
 
     /**
-        Update PopupComponent bounds to cover its parent Component.
+        Update PopupPanel bounds to cover its parent Component.
     */
     void updateBounds();
+
+    /**
+        Dismiss the PopupPanel by triggering its owner to delete it.
+    */
+    virtual void dismiss();
 
 //==============================================================================
     /** @internal */
@@ -38,8 +42,8 @@ public:
     void mouseDown (const MouseEvent& event) override;
 
 private:
-    std::unique_ptr<PopupComponent>& mOwner;
+    std::unique_ptr<PopupPanel>& mOwner;
 
 //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PopupComponent)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PopupPanel)
 };

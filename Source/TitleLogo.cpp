@@ -1,18 +1,18 @@
 /*
   ==============================================================================
 
-    TitleComponent.cpp
+    TitleLogo.cpp
     Created: 27 May 2021 4:51:55pm
     Author:  Anthony Alfimov
 
   ==============================================================================
 */
 
-#include "TitleComponent.h"
+#include "TitleLogo.h"
 #include "InterfaceConstants.h"
 #include "MainPanel.h"
 
-TitleComponent::TitleComponent()
+TitleLogo::TitleLogo()
 {
     // Set up the Title Label
     mTitleLabel.setFont (RBD::titleFont);
@@ -31,13 +31,15 @@ TitleComponent::TitleComponent()
             return;
         }
 
-        mAboutPanel = std::make_unique<AboutPanel> (parent, mAboutPanel);
+        mAboutPanel = std::make_unique<AboutPanel> (mAboutPanel);
+        parent->addAndMakeVisible (mAboutPanel.get());
+        mAboutPanel->updateBounds();
     };
     
     mTitleLabel.addMouseListener (&mLabelMouseEventInvoker, false);
 }
 
-void TitleComponent::resized()
+void TitleLogo::resized()
 {
     int titleWidth = RBD::titleFont.getStringWidth (mTitleLabel.getText());
     auto titleLabelBounds = getLocalBounds().removeFromRight (titleWidth);
