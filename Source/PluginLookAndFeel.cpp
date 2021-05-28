@@ -39,8 +39,9 @@ PluginLookAndFeel::PluginLookAndFeel()
 
     // TextButton colours
     setColour (TextButton::buttonColourId, RBD::controlNormalColour);
-    setColour (TextButton::textColourOnId, RBD::textNormalColour);
+    setColour (TextButton::buttonOnColourId, RBD::controlHoverColour);
     setColour (TextButton::textColourOffId, RBD::textNormalColour);
+    setColour (TextButton::textColourOnId, RBD::textActiveColour);
 
     // HyperlinkButton colours
     setColour (HyperlinkButton::textColourId, RBD::textLinkColour);
@@ -117,19 +118,42 @@ void PluginLookAndFeel::drawButtonBackground (Graphics& g, Button& button,
                                               bool shouldDrawButtonAsHighlighted,
                                               bool shouldDrawButtonAsDown)
 {
-    auto fillColour = RBD::controlNormalColour;
+    Colour fillColour;
 
     if (shouldDrawButtonAsDown)
-        fillColour = RBD::controlActiveColour;
+        fillColour = button.findColour (TextButton::buttonOnColourId).brighter();
     else if (shouldDrawButtonAsHighlighted)
-        fillColour = RBD::controlHoverColour;
-
-    #warning Non-namespaced Rectangle might be a problem on Windows
-    const auto bounds = button.getLocalBounds().toFloat().reduced (0.5f);
+        fillColour = button.findColour (TextButton::buttonOnColourId);
+    else
+        fillColour = button.findColour (TextButton::buttonColourId);
 
     g.setColour (fillColour);
-    const float cornerSize = 2.0f * RBD::defaultCornerSize;
-    g.fillRoundedRectangle (bounds.reduced (1.0f), cornerSize);
+
+    const auto bounds = button.getLocalBounds().toFloat();
+    const float cornerSize = RBD::defaultCornerSize;
+
+    auto flatOnLeft   = button.isConnectedOnLeft();
+    auto flatOnRight  = button.isConnectedOnRight();
+    auto flatOnTop    = button.isConnectedOnTop();
+    auto flatOnBottom = button.isConnectedOnBottom();
+
+    if (flatOnLeft || flatOnRight || flatOnTop || flatOnBottom)
+    {
+        Path path;
+        path.addRoundedRectangle (bounds.getX(), bounds.getY(),
+                                  bounds.getWidth(), bounds.getHeight(),
+                                  cornerSize, cornerSize,
+                                  ! (flatOnLeft  || flatOnTop),
+                                  ! (flatOnRight || flatOnTop),
+                                  ! (flatOnLeft  || flatOnBottom),
+                                  ! (flatOnRight || flatOnBottom));
+
+        g.fillPath (path);
+    }
+    else
+    {
+        g.fillRoundedRectangle (bounds, cornerSize);
+    }
 }
 
 //= POPUP MENUS ================================================================

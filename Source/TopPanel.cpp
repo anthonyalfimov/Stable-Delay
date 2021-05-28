@@ -58,14 +58,14 @@ TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor)
     addAndMakeVisible (mNewPreset.get());
     
     mSavePreset = std::make_unique<TextButton>();
-    bounds.translate (buttonWidth, 0);
+    bounds.translate (buttonWidth + 2, 0);
     mSavePreset->setBounds (bounds);
     mSavePreset->setButtonText ("SAVE");
     mSavePreset->addListener (this);
     addAndMakeVisible (mSavePreset.get());
     
     mSaveAsPreset = std::make_unique<TextButton>();
-    bounds.translate (buttonWidth, 0);
+    bounds.translate (buttonWidth + 2, 0);
     mSaveAsPreset->setBounds (bounds);
     mSaveAsPreset->setButtonText ("SAVE AS");
     mSaveAsPreset->addListener (this);
