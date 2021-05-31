@@ -92,8 +92,7 @@ void DropdownMenu::buildMenu()
 
         // Set up as part of toggle radio button group
         item->setClickingTogglesState (true);
-        //TODO: Make this work with a radio group
-        //item->setRadioGroupId (radioGroupId, dontSendNotification);
+        item->setRadioGroupId (radioGroupId, dontSendNotification);
 
         // Set up button colours
         item->setColour (TextButton::buttonColourId, RBD::popupItemColour);
@@ -102,10 +101,13 @@ void DropdownMenu::buildMenu()
         item->setColour (TextButton::textColourOnId, RBD::textNormalColour);
 
         // Set up on-click callback
-        item->onClick = [i, this] ()
+        item->onClick = [i, item, this] ()
         {
-            mDropdown->setSelectedItemIndex (i);
-            this->dismiss();
+            if (item->getToggleState())
+            {
+                mDropdown->setSelectedItemIndex (i);
+                this->dismiss();
+            }
         };
 
         // Set connected flags
@@ -157,6 +159,7 @@ ParameterDropdown::ParameterDropdown (AudioProcessorValueTreeState& stateToContr
     addMouseListener (&mMouseEventInvoker, true);
 
     // Set up style
+    setEditableText (false);
     setColour (ComboBox::textColourId, RBD::textFxTypeColour);
 }
 
