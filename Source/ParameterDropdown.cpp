@@ -16,8 +16,10 @@
 //  DropdownMenu
 //==============================================================================
 
-DropdownMenu::DropdownMenu (ParameterDropdown* dropdown)
-    : PopupPanel (dropdown->getDropdownMenu()), mDropdown (dropdown)
+DropdownMenu::DropdownMenu (ParameterDropdown* dropdown, int radioGroupId)
+    : PopupPanel (dropdown->getDropdownMenu()),
+      mDropdown (dropdown),
+      mRadioGroupId (radioGroupId)
 {
     auto* parent = dropdown->findParentComponentOfClass<MainPanel>();
 
@@ -92,7 +94,7 @@ void DropdownMenu::buildMenu()
 
         // Set up as part of toggle radio button group
         item->setClickingTogglesState (true);
-        item->setRadioGroupId (radioGroupId, dontSendNotification);
+        item->setRadioGroupId (mRadioGroupId, dontSendNotification);
 
         // Set up button colours
         item->setColour (TextButton::buttonColourId, RBD::popupItemColour);
@@ -134,9 +136,10 @@ void DropdownMenu::buildMenu()
 
 ParameterDropdown::ParameterDropdown (AudioProcessorValueTreeState& stateToControl,
                                       Parameter::Index parameterIndex,
+                                      int radioGroupId,
                                       const StringArray& itemList,
                                       int firstItemIdOffset)
-    : ComboBox (Parameter::Name[parameterIndex])
+    : ComboBox (Parameter::Name[parameterIndex]), mRadioGroupId (radioGroupId)
 {
     // Set up item list
     addItemList (itemList, firstItemIdOffset);
@@ -165,5 +168,5 @@ ParameterDropdown::ParameterDropdown (AudioProcessorValueTreeState& stateToContr
 
 void ParameterDropdown::showPopup()
 {
-    mMenu = std::make_unique<DropdownMenu> (this);
+    mMenu = std::make_unique<DropdownMenu> (this, mRadioGroupId);
 }

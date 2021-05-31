@@ -12,6 +12,14 @@
 
 #include <JuceHeader.h>
 
+namespace RadioGroup
+{
+    enum ID : int
+    {
+        FxType = 1001
+    };
+}
+
 namespace RBD
 {
     // C++17 "inline" keyword ensures that only one copy of the constant

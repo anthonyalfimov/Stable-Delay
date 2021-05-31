@@ -22,7 +22,7 @@ class ParameterDropdown;
 class DropdownMenu  : public PopupPanel
 {
 public:
-    explicit DropdownMenu (ParameterDropdown* dropdown);
+    DropdownMenu (ParameterDropdown* dropdown, int radioGroupId);
 
 //==============================================================================
     /** @internal */
@@ -46,8 +46,8 @@ private:
     OwnedArray<TextButton> mItems;
     int numItems = 0;
 
-    // MARK: Temporary Radio Group ID
-    int radioGroupId = 1001;
+//==============================================================================
+    int mRadioGroupId = 0;
 
 //==============================================================================
     void buildMenu();
@@ -71,6 +71,7 @@ public:
     */
     ParameterDropdown (AudioProcessorValueTreeState& stateToControl,
                        Parameter::Index parameterIndex,
+                       int radioGroupId,
                        const StringArray& itemList,
                        int firstItemIdOffset = 1);
 
@@ -82,6 +83,7 @@ private:
     std::unique_ptr<AudioProcessorValueTreeState::ComboBoxAttachment> mAttachment;
 
 //==============================================================================
+    int mRadioGroupId = 0;
     std::unique_ptr<PopupPanel> mMenu;
     
 //==============================================================================
