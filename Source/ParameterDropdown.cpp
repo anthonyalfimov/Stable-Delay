@@ -77,9 +77,13 @@ void DropdownMenu::resized()
 
 void DropdownMenu::paint (Graphics& g)
 {
+    Path panel;
+    panel.addRoundedRectangle (panelBounds.expanded (panelBorderSize),
+                               panelCornerSize);
+    panelShadow.drawForPath (g, panel);
+
     g.setColour (panelColour);
-    g.fillRoundedRectangle (panelBounds.expanded (panelBorderSize).toFloat(),
-                            panelCornerSize);
+    g.fillPath (panel);
 }
 
 void DropdownMenu::buildMenu()

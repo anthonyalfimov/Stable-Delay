@@ -38,6 +38,8 @@ protected:
     Colour panelColour = RBD::popupBgColour;
     int panelBorderSize = 1;
     float panelCornerSize = RBD::defaultCornerSize;
+    // TODO: Consider moving to L&F as a default shadow
+    DropShadow panelShadow { RBD::shadowColour, 8, { 3, 3 } };
 
 //==============================================================================
     SafePointer<ParameterDropdown> mDropdown;
