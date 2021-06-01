@@ -14,7 +14,7 @@
 #include "InterfaceConstants.h"
 
 /**
-    Abstract base class for a component that covers the whole bounds of its parent,
+    Abstract base class for a component that covers the whole of its parent,
     always stays on top, and self-destructs on mouse click.
 
     @Discussion
