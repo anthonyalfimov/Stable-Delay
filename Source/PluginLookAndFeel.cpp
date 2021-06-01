@@ -107,12 +107,6 @@ void PluginLookAndFeel::drawLabel (Graphics& g, Label& label)
 
 //= BUTTONS ====================================================================
 
-Font PluginLookAndFeel::getTextButtonFont (TextButton& /*button*/,
-                                           int /*buttonHeight*/)
-{
-    return RBD::mainFont;
-}
-
 void PluginLookAndFeel::drawButtonBackground (Graphics& g, Button& button,
                                               const Colour& /*backgroundColour*/,
                                               bool shouldDrawButtonAsHighlighted,
@@ -154,6 +148,38 @@ void PluginLookAndFeel::drawButtonBackground (Graphics& g, Button& button,
     {
         g.fillRoundedRectangle (bounds, cornerSize);
     }
+}
+
+Font PluginLookAndFeel::getTextButtonFont (TextButton& /*button*/,
+                                           int buttonHeight)
+{
+    if (buttonHeight >= largeButtonMinHeight)
+        return RBD::largeFont;
+
+    return RBD::mainFont;
+}
+
+void PluginLookAndFeel::drawButtonText (Graphics& g, TextButton& button,
+                                        bool /*shouldDrawButtonAsHighlighted*/,
+                                        bool /*shouldDrawButtonAsDown*/)
+{
+    Font font (getTextButtonFont (button, button.getHeight()));
+    g.setFont (font);
+    g.setColour (button.findColour (button.getToggleState() ? TextButton::textColourOnId
+                                                            : TextButton::textColourOffId)
+                       .withMultipliedAlpha (button.isEnabled() ? 1.0f : 0.5f));
+
+    const int cornerSize = RBD::defaultCornerSize;
+    auto textBounds = button.getLocalBounds().reduced (cornerSize);
+
+    if (button.getHeight() >= largeButtonMinHeight)
+    {
+        textBounds.removeFromBottom (largeFontBottomOffset);
+        textBounds.removeFromRight (largeFontRightOffset);
+    }
+
+    g.drawFittedText (button.getButtonText(), textBounds,
+                      Justification::centred, 1, 1.0f);
 }
 
 //= POPUP MENUS ================================================================
@@ -302,9 +328,7 @@ void PluginLookAndFeel::positionComboBoxText (ComboBox& comboBox, Label& label)
         // Text is centred, so add the same padding on the left
         bounds.removeFromLeft (comboBoxButtonWidth);
         // Use borders to compensate for the intrinsic font offsets
-        const int bottomBorder = comboBoxTextVerticalOffset;
-        const int rightBorder = comboBoxTextHorizontalOffset;
-        label.setBorderSize ({ 0, 0, bottomBorder, rightBorder });
+        label.setBorderSize ({ 0, 0, largeFontBottomOffset, largeFontRightOffset });
     }
     else
     {   // Normal ComboBox

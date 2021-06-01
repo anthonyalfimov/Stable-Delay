@@ -32,6 +32,10 @@ public:
 
 //= UTILITIES ==================================================================
 
+    // Offsets to visually center centered text that uses largeFont
+    inline static const int largeFontRightOffset = 3;
+    inline static const int largeFontBottomOffset = 2;
+
     void drawUpDownArrowButton (Graphics& g, Colour arrowColour,
                                 bool isUpArrow,
                                 int buttonX, int buttonY,
@@ -42,13 +46,19 @@ public:
      void drawLabel (Graphics& g, Label& label) override;
     
 //= BUTTONS ====================================================================
-    
-    Font getTextButtonFont (TextButton& button, int buttonHeight) override;
-    
+
+    inline static const int largeButtonMinHeight = 40;
+
     void drawButtonBackground (Graphics& g, Button& button,
                                const Colour& backgroundColour,
                                bool shouldDrawButtonAsHighlighted,
                                bool shouldDrawButtonAsDown) override;
+
+    Font getTextButtonFont (TextButton& button, int buttonHeight) override;
+
+    void drawButtonText (Graphics& g, TextButton& button,
+                         bool shouldDrawButtonAsHighlighted,
+                         bool shouldDrawButtonAsDown) override;
 
 //= POPUP MENUS ================================================================
 
@@ -76,9 +86,6 @@ public:
 
     inline static const int comboBoxButtonWidth = 40;
     inline static const int largeComboBoxMinHeight = 40;
-
-    inline static const int comboBoxTextHorizontalOffset = 3;
-    inline static const int comboBoxTextVerticalOffset = 2;
 
     void drawComboBox (Graphics& g, int width, int height, bool isButtonDown,
                        int buttonX, int buttonY, int buttonW, int buttonH,
