@@ -32,6 +32,17 @@ void PopupPanel::parentSizeChanged()
     updateBounds();
 }
 
+void PopupPanel::paint (Graphics& g)
+{
+    Path panel;
+    panel.addRoundedRectangle (panelBounds.expanded (panelBorderSize),
+                               panelCornerSize);
+    panelShadow.drawForPath (g, panel);
+
+    g.setColour (panelColour);
+    g.fillPath (panel);
+}
+
 void PopupPanel::mouseDown (const MouseEvent& /*event*/)
 {
     dismiss();

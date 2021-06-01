@@ -12,7 +12,7 @@
 
 #include "PopupPanel.h"
 
-class AboutPanel final : public PopupPanel
+class AboutPanel final  : public PopupPanel
 {
 public:
     AboutPanel (std::unique_ptr<PopupPanel>& owner);
@@ -24,7 +24,6 @@ public:
     void paint (Graphics& g) override;
 
 private:
-    Rectangle<int> mBackground;
     Label mTitleLabel { "title", "Really Basic Delay" };
     Label mVersionLabel { "version" };
     Label mAuthorLabel { "author", "Developed by Anthony Alfimov" };

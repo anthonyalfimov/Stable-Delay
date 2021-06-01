@@ -21,6 +21,10 @@ DropdownMenu::DropdownMenu (ParameterDropdown* dropdown, int radioGroupId)
       mDropdown (dropdown),
       mRadioGroupId (radioGroupId)
 {
+    // Set up PopupPanel parameters
+    panelBorderSize = 1;
+
+    // Add DropdownMenu to its parent Dropdown
     auto* parent = dropdown->findParentComponentOfClass<MainPanel>();
 
     if (parent == nullptr)
@@ -47,8 +51,7 @@ void DropdownMenu::dismiss()
 
 void DropdownMenu::resized()
 {
-    // Calculate the menu position
-
+    // Calculate the Menu position
     if (getParentComponent() == nullptr)
     {
         jassertfalse;
@@ -73,17 +76,6 @@ void DropdownMenu::resized()
         item->setBounds (bounds.removeFromTop (itemHeight));
         bounds.removeFromTop (panelBorderSize);
     }
-}
-
-void DropdownMenu::paint (Graphics& g)
-{
-    Path panel;
-    panel.addRoundedRectangle (panelBounds.expanded (panelBorderSize),
-                               panelCornerSize);
-    panelShadow.drawForPath (g, panel);
-
-    g.setColour (panelColour);
-    g.fillPath (panel);
 }
 
 void DropdownMenu::buildMenu()

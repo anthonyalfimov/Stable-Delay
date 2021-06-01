@@ -11,11 +11,11 @@
 #include "AboutPanel.h"
 #include "InterfaceConstants.h"
 
-AboutPanel::AboutPanel (std::unique_ptr<PopupPanel>& owner)
-    : PopupPanel (owner)
+AboutPanel::AboutPanel (std::unique_ptr<PopupPanel>& owner) : PopupPanel (owner)
 {
     // Set up Panel attributes
     setName ("AboutPanel");
+    panelColour = RBD::aboutPanelBgColour;
 
     // Set up the Title Label
     mTitleLabel.setFont (RBD::titleFont);
@@ -50,10 +50,9 @@ AboutPanel::AboutPanel (std::unique_ptr<PopupPanel>& owner)
 
 void AboutPanel::resized()
 {
-    mBackground = getLocalBounds().withSizeKeepingCentre (RBD::aboutPanelWidth,
+    panelBounds = getLocalBounds().withSizeKeepingCentre (RBD::aboutPanelWidth,
                                                           RBD::aboutPanelHeight);
-
-    auto bounds = mBackground.reduced (10);
+    auto bounds = panelBounds.reduced (10);
 
     auto titleHeight = 34;
     auto lineHeight = 22;
@@ -72,14 +71,11 @@ void AboutPanel::paint (Graphics& g)
     g.fillAll (RBD::aboutPanelDimColour);
 
     // Draw About panel background:
-    auto bounds = mBackground.toFloat();
-    auto outerCornerSize = RBD::defaultCornerSize * 2.0f;
-    g.setColour (RBD::aboutPanelBgColour);
-    g.fillRoundedRectangle (bounds, outerCornerSize);
+    PopupPanel::paint (g);
 
     // Draw About Panel border:
-    bounds.reduce (5.5, 5.5);
-    auto innerCornerSize = RBD::defaultCornerSize;
+    const float innerCornerSize = panelCornerSize / 2.0f;
     g.setColour (RBD::textNormalColour);
-    g.drawRoundedRectangle (bounds, innerCornerSize, 1.0f);
+    g.drawRoundedRectangle (panelBounds.toFloat().reduced (5.5f),
+                            innerCornerSize, 1.0f);
 }

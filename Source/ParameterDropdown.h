@@ -29,19 +29,8 @@ public:
     void dismiss() override;
     /** @internal */
     void resized() override;
-    /** @internal */
-    void paint (Graphics& g) override;
 
 protected:
-    // TODO: Place these members as public/protected in the Popup base class
-    Rectangle<int> panelBounds;
-    Colour panelColour = RBD::popupBgColour;
-    int panelBorderSize = 1;
-    float panelCornerSize = RBD::defaultCornerSize;
-    // TODO: Consider moving to L&F as a default shadow
-    DropShadow panelShadow { RBD::shadowColour, 8, { 3, 3 } };
-
-//==============================================================================
     SafePointer<ParameterDropdown> mDropdown;
 
 private:
