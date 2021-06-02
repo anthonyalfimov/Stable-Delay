@@ -70,15 +70,18 @@ public:
 
     std::unique_ptr<PopupPanel>& getDropdownMenu() { return mMenu; }
 
+//==============================================================================
+    /** @internal */
+    void mouseEnter (const MouseEvent& event) override;
+    /** @internal */
+    void mouseExit (const MouseEvent& event) override;
+
 private:
     std::unique_ptr<AudioProcessorValueTreeState::ComboBoxAttachment> mAttachment;
 
 //==============================================================================
     int mRadioGroupId = 0;
     std::unique_ptr<PopupPanel> mMenu;
-    
-//==============================================================================
-    MouseEventInvoker mMouseEventInvoker;
 
 //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ParameterDropdown)

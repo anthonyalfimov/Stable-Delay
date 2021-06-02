@@ -137,6 +137,10 @@ ParameterDropdown::ParameterDropdown (AudioProcessorValueTreeState& stateToContr
                                       int firstItemIdOffset)
     : ComboBox (Parameter::Name[parameterIndex]), mRadioGroupId (radioGroupId)
 {
+    // Set up style
+    setEditableText (false);
+    setColour (ComboBox::textColourId, RBD::textFxTypeColour);
+
     // Set up item list
     addItemList (itemList, firstItemIdOffset);
 
@@ -147,22 +151,21 @@ ParameterDropdown::ParameterDropdown (AudioProcessorValueTreeState& stateToContr
     mAttachment = std::make_unique<ComboBoxAttachment> (stateToControl,
                                                         Parameter::ID[parameterIndex],
                                                         *this);
-
-    // Set up mouse event callbacks
-    auto repaintDropdown = [this] (const MouseEvent& /*event*/) { repaint(); };
-
-    mMouseEventInvoker.onMouseEnter = repaintDropdown;
-    mMouseEventInvoker.onMouseExit = repaintDropdown;
-    //mMouseEventInvoker.onMouseUp = repaintDropdown;
-
-    addMouseListener (&mMouseEventInvoker, true);
-
-    // Set up style
-    setEditableText (false);
-    setColour (ComboBox::textColourId, RBD::textFxTypeColour);
 }
 
 void ParameterDropdown::showPopup()
 {
     mMenu = std::make_unique<DropdownMenu> (this, mRadioGroupId);
+}
+
+void ParameterDropdown::mouseEnter (const MouseEvent& event)
+{
+    ComboBox::mouseEnter (event);
+    repaint();
+}
+
+void ParameterDropdown::mouseExit (const MouseEvent& event)
+{
+    ComboBox::mouseExit (event);
+    repaint();
 }
