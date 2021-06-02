@@ -50,7 +50,7 @@ public:
     /** @internal */
     void paint (Graphics& g) override;
     /** @internal */
-    void mouseDown (const MouseEvent& event) override;
+    void mouseUp (const MouseEvent& event) override;
 
 protected:
     Rectangle<int> panelBounds;

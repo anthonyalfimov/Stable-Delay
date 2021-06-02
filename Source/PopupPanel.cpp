@@ -43,7 +43,7 @@ void PopupPanel::paint (Graphics& g)
     g.fillPath (panel);
 }
 
-void PopupPanel::mouseDown (const MouseEvent& /*event*/)
+void PopupPanel::mouseUp (const MouseEvent& /*event*/)
 {
     dismiss();
 }
