@@ -32,7 +32,7 @@ public:
 private:
     FxType::Index mTypeIndex;
 
-    std::unique_ptr<ParameterDropdown> mFxTypeComboBox;
+    std::unique_ptr<ParameterDropdown> mFxTypeDropdown;
     
     // Use an array of pointers to allow dynamically changing number of knobs
     OwnedArray<ParameterKnob> mKnobs;

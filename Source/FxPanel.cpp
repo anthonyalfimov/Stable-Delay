@@ -19,22 +19,22 @@ FxPanel::FxPanel (ReallyBasicDelayAudioProcessor& processor)
     setSize (RBD::fxPanelWidth, RBD::fxPanelHeight);
 
     // Set up FX Type ComboBox
-    mFxTypeComboBox = std::make_unique<ParameterDropdown> (mProcessor.parameters,
+    mFxTypeDropdown = std::make_unique<ParameterDropdown> (mProcessor.parameters,
                                                            Parameter::FxType,
                                                            RadioGroup::FxType,
                                                            FxType::Label);
 
-    // Remove this to re-enable FX Type Dropdown keyboard focus
-    mFxTypeComboBox->setWantsKeyboardFocus (false);
+    // Remove this to re-enable FX Type Dropdown keyboard control
+    mFxTypeDropdown->setWantsKeyboardFocus (false);
 
     const int comboBoxWidth = 300;
     const int comboBoxHeight = 50;
     auto bounds = getLocalBounds().withSizeKeepingCentre (comboBoxWidth, comboBoxHeight);
     bounds.setY (20);
-    mFxTypeComboBox->setBounds (bounds);
-    mFxTypeComboBox->setJustificationType (Justification::centred);
-    addAndMakeVisible (mFxTypeComboBox.get());
-    mFxTypeComboBox->addListener (this);
+    mFxTypeDropdown->setBounds (bounds);
+    mFxTypeDropdown->setJustificationType (Justification::centred);
+    addAndMakeVisible (mFxTypeDropdown.get());
+    mFxTypeDropdown->addListener (this);
 
     // Set up initial Panel Style
     auto* fxTypeParameter = dynamic_cast<AudioParameterFloat*>
