@@ -24,6 +24,9 @@ FxPanel::FxPanel (ReallyBasicDelayAudioProcessor& processor)
                                                            RadioGroup::FxType,
                                                            FxType::Label);
 
+    // Remove this to re-enable FX Type Dropdown keyboard focus
+    mFxTypeComboBox->setWantsKeyboardFocus (false);
+
     const int comboBoxWidth = 300;
     const int comboBoxHeight = 50;
     auto bounds = getLocalBounds().withSizeKeepingCentre (comboBoxWidth, comboBoxHeight);
