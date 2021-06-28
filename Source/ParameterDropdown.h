@@ -31,6 +31,11 @@ public:
     void resized() override;
 
 protected:
+    // TODO: Consider making the DropdownMenu class private inside ParameterDropdown
+    //  Then we don't have to worry about misuse of the class and can be certain
+    //  that mDropdown can never be null - so we can drop SafePointer.
+    //  Otherwise, check whether mDropdown is null before using it!
+    
     SafePointer<ParameterDropdown> mDropdown;
 
 private:

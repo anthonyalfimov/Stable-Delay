@@ -16,6 +16,12 @@
 //  DropdownMenu
 //==============================================================================
 
+// TODO: Should we check whether the owner-dropdown pointer is null?
+//  The intended use of this class is for the owner-dropdown to own the
+//  DropdownMenu instance. So it can't be null without the DropdownMenu itself
+//  being destroyed.
+//  However, if DropdownMenu class is not private, it could be used differently.
+
 DropdownMenu::DropdownMenu (ParameterDropdown* dropdown, int radioGroupId)
     : PopupPanel (dropdown->getDropdownMenu()),
       mDropdown (dropdown),
@@ -24,7 +30,10 @@ DropdownMenu::DropdownMenu (ParameterDropdown* dropdown, int radioGroupId)
     // Set up PopupPanel parameters
     panelBorderSize = 1;
 
-    // Add DropdownMenu to its parent Dropdown
+    // Set up keyboard focus
+    setWantsKeyboardFocus (true);
+
+    // Add DropdownMenu on top of the MainPanel component containing our owner-dropdown
     auto* parent = dropdown->findParentComponentOfClass<MainPanel>();
 
     if (parent == nullptr)
@@ -35,17 +44,17 @@ DropdownMenu::DropdownMenu (ParameterDropdown* dropdown, int radioGroupId)
     }
 
     parent->addAndMakeVisible (this);
+
     updateBounds();
     buildMenu();
     resized();
+    grabKeyboardFocus();
 }
 
 void DropdownMenu::dismiss()
 {
-    // TODO: Is there any point in checking if our owner is nullptr?
-    if (mDropdown != nullptr)
-        mDropdown->hidePopup();
-
+    mDropdown->hidePopup();
+    mDropdown->grabKeyboardFocus(); // return keyboard focus to parent Dropdown
     PopupPanel::dismiss();
 }
 
