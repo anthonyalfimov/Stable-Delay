@@ -33,7 +33,7 @@ public:
 //= UTILITIES ==================================================================
 
     // Offsets to visually center centered text that uses largeFont
-    inline static const int largeFontRightOffset = 3;
+    inline static const int largeFontRightOffset = 1;
     inline static const int largeFontBottomOffset = 2;
 
     void drawUpDownArrowButton (Graphics& g, Colour arrowColour,

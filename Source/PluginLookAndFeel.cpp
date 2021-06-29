@@ -298,7 +298,7 @@ void PluginLookAndFeel::drawComboBox (Graphics& g, int width, int height,
 
     // MARK: Begin debug paint
     Rectangle<int> textBorder (0, 0, width, height);
-    textBorder.reduce (comboBoxButtonWidth + 16, 10);
+    textBorder.reduce (comboBoxButtonWidth + 23, 11);
     g.setColour (Colours::hotpink);
     //g.fillRect (textBorder);
     // MARK: End debug paint

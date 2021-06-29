@@ -110,7 +110,7 @@ namespace RBD
     // Styles
     inline const Font mainFont = Font (primaryFont).withPointHeight (11.0f);
     inline const Font titleFont = Font (primaryFont).withPointHeight (18.0f);
-    inline const Font largeFont = Font (primaryFont).withPointHeight (42.0f);
+    inline const Font largeFont = Font (primaryFont).withPointHeight (38.75f);
     inline const Font meterFont = Font (primaryFont).withPointHeight (9.0f);
     inline const Font descriptorFont = Font (primaryFont).withPointHeight (12.0f);
 }
