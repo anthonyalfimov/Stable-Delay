@@ -157,6 +157,9 @@ void TopPanel::updatePresetList()
         mPresetList->addItem (presetManager->getPresetName (i), i + 1);
     }
 
-    // This also sets the comboBox selected item, if it's a valid Item Text
-    mPresetList->setText (presetManager->getCurrentPresetName());
+    // If the text is a valid Preset Name, the corresponding preset will be
+    //  selected as well. Don't send notification so that updating the list
+    //  doesn't reload the preset and discard user changes.
+    mPresetList->setText (presetManager->getCurrentPresetName(),
+                          dontSendNotification);
 }
