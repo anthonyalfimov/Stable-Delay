@@ -115,7 +115,7 @@ void PluginLookAndFeel::drawButtonBackground (Graphics& g, Button& button,
     Colour fillColour;
 
     if (shouldDrawButtonAsDown)
-        fillColour = button.findColour (TextButton::buttonOnColourId).brighter();
+        fillColour = button.findColour (TextButton::buttonOnColourId).brighter (0.1f);
     else if (shouldDrawButtonAsHighlighted)
         fillColour = button.findColour (TextButton::buttonOnColourId);
     else
