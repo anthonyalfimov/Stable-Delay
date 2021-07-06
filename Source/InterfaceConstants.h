@@ -76,7 +76,7 @@ namespace RBD
     inline const Colour noColour = Colour (0, 0, 0).withAlpha (0.0f);
     inline const Colour textNormalColour = Colour (110, 110, 110);
     inline const Colour textActiveColour = Colour (125, 125, 125);
-    inline const Colour textFxTypeColour = Colour (60, 60, 60);
+    inline const Colour textFxTypeColour = Colour (62, 62, 62);
     inline const Colour textLinkColour = Colour (105, 115, 140);
     inline const Colour controlNormalColour = Colour (0, 0, 0).withAlpha (0.3f);
     inline const Colour controlHoverColour = Colour (0, 0, 0).withAlpha (0.8f);
@@ -84,7 +84,7 @@ namespace RBD
     inline const Colour controlOutlineColour = noColour;
     inline const Colour toggleNormalColour = Colour (0, 0, 0).withAlpha (0.1f);
     inline const Colour toggleHandleColour = Colour (125, 125, 125);
-    inline const Colour arrowNormalColour = Colour (65, 65, 65);
+    inline const Colour arrowNormalColour = textFxTypeColour;
     inline const Colour arrowActiveColour = textNormalColour;
     inline const Colour sliderMarkColour = Colour (242, 242, 242);
     inline const Colour sliderTickColour = Colour (232, 232, 232);
