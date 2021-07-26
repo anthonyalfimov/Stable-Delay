@@ -16,33 +16,34 @@
 #include "SaturationModule.h"
 #include "Parameters.h"
 
-// TODO: Choose whether to use double precision for delay time
-//  And at which point should we start using double precision?
-//  Current use of double precision is inconsistent!
+// TODO: Choose where to use double precision for delay time
+//  Extra precision is beneficial when values of significantly different orders
+//  of magnitude are combined. Without increasing precision, some detail might
+//  be lost due to a limited number of significant digits.
 //
-//  It might not be possible to use a double precision parameter to get extra
-//  resolution from the UI knob. It's highly unlikely it would make any
-//  difference even if possible.
+//  Roughly: float  -  7 significant decimal digits,
+//           double - 16 significant decimal digits.
 //
-//  A) double precision for delay time in seconds and in samples:
-//      mTimeSmoothed and mModulationBuffer should use type double;
-//      calculated delayTimeInSamples and the argument of getInterpolatedSample()
-//      should use type double.
+//  Should double precision be used for:
 //
-//  B) double precision only for delay time in samples:
-//      mTimeSmoothed and mModulationBuffer should use type float;
-//      calculated delayTimeInSamples and the argument of getInterpolatedSample()
-//      should use type double.
+//  1) mTimeSmoothed and mModulationBuffer
+//      - control inputs; delay time in seconds is controlled by a float
+//      parameter, so double precision would only affect smoothing resolution;
+//      => use single precision by default;
+//      => test whether time parameter smoothing and modulation benefit from
+//      extra resolution of double precision;
 //
-//  C) no double precision for delay time.
+//  2) delay time in seconds
+//      - sum of the time parameter value and the modulation; these can have
+//      significantly different orders of magnitude;
+//      => use double precision;
 //
-//  Can using double precision for delay time give a perceivable benefit at all,
-//  and if so, at which point should it be applied?
-//
-//  Do we need extra resolution for modulation and smoothing (A), or do we need
-//  extra precision for intersample interpolation (B)?
-//
-//  Does double precision make sense only with better interpolation?
+//  3) delay time in samples
+//      - high sample rate and/or delay time can result in almost no significant
+//      digits left for the fractional part when using type float;
+//      - fractional part of the delay time in samples is especially important
+//      when using good intersample interpolation;
+//      => use double precision.
 
 class DelayModule  : public DspModule
 {
@@ -63,7 +64,7 @@ public:
 private:
 //==============================================================================
     // Parameters
-    // MARK: Pick precision - delay-time-in-seconds
+    // MARK: Precision: time smoothing
     SmoothedValue<double, ValueSmoothingTypes::Multiplicative> mTimeSmoothed;
     SmoothedValue<float> mFeedbackSmoothed;
     FxType::Index mTypeValue = FxType::Delay;
@@ -92,13 +93,12 @@ private:
     
     int mWritePosition = 0;
 
-    // MARK: Pick precision - delay-time-in-samples
     float getInterpolatedSample (double delayTimeInSamples) const;
 
 //==============================================================================
     // LFO
     LfoModule mLfo;
-    // MARK: Pick precision - delay-time-in-seconds
+    // MARK: Precision: modulation
     std::unique_ptr<float[]> mModulationBuffer;
 
 //==============================================================================

@@ -113,11 +113,10 @@ void DelayModule::process (const float* inAudio, float* outAudio,
     for (int i = 0; i < numSamplesToRender; ++i)
     {
     // READ SAMPLE FROM THE DELAY BUFFER
-        // MARK: Pick precision - delay-time-in-seconds
+        // MARK: Enforce double precision
         const double delayTimeInSeconds = mTimeSmoothed.getNextValue()
                                           + mModulationBuffer[i];
         
-        // MARK: Pick precision - delay-time-in-samples
         const double delayTimeInSamples = delayTimeInSeconds * mSampleRate;
         const float readSample = getInterpolatedSample (delayTimeInSamples);
 
