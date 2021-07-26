@@ -116,10 +116,17 @@ void DelayModule::process (const float* inAudio, float* outAudio,
     for (int i = 0; i < numSamplesToRender; ++i)
     {
     // READ SAMPLE FROM THE DELAY BUFFER
+        // MARK: Pick precision - delay-time-in-seconds
         const double delayTimeInSeconds = mTimeSmoothed.getNextValue()
-                                            + mModulationBuffer[i];
+                                          + mModulationBuffer[i];
+        
+        // MARK: Pick precision - delay-time-in-samples
         const double delayTimeInSamples = delayTimeInSeconds * mSampleRate;
         const float readSample = getInterpolatedSample (delayTimeInSamples);
+
+        // We must assume that inAudio and outAudio can point to the same location.
+        //  Therefore, we must finish reading data from inAudio before writing
+        //  to outAudio.
 
     // WRITE SAMPLE TO THE DELAY BUFFER
         float writeSample = inAudio[i]

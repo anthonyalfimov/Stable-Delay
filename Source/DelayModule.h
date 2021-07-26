@@ -16,6 +16,34 @@
 #include "SaturationModule.h"
 #include "Parameters.h"
 
+// TODO: Choose whether to use double precision for delay time
+//  And at which point should we start using double precision?
+//  Current use of double precision is inconsistent!
+//
+//  It might not be possible to use a double precision parameter to get extra
+//  resolution from the UI knob. It's highly unlikely it would make any
+//  difference even if possible.
+//
+//  A) double precision for delay time in seconds and in samples:
+//      mTimeSmoothed and mModulationBuffer should use type double;
+//      calculated delayTimeInSamples and the argument of getInterpolatedSample()
+//      should use type double.
+//
+//  B) double precision only for delay time in samples:
+//      mTimeSmoothed and mModulationBuffer should use type float;
+//      calculated delayTimeInSamples and the argument of getInterpolatedSample()
+//      should use type double.
+//
+//  C) no double precision for delay time.
+//
+//  Can using double precision for delay time give a perceivable benefit at all,
+//  and if so, at which point should it be applied?
+//
+//  Do we need extra resolution for modulation and smoothing (A), or do we need
+//  extra precision for intersample interpolation (B)?
+//
+//  Does double precision make sense only with better interpolation?
+
 class DelayModule  : public DspModule
 {
 public:
@@ -35,7 +63,7 @@ public:
 private:
 //==============================================================================
     // Parameters
-    // TODO: Is there actual benefit from type double for delay time?
+    // MARK: Pick precision - delay-time-in-seconds
     SmoothedValue<double, ValueSmoothingTypes::Multiplicative> mTimeSmoothed;
     SmoothedValue<float> mFeedbackSmoothed;
     FxType::Index mTypeValue = FxType::Delay;
@@ -59,19 +87,19 @@ private:
     //  always just one channel. Switching to JUCE AudioBuffer makes sense once we also
     //  switch to having a single instance of each DSP module handling vectorised channels
 
-    //  std::vector allows reallocation, but is this a real problem for us here?
-
     std::unique_ptr<float[]> mAudioBuffer;
     int mAudioBufferSize = 0;
     
     int mWritePosition = 0;
     float mFeedbackSample = 0.0f;
 
+    // MARK: Pick precision - delay-time-in-samples
     float getInterpolatedSample (double delayTimeInSamples) const;
 
 //==============================================================================
     // LFO
     LfoModule mLfo;
+    // MARK: Pick precision - delay-time-in-seconds
     std::unique_ptr<float[]> mModulationBuffer;
 
 //==============================================================================
