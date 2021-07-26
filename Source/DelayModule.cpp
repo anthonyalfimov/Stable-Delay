@@ -81,9 +81,6 @@ void DelayModule::prepare (double sampleRate, int blockSize)
 
 void DelayModule::reset()
 {
-    // Clear the feedback sample
-    mFeedbackSample = 0.0f;
-
     // Clear the delay buffer
     if (mAudioBuffer != nullptr)
         FloatVectorOperations::clear (mAudioBuffer.get(), mAudioBufferSize);
@@ -125,19 +122,18 @@ void DelayModule::process (const float* inAudio, float* outAudio,
         const float readSample = getInterpolatedSample (delayTimeInSamples);
 
         // We must assume that inAudio and outAudio can point to the same location.
-        //  Therefore, we must finish reading data from inAudio before writing
-        //  to outAudio.
+        // Therefore, we must finish reading data from inAudio before writing
+        // to outAudio.
 
     // WRITE SAMPLE TO THE DELAY BUFFER
         float writeSample = inAudio[i]
-                            + mFeedbackSample * mFeedbackSmoothed.getNextValue();
+                            + readSample * mFeedbackSmoothed.getNextValue();
 
         // Pass the signal through the saturator before writing it to the buffer
         mSaturator.process (&writeSample, &writeSample, 1);
         mAudioBuffer[mWritePosition] = writeSample;
 
     // WRITE OUTPUT AUDIO
-        mFeedbackSample = readSample;   // update feedback sample
         outAudio[i] = readSample;       // write output audio
 
     // ADVANCE THE WRITE HEAD

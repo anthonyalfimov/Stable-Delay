@@ -91,7 +91,6 @@ private:
     int mAudioBufferSize = 0;
     
     int mWritePosition = 0;
-    float mFeedbackSample = 0.0f;
 
     // MARK: Pick precision - delay-time-in-samples
     float getInterpolatedSample (double delayTimeInSamples) const;
