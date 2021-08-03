@@ -55,21 +55,23 @@ void MeterProbe::process (const float* inAudio, float* /*outAudio*/,
 
     for (int i = 0; i < numSamplesToRender; ++i)
     {
+        const float sample = inAudio[i];
+
         // Update peak level
-        const float currentPeakLevel = std::abs (inAudio[i]);
+        const float currentPeakLevel = std::abs (sample);
 
         if (currentPeakLevel > maxPeakLevel)
             maxPeakLevel = currentPeakLevel;
 
-        // Fill RMS buffer
-        mRmsBuffer[mWritePosition] = inAudio[i];
+        // Fill RMS buffer with sample value squared
+        mRmsBuffer[mWritePosition] = sample * sample;
         mWritePosition = (mWritePosition + 1) % mRmsBufferSize;
     }
 
     mPeakLevel.store (maxPeakLevel);    // write peak level
 
     // TODO: We don't need to calculate the RMS level every block
-    //  The meter GUI is updated at a slower rate than block processing (~10Hz).
+    //  The meter GUI is updated at a slower rate than block processing (~15Hz).
     //  We should determine the maximum acceptable latency in RMS value update.
     //  The RMS level should be updated with a period equal to that latency.
     //  This can be done by running a counter and skipping a number of blocks
@@ -78,16 +80,20 @@ void MeterProbe::process (const float* inAudio, float* /*outAudio*/,
     mRmsLevel.store (calculateRms());   // write RMS level
 }
 
+// TODO: Consider using running sum to avoid summing the buffer every calculation
+//  Note that using the running sum could result in accumulated float math error.
+//  This can be avoided by using an int buffer, or by periodically recalculating
+//  the sum from the buffer.
+//  We don't need to calculate RMS in real time or even every block, it can be
+//  updated at ~15Hz (meter refresh rate). The running sum can be reset at
+//  1 Hz.
+
 float MeterProbe::calculateRms() const
 {
     double sum = 0.0;
 
     for (int i = 0; i < mRmsBufferSize; ++i)
-    {
-    // MARK: JUCE saves the sample value into a variable - what's the benefit?
-        float sample = mRmsBuffer[i];
-        sum += sample * sample;
-    }
+        sum += mRmsBuffer[i];
 
     return std::sqrt (sum / mRmsBufferSize);
 }

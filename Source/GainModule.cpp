@@ -32,7 +32,7 @@ void GainModule::process (const float* inAudio, float* outAudio,
                           int numSamplesToRender)
 {
     // If parameter is not smoothing, apply gain to the whole block
-    //  Parameter target cannot changing withing a block, so this is safe
+    //  Parameter target cannot change withing a block, so this is safe
     
     if (mGainSmoothed.isSmoothing())
     {
