@@ -56,7 +56,7 @@ void MeterProbe::process (const float* inAudio, float* /*outAudio*/,
     for (int i = 0; i < numSamplesToRender; ++i)
     {
         // Update peak level
-        const float currentPeakLevel = fabs (inAudio[i]);
+        const float currentPeakLevel = std::abs (inAudio[i]);
 
         if (currentPeakLevel > maxPeakLevel)
             maxPeakLevel = currentPeakLevel;
