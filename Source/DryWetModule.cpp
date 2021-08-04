@@ -39,7 +39,7 @@ void DryWetModule::reset()
     mWetGainSmoothed.reset (mSampleRate, 0.05f);
 }
 
-void DryWetModule::pushDryBlock (const float* inAudio, int numSamples)
+void DryWetModule::writeDryBlock (const float* inAudio, int numSamples)
 {
     jassert (isPositiveAndNotGreaterThan (numSamples, mBlockSize));
 

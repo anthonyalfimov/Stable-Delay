@@ -254,7 +254,7 @@ void ReallyBasicDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     {
         float* channelData = buffer.getWritePointer (channel);
 
-        mDryWetMixer[channel]->pushDryBlock (channelData, numSamples);
+        mDryWetMixer[channel]->writeDryBlock (channelData, numSamples);
         mFxProcessor[channel]->process (channelData, channelData, numSamples);
         mDryWetMixer[channel]->process (channelData, channelData, numSamples);
         mOutputClipper[channel]->process(channelData, channelData, numSamples);

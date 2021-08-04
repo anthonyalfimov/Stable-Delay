@@ -25,7 +25,7 @@ public:
 
     void prepare (double sampleRate, int blockSize) override;
     void reset() override;
-    void pushDryBlock (const float* inAudio, int numSamples);
+    void writeDryBlock (const float* inAudio, int numSamples);
     void process (const float* inAudio, float* outAudio,
                   int numSamplesToRender) override;
 
