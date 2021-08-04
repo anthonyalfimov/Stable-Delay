@@ -60,7 +60,6 @@ void FxModule::setState (float time, float feedback, float type,
     }
 
     const float modOffset = shouldOffsetModulation ? stereoWidth : 0.0f;
-
     mLfo.setState (modRate, modAmplitude, modOffset);
 }
 
@@ -98,12 +97,8 @@ void FxModule::reset()
 void FxModule::process (const float* inAudio, float* outAudio,
                         int numSamplesToRender)
 {
-    jassert (isPositiveAndNotGreaterThan (numSamplesToRender, mBlockSize));
-
-    // Fill modulation buffer
+    // FILL MODULATION BUFFER
     mLfo.process (mModulationBuffer.get(), mModulationBuffer.get(), numSamplesToRender);
-
-    // TODO: Consider wrapping delay buffer in an AudioBlock for processing
 
     for (int i = 0; i < numSamplesToRender; ++i)
     {
