@@ -11,7 +11,7 @@
 #include <JuceHeader.h>
 #include "GainModule.h"
 #include "MeterProbe.h"
-#include "DelayModule.h"
+#include "FxModule.h"
 #include "DryWetModule.h"
 #include "SaturationModule.h"
 #include "PresetManager.h"
@@ -82,7 +82,7 @@ private:
     // DSP Modules
     OwnedArray<GainModule> mInputGain;
     OwnedArray<MeterProbe> mInputMeterProbe;
-    OwnedArray<DelayModule> mDelay;
+    OwnedArray<FxModule> mFxProcessor;
     OwnedArray<DryWetModule> mDryWetMixer;
     OwnedArray<SaturationModule> mOutputClipper;
     OwnedArray<GainModule> mOutputGain;

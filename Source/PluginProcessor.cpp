@@ -137,8 +137,8 @@ void ReallyBasicDelayAudioProcessor::prepareToPlay (double sampleRate, int sampl
     for (auto inputMeterProbe : mInputMeterProbe)
         inputMeterProbe->prepare (sampleRate, samplesPerBlock);
 
-    for (auto delay : mDelay)
-        delay->prepare (sampleRate, samplesPerBlock);
+    for (auto fxProcessor : mFxProcessor)
+        fxProcessor->prepare (sampleRate, samplesPerBlock);
 
     for (auto dryWetMixer : mDryWetMixer)
         dryWetMixer->prepare (sampleRate, samplesPerBlock);
@@ -167,8 +167,8 @@ void ReallyBasicDelayAudioProcessor::releaseResources()
     for (auto inputMeterProbe : mInputMeterProbe)
         inputMeterProbe->reset();
 
-    for (auto delay : mDelay)
-        delay->reset();
+    for (auto fxProcessor : mFxProcessor)
+        fxProcessor->reset();
 
     for (auto dryWetMixer : mDryWetMixer)
         dryWetMixer->reset();
@@ -255,7 +255,7 @@ void ReallyBasicDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
         float* channelData = buffer.getWritePointer (channel);
 
         mDryWetMixer[channel]->pushDryBlock (channelData, numSamples);
-        mDelay[channel]->process (channelData, channelData, numSamples);
+        mFxProcessor[channel]->process (channelData, channelData, numSamples);
         mDryWetMixer[channel]->process (channelData, channelData, numSamples);
         mOutputClipper[channel]->process(channelData, channelData, numSamples);
         mOutputGain[channel]->process (channelData, channelData, numSamples);
@@ -369,7 +369,7 @@ void ReallyBasicDelayAudioProcessor::initialiseDSP()
     // Create DSP modules for output channels
     for (int i = 0; i < totalNumOutputChannels; ++i)
     {
-        mDelay.add (std::make_unique<DelayModule>());
+        mFxProcessor.add (std::make_unique<FxModule>());
         mDryWetMixer.add (std::make_unique<DryWetModule>());
         mOutputClipper.add (std::make_unique<SaturationModule>());
         mOutputGain.add (std::make_unique<GainModule>());
@@ -422,14 +422,14 @@ void ReallyBasicDelayAudioProcessor::updateParameters()
     const float stereoSpread
     = (getTotalNumOutputChannels() == 2) ? mStereoSpreadValue->load() : 0.0f;
 
-    for (int channel = 0; channel < mDelay.size(); ++channel)
-        mDelay[channel]->setState (mDelayTimeValue->load(),
-                                   feedback,
-                                   mFxTypeValue->load(),
-                                   mModulationRateValue->load(),
-                                   mModulationDepthValue->load(),
-                                   stereoSpread,
-                                   (channel != 0));
+    for (int channel = 0; channel < mFxProcessor.size(); ++channel)
+        mFxProcessor[channel]->setState (mDelayTimeValue->load(),
+                                         feedback,
+                                         mFxTypeValue->load(),
+                                         mModulationRateValue->load(),
+                                         mModulationDepthValue->load(),
+                                         stereoSpread,
+                                         (channel != 0));
 
     for (auto dryWetMixer : mDryWetMixer)
         dryWetMixer->setState (mDryWetValue->load());

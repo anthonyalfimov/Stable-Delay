@@ -1,25 +1,25 @@
 /*
   ==============================================================================
 
-    DelayModule.cpp
+    FxModule.cpp
     Created: 5 Jan 2021 4:58:02pm
     Author:  Anthony
 
   ==============================================================================
 */
 
-#include "DelayModule.h"
+#include "FxModule.h"
 #include "AudioConstants.h"
 
-DelayModule::DelayModule()
+FxModule::FxModule()
 {
     // Set the saturation curve
     mSaturator.setState (SaturationCurve::beta);
 }
 
-void DelayModule::setState (float time, float feedback, float type,
-                            float modRate, float modDepth, float stereoWidth,
-                            bool shouldOffsetModulation)
+void FxModule::setState (float time, float feedback, float type,
+                         float modRate, float modDepth, float stereoWidth,
+                         bool shouldOffsetModulation)
 {
     mTypeValue = static_cast<FxType::Index> (type);
 
@@ -64,7 +64,7 @@ void DelayModule::setState (float time, float feedback, float type,
     mLfo.setState (modRate, modAmplitude, modOffset);
 }
 
-void DelayModule::prepare (double sampleRate, int blockSize)
+void FxModule::prepare (double sampleRate, int blockSize)
 {
     DspModule::prepare (sampleRate, blockSize);
 
@@ -79,7 +79,7 @@ void DelayModule::prepare (double sampleRate, int blockSize)
     reset();
 }
 
-void DelayModule::reset()
+void FxModule::reset()
 {
     // Clear the delay buffer
     if (mAudioBuffer != nullptr)
@@ -100,8 +100,8 @@ void DelayModule::reset()
     mFeedbackSmoothed.reset (mSampleRate, 0.05);
 }
 
-void DelayModule::process (const float* inAudio, float* outAudio,
-                           int numSamplesToRender)
+void FxModule::process (const float* inAudio, float* outAudio,
+                        int numSamplesToRender)
 {
     jassert (isPositiveAndNotGreaterThan (numSamplesToRender, mBlockSize));
 
@@ -140,7 +140,7 @@ void DelayModule::process (const float* inAudio, float* outAudio,
     }
 }
 
-float DelayModule::getInterpolatedSample (double delayTimeInSamples) const
+float FxModule::getInterpolatedSample (double delayTimeInSamples) const
 {
     double readPosition = static_cast<double> (mWritePosition) - delayTimeInSamples;
     

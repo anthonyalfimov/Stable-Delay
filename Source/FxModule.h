@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    DelayModule.h
+    FxModule.h
     Created: 5 Jan 2021 4:58:02pm
     Author:  Anthony
 
@@ -45,10 +45,10 @@
 //      when using good intersample interpolation;
 //      => use double precision.
 
-class DelayModule  : public DspModule
+class FxModule  : public DspModule
 {
 public:
-    DelayModule();
+    FxModule();
 
 //==============================================================================
     void setState (float time, float feedback, float type,
@@ -106,6 +106,6 @@ private:
     SaturationModule mSaturator;
 
 //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DelayModule)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FxModule)
 };
 
