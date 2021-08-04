@@ -68,32 +68,27 @@ void FxModule::prepare (double sampleRate, int blockSize)
 {
     DspModule::prepare (sampleRate, blockSize);
 
-    mLfo.prepare (sampleRate, blockSize);
+    // Prepare contained modules
     mSaturator.prepare (sampleRate, blockSize);
+    mDelay.prepare (sampleRate, blockSize);
+    mLfo.prepare (sampleRate, blockSize);
 
-    // Add one extra sample just in case, to account for rounding mistakes, etc.
-    mAudioBufferSize = (RBD::maxDelayTimeInSeconds + maxDelayTimeAmplitude)
-                        * mSampleRate + 1;
-    mAudioBuffer = std::make_unique<float[]> (mAudioBufferSize);
+    // Allocate modulation buffer
     mModulationBuffer = std::make_unique<float[]> (mBlockSize);
+    
     reset();
 }
 
 void FxModule::reset()
 {
-    // Clear the delay buffer
-    if (mAudioBuffer != nullptr)
-        FloatVectorOperations::clear (mAudioBuffer.get(), mAudioBufferSize);
-
     // Clear the modulation buffer
     if (mModulationBuffer != nullptr)
         FloatVectorOperations::clear (mModulationBuffer.get(), mBlockSize);
 
-    // Reset the LFO
-    mLfo.reset();
-
-    // Reset the Saturator
+    // Reset contained modules
     mSaturator.reset();
+    mDelay.reset();
+    mLfo.reset();
 
     // Reset smoothed parameters
     mTimeSmoothed.reset (mSampleRate, 0.1);
@@ -116,46 +111,23 @@ void FxModule::process (const float* inAudio, float* outAudio,
         // MARK: Enforce double precision
         const double delayTimeInSeconds = mTimeSmoothed.getNextValue()
                                           + mModulationBuffer[i];
-        
-        const double delayTimeInSamples = delayTimeInSeconds * mSampleRate;
-        const float readSample = getInterpolatedSample (delayTimeInSamples);
+        const float readSample = mDelay.read (delayTimeInSeconds);
 
         // We must assume that inAudio and outAudio can point to the same location.
         // Therefore, we must finish reading data from inAudio before writing
         // to outAudio.
 
-    // WRITE SAMPLE TO THE DELAY BUFFER
+    // WRITE SAMPLE TO THE DELAY BUFFER AND ADVANCE THE WRITE HEAD
         float writeSample = inAudio[i]
                             + readSample * mFeedbackSmoothed.getNextValue();
 
         // Pass the signal through the saturator before writing it to the buffer
         mSaturator.process (&writeSample, &writeSample, 1);
-        mAudioBuffer[mWritePosition] = writeSample;
+
+        mDelay.writeAndAdvance (writeSample);
 
     // WRITE OUTPUT AUDIO
         outAudio[i] = readSample;       // write output audio
-
-    // ADVANCE THE WRITE HEAD
-        mWritePosition = (mWritePosition + 1) % mAudioBufferSize;
     }
-}
-
-float FxModule::getInterpolatedSample (double delayTimeInSamples) const
-{
-    double readPosition = static_cast<double> (mWritePosition) - delayTimeInSamples;
-    
-    if (readPosition < 0.0)
-        readPosition += mAudioBufferSize;
-    
-    const int readPositionIndex0 = static_cast<int> (readPosition);
-    const int readPositionIndex1 = (readPositionIndex0 + 1) % mAudioBufferSize;
-    
-    const float readSample0 = mAudioBuffer[readPositionIndex0];
-    const float readSample1 = mAudioBuffer[readPositionIndex1];
-    
-    const double fractionalReadPosition = readPosition - readPositionIndex0;
-
-    // Linear interpolation:
-    return readSample0 + fractionalReadPosition * (readSample1 - readSample0);
 }
 

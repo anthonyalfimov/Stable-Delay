@@ -88,15 +88,17 @@
       <FILE id="miQHTD" name="GainModule.h" compile="0" resource="0" file="Source/GainModule.h"/>
       <FILE id="gYeDeC" name="LfoModule.cpp" compile="1" resource="0" file="Source/LfoModule.cpp"/>
       <FILE id="AF9TA9" name="LfoModule.h" compile="0" resource="0" file="Source/LfoModule.h"/>
+      <FILE id="Cayqlj" name="DelayModule.cpp" compile="1" resource="0" file="Source/DelayModule.cpp"/>
+      <FILE id="xYWtWs" name="DelayModule.h" compile="0" resource="0" file="Source/DelayModule.h"/>
+      <FILE id="p0iOWO" name="SaturationModule.cpp" compile="1" resource="0"
+            file="Source/SaturationModule.cpp"/>
+      <FILE id="UBI3Fy" name="SaturationModule.h" compile="0" resource="0"
+            file="Source/SaturationModule.h"/>
       <FILE id="yrs5AZ" name="FxModule.cpp" compile="1" resource="0" file="Source/FxModule.cpp"/>
       <FILE id="Hz1C1r" name="FxModule.h" compile="0" resource="0" file="Source/FxModule.h"/>
       <FILE id="Caouf7" name="DryWetModule.cpp" compile="1" resource="0"
             file="Source/DryWetModule.cpp"/>
       <FILE id="tle1Tc" name="DryWetModule.h" compile="0" resource="0" file="Source/DryWetModule.h"/>
-      <FILE id="p0iOWO" name="SaturationModule.cpp" compile="1" resource="0"
-            file="Source/SaturationModule.cpp"/>
-      <FILE id="UBI3Fy" name="SaturationModule.h" compile="0" resource="0"
-            file="Source/SaturationModule.h"/>
       <FILE id="dzLL5s" name="MeterProbe.cpp" compile="1" resource="0" file="Source/MeterProbe.cpp"/>
       <FILE id="EMC7Qe" name="MeterProbe.h" compile="0" resource="0" file="Source/MeterProbe.h"/>
     </GROUP>
