@@ -20,12 +20,14 @@ DelayModule::DelayModule (double maxDelayInSeconds)
 
 float DelayModule::read (double delayInSeconds) const
 {
-    jassert (isPositiveAndNotGreaterThan (delayInSeconds, mMaxDelayInSeconds));
+    double delayInSamples = delayInSeconds * mSampleRate;
+    const double maxDelayInSamples = mAudioBufferSize;
 
-    // Constrain delay time to a valid range
-    delayInSeconds = jlimit (0.0, mMaxDelayInSeconds, delayInSeconds);
+    jassert (isPositiveAndNotGreaterThan (delayInSamples, maxDelayInSamples));
+    // This delay design enforces reading before writing, so it doesn't support
+    //  0-sample delay time
+    delayInSamples = jlimit (1.0, maxDelayInSamples, delayInSamples);
 
-    const double delayInSamples = delayInSeconds * mSampleRate;
     return getInterpolatedSample (delayInSamples);
 }
 
@@ -44,8 +46,9 @@ void DelayModule::prepare (double sampleRate, int blockSize)
 {
     DspModule::prepare (sampleRate, blockSize);
 
-    // Add one extra sample just in case
-    mAudioBufferSize = static_cast<int> (mMaxDelayInSeconds * mSampleRate + 1);
+    // At max delay time the read position coincides with the write position.
+    //  This is ok, since this delay design enforces reading before writing.
+    mAudioBufferSize = static_cast<int> (mMaxDelayInSeconds * mSampleRate);
     mAudioBuffer = std::make_unique<float[]> (mAudioBufferSize);
 
     reset();
