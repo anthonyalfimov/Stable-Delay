@@ -17,46 +17,79 @@ FxModule::FxModule()
     mSaturator.setState (SaturationCurve::beta);
 }
 
-void FxModule::setState (float time, float feedback, float type,
+void FxModule::setState (float driveInDecibels, bool applyBoost,
+                         float time, float feedback, float type,
                          float modRate, float modDepth, float stereoWidth,
                          bool shouldOffsetModulation)
 {
+    // Set delay input drive parameters
+
+    if (applyBoost)
+        driveInDecibels += boostAmountInDecibels;
+
+    mPreSaturatorGain.setState (driveInDecibels);
+
+    //  To achieve approximate equal-loudness drive, reduce the level after the
+    //  saturation by half the amount of drive in decibels
+    const float postGainInDecibels = -0.5f * driveInDecibels;
+    mPostSaturatorGain.setState (postGainInDecibels);
+
+    // Set delay and modulation parameters
     mTypeValue = static_cast<FxType::Index> (type);
 
-    float modAmplitude;
+    float modAmplitude = 0.0f;
 
     switch (mTypeValue)
     {
         case FxType::Delay:
+        {
             mTimeSmoothed.setTargetValue (time / 1000.0);   // convert from ms to s
-            mFeedbackSmoothed.setTargetValue (feedback / 100.0f);    // convert from %
-            modRate = 0.05f;        // set fixed slow modulation
 
+            feedback = feedback / 100.0f; // convert from %
+            // Compensate feedback reduction due to post-saturation gain decrease
+            feedback = feedback * Decibels::decibelsToGain (-postGainInDecibels);
+            mFeedbackSmoothed.setTargetValue (feedback);
+
+            // TODO: Consider using PiecewiseNormalisableRange to map delay modulation
+
+            modRate = delayModRate; // set fixed slow modulation
             // Set the max modulation amplitude to 0.1 the delay time - as long
             //  as it fits between min and max values for delay time modulation
             //  amlitude
-            modAmplitude = (stereoWidth / 100.0f)
-                            * jlimit (minDelayTimeAmplitude,
-                                      maxDelayTimeAmplitude,
-                                      time / 10000.0f);
+            modAmplitude = (stereoWidth / 100.0f) * jlimit (minDelayTimeAmplitude,
+                                                            maxDelayTimeAmplitude,
+                                                            time / 10000.0f);
             break;
+        }
 
         case FxType::Chorus:
+        {
             mTimeSmoothed.setTargetValue (chorusCentreTime);
+
             mFeedbackSmoothed.setTargetValue (0.0f);    // disable feedback
+
             modAmplitude = chorusTimeAmplitude * modDepth / 100.0f;  // convert from %
             break;
+        }
 
         case FxType::Flanger:
+        {
             mTimeSmoothed.setTargetValue (flangerCentreTime);
-            mFeedbackSmoothed.setTargetValue (feedback / 100.0f);    // convert from %
+
+            feedback = feedback / 100.0f; // convert from %
+            // Compensate feedback reduction due to post-saturation gain decrease
+            feedback = feedback * Decibels::decibelsToGain (-postGainInDecibels);
+            mFeedbackSmoothed.setTargetValue (feedback);
+
             modAmplitude = flangerTimeAmplitude * modDepth / 100.0f; // convert from %
             break;
+        }
 
         default:
+        {
             jassertfalse;
-            modAmplitude = 0.0f;    // disable modulation
             break;
+        }
     }
 
     const float modOffset = shouldOffsetModulation ? stereoWidth : 0.0f;
@@ -68,7 +101,9 @@ void FxModule::prepare (double sampleRate, int blockSize)
     DspModule::prepare (sampleRate, blockSize);
 
     // Prepare contained modules
+    mPreSaturatorGain.prepare (sampleRate, blockSize);
     mSaturator.prepare (sampleRate, blockSize);
+    mPostSaturatorGain.prepare (sampleRate, blockSize);
     mDelay.prepare (sampleRate, blockSize);
     mLfo.prepare (sampleRate, blockSize);
 
@@ -85,7 +120,9 @@ void FxModule::reset()
         FloatVectorOperations::clear (mModulationBuffer.get(), mBlockSize);
 
     // Reset contained modules
+    mPreSaturatorGain.reset();
     mSaturator.reset();
+    mPostSaturatorGain.reset();
     mDelay.reset();
     mLfo.reset();
 
@@ -97,6 +134,10 @@ void FxModule::reset()
 void FxModule::process (const float* inAudio, float* outAudio,
                         int numSamplesToRender)
 {
+    // APPLY PRE-SATURATION GAIN
+    // TODO: Should we apply the pre-gain per-sample in the main loop?
+    mPreSaturatorGain.process (inAudio, outAudio, numSamplesToRender);
+
     // FILL MODULATION BUFFER
     mLfo.process (mModulationBuffer.get(), mModulationBuffer.get(), numSamplesToRender);
 
@@ -118,6 +159,8 @@ void FxModule::process (const float* inAudio, float* outAudio,
 
         // Pass the signal through the saturator before writing it to the buffer
         mSaturator.process (&writeSample, &writeSample, 1);
+        // Apply post-saturator gain
+        mPostSaturatorGain.process (&writeSample, &writeSample, 1);
 
         mDelay.writeAndAdvance (writeSample);
 

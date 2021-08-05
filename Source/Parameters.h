@@ -63,7 +63,8 @@ namespace Parameter
 {
     enum Index : int
     {
-        InputGain = 0,
+        InputDrive = 0,
+        InputBoost,
         DelayTime,
         Feedback,
         InvertFeedback,
@@ -80,7 +81,8 @@ namespace Parameter
 
     inline const String ID[NumParameters]
     {
-        "InputGain",
+        "InputDrive",
+        "InputBoost",
         "Time",
         "Feedback",
         "InvertFeedback",
@@ -94,7 +96,8 @@ namespace Parameter
 
     inline const String Name[NumParameters]
     {
-        "Input Gain",
+        "Drive",
+        "Boost",
         "Time",
         "Feedback",
         "Invert",
@@ -128,38 +131,41 @@ namespace Parameter
 
     inline const PiecewiseRange<float, 3> gainRange
     {
-        { { -24.0f, -4.0f, 0.1f }, 0.35f },
+        { { -12.0f, -4.0f, 0.1f }, 0.35f },
         { { -4.0f, 4.0f, 0.1f, 0.5f, true }, 0.65f },
-        { { 4.0f, 24.0f, 0.1f }, 1.0f }
+        { { 4.0f, 12.0f, 0.1f }, 1.0f }
     };
 
     inline const NormalisableRange<float> Range[NumParameters]
     {
-        // Input Gain:
-        gainRange.getNormalisableRange(),
+        // Input Drive:
+        { 0.0f, 24.0f, 0.1f },
+        // Input Boost:
+        { 0.0f, 1.0f, 1.0f },
         // Time:
         timeRange.getNormalisableRange(),
         // Feedback:
         createSkewedNormalisableRange (0.0f, 120.0f, 0.0f, 50.0f),
         // Invert Feedback:
-        {0.0f, 1.0f, 1.0f},
+        { 0.0f, 1.0f, 1.0f },
         // Dry Wet Mix:
-        {0.0f, 100.0f},
+        { 0.0f, 100.0f },
         // Type:
-        {0.0f, 2.0f, 1.0f},
+        { 0.0f, 2.0f, 1.0f },
         // Output Gain:
         gainRange.getNormalisableRange(),
         // Modulation Rate:
         rateRange.getNormalisableRange(),
         // Modulation Depth:
-        {0.0f, 100.0f},
+        { 0.0f, 100.0f },
         // Stereo Spread:
         createSkewedNormalisableRange (0.0f, 100.0f, 0.0f, 30.0f)
     };
 
     inline const float DefaultValue[NumParameters]
     {
-        0.0f,   // Input Gain
+        0.0f,   // Input Drive
+        0.0f,   // Input Boost
         100.0f, // Time
         50.0f,  // Feedback
         0.0f,   // Invert Feedback
@@ -173,7 +179,8 @@ namespace Parameter
 
     inline const String Label[NumParameters]
     {
-        " dB",  // Input Gain
+        " dB",  // Input Drive
+        "",     // Input Boost
         " ms",  // Time
         " %",   // Feedback
         "",     // Invert Feedback
@@ -204,7 +211,8 @@ namespace Parameter
     
     inline const stringFromValueFunction stringFromValue[NumParameters]
     {
-        nullptr,                    // Input Gain
+        nullptr,                    // Input Drive
+        stringFromToggleValue,      // Input Boost
         showDecimalPlaceBelow<100>, // Time
         showDecimalPlaces<0>,       // Feedback
         stringFromToggleValue,      // Invert Feedback
@@ -218,48 +226,52 @@ namespace Parameter
 
     inline const std::initializer_list<float> majorTicks[NumParameters]
     {
-        // Input Gain:
-        {-24.0f, 24.0f, 0.0f},
+        // Input Drive:
+        { 0.0f, 12.0f, 24.0f },
+        // Input Boost:
+        {},
         // Time:
-        {1.0f, RBD::maxDelayTimeInMs, 10.0f, 100.0f},
+        { 1.0f, RBD::maxDelayTimeInMs, 10.0f, 100.0f },
         // Feedback:
-        {0.0f, 120.0f, 50.0f},
+        { 0.0f, 120.0f, 50.0f },
         // Invert Feedback:
         {},
         // Dry Wet:
-        {0.0f, 100.0f, 50.0f},
+        { 0.0f, 100.0f, 50.0f },
         // Type:
         {},
         // Output Gain:
-        {-24.0f, 24.0f, 0.0f},
+        { -12.0f, 12.0f, 0.0f },
         // Modulation Rate:
-        {0.01f, 10.0f, 0.1f, 1.0f},
+        { 0.01f, 10.0f, 0.1f, 1.0f },
         // Modulation Depth:
-        {0.0f, 100.0f, 50.0f},
+        { 0.0f, 100.0f, 50.0f },
         // Stereo Spread:
         {}
     };
 
     inline const std::initializer_list<float> minorTicks[NumParameters]
     {
-        // Input Gain:
-        {1, 4, 8, 12, 16, 20, -1, -4, -8, -12, -16, -20},
+        // Input Drive:
+        { 2, 4, 6, 8, 10, 14, 16, 18, 20, 22 },
+        // Input Boost:
+        {},
         // Time:
-        {5, 40, 70, 200, 300, 400, 500, 600, 700, 800, 900},
+        { 5, 40, 70, 200, 300, 400, 500, 600, 700, 800, 900 },
         // Feedback:
-        {10, 20, 30, 40, 60, 70, 80, 90, 100, 110},
+        { 10, 20, 30, 40, 60, 70, 80, 90, 100, 110 },
         // Invert Feedback:
         {},
         // Dry Wet:
-        {10, 20, 30, 40, 60, 70, 80, 90},
+        { 10, 20, 30, 40, 60, 70, 80, 90 },
         // Type:
         {},
         // Output Gain:
-        {1, 4, 8, 12, 16, 20, -1, -4, -8, -12, -16, -20},
+        { 1, 2, 4, 6, 8, 10, -1, -2, -4, -6, -8, -10 },
         // Modulation Rate:
-        {0.05f, 0.4f, 0.7f, 2, 3, 4, 5, 6, 7, 8, 9},
+        { 0.05f, 0.4f, 0.7f, 2, 3, 4, 5, 6, 7, 8, 9 },
         // Modulation Depth:
-        {10, 20, 30, 40, 60, 70, 80, 90},
+        { 10, 20, 30, 40, 60, 70, 80, 90 },
         // Stereo Spread:
         {}
     };

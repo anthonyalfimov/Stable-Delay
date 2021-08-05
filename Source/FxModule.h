@@ -12,8 +12,9 @@
 
 #include <JuceHeader.h>
 #include "DspModule.h"
-#include "DelayModule.h"
+#include "GainModule.h"
 #include "SaturationModule.h"
+#include "DelayModule.h"
 #include "LfoModule.h"
 #include "Parameters.h"
 
@@ -23,7 +24,8 @@ public:
     FxModule();
 
 //==============================================================================
-    void setState (float time, float feedback, float type,
+    void setState (float driveInDecibels, bool applyBoost,
+                   float time, float feedback, float type,
                    float modRate, float modDepth, float stereoWidth,
                    bool shouldOffsetModulation);
     
@@ -36,10 +38,10 @@ public:
 private:
 //==============================================================================
     // Parameters
+    FxType::Index mTypeValue = FxType::Delay;
     // MARK: Precision: time smoothing
     SmoothedValue<double, ValueSmoothingTypes::Multiplicative> mTimeSmoothed;
     SmoothedValue<float> mFeedbackSmoothed;
-    FxType::Index mTypeValue = FxType::Delay;
 
 //==============================================================================
     // FX type constants
@@ -50,9 +52,15 @@ private:
     inline static constexpr float maxDelayTimeAmplitude = 0.01f;
     inline static constexpr float minDelayTimeAmplitude = 0.0005f;
 
+    inline static constexpr float delayModRate = 0.05f;
+
 //==============================================================================
     // Drive
+    GainModule mPreSaturatorGain;
     SaturationModule mSaturator;
+    GainModule mPostSaturatorGain;
+
+    inline static constexpr float boostAmountInDecibels = 10.0f;
 
 //==============================================================================
     // Delay

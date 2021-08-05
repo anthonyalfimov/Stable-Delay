@@ -80,7 +80,6 @@ private:
     void updateParameters();
     
     // DSP Modules
-    OwnedArray<GainModule> mInputGain;
     OwnedArray<MeterProbe> mInputMeterProbe;
     OwnedArray<FxModule> mFxProcessor;
     OwnedArray<DryWetModule> mDryWetMixer;
@@ -92,7 +91,8 @@ private:
     // TODO: Is there a better option than storing raw ptrs to parameter values?
     //  Lifetime of these ptrs is the same at the AudioProcessorValueTreeState that
     //  stores them, so there should be no problems
-    std::atomic<float>* mInputGainValue = nullptr;
+    std::atomic<float>* mInputDriveValue = nullptr;
+    std::atomic<float>* mInputBoostValue = nullptr;
     std::atomic<float>* mDelayTimeValue = nullptr;
     std::atomic<float>* mFeedbackValue = nullptr;
     std::atomic<float>* mInvertFeedbackValue = nullptr;

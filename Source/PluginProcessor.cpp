@@ -131,9 +131,6 @@ void ReallyBasicDelayAudioProcessor::prepareToPlay (double sampleRate, int sampl
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
 
-    for (auto inputGain : mInputGain)
-        inputGain->prepare (sampleRate, samplesPerBlock);
-
     for (auto inputMeterProbe : mInputMeterProbe)
         inputMeterProbe->prepare (sampleRate, samplesPerBlock);
 
@@ -160,9 +157,6 @@ void ReallyBasicDelayAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
-    
-    for (auto inputGain : mInputGain)
-        inputGain->reset();
 
     for (auto inputMeterProbe : mInputMeterProbe)
         inputMeterProbe->reset();
@@ -237,7 +231,6 @@ void ReallyBasicDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     {
         float* channelData = buffer.getWritePointer (channel);
 
-        mInputGain[channel]->process (channelData, channelData, numSamples);
         mInputMeterProbe[channel]->process (channelData, channelData, numSamples);
     }
 
@@ -360,7 +353,6 @@ void ReallyBasicDelayAudioProcessor::initialiseDSP()
     // Create DSP modules for input channels
     for (int i = 0; i < totalNumInputChannels; ++i)
     {
-        mInputGain.add (std::make_unique<GainModule>());
         mInputMeterProbe. add (std::make_unique<MeterProbe>());
     }
 
@@ -386,8 +378,10 @@ void ReallyBasicDelayAudioProcessor::initialiseParameters()
     //  Create std::atomic<float> members (or an array of them) and initialise
     //  them once in the processor constructor.
 
-    mInputGainValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::InputGain]);
+    mInputDriveValue
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::InputDrive]);
+    mInputBoostValue
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::InputBoost]);
     mDelayTimeValue
     = parameters.getRawParameterValue (Parameter::ID[Parameter::DelayTime]);
     mFeedbackValue
@@ -412,9 +406,6 @@ void ReallyBasicDelayAudioProcessor::initialiseParameters()
 
 void ReallyBasicDelayAudioProcessor::updateParameters()
 {
-    for (auto inputGain : mInputGain)
-        inputGain->setState (mInputGainValue->load());
-
     const float feedbackFactor
     = (mInvertFeedbackValue->load() == Toggle::On) ? -1.0f : 1.0f;
     const float feedback = feedbackFactor * mFeedbackValue->load();
@@ -423,7 +414,9 @@ void ReallyBasicDelayAudioProcessor::updateParameters()
     = (getTotalNumOutputChannels() == 2) ? mStereoSpreadValue->load() : 0.0f;
 
     for (int channel = 0; channel < mFxProcessor.size(); ++channel)
-        mFxProcessor[channel]->setState (mDelayTimeValue->load(),
+        mFxProcessor[channel]->setState (mInputDriveValue->load(),
+                                         mInputBoostValue->load() == Toggle::On,
+                                         mDelayTimeValue->load(),
                                          feedback,
                                          mFxTypeValue->load(),
                                          mModulationRateValue->load(),

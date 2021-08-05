@@ -27,7 +27,7 @@ public:
     
 private:
     std::unique_ptr<TopPanel> mTopPanel;
-    std::unique_ptr<GainPanel> mInputGainPanel;
+    std::unique_ptr<GainPanel> mInputDrivePanel;
     std::unique_ptr<GainPanel> mOutputGainPanel;
     std::unique_ptr<CentrePanel> mCentrePanel;
 

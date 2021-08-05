@@ -28,7 +28,7 @@ Meter::Meter (Parameter::Index parameterIndex,
     // Create and initialise MeterChannel objects
     switch (parameterIndex)
     {
-        case Parameter::InputGain:
+        case Parameter::InputDrive:
             for (int i = 0; i < mNumChannels; ++i)
             {
                 auto* meterProbe = processor.getInputMeterProbe (i);
