@@ -131,9 +131,9 @@ namespace Parameter
 
     inline const PiecewiseRange<float, 3> gainRange
     {
-        { { -12.0f, -4.0f, 0.1f }, 0.35f },
-        { { -4.0f, 4.0f, 0.1f, 0.5f, true }, 0.65f },
-        { { 4.0f, 12.0f, 0.1f }, 1.0f }
+        { { -12.0f, -2.0f, 0.1f }, 0.35f },
+        { { -2.0f, 2.0f, 0.1f }, 0.65f },
+        { { 2.0f, 12.0f, 0.1f }, 1.0f }
     };
 
     inline const NormalisableRange<float> Range[NumParameters]
