@@ -23,15 +23,19 @@ void FxModule::setState (float driveInDecibels, bool applyBoost,
                          bool shouldOffsetModulation)
 {
     // Set delay input drive parameters
-
-    if (applyBoost)
-        driveInDecibels += boostAmountInDecibels;
-
-    mPreSaturatorGain.setState (driveInDecibels);
-
+    float preGainInDecibels = driveInDecibels;
     //  To achieve approximate equal-loudness drive, reduce the level after the
     //  saturation by half the amount of drive in decibels
-    const float postGainInDecibels = -0.5f * driveInDecibels;
+    float postGainInDecibels = -0.5f * driveInDecibels;
+
+    if (applyBoost)
+    {
+        // Boost is applied un-compensated to bring up low-level signals
+        preGainInDecibels += boostAmountInDecibels;
+        postGainInDecibels -= boostAmountInDecibels;
+    }
+
+    mPreSaturatorGain.setState (preGainInDecibels);
     mPostSaturatorGain.setState (postGainInDecibels);
 
     // Set delay and modulation parameters
