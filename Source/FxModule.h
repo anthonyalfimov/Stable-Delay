@@ -56,9 +56,8 @@ private:
 
 //==============================================================================
     // Drive
-    GainModule mPreSaturatorGain;
+    SmoothedValue<float> mDriveSmoothed;    
     SaturationModule mSaturator;
-    GainModule mPostSaturatorGain;
 
     inline static constexpr float boostAmountInDecibels = 10.0f;
 

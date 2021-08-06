@@ -23,20 +23,9 @@ void FxModule::setState (float driveInDecibels, bool applyBoost,
                          bool shouldOffsetModulation)
 {
     // Set delay input drive parameters
-    float preGainInDecibels = driveInDecibels;
-    //  To achieve approximate equal-loudness drive, reduce the level after the
-    //  saturation by half the amount of drive in decibels
-    float postGainInDecibels = -0.5f * driveInDecibels;
-
-    if (applyBoost)
-    {
-        // Boost is applied un-compensated to bring up low-level signals
-        preGainInDecibels += boostAmountInDecibels;
-        postGainInDecibels -= boostAmountInDecibels;
-    }
-
-    mPreSaturatorGain.setState (preGainInDecibels);
-    mPostSaturatorGain.setState (postGainInDecibels);
+    
+    mDriveSmoothed.setTargetValue (driveInDecibels);
+    const float feedbackCompensationFactor = Decibels::decibelsToGain (0.5f * driveInDecibels);
 
     // Set delay and modulation parameters
     mTypeValue = static_cast<FxType::Index> (type);
@@ -49,9 +38,8 @@ void FxModule::setState (float driveInDecibels, bool applyBoost,
         {
             mTimeSmoothed.setTargetValue (time / 1000.0);   // convert from ms to s
 
-            feedback = feedback / 100.0f; // convert from %
             // Compensate feedback reduction due to post-saturation gain decrease
-            feedback = feedback * Decibels::decibelsToGain (-postGainInDecibels);
+            feedback = feedback * feedbackCompensationFactor / 100.0f; // convert from %
             mFeedbackSmoothed.setTargetValue (feedback);
 
             // TODO: Consider using PiecewiseNormalisableRange to map delay modulation
@@ -80,9 +68,8 @@ void FxModule::setState (float driveInDecibels, bool applyBoost,
         {
             mTimeSmoothed.setTargetValue (flangerCentreTime);
 
-            feedback = feedback / 100.0f; // convert from %
             // Compensate feedback reduction due to post-saturation gain decrease
-            feedback = feedback * Decibels::decibelsToGain (-postGainInDecibels);
+            feedback = feedback * feedbackCompensationFactor / 100.0f; // convert from %
             mFeedbackSmoothed.setTargetValue (feedback);
 
             modAmplitude = flangerTimeAmplitude * modDepth / 100.0f; // convert from %
@@ -105,9 +92,7 @@ void FxModule::prepare (double sampleRate, int blockSize)
     DspModule::prepare (sampleRate, blockSize);
 
     // Prepare contained modules
-    mPreSaturatorGain.prepare (sampleRate, blockSize);
     mSaturator.prepare (sampleRate, blockSize);
-    mPostSaturatorGain.prepare (sampleRate, blockSize);
     mDelay.prepare (sampleRate, blockSize);
     mLfo.prepare (sampleRate, blockSize);
 
@@ -124,24 +109,19 @@ void FxModule::reset()
         FloatVectorOperations::clear (mModulationBuffer.get(), mBlockSize);
 
     // Reset contained modules
-    mPreSaturatorGain.reset();
     mSaturator.reset();
-    mPostSaturatorGain.reset();
     mDelay.reset();
     mLfo.reset();
 
     // Reset smoothed parameters
+    mDriveSmoothed.reset (mSampleRate, 0.05f);
     mTimeSmoothed.reset (mSampleRate, 0.1);
-    mFeedbackSmoothed.reset (mSampleRate, 0.05);
+    mFeedbackSmoothed.reset (mSampleRate, 0.05f);
 }
 
 void FxModule::process (const float* inAudio, float* outAudio,
                         int numSamplesToRender)
 {
-    // APPLY PRE-SATURATION GAIN
-    // TODO: Should we apply the pre-gain per-sample in the main loop?
-    mPreSaturatorGain.process (inAudio, outAudio, numSamplesToRender);
-
     // FILL MODULATION BUFFER
     mLfo.process (mModulationBuffer.get(), mModulationBuffer.get(), numSamplesToRender);
 
@@ -158,13 +138,20 @@ void FxModule::process (const float* inAudio, float* outAudio,
         // to outAudio.
 
     // WRITE SAMPLE TO THE DELAY BUFFER AND ADVANCE THE WRITE HEAD
-        float writeSample = inAudio[i]
-                            + readSample * mFeedbackSmoothed.getNextValue();
+        const float drive = mDriveSmoothed.getNextValue();
+        const float halfDrive = drive / 2.0f;
+        const float inSample = inAudio[i];
+        float writeSample = inSample * Decibels::decibelsToGain (drive)
+                          + readSample * mFeedbackSmoothed.getNextValue();
 
         // Pass the signal through the saturator before writing it to the buffer
         mSaturator.process (&writeSample, &writeSample, 1);
         // Apply post-saturator gain
-        mPostSaturatorGain.process (&writeSample, &writeSample, 1);
+        const float inPeakLevel = Decibels::gainToDecibels (std::abs (inSample));
+        const float smoothingFactor = 4.0f;
+        const float postGainInDecibels
+        = 0.5f * halfDrive * (std::tanh ((inPeakLevel + drive) / smoothingFactor) - 3.0f);
+        writeSample = writeSample * Decibels::decibelsToGain (postGainInDecibels);
 
         mDelay.writeAndAdvance (writeSample);
 
