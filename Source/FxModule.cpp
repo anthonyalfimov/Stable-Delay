@@ -25,7 +25,7 @@ void FxModule::setState (float driveInDecibels, bool applyBoost,
     // Set delay input drive parameters
     
     mDriveSmoothed.setTargetValue (driveInDecibels);
-    const float feedbackCompensationFactor = Decibels::decibelsToGain (0.5f * driveInDecibels);
+    const float feedbackCompensationFactor = Decibels::decibelsToGain (driveInDecibels);
 
     // Set delay and modulation parameters
     mTypeValue = static_cast<FxType::Index> (type);
