@@ -90,6 +90,10 @@
       <FILE id="AF9TA9" name="LfoModule.h" compile="0" resource="0" file="Source/LfoModule.h"/>
       <FILE id="Cayqlj" name="DelayModule.cpp" compile="1" resource="0" file="Source/DelayModule.cpp"/>
       <FILE id="xYWtWs" name="DelayModule.h" compile="0" resource="0" file="Source/DelayModule.h"/>
+      <FILE id="DKL7TN" name="SlewFilterModule.cpp" compile="1" resource="0"
+            file="Source/SlewFilterModule.cpp"/>
+      <FILE id="rzWoCP" name="SlewFilterModule.h" compile="0" resource="0"
+            file="Source/SlewFilterModule.h"/>
       <FILE id="p0iOWO" name="SaturationModule.cpp" compile="1" resource="0"
             file="Source/SaturationModule.cpp"/>
       <FILE id="UBI3Fy" name="SaturationModule.h" compile="0" resource="0"
