@@ -14,7 +14,7 @@
 #include "DspModule.h"
 
 // TODO: Consider passing lambdas to apply to the sample pre and post processing
-//  for the `process` method
+//  For the `process` method to be able to handle peak and RMS filtering.
 
 class SlewFilterModule  : public DspModule
 {
@@ -26,12 +26,48 @@ public:
 
 //==============================================================================
     void prepare (double sampleRate, int blockSize) override;
+
+    /**
+        Reset the filter state variable (previous output value) to 0.
+    */
     void reset() override;
+
+    /**
+        Reset the filter state variable (previous output value) to the
+        supplied initial value.
+    */
     void reset (float initialValue);
 
+    /**
+        Process a single value and return a filtered result.
+
+        @Discussion
+        NB! If denormals are not disabled on the CPU when this method is called,
+        make sure to call `resetDenormals()` afterwards.
+    */
     float processSample (float inputValue);
+
+    /**
+        Process input samples and place the result in the supplied output location.
+
+        @Discussion
+        NB! If denormals are not disabled on the CPU when this method is called,
+        make sure to call `resetDenormals()` afterwards.
+    */
     void process (const float* inAudio, float* outAudio,
                   int numSamplesToRender) override;
+
+//==============================================================================
+    /**
+        Reset the filter state variable (previous output value) to zero
+        if it is a denormal.
+
+        @Discussion
+        If you don't otherwise disable denormals when using this class's
+        methods, make sure to call this after every `processSample()` or
+        `process()` call.
+    */
+    void resetDenormals();
 
 private:
     float mPreviousValue = 0.0f;

@@ -61,6 +61,12 @@ void SlewFilterModule::process (const float* inAudio, float* outAudio,
 }
 
 //==============================================================================
+void SlewFilterModule::resetDenormals()
+{
+    JUCE_SNAP_TO_ZERO (mPreviousValue);
+}
+
+//==============================================================================
 float SlewFilterModule::getAveragingWeight (float transitionTimeInMs) const
 {
     return (transitionTimeInMs < minTimeInMs) ? 0.0f
