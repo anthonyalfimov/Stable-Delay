@@ -9,7 +9,7 @@
 namespace BinaryData
 {
     extern const char*   RBD_BG_2x_png;
-    const int            RBD_BG_2x_pngSize = 281144;
+    const int            RBD_BG_2x_pngSize = 337507;
 
     extern const char*   RBD_Knob_80_2x_png;
     const int            RBD_Knob_80_2x_pngSize = 15844;
