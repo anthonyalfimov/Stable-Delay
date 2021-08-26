@@ -13,6 +13,9 @@
 
 FxModule::FxModule()
 {
+    // Set dynamic threshold detector rise and fall time constants
+    mDetector.setState (5 /*ms*/, 50 /*ms*/);
+
     // Set the saturation curve
     mSaturator.setState (SaturationCurve::beta);
 }
@@ -106,6 +109,7 @@ void FxModule::prepare (double sampleRate, int blockSize)
 
     // Prepare contained modules
     mPreSaturatorGain.prepare (sampleRate, blockSize);
+    mDetector.prepare (sampleRate, blockSize);
     mSaturator.prepare (sampleRate, blockSize);
     mPostSaturatorGain.prepare (sampleRate, blockSize);
     mDelay.prepare (sampleRate, blockSize);
@@ -125,6 +129,7 @@ void FxModule::reset()
 
     // Reset contained modules
     mPreSaturatorGain.reset();
+    mDetector.reset();
     mSaturator.reset();
     mPostSaturatorGain.reset();
     mDelay.reset();
@@ -138,10 +143,6 @@ void FxModule::reset()
 void FxModule::process (const float* inAudio, float* outAudio,
                         int numSamplesToRender)
 {
-    // APPLY PRE-SATURATION GAIN
-    // TODO: Should we apply the pre-gain per-sample in the main loop?
-    mPreSaturatorGain.process (inAudio, outAudio, numSamplesToRender);
-
     // FILL MODULATION BUFFER
     mLfo.process (mModulationBuffer.get(), mModulationBuffer.get(), numSamplesToRender);
 
@@ -158,13 +159,29 @@ void FxModule::process (const float* inAudio, float* outAudio,
         // to outAudio.
 
     // WRITE SAMPLE TO THE DELAY BUFFER AND ADVANCE THE WRITE HEAD
-        float writeSample = inAudio[i]
-                            + readSample * mFeedbackSmoothed.getNextValue();
+        float writeSample = inAudio[i];
+
+        // TODO: Clamp threshold before or after the DetectorFilter?
+
+        const float gainLevel = mDetector.processSample (std::abs (writeSample));
+        const float thresholdInDb = jlimit (-10.0f, 0.0f,
+                                            Decibels::gainToDecibels(gainLevel) + 6.0f);
+
+        // Apply threshold-move boost
+        writeSample *= Decibels::decibelsToGain (-thresholdInDb);
+
+        // Apply pre-saturator gain
+        mPreSaturatorGain.process (&writeSample, &writeSample, 1);
+
+        writeSample += readSample * mFeedbackSmoothed.getNextValue();
 
         // Pass the signal through the saturator before writing it to the buffer
         mSaturator.process (&writeSample, &writeSample, 1);
         // Apply post-saturator gain
         mPostSaturatorGain.process (&writeSample, &writeSample, 1);
+
+        // Apply threshold-move cut
+        writeSample *= Decibels::decibelsToGain (thresholdInDb);
 
         mDelay.writeAndAdvance (writeSample);
 

@@ -13,6 +13,7 @@
 #include <JuceHeader.h>
 #include "DspModule.h"
 #include "GainModule.h"
+#include "SlewFilterModule.h"
 #include "SaturationModule.h"
 #include "DelayModule.h"
 #include "LfoModule.h"
@@ -57,6 +58,7 @@ private:
 //==============================================================================
     // Drive
     GainModule mPreSaturatorGain;
+    SlewFilterModule mDetector;
     SaturationModule mSaturator;
     GainModule mPostSaturatorGain;
 
