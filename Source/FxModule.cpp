@@ -167,13 +167,14 @@ void FxModule::process (const float* inAudio, float* outAudio,
         const float thresholdInDb = jlimit (-16.0f, 0.0f,
                                             Decibels::gainToDecibels(gainLevel) + 8.0f);
 
-        // Apply threshold-move boost
-        writeSample *= Decibels::decibelsToGain (-thresholdInDb);
-
         // Apply pre-saturator gain
         mPreSaturatorGain.process (&writeSample, &writeSample, 1);
 
+        // Add feedback sample
         writeSample += readSample * mFeedbackSmoothed.getNextValue();
+        
+        // Apply threshold-move boost
+        writeSample *= Decibels::decibelsToGain (-thresholdInDb);
 
         // Pass the signal through the saturator before writing it to the buffer
         mSaturator.process (&writeSample, &writeSample, 1);
