@@ -164,8 +164,8 @@ void FxModule::process (const float* inAudio, float* outAudio,
         // TODO: Clamp threshold before or after the DetectorFilter?
 
         const float gainLevel = mDetector.processSample (std::abs (writeSample));
-        const float thresholdInDb = jlimit (-10.0f, 0.0f,
-                                            Decibels::gainToDecibels(gainLevel) + 6.0f);
+        const float thresholdInDb = jlimit (-16.0f, 0.0f,
+                                            Decibels::gainToDecibels(gainLevel) + 8.0f);
 
         // Apply threshold-move boost
         writeSample *= Decibels::decibelsToGain (-thresholdInDb);
