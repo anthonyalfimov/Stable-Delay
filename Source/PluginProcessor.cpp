@@ -250,9 +250,9 @@ void ReallyBasicDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
         mDryWetMixer[channel]->writeDryBlock (channelData, numSamples);
         mFxProcessor[channel]->process (channelData, channelData, numSamples);
         mDryWetMixer[channel]->process (channelData, channelData, numSamples);
-        mOutputClipper[channel]->process(channelData, channelData, numSamples);
         mOutputGain[channel]->process (channelData, channelData, numSamples);
         mOutputMeterProbe[channel]->process (channelData, channelData, numSamples);
+        //mOutputClipper[channel]->process(channelData, channelData, numSamples);
     }
 }
 
