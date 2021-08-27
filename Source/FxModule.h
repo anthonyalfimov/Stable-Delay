@@ -28,7 +28,9 @@ public:
     void setState (float driveInDecibels, bool applyBoost,
                    float time, float feedback, float type,
                    float modRate, float modDepth, float stereoWidth,
-                   bool shouldOffsetModulation);
+                   bool shouldOffsetModulation,
+                   bool dynamicClipping, SaturationCurve clippingCurve,
+                   float clipRise, float clipFall, float clipThreshold);
     
 //==============================================================================
     void prepare (double sampleRate, int blockSize) override;
@@ -61,6 +63,9 @@ private:
     SlewFilterModule mDetector;
     SaturationModule mSaturator;
     GainModule mPostSaturatorGain;
+    
+    bool mUseDynamicClipping = true;
+    float mClippingThreshold = 8.0f;
 
     inline static constexpr float boostAmountInDecibels = 10.0f;
 

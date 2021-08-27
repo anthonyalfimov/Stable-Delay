@@ -13,18 +13,25 @@
 
 FxModule::FxModule()
 {
-    // Set dynamic threshold detector rise and fall time constants
-    mDetector.setState (5 /*ms*/, 50 /*ms*/);
-
-    // Set the saturation curve
-    mSaturator.setState (SaturationCurve::beta);
+    
 }
 
 void FxModule::setState (float driveInDecibels, bool applyBoost,
                          float time, float feedback, float type,
                          float modRate, float modDepth, float stereoWidth,
-                         bool shouldOffsetModulation)
+                         bool shouldOffsetModulation,
+                         bool dynamicClipping, SaturationCurve clippingCurve,
+                         float clipRise, float clipFall, float clipThreshold)
 {
+    // Set dynamic threshold detector rise and fall time constants
+    mDetector.setState (clipRise /*ms*/, clipFall /*ms*/);
+
+    // Set the saturation curve
+    mSaturator.setState (clippingCurve);
+    
+    mUseDynamicClipping = dynamicClipping;
+    mClippingThreshold = clipThreshold;
+    
     // Set delay input drive parameters
     float preGainInDecibels = driveInDecibels;
     //  To achieve approximate equal-loudness drive, reduce the level after the
@@ -163,9 +170,10 @@ void FxModule::process (const float* inAudio, float* outAudio,
 
         // TODO: Clamp threshold before or after the DetectorFilter?
 
-        const float gainLevel = mDetector.processSample (std::abs (writeSample));
-        const float thresholdInDb = jlimit (-16.0f, 0.0f,
-                                            Decibels::gainToDecibels(gainLevel) + 8.0f);
+        const float levelInDb
+        = Decibels::gainToDecibels (mDetector.processSample (std::abs (writeSample)));
+        const float thresholdInDb = jlimit (-16.0f, -1.0f,
+                                            levelInDb + mClippingThreshold);
 
         // Apply pre-saturator gain
         mPreSaturatorGain.process (&writeSample, &writeSample, 1);
@@ -174,7 +182,8 @@ void FxModule::process (const float* inAudio, float* outAudio,
         writeSample += readSample * mFeedbackSmoothed.getNextValue();
         
         // Apply threshold-move boost
-        writeSample *= Decibels::decibelsToGain (-thresholdInDb);
+        if (mUseDynamicClipping)
+            writeSample *= Decibels::decibelsToGain (-thresholdInDb);
 
         // Pass the signal through the saturator before writing it to the buffer
         mSaturator.process (&writeSample, &writeSample, 1);
@@ -182,7 +191,8 @@ void FxModule::process (const float* inAudio, float* outAudio,
         mPostSaturatorGain.process (&writeSample, &writeSample, 1);
 
         // Apply threshold-move cut
-        writeSample *= Decibels::decibelsToGain (thresholdInDb);
+        if (mUseDynamicClipping)
+            writeSample *= Decibels::decibelsToGain (thresholdInDb);
 
         mDelay.writeAndAdvance (writeSample);
 

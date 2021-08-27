@@ -401,6 +401,17 @@ void ReallyBasicDelayAudioProcessor::initialiseParameters()
     mStereoSpreadValue
     = parameters.getRawParameterValue (Parameter::ID[Parameter::StereoSpread]);
 
+    mDClipDynamicValue
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipDynamic]);
+    mDClipCurveValue
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipCurve]);
+    mDClipRiseValue
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipRise]);
+    mDClipFallValue
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipFall]);
+    mDClipThresholdValue
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipThreshold]);
+    
     updateParameters();
 }
 
@@ -412,7 +423,7 @@ void ReallyBasicDelayAudioProcessor::updateParameters()
 
     const float stereoSpread
     = (getTotalNumOutputChannels() == 2) ? mStereoSpreadValue->load() : 0.0f;
-
+    
     for (int channel = 0; channel < mFxProcessor.size(); ++channel)
         mFxProcessor[channel]->setState (mInputDriveValue->load(),
                                          mInputBoostValue->load() == Toggle::On,
@@ -422,7 +433,12 @@ void ReallyBasicDelayAudioProcessor::updateParameters()
                                          mModulationRateValue->load(),
                                          mModulationDepthValue->load(),
                                          stereoSpread,
-                                         (channel != 0));
+                                         (channel != 0),
+                                         mDClipDynamicValue->load() == Toggle::On,
+                                         static_cast<SaturationCurve> (mDClipCurveValue->load()),
+                                         mDClipRiseValue->load(),
+                                         mDClipFallValue->load(),
+                                         mDClipThresholdValue->load());
 
     for (auto dryWetMixer : mDryWetMixer)
         dryWetMixer->setState (mDryWetValue->load());

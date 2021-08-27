@@ -74,6 +74,13 @@ namespace Parameter
         ModulationRate,
         ModulationDepth,
         StereoSpread,
+        
+        DClipDynamic,
+        DClipCurve,
+        DClipRise,
+        DClipFall,
+        DClipThreshold,
+        
         NumParameters
     };
 
@@ -91,7 +98,13 @@ namespace Parameter
         "OutputGain",
         "ModulationRate",
         "ModulationDepth",
-        "StereoSpread"
+        "StereoSpread",
+        
+        "DClipDynamic",
+        "DClipCurve",
+        "DClipRise",
+        "DClipFall",
+        "DClipThreshold"
     };
 
     inline const String Name[NumParameters]
@@ -106,7 +119,13 @@ namespace Parameter
         "Output Gain",
         "Rate",
         "Depth",
-        "Spread"
+        "Spread",
+        
+        "Clip: Dynamic",
+        "Clip: Curve",
+        "Clip: Rise",
+        "Clip: Fall",
+        "Clip: Threshold"
     };
 
     // TODO: DRY generation of ranges and ticks from min, max and mid values
@@ -135,6 +154,20 @@ namespace Parameter
         { { -2.0f, 2.0f, 0.1f }, 0.65f },
         { { 2.0f, 12.0f, 0.1f }, 1.0f }
     };
+    
+    inline const PiecewiseRange<float, 4> riseRange
+    {
+        { { 0.1f, 1.0f, 0.1f }, 0.15f },
+        { { 1.0f, 10.0f, 1.0f }, 0.5f },
+        { { 10.0f, 100.0f, 1.0f }, 0.8f },
+        { { 100.0f, 500.0f, 1.0f }, 1.0f }
+    };
+    
+    inline const PiecewiseRange<float, 2> fallRange
+    {
+        { { 10.0f, 100.0f, 1.0f }, 0.5f },
+        { { 100.0f, 1000.0f, 1.0f }, 1.0f }
+    };
 
     inline const NormalisableRange<float> Range[NumParameters]
     {
@@ -159,7 +192,18 @@ namespace Parameter
         // Modulation Depth:
         { 0.0f, 100.0f },
         // Stereo Spread:
-        createSkewedNormalisableRange (0.0f, 100.0f, 0.0f, 30.0f)
+        createSkewedNormalisableRange (0.0f, 100.0f, 0.0f, 30.0f),
+        
+        // DClipDynamic:
+        { 0.0f, 1.0f, 1.0f },
+        // DClipCurve:
+        { 0.0f, 2.0f, 1.0f },
+        // DClipRise:
+        riseRange.getNormalisableRange(),
+        // DClipFall:
+        fallRange.getNormalisableRange(),
+        // DClipThreshold:
+        { 4.0f, 24.0f, 1.0f }
     };
 
     inline const float DefaultValue[NumParameters]
@@ -174,7 +218,13 @@ namespace Parameter
         0.0f,   // Output Gain
         1.0f,   // Modulation Rate
         50.0f,  // Modulation Depth
-        30.0f   // Stereo Spread
+        30.0f,  // Stereo Spread
+        
+        1.0f,   // DClipDynamic
+        1.0f,   // DClipCurve
+        5.0f,   // DClipRise
+        50.0f,  // DClipFall
+        8.0f,   // DClipThreshold
     };
 
     inline const String Label[NumParameters]
@@ -189,7 +239,13 @@ namespace Parameter
         " dB",  // Output Gain
         " Hz",  // Modulation Rate
         " %",   // Modulation Depth
-        " %"    // Stereo Spread
+        " %",   // Stereo Spread
+        
+        "",     // DClipDynamic
+        "",     // DClipCurve
+        " ms",  // DClipRise
+        " ms",  // DClipFall
+        " dB"   // DClipThreshold
     };
 
     inline const auto stringFromFxTypeValue = [] (float value, int /*maxStringLength*/)
@@ -222,6 +278,12 @@ namespace Parameter
         showDecimalPlaces<2>,       // Modulation Rate
         showDecimalPlaces<0>,       // Modulation Depth
         showDecimalPlaceBelow<10>,  // Stereo Spread
+        
+        stringFromToggleValue,      // DClipDynamic
+        showDecimalPlaces<0>,       // DClipCurve
+        showDecimalPlaceBelow<1>,   // DClipRise
+        showDecimalPlaces<0>,       // DClipFall
+        showDecimalPlaces<0>        // DClipThreshold
     };
 
     inline const std::initializer_list<float> majorTicks[NumParameters]
@@ -247,7 +309,9 @@ namespace Parameter
         // Modulation Depth:
         { 0.0f, 100.0f, 50.0f },
         // Stereo Spread:
-        {}
+        {},
+        
+        {}, {}, {}, {}, {}
     };
 
     inline const std::initializer_list<float> minorTicks[NumParameters]
@@ -273,6 +337,8 @@ namespace Parameter
         // Modulation Depth:
         { 10, 20, 30, 40, 60, 70, 80, 90 },
         // Stereo Spread:
-        {}
+        {},
+        
+        {}, {}, {}, {}, {}
     };
 } // end namespace Parameter
