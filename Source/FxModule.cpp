@@ -202,6 +202,7 @@ void FxModule::process (const float* inAudio, float* outAudio,
                 
             case DClip::Smoothed:
                 thresholdInDb = jlimit (-16.0f, -1.0f, levelInDb + mClippingThreshold);
+                // NB: Smoothing the value in dB!
                 thresholdInDb = wn_dbg_tanhMap (thresholdInDb);
                 break;
                 
