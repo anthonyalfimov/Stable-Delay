@@ -21,7 +21,8 @@ void FxModule::setState (float driveInDecibels, bool applyBoost,
                          float modRate, float modDepth, float stereoWidth,
                          bool shouldOffsetModulation,
                          bool dynamicClipping, SaturationCurve clippingCurve,
-                         float clipRise, float clipFall, float clipThreshold)
+                         float clipRise, float clipFall, float clipThreshold,
+                         DClip::Mode clipMode)
 {
     // Set dynamic threshold detector rise and fall time constants
     mDetector.setState (clipRise /*ms*/, clipFall /*ms*/);
@@ -31,6 +32,7 @@ void FxModule::setState (float driveInDecibels, bool applyBoost,
     
     mUseDynamicClipping = dynamicClipping;
     mClippingThreshold = clipThreshold;
+    mClipMode = clipMode;
     
     // Set delay input drive parameters
     float preGainInDecibels = driveInDecibels;
@@ -136,7 +138,12 @@ void FxModule::reset()
 
     // Reset contained modules
     mPreSaturatorGain.reset();
-    mDetector.reset();
+    
+    if (mClipMode == DClip::PreFilter)
+        mDetector.reset (Decibels::decibelsToGain (-16.0f));
+    else
+        mDetector.reset();
+    
     mSaturator.reset();
     mPostSaturatorGain.reset();
     mDelay.reset();
@@ -145,6 +152,11 @@ void FxModule::reset()
     // Reset smoothed parameters
     mTimeSmoothed.reset (mSampleRate, 0.1);
     mFeedbackSmoothed.reset (mSampleRate, 0.05);
+}
+
+float wn_dbg_tanhMap (float x)
+{
+    return (64 * x * x * x - 816 * x*x - 3444 * x - 34289) / (18 * (16 * x * x + 272 * x + 1831));
 }
 
 void FxModule::process (const float* inAudio, float* outAudio,
@@ -167,14 +179,39 @@ void FxModule::process (const float* inAudio, float* outAudio,
 
     // WRITE SAMPLE TO THE DELAY BUFFER AND ADVANCE THE WRITE HEAD
         float writeSample = inAudio[i];
+        float detectorSample = std::abs (writeSample);
 
-        // TODO: Clamp threshold before or after the DetectorFilter?
+        // TODO: What if we pass the value in dB through SlewFilter?
+        
+        if (mClipMode == DClip::PreFilter)
+        {
+            float sampleInDb = Decibels::gainToDecibels (detectorSample);
+            sampleInDb = jlimit (-16.0f, -1.0f, sampleInDb + mClippingThreshold);
+            detectorSample = Decibels::decibelsToGain (sampleInDb);
+        }
 
         const float levelInDb
-        = Decibels::gainToDecibels (mDetector.processSample (std::abs (writeSample)));
-        const float thresholdInDb = jlimit (-16.0f, -1.0f,
-                                            levelInDb + mClippingThreshold);
-
+        = Decibels::gainToDecibels (mDetector.processSample (detectorSample));
+        float thresholdInDb = 0.0f;
+        
+        switch (mClipMode)
+        {
+            case DClip::Normal:
+                thresholdInDb = jlimit (-16.0f, -1.0f, levelInDb + mClippingThreshold);
+                break;
+                
+            case DClip::Smoothed:
+                thresholdInDb = jlimit (-16.0f, -1.0f, levelInDb + mClippingThreshold);
+                thresholdInDb = wn_dbg_tanhMap (thresholdInDb);
+                break;
+                
+            case DClip::PreFilter:
+                thresholdInDb = levelInDb;
+                
+            default:
+                break;
+        }
+        
         // Apply pre-saturator gain
         mPreSaturatorGain.process (&writeSample, &writeSample, 1);
 

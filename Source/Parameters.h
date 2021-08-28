@@ -52,6 +52,16 @@ namespace Toggle
 
 } // end namespace Toggle
 
+namespace DClip
+{
+    enum Mode : int
+    {
+        Normal = 0,
+        Smoothed,
+        PreFilter
+    };
+}
+
 // TODO: Consider turning the Parameter namespace into a class
 //  This will allow to have direct control over the lifetime of the contained
 //  objects, which is becoming more important as these objects become more
@@ -80,6 +90,7 @@ namespace Parameter
         DClipRise,
         DClipFall,
         DClipThreshold,
+        DClipMode,
         
         NumParameters
     };
@@ -104,7 +115,8 @@ namespace Parameter
         "DClipCurve",
         "DClipRise",
         "DClipFall",
-        "DClipThreshold"
+        "DClipThreshold",
+        "DClipMode"
     };
 
     inline const String Name[NumParameters]
@@ -125,7 +137,8 @@ namespace Parameter
         "Clip: Curve",
         "Clip: Rise",
         "Clip: Fall",
-        "Clip: Threshold"
+        "Clip: Threshold",
+        "Clip: Mode"
     };
 
     // TODO: DRY generation of ranges and ticks from min, max and mid values
@@ -203,7 +216,9 @@ namespace Parameter
         // DClipFall:
         fallRange.getNormalisableRange(),
         // DClipThreshold:
-        { 4.0f, 24.0f, 1.0f }
+        { 4.0f, 24.0f, 1.0f },
+        // DClipMode:
+        { 0.0f, 2.0f, 1.0f }
     };
 
     inline const float DefaultValue[NumParameters]
@@ -225,6 +240,7 @@ namespace Parameter
         5.0f,   // DClipRise
         50.0f,  // DClipFall
         8.0f,   // DClipThreshold
+        DClip::Normal    // DClipMode
     };
 
     inline const String Label[NumParameters]
@@ -245,7 +261,8 @@ namespace Parameter
         "",     // DClipCurve
         " ms",  // DClipRise
         " ms",  // DClipFall
-        " dB"   // DClipThreshold
+        " dB",  // DClipThreshold
+        ""      // DClipMode
     };
 
     inline const auto stringFromFxTypeValue = [] (float value, int /*maxStringLength*/)
@@ -260,6 +277,29 @@ namespace Parameter
         const auto toggleIndex = static_cast<Toggle::Index> (value);
 
         return Toggle::Label[toggleIndex];
+    };
+    
+    inline const auto stringFromDClipMode = [] (float value, int /*maxStringLength*/)
+    {
+        const auto type = static_cast<int> (value);
+        
+        switch (type)
+        {
+            case DClip::Normal:
+                return "Normal";
+                break;
+                
+            case DClip::Smoothed:
+                return "Smoothed";
+                break;
+                
+            case DClip::PreFilter:
+                return "Pre Filter";
+                break;
+                
+            default:
+                return "Error";
+        }
     };
 
     using stringFromValueFunction = std::function<String(float value,
@@ -283,7 +323,8 @@ namespace Parameter
         showDecimalPlaces<0>,       // DClipCurve
         showDecimalPlaceBelow<1>,   // DClipRise
         showDecimalPlaces<0>,       // DClipFall
-        showDecimalPlaces<0>        // DClipThreshold
+        showDecimalPlaces<0>,       // DClipThreshold
+        stringFromDClipMode         // DClipMode
     };
 
     inline const std::initializer_list<float> majorTicks[NumParameters]
@@ -311,7 +352,7 @@ namespace Parameter
         // Stereo Spread:
         {},
         
-        {}, {}, {}, {}, {}
+        {}, {}, {}, {}, {}, {}
     };
 
     inline const std::initializer_list<float> minorTicks[NumParameters]
@@ -339,6 +380,6 @@ namespace Parameter
         // Stereo Spread:
         {},
         
-        {}, {}, {}, {}, {}
+        {}, {}, {}, {}, {}, {}
     };
 } // end namespace Parameter

@@ -108,6 +108,7 @@ private:
     std::atomic<float>* mDClipRiseValue = nullptr;
     std::atomic<float>* mDClipFallValue = nullptr;
     std::atomic<float>* mDClipThresholdValue = nullptr;
+    std::atomic<float>* mDClipModeValue = nullptr;
     
     std::unique_ptr<PresetManager> mPresetManager;
     

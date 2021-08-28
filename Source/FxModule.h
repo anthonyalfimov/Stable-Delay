@@ -30,7 +30,8 @@ public:
                    float modRate, float modDepth, float stereoWidth,
                    bool shouldOffsetModulation,
                    bool dynamicClipping, SaturationCurve clippingCurve,
-                   float clipRise, float clipFall, float clipThreshold);
+                   float clipRise, float clipFall, float clipThreshold,
+                   DClip::Mode clipMode);
     
 //==============================================================================
     void prepare (double sampleRate, int blockSize) override;
@@ -66,6 +67,7 @@ private:
     
     bool mUseDynamicClipping = true;
     float mClippingThreshold = 8.0f;
+    DClip::Mode mClipMode = DClip::Normal;
 
     inline static constexpr float boostAmountInDecibels = 10.0f;
 
