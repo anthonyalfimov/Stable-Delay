@@ -154,11 +154,6 @@ void FxModule::reset()
     mFeedbackSmoothed.reset (mSampleRate, 0.05);
 }
 
-float wn_dbg_tanhMap (float x)
-{
-    return (64 * x * x * x - 816 * x*x - 3444 * x - 34289) / (18 * (16 * x * x + 272 * x + 1831));
-}
-
 void FxModule::process (const float* inAudio, float* outAudio,
                         int numSamplesToRender)
 {
@@ -197,20 +192,35 @@ void FxModule::process (const float* inAudio, float* outAudio,
         switch (mClipMode)
         {
             case DClip::Normal:
+            {
                 thresholdInDb = jlimit (-16.0f, -1.0f, levelInDb + mClippingThreshold);
                 break;
+            }
                 
             case DClip::Smoothed:
-                thresholdInDb = jlimit (-16.0f, -1.0f, levelInDb + mClippingThreshold);
+            {
+                // [-oo, oo] -> [-16, -1] in a tanh smoothed fashion
+                
+                auto tanhTranfer = [] (float x)
+                {
+                    return (x * x * x - 51 * x * x + 435 * x - 4913) / (9 * (x * x + 17 * x + 241));
+                };
+                
                 // NB: Smoothing the value in dB!
-                thresholdInDb = wn_dbg_tanhMap (thresholdInDb);
+                thresholdInDb = tanhTranfer (levelInDb + mClippingThreshold);
+                thresholdInDb = jlimit (-16.0f, -1.0f, thresholdInDb);
                 break;
+            }
                 
             case DClip::PreFilter:
+            {
                 thresholdInDb = levelInDb;
+            }
                 
             default:
+            {
                 break;
+            }
         }
         
         // Apply pre-saturator gain
