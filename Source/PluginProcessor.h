@@ -13,7 +13,6 @@
 #include "MeterProbe.h"
 #include "FxModule.h"
 #include "DryWetModule.h"
-#include "SaturationModule.h"
 #include "PresetManager.h"
 
 //==============================================================================
@@ -83,7 +82,6 @@ private:
     OwnedArray<MeterProbe> mInputMeterProbe;
     OwnedArray<FxModule> mFxProcessor;
     OwnedArray<DryWetModule> mDryWetMixer;
-    OwnedArray<SaturationModule> mOutputClipper;
     OwnedArray<GainModule> mOutputGain;
     OwnedArray<MeterProbe> mOutputMeterProbe;
     
