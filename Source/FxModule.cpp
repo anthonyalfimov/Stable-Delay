@@ -174,7 +174,10 @@ void FxModule::process (const float* inAudio, float* outAudio,
 
     // WRITE SAMPLE TO THE DELAY BUFFER AND ADVANCE THE WRITE HEAD
         float writeSample = inAudio[i];
-        float detectorSample = std::abs (writeSample);
+        
+        // MARK: FeedbackSmoothed value is pre-boosted to compensate for Drive
+        const float feedbackSample = readSample * mFeedbackSmoothed.getNextValue();
+        float detectorSample = std::abs (writeSample + feedbackSample);
 
         // TODO: What if we pass the value in dB through SlewFilter?
         
@@ -227,7 +230,7 @@ void FxModule::process (const float* inAudio, float* outAudio,
         mPreSaturatorGain.process (&writeSample, &writeSample, 1);
 
         // Add feedback sample
-        writeSample += readSample * mFeedbackSmoothed.getNextValue();
+        writeSample += feedbackSample;
         
         // Apply threshold-move boost
         if (mUseDynamicClipping)
