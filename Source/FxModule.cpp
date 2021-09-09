@@ -16,7 +16,7 @@ FxModule::FxModule()
     
 }
 
-void FxModule::setState (float driveInDecibels, bool applyBoost,
+void FxModule::setState (float driveInDecibels,
                          float time, float feedback, float type,
                          float modRate, float modDepth, float stereoWidth,
                          bool shouldOffsetModulation,
@@ -30,25 +30,12 @@ void FxModule::setState (float driveInDecibels, bool applyBoost,
     // Set the saturation curve
     mSaturator.setState (clippingCurve);
     
+    // Set delay input drive parameters
+    mDriveSmoothed.setTargetValue (driveInDecibels);
+
     mUseDynamicClipping = dynamicClipping;
     mClippingThreshold = clipThreshold;
     mClipMode = clipMode;
-    
-    // Set delay input drive parameters
-    float preGainInDecibels = driveInDecibels;
-    //  To achieve approximate equal-loudness drive, reduce the level after the
-    //  saturation by half the amount of drive in decibels
-    float postGainInDecibels = -0.5f * driveInDecibels;
-
-    if (applyBoost)
-    {
-        // Boost is applied un-compensated to bring up low-level signals
-        preGainInDecibels += boostAmountInDecibels;
-        postGainInDecibels -= boostAmountInDecibels;
-    }
-
-    mPreSaturatorGain.setState (preGainInDecibels);
-    mPostSaturatorGain.setState (postGainInDecibels);
 
     // Set delay and modulation parameters
     mTypeValue = static_cast<FxType::Index> (type);
@@ -60,11 +47,7 @@ void FxModule::setState (float driveInDecibels, bool applyBoost,
         case FxType::Delay:
         {
             mTimeSmoothed.setTargetValue (time / 1000.0);   // convert from ms to s
-
-            feedback = feedback / 100.0f; // convert from %
-            // Compensate feedback reduction due to post-saturation gain decrease
-            feedback = feedback * Decibels::decibelsToGain (-postGainInDecibels);
-            mFeedbackSmoothed.setTargetValue (feedback);
+            mFeedbackSmoothed.setTargetValue (feedback / 100.0f);    // convert from %
 
             // TODO: Consider using PiecewiseNormalisableRange to map delay modulation
 
@@ -81,9 +64,7 @@ void FxModule::setState (float driveInDecibels, bool applyBoost,
         case FxType::Chorus:
         {
             mTimeSmoothed.setTargetValue (chorusCentreTime);
-
             mFeedbackSmoothed.setTargetValue (0.0f);    // disable feedback
-
             modAmplitude = chorusTimeAmplitude * modDepth / 100.0f;  // convert from %
             break;
         }
@@ -91,12 +72,7 @@ void FxModule::setState (float driveInDecibels, bool applyBoost,
         case FxType::Flanger:
         {
             mTimeSmoothed.setTargetValue (flangerCentreTime);
-
-            feedback = feedback / 100.0f; // convert from %
-            // Compensate feedback reduction due to post-saturation gain decrease
-            feedback = feedback * Decibels::decibelsToGain (-postGainInDecibels);
-            mFeedbackSmoothed.setTargetValue (feedback);
-
+            mFeedbackSmoothed.setTargetValue (feedback / 100.0f); // convert from %
             modAmplitude = flangerTimeAmplitude * modDepth / 100.0f; // convert from %
             break;
         }
@@ -117,10 +93,8 @@ void FxModule::prepare (double sampleRate, int blockSize)
     DspModule::prepare (sampleRate, blockSize);
 
     // Prepare contained modules
-    mPreSaturatorGain.prepare (sampleRate, blockSize);
     mDetector.prepare (sampleRate, blockSize);
     mSaturator.prepare (sampleRate, blockSize);
-    mPostSaturatorGain.prepare (sampleRate, blockSize);
     mDelay.prepare (sampleRate, blockSize);
     mLfo.prepare (sampleRate, blockSize);
 
@@ -137,21 +111,20 @@ void FxModule::reset()
         FloatVectorOperations::clear (mModulationBuffer.get(), mBlockSize);
 
     // Reset contained modules
-    mPreSaturatorGain.reset();
-    
+
     if (mClipMode == DClip::PreFilter)
         mDetector.reset (Decibels::decibelsToGain (-16.0f));
     else
         mDetector.reset();
     
     mSaturator.reset();
-    mPostSaturatorGain.reset();
     mDelay.reset();
     mLfo.reset();
 
     // Reset smoothed parameters
     mTimeSmoothed.reset (mSampleRate, 0.1);
     mFeedbackSmoothed.reset (mSampleRate, 0.05);
+    mDriveSmoothed.reset (mSampleRate, 0.05f);
 }
 
 void FxModule::process (const float* inAudio, float* outAudio,
@@ -174,9 +147,7 @@ void FxModule::process (const float* inAudio, float* outAudio,
 
     // WRITE SAMPLE TO THE DELAY BUFFER AND ADVANCE THE WRITE HEAD
         float writeSample = inAudio[i];
-        
-        // MARK: FeedbackSmoothed value is pre-boosted to compensate for Drive
-        const float feedbackSample = readSample * mFeedbackSmoothed.getNextValue();
+        float feedbackSample = readSample * mFeedbackSmoothed.getNextValue();
         float detectorSample = std::abs (writeSample + feedbackSample);
 
         // TODO: What if we pass the value in dB through SlewFilter?
@@ -227,7 +198,11 @@ void FxModule::process (const float* inAudio, float* outAudio,
         }
         
         // Apply pre-saturator gain
-        mPreSaturatorGain.process (&writeSample, &writeSample, 1);
+        const float preBoostInDb = mDriveSmoothed.getNextValue();
+        const float postCutInDb = preBoostInDb * 0.5f;
+
+        writeSample *= Decibels::decibelsToGain (preBoostInDb);
+        feedbackSample *= Decibels::decibelsToGain (postCutInDb);
 
         // Add feedback sample
         writeSample += feedbackSample;
@@ -239,7 +214,7 @@ void FxModule::process (const float* inAudio, float* outAudio,
         // Pass the signal through the saturator before writing it to the buffer
         mSaturator.process (&writeSample, &writeSample, 1);
         // Apply post-saturator gain
-        mPostSaturatorGain.process (&writeSample, &writeSample, 1);
+        writeSample *= Decibels::decibelsToGain (-postCutInDb);
 
         // Apply threshold-move cut
         if (mUseDynamicClipping)

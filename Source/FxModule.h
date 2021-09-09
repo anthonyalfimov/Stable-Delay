@@ -25,7 +25,7 @@ public:
     FxModule();
 
 //==============================================================================
-    void setState (float driveInDecibels, bool applyBoost,
+    void setState (float driveInDecibels,
                    float time, float feedback, float type,
                    float modRate, float modDepth, float stereoWidth,
                    bool shouldOffsetModulation,
@@ -60,16 +60,13 @@ private:
 
 //==============================================================================
     // Drive
-    GainModule mPreSaturatorGain;
+    SmoothedValue<float> mDriveSmoothed;
     SlewFilterModule mDetector;
     SaturationModule mSaturator;
-    GainModule mPostSaturatorGain;
-    
+
     bool mUseDynamicClipping = true;
     float mClippingThreshold = 8.0f;
     DClip::Mode mClipMode = DClip::Normal;
-
-    inline static constexpr float boostAmountInDecibels = 10.0f;
 
 //==============================================================================
     // Delay

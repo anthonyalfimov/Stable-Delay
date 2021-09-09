@@ -428,7 +428,6 @@ void ReallyBasicDelayAudioProcessor::updateParameters()
     
     for (int channel = 0; channel < mFxProcessor.size(); ++channel)
         mFxProcessor[channel]->setState (mInputDriveValue->load(),
-                                         mInputBoostValue->load() == Toggle::On,
                                          mDelayTimeValue->load(),
                                          feedback,
                                          mFxTypeValue->load(),
