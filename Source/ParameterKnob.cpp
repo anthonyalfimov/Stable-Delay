@@ -390,6 +390,9 @@ ParameterKnob::ParameterKnob (AudioProcessorValueTreeState& stateToControl,
     addAndMakeVisible (mToggle.get());
     mToggle->toBehind (mLabel.get());   // place toggle behind knob label
 
+    // MARK: Remove to re-enable keyboard control
+    mToggle->setWantsKeyboardFocus (false);
+
     mHasToggle = true;
 }
 

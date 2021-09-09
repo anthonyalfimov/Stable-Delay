@@ -24,7 +24,7 @@ FxPanel::FxPanel (ReallyBasicDelayAudioProcessor& processor)
                                                            RadioGroup::FxType,
                                                            FxType::Label);
 
-    // MARK: Remove this to re-enable FX Type Dropdown keyboard control
+    // MARK: Remove to re-enable keyboard control
     mFxTypeDropdown->setWantsKeyboardFocus (false);
 
     const int comboBoxWidth = 300;

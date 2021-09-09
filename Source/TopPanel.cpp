@@ -28,6 +28,9 @@ TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor)
     addAndMakeVisible (mPresetList.get());
     updatePresetList();
 
+    // MARK: Remove to re-enable keyboard control
+    mPresetList->setWantsKeyboardFocus (false);
+
     // Set up Preset List mouse event callbacks
     WeakReference<Component> presetListWeakReference (mPresetList.get());
     auto repaintPresetList = [presetListWeakReference] (const MouseEvent& /*event*/)
@@ -56,6 +59,9 @@ TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor)
     mNewPreset->setButtonText ("NEW");
     mNewPreset->addListener (this);
     addAndMakeVisible (mNewPreset.get());
+
+    // MARK: Remove to re-enable keyboard control
+    mNewPreset->setWantsKeyboardFocus (false);
     
     mSavePreset = std::make_unique<TextButton>();
     bounds.translate (buttonWidth + 2, 0);
@@ -63,6 +69,9 @@ TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor)
     mSavePreset->setButtonText ("SAVE");
     mSavePreset->addListener (this);
     addAndMakeVisible (mSavePreset.get());
+
+    // MARK: Remove to re-enable keyboard control
+    mSavePreset->setWantsKeyboardFocus (false);
     
     mSaveAsPreset = std::make_unique<TextButton>();
     bounds.translate (buttonWidth + 2, 0);
@@ -70,6 +79,9 @@ TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor)
     mSaveAsPreset->setButtonText ("SAVE AS");
     mSaveAsPreset->addListener (this);
     addAndMakeVisible (mSaveAsPreset.get());
+
+    // MARK: Remove to re-enable keyboard control
+    mSaveAsPreset->setWantsKeyboardFocus (false);
 
     // Set up the Title Logo
     mTitleLogo = std::make_unique<TitleLogo>();
