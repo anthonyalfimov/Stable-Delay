@@ -124,7 +124,7 @@ void FxModule::reset()
     // Reset smoothed parameters
     mTimeSmoothed.reset (mSampleRate, 0.1);
     mFeedbackSmoothed.reset (mSampleRate, 0.05);
-    mDriveSmoothed.reset (mSampleRate, 0.05f);
+    mDriveSmoothed.reset (mSampleRate, 0.0);
 }
 
 void FxModule::process (const float* inAudio, float* outAudio,
