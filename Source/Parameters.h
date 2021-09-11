@@ -168,18 +168,18 @@ namespace Parameter
         { { 2.0f, 12.0f, 0.1f }, 1.0f }
     };
     
-    inline const PiecewiseRange<float, 4> riseRange
+    inline const PiecewiseRange<float, 3> riseRange
     {
-        { { 0.1f, 1.0f, 0.1f }, 0.15f },
-        { { 1.0f, 10.0f, 1.0f }, 0.5f },
-        { { 10.0f, 100.0f, 1.0f }, 0.8f },
-        { { 100.0f, 500.0f, 1.0f }, 1.0f }
+        { { 0.01f, 0.1f, 0.01f }, 0.25f },
+        { { 0.1f, 1.0f, 0.1f }, 0.75f },
+        { { 1.0f, 10.0f, 1.0f }, 1.0f }
     };
     
-    inline const PiecewiseRange<float, 2> fallRange
+    inline const PiecewiseRange<float, 3> fallRange
     {
-        { { 10.0f, 100.0f, 1.0f }, 0.5f },
-        { { 100.0f, 1000.0f, 1.0f }, 1.0f }
+        { { 10.0f, 100.0f, 1.0f }, 0.4f },
+        { { 100.0f, 1000.0f, 1.0f }, 0.8f },
+        { { 1000.0f, 5000.0f, 10.0f }, 1.0f }
     };
 
     inline const NormalisableRange<float> Range[NumParameters]
@@ -237,8 +237,8 @@ namespace Parameter
         
         1.0f,   // DClipDynamic
         1.0f,   // DClipCurve
-        5.0f,   // DClipRise
-        50.0f,  // DClipFall
+        1.0f,   // DClipRise
+        500.0f,  // DClipFall
         8.0f,   // DClipThreshold
         DClip::Normal    // DClipMode
     };
@@ -321,7 +321,7 @@ namespace Parameter
         
         stringFromToggleValue,      // DClipDynamic
         showDecimalPlaces<0>,       // DClipCurve
-        showDecimalPlaceBelow<1>,   // DClipRise
+        showDecimalPlaces<2>,       // DClipRise
         showDecimalPlaces<0>,       // DClipFall
         showDecimalPlaces<0>,       // DClipThreshold
         stringFromDClipMode         // DClipMode

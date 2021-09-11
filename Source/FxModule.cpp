@@ -155,7 +155,7 @@ void FxModule::process (const float* inAudio, float* outAudio,
         if (mClipMode == DClip::PreFilter)
         {
             float sampleInDb = Decibels::gainToDecibels (detectorSample);
-            sampleInDb = jlimit (-16.0f, -1.0f, sampleInDb + mClippingThreshold);
+            sampleInDb = jlimit (-18.0f, -1.0f, sampleInDb + mClippingThreshold);
             detectorSample = Decibels::decibelsToGain (sampleInDb);
         }
 
@@ -167,13 +167,13 @@ void FxModule::process (const float* inAudio, float* outAudio,
         {
             case DClip::Normal:
             {
-                thresholdInDb = jlimit (-16.0f, -1.0f, levelInDb + mClippingThreshold);
+                thresholdInDb = jlimit (-18.0f, -1.0f, levelInDb + mClippingThreshold);
                 break;
             }
                 
             case DClip::Smoothed:
             {
-                // [-oo, oo] -> [-16, -1] in a tanh smoothed fashion
+                // [-oo, oo] -> [-18, -1] in a tanh smoothed fashion
                 
                 auto tanhTranfer = [] (float x)
                 {
@@ -182,7 +182,7 @@ void FxModule::process (const float* inAudio, float* outAudio,
                 
                 // NB: Smoothing the value in dB!
                 thresholdInDb = tanhTranfer (levelInDb + mClippingThreshold);
-                thresholdInDb = jlimit (-16.0f, -1.0f, thresholdInDb);
+                thresholdInDb = jlimit (-18.0f, -1.0f, thresholdInDb);
                 break;
             }
                 
