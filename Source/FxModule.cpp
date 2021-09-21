@@ -150,8 +150,8 @@ void FxModule::process (const float* inAudio, float* outAudio,
         float feedbackSample = readSample * mFeedbackSmoothed.getNextValue();
         float detectorSample = std::abs (writeSample + feedbackSample);
 
-        const float maxThreshold = -1.0f;
-        const float minThreshold = -18.0f;
+        const float maxThreshold = -1.0f;   // some protection against clipping?
+        const float minThreshold = -24.0f;  // TODO: what's the limit here?
         
         // TODO: What if we pass the value in dB through SlewFilter?
         if (mClipMode == DClip::PreFilter)
