@@ -150,12 +150,14 @@ void FxModule::process (const float* inAudio, float* outAudio,
         float feedbackSample = readSample * mFeedbackSmoothed.getNextValue();
         float detectorSample = std::abs (writeSample + feedbackSample);
 
-        // TODO: What if we pass the value in dB through SlewFilter?
+        const float maxThreshold = -1.0f;
+        const float minThreshold = -18.0f;
         
+        // TODO: What if we pass the value in dB through SlewFilter?
         if (mClipMode == DClip::PreFilter)
         {
             float sampleInDb = Decibels::gainToDecibels (detectorSample);
-            sampleInDb = jlimit (-18.0f, -1.0f, sampleInDb + mClippingThreshold);
+            sampleInDb = jlimit (minThreshold, maxThreshold, sampleInDb + mClippingThreshold);
             detectorSample = Decibels::decibelsToGain (sampleInDb);
         }
 
@@ -167,7 +169,7 @@ void FxModule::process (const float* inAudio, float* outAudio,
         {
             case DClip::Normal:
             {
-                thresholdInDb = jlimit (-18.0f, -1.0f, levelInDb + mClippingThreshold);
+                thresholdInDb = jlimit (minThreshold, maxThreshold, levelInDb + mClippingThreshold);
                 break;
             }
                 
@@ -182,7 +184,7 @@ void FxModule::process (const float* inAudio, float* outAudio,
                 
                 // NB: Smoothing the value in dB!
                 thresholdInDb = tanhTranfer (levelInDb + mClippingThreshold);
-                thresholdInDb = jlimit (-18.0f, -1.0f, thresholdInDb);
+                thresholdInDb = jlimit (minThreshold, maxThreshold, thresholdInDb);
                 break;
             }
                 
