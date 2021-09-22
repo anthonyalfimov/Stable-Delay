@@ -88,7 +88,7 @@ float DelayModule::getInterpolatedSample (double delayInSamples) const
     if (readPosition < 0.0)
         readPosition += mAudioBufferSize;
 
-    /* Temporarily disable intepolarion:
+    /* Temporarily disable intepolarion: */
     const int readPositionIndex0 = static_cast<int> (readPosition);
     const int readPositionIndex1 = (readPositionIndex0 + 1) % mAudioBufferSize;
 
@@ -99,8 +99,9 @@ float DelayModule::getInterpolatedSample (double delayInSamples) const
 
     // Linear interpolation:
     return readSample0 + fractionalReadPosition * (readSample1 - readSample0);
-    */
     
+    /*
     const int readPositionIndex = static_cast<int> (readPosition);
     return mAudioBuffer[readPositionIndex];
+    */
 }
