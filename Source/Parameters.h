@@ -170,7 +170,7 @@ namespace Parameter
     
     inline const PiecewiseRange<float, 3> riseRange
     {
-        { { 0.01f, 0.1f, 0.01f }, 0.25f },
+        { { 0.04f, 0.1f, 0.01f }, 0.2f },
         { { 0.1f, 1.0f, 0.1f }, 0.75f },
         { { 1.0f, 10.0f, 1.0f }, 1.0f }
     };
@@ -185,7 +185,7 @@ namespace Parameter
     inline const NormalisableRange<float> Range[NumParameters]
     {
         // Input Drive:
-        { 0.0f, 24.0f, 0.1f },
+        { 0.0f, 36.0f, 0.1f },
         // Input Boost:
         { 0.0f, 1.0f, 1.0f },
         // Time:
@@ -237,8 +237,8 @@ namespace Parameter
         
         1.0f,   // DClipDynamic
         1.0f,   // DClipCurve
-        1.0f,   // DClipRise
-        500.0f,  // DClipFall
+        0.2f,   // DClipRise
+        1200.0f,  // DClipFall
         8.0f,   // DClipThreshold
         DClip::Normal    // DClipMode
     };
@@ -330,7 +330,7 @@ namespace Parameter
     inline const std::initializer_list<float> majorTicks[NumParameters]
     {
         // Input Drive:
-        { 0.0f, 12.0f, 24.0f },
+        { 0.0f, 12.0f, 24.0f, 36.0f },
         // Input Boost:
         {},
         // Time:
