@@ -175,11 +175,11 @@ void FxModule::process (const float* inAudio, float* outAudio,
                 
             case DClip::Smoothed:
             {
-                // [-oo, oo] -> [-18, -1] in a tanh smoothed fashion
+                // [-oo, oo] -> [-36, -1] in a tanh smoothed fashion
                 
                 auto tanhTranfer = [] (float x)
                 {
-                    return (x * x * x - 51 * x * x + 435 * x - 4913) / (9 * (x * x + 17 * x + 241));
+                    return (x * x * x - 111 * x * x + 3135 * x - 50653) / (9 * (x * x + 37 * x + 1261));
                 };
                 
                 // NB: Smoothing the value in dB!
