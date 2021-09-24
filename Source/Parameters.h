@@ -238,7 +238,7 @@ namespace Parameter
         1.0f,   // DClipDynamic
         1.0f,   // DClipCurve
         0.2f,   // DClipRise
-        1200.0f,  // DClipFall
+        1200.0f,// DClipFall
         8.0f,   // DClipThreshold
         DClip::Normal    // DClipMode
     };

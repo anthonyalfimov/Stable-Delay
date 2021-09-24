@@ -67,6 +67,9 @@ private:
     bool mUseDynamicClipping = true;
     float mClippingThreshold = 8.0f;
     DClip::Mode mClipMode = DClip::Normal;
+    
+    inline static constexpr float detectorRiseTime = 0.2f /*ms*/;
+    inline static constexpr float detectorFallTime = 1200.0f /*ms*/;
 
 //==============================================================================
     // Delay
