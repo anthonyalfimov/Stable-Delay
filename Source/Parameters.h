@@ -57,8 +57,8 @@ namespace DClip
     enum Mode : int
     {
         Normal = 0,
-        Smoothed,
-        PreFilter
+        PreFilter,
+        Smoothed
     };
 }
 
@@ -289,12 +289,12 @@ namespace Parameter
                 return "Normal";
                 break;
                 
-            case DClip::Smoothed:
-                return "Smoothed";
-                break;
-                
             case DClip::PreFilter:
                 return "Pre Filter";
+                break;
+                
+            case DClip::Smoothed:
+                return "Smoothed";
                 break;
                 
             default:
