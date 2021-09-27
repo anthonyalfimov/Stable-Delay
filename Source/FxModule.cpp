@@ -14,28 +14,26 @@
 FxModule::FxModule()
 {
     
+    // Set the saturation curve
+    mSaturator.setState (SaturationCurve::beta);
+    
+    // Set dynamic threshold detector rise and fall time constants
+    mDetector.setState (detectorRiseTime, detectorFallTime);
 }
 
 void FxModule::setState (float driveInDecibels,
                          float time, float feedback, float type,
                          float modRate, float modDepth, float stereoWidth,
                          bool shouldOffsetModulation,
-                         bool dynamicClipping, SaturationCurve clippingCurve,
-                         float clipRise, float clipFall, float clipThreshold,
-                         DClip::Mode clipMode)
+                         bool dynamicClipping, SaturationCurve /*clippingCurve*/,
+                         float /*clipRise*/, float /*clipFall*/, float clipThreshold,
+                         DClip::Mode /*clipMode*/)
 {
-    // Set dynamic threshold detector rise and fall time constants
-    mDetector.setState (clipRise /*ms*/, clipFall /*ms*/);
-
-    // Set the saturation curve
-    mSaturator.setState (clippingCurve);
-    
     // Set delay input drive parameters
     mDriveSmoothed.setTargetValue (driveInDecibels);
 
     mUseDynamicClipping = dynamicClipping;
     mClippingThreshold = clipThreshold;
-    mClipMode = clipMode;
 
     // Set delay and modulation parameters
     mTypeValue = static_cast<FxType::Index> (type);
@@ -111,11 +109,7 @@ void FxModule::reset()
         FloatVectorOperations::clear (mModulationBuffer.get(), mBlockSize);
 
     // Reset contained modules
-
-    if (mClipMode == DClip::PreFilter)
-        mDetector.reset (Decibels::decibelsToGain (-16.0f));
-    else
-        mDetector.reset();
+    mDetector.reset();
     
     mSaturator.reset();
     mDelay.reset();
@@ -153,37 +147,10 @@ void FxModule::process (const float* inAudio, float* outAudio,
         const float maxThreshold = -1.0f;   // some protection against clipping?
         const float minThreshold = -36.0f;  // TODO: what's the limit here?
         
-        // TODO: What if we pass the value in dB through SlewFilter?
-        if (mClipMode == DClip::PreFilter)
-        {
-            float sampleInDb = Decibels::gainToDecibels (detectorSample);
-            sampleInDb = jlimit (minThreshold, maxThreshold, sampleInDb + mClippingThreshold);
-            detectorSample = Decibels::decibelsToGain (sampleInDb);
-        }
-
         const float levelInDb
         = Decibels::gainToDecibels (mDetector.processSample (detectorSample));
-        float thresholdInDb = 0.0f;
-        
-        switch (mClipMode)
-        {
-            case DClip::Normal:
-            {
-                thresholdInDb = jlimit (minThreshold, maxThreshold, levelInDb + mClippingThreshold);
-                break;
-            }
-                
-            case DClip::PreFilter:
-            {
-                thresholdInDb = levelInDb;
-            }
-                
-            default:
-            {
-                break;
-            }
-        }
-        
+        float thresholdInDb = jlimit (minThreshold, maxThreshold, levelInDb + mClippingThreshold);
+
         // Apply pre-saturator gain
         const float preBoostInDb = mDriveSmoothed.getNextValue();
         const float postCutInDb = preBoostInDb * 0.5f;
