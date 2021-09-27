@@ -173,21 +173,6 @@ void FxModule::process (const float* inAudio, float* outAudio,
                 break;
             }
                 
-            case DClip::Smoothed:
-            {
-                // [-oo, oo] -> [-36, -1] in a tanh smoothed fashion
-                
-                auto tanhTranfer = [] (float x)
-                {
-                    return (x * x * x - 111 * x * x + 3135 * x - 50653) / (9 * (x * x + 37 * x + 1261));
-                };
-                
-                // NB: Smoothing the value in dB!
-                thresholdInDb = tanhTranfer (levelInDb + mClippingThreshold);
-                thresholdInDb = jlimit (minThreshold, maxThreshold, thresholdInDb);
-                break;
-            }
-                
             case DClip::PreFilter:
             {
                 thresholdInDb = levelInDb;

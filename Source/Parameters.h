@@ -57,8 +57,7 @@ namespace DClip
     enum Mode : int
     {
         Normal = 0,
-        PreFilter,
-        Smoothed
+        PreFilter
     };
 }
 
@@ -218,7 +217,7 @@ namespace Parameter
         // DClipThreshold:
         { 4.0f, 24.0f, 1.0f },
         // DClipMode:
-        { 0.0f, 2.0f, 1.0f }
+        { 0.0f, 1.0f, 1.0f }
     };
 
     inline const float DefaultValue[NumParameters]
@@ -291,10 +290,6 @@ namespace Parameter
                 
             case DClip::PreFilter:
                 return "Pre Filter";
-                break;
-                
-            case DClip::Smoothed:
-                return "Smoothed";
                 break;
                 
             default:
