@@ -210,7 +210,7 @@ namespace Parameter
         // DClipDynamic:
         { 0.0f, 1.0f, 1.0f },
         // DClipCurve:
-        { 0.0f, 2.0f, 1.0f },
+        { 1.0f, 2.0f, 1.0f },
         // DClipRise:
         riseRange.getNormalisableRange(),
         // DClipFall:
