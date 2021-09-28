@@ -162,9 +162,9 @@ namespace Parameter
 
     inline const PiecewiseRange<float, 3> gainRange
     {
-        { { -12.0f, -2.0f, 0.1f }, 0.35f },
-        { { -2.0f, 2.0f, 0.1f }, 0.65f },
-        { { 2.0f, 12.0f, 0.1f }, 1.0f }
+        { { -10.0f, -2.0f, 0.1f }, 0.33f },
+        { { -2.0f, 2.0f, 0.1f }, 0.67f },
+        { { 2.0f, 10.0f, 0.1f }, 1.0f }
     };
     
     inline const PiecewiseRange<float, 3> riseRange
@@ -184,7 +184,7 @@ namespace Parameter
     inline const NormalisableRange<float> Range[NumParameters]
     {
         // Input Drive:
-        { 0.0f, 36.0f, 0.1f },
+        { 0.0f, 24.0f, 0.1f },
         // Input Boost:
         { 0.0f, 1.0f, 1.0f },
         // Time:
@@ -325,7 +325,7 @@ namespace Parameter
     inline const std::initializer_list<float> majorTicks[NumParameters]
     {
         // Input Drive:
-        { 0.0f, 12.0f, 24.0f, 36.0f },
+        { 0.0f, 12.0f, 24.0f },
         // Input Boost:
         {},
         // Time:
@@ -339,7 +339,7 @@ namespace Parameter
         // Type:
         {},
         // Output Gain:
-        { -12.0f, 12.0f, 0.0f },
+        { -10.0f, 10.0f, 0.0f },
         // Modulation Rate:
         { 0.01f, 10.0f, 0.1f, 1.0f },
         // Modulation Depth:
@@ -367,7 +367,7 @@ namespace Parameter
         // Type:
         {},
         // Output Gain:
-        { 1, 2, 4, 6, 8, 10, -1, -2, -4, -6, -8, -10 },
+        { 1, 2, 4, 6, 8, -1, -2, -4, -6, -8 },
         // Modulation Rate:
         { 0.05f, 0.4f, 0.7f, 2, 3, 4, 5, 6, 7, 8, 9 },
         // Modulation Depth:
