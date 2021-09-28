@@ -29,9 +29,7 @@ public:
                    float time, float feedback, float type,
                    float modRate, float modDepth, float stereoWidth,
                    bool shouldOffsetModulation,
-                   bool dynamicClipping, SaturationCurve clippingCurve,
-                   float clipRise, float clipFall, float clipThreshold,
-                   DClip::Mode clipMode);
+                   bool dynamicClipping, float minThreshold);
     
 //==============================================================================
     void prepare (double sampleRate, int blockSize) override;
@@ -65,8 +63,10 @@ private:
     SaturationModule mSaturator;
 
     bool mUseDynamicClipping = true;
-    float mClippingThreshold = 8.0f;
     
+    float mMinThreshold = -36.0f /*dB*/;
+
+    inline static constexpr float clipperBaseThresholdDelta = 8.0f /*dB*/;
     inline static constexpr float detectorRiseTime = 0.2f /*ms*/;
     inline static constexpr float detectorFallTime = 1200.0f /*ms*/;
 

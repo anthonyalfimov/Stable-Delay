@@ -25,15 +25,13 @@ void FxModule::setState (float driveInDecibels,
                          float time, float feedback, float type,
                          float modRate, float modDepth, float stereoWidth,
                          bool shouldOffsetModulation,
-                         bool dynamicClipping, SaturationCurve /*clippingCurve*/,
-                         float /*clipRise*/, float /*clipFall*/, float clipThreshold,
-                         DClip::Mode /*clipMode*/)
+                         bool dynamicClipping, float minThreshold)
 {
     // Set delay input drive parameters
     mDriveSmoothed.setTargetValue (driveInDecibels);
 
     mUseDynamicClipping = dynamicClipping;
-    mClippingThreshold = clipThreshold;
+    mMinThreshold = minThreshold;
 
     // Set delay and modulation parameters
     mTypeValue = static_cast<FxType::Index> (type);
@@ -145,11 +143,12 @@ void FxModule::process (const float* inAudio, float* outAudio,
         float detectorSample = std::abs (writeSample + feedbackSample);
 
         const float maxThreshold = -1.0f;   // some protection against clipping?
-        const float minThreshold = -36.0f;  // TODO: what's the limit here?
+        //const float minThreshold = -36.0f;  // TODO: what's the limit here?
         
         const float levelInDb
         = Decibels::gainToDecibels (mDetector.processSample (detectorSample));
-        float thresholdInDb = jlimit (minThreshold, maxThreshold, levelInDb + mClippingThreshold);
+        float thresholdInDb = jlimit (mMinThreshold, maxThreshold,
+                                      levelInDb + clipperBaseThresholdDelta);
 
         // Apply pre-saturator gain
         const float preBoostInDb = mDriveSmoothed.getNextValue();
