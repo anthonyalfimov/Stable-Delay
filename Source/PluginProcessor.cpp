@@ -403,8 +403,16 @@ void ReallyBasicDelayAudioProcessor::initialiseParameters()
 
     mDClipDynamicValue
     = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipDynamic]);
-    mDClipMinThresholdValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipMinThreshold]);
+    mDClipCurveValue
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipCurve]);
+    mDClipRiseValue
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipRise]);
+    mDClipFallValue
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipFall]);
+    mDClipThresholdValue
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipThreshold]);
+    mDClipModeValue
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipMode]);
     
     updateParameters();
 }
@@ -428,7 +436,11 @@ void ReallyBasicDelayAudioProcessor::updateParameters()
                                          stereoSpread,
                                          (channel != 0),
                                          mDClipDynamicValue->load() == Toggle::On,
-                                         mDClipMinThresholdValue->load());
+                                         static_cast<SaturationCurve> (mDClipCurveValue->load()),
+                                         mDClipRiseValue->load(),
+                                         mDClipFallValue->load(),
+                                         mDClipThresholdValue->load(),
+                                         static_cast<DClip::Mode> (mDClipModeValue->load()));
 
     for (auto dryWetMixer : mDryWetMixer)
         dryWetMixer->setState (mDryWetValue->load());
