@@ -104,11 +104,11 @@ private:
     std::atomic<float>* mStereoSpreadValue = nullptr;
     
     std::atomic<float>* mDClipDynamicValue = nullptr;
-    std::atomic<float>* mDClipCurveValue = nullptr;
     std::atomic<float>* mDClipRiseValue = nullptr;
     std::atomic<float>* mDClipFallValue = nullptr;
-    std::atomic<float>* mDClipThresholdValue = nullptr;
-    std::atomic<float>* mDClipModeValue = nullptr;
+    std::atomic<float>* mDClipThresholdDeltaValue = nullptr;
+    std::atomic<float>* mDClipMinThresholdValue = nullptr;
+    std::atomic<float>* mDClipDetectorModeValue = nullptr;
     
     std::unique_ptr<PresetManager> mPresetManager;
     

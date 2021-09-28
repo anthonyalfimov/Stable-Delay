@@ -54,10 +54,10 @@ namespace Toggle
 
 namespace DClip
 {
-    enum Mode : int
+    enum DetectorMode : int
     {
-        Normal = 0,
-        PreFilter
+        Gain = 0,
+        Decibel
     };
 }
 
@@ -85,11 +85,11 @@ namespace Parameter
         StereoSpread,
         
         DClipDynamic,
-        DClipCurve,
         DClipRise,
         DClipFall,
-        DClipThreshold,
-        DClipMode,
+        DClipThresholdDelta,
+        DClipMinThreshold,
+        DClipDetectorMode,
         
         NumParameters
     };
@@ -111,11 +111,11 @@ namespace Parameter
         "StereoSpread",
         
         "DClipDynamic",
-        "DClipCurve",
         "DClipRise",
         "DClipFall",
-        "DClipThreshold",
-        "DClipMode"
+        "DClipThresholdDelta",
+        "DClipMinThreshold",
+        "DClipDetectorMode"
     };
 
     inline const String Name[NumParameters]
@@ -133,11 +133,11 @@ namespace Parameter
         "Spread",
         
         "Clip: Dynamic",
-        "Clip: Curve",
         "Clip: Rise",
         "Clip: Fall",
-        "Clip: Threshold",
-        "Clip: Mode"
+        "Clip: Threshold Delta",
+        "Clip: Min Threshold",
+        "Clip: Detector Mode"
     };
 
     // TODO: DRY generation of ranges and ticks from min, max and mid values
@@ -184,7 +184,7 @@ namespace Parameter
     inline const NormalisableRange<float> Range[NumParameters]
     {
         // Input Drive:
-        { 0.0f, 24.0f, 0.1f },
+        { 0.0f, 32.0f, 0.1f },
         // Input Boost:
         { 0.0f, 1.0f, 1.0f },
         // Time:
@@ -208,15 +208,15 @@ namespace Parameter
         
         // DClipDynamic:
         { 0.0f, 1.0f, 1.0f },
-        // DClipCurve:
-        { 1.0f, 2.0f, 1.0f },
         // DClipRise:
         riseRange.getNormalisableRange(),
         // DClipFall:
         fallRange.getNormalisableRange(),
-        // DClipThreshold:
+        // DClipThresholdDelta:
         { 4.0f, 24.0f, 1.0f },
-        // DClipMode:
+        // DClipMinThreshold:
+        { -72.0f, -18.0f, 1.0f },
+        // DClipDetectorMode:
         { 0.0f, 1.0f, 1.0f }
     };
 
@@ -235,11 +235,11 @@ namespace Parameter
         30.0f,  // Stereo Spread
         
         1.0f,   // DClipDynamic
-        1.0f,   // DClipCurve
         0.2f,   // DClipRise
         1200.0f,// DClipFall
-        8.0f,   // DClipThreshold
-        DClip::Normal    // DClipMode
+        8.0f,   // DClipThresholdDelta
+        -36.0f, // DClipMinThreshold
+        DClip::Gain    // DClipDetectorMode
     };
 
     inline const String Label[NumParameters]
@@ -257,11 +257,11 @@ namespace Parameter
         " %",   // Stereo Spread
         
         "",     // DClipDynamic
-        "",     // DClipCurve
         " ms",  // DClipRise
         " ms",  // DClipFall
-        " dB",  // DClipThreshold
-        ""      // DClipMode
+        " dB",  // DClipThresholdDelta
+        " dB",  // DClipMinThreshold
+        ""      // DClipDetectorMode
     };
 
     inline const auto stringFromFxTypeValue = [] (float value, int /*maxStringLength*/)
@@ -284,12 +284,12 @@ namespace Parameter
         
         switch (type)
         {
-            case DClip::Normal:
-                return "Normal";
+            case DClip::Gain:
+                return "Gain";
                 break;
                 
-            case DClip::PreFilter:
-                return "Pre Filter";
+            case DClip::Decibel:
+                return "Decibel";
                 break;
                 
             default:
@@ -315,11 +315,11 @@ namespace Parameter
         showDecimalPlaceBelow<10>,  // Stereo Spread
         
         stringFromToggleValue,      // DClipDynamic
-        showDecimalPlaces<0>,       // DClipCurve
         showDecimalPlaces<2>,       // DClipRise
         showDecimalPlaces<0>,       // DClipFall
-        showDecimalPlaces<0>,       // DClipThreshold
-        stringFromDClipMode         // DClipMode
+        showDecimalPlaces<0>,       // DClipThresholdDelta
+        showDecimalPlaces<0>,       // DClipMinThreshold
+        stringFromDClipMode         // DClipDetectorMode
     };
 
     inline const std::initializer_list<float> majorTicks[NumParameters]

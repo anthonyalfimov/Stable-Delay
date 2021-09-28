@@ -29,9 +29,9 @@ public:
                    float time, float feedback, float type,
                    float modRate, float modDepth, float stereoWidth,
                    bool shouldOffsetModulation,
-                   bool dynamicClipping, SaturationCurve clippingCurve,
-                   float clipRise, float clipFall, float clipThreshold,
-                   DClip::Mode clipMode);
+                   bool dynamicClipping, float clipRise, float clipFall,
+                   float clipThresholdDelta, float clipMinThreshold,
+                   DClip::DetectorMode detectorMode);
     
 //==============================================================================
     void prepare (double sampleRate, int blockSize) override;
@@ -66,6 +66,8 @@ private:
 
     bool mUseDynamicClipping = true;
     float mClippingThreshold = 8.0f;
+    float mMinThreshold = -36.0f;
+    DClip::DetectorMode mDetectorMode = DClip::Gain;
     
     inline static constexpr float detectorRiseTime = 0.2f /*ms*/;
     inline static constexpr float detectorFallTime = 1200.0f /*ms*/;
