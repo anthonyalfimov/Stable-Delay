@@ -218,7 +218,7 @@ namespace Parameter
         // DClipThresholdDelta:
         { 4.0f, 24.0f, 1.0f },
         // DClipMinThreshold:
-        { -72.0f, -18.0f, 1.0f },
+        { -92.0f, -24.0f, 1.0f },
         // DClipDetectorMode:
         { 0.0f, 1.0f, 1.0f },
         // DClipOutputDetector:
@@ -243,7 +243,7 @@ namespace Parameter
         0.2f,   // DClipRise
         1200.0f,// DClipFall
         8.0f,   // DClipThresholdDelta
-        -36.0f, // DClipMinThreshold
+        -72.0f, // DClipMinThreshold
         DClip::Gain,   // DClipDetectorMode
         0.0f    // DClipOutputDetector
     };
