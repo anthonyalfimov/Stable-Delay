@@ -90,6 +90,7 @@ namespace Parameter
         DClipThresholdDelta,
         DClipMinThreshold,
         DClipDetectorMode,
+        DClipOutputDetector,
         
         NumParameters
     };
@@ -115,7 +116,8 @@ namespace Parameter
         "DClipFall",
         "DClipThresholdDelta",
         "DClipMinThreshold",
-        "DClipDetectorMode"
+        "DClipDetectorMode",
+        "DClipOutputDetector"
     };
 
     inline const String Name[NumParameters]
@@ -137,7 +139,8 @@ namespace Parameter
         "Clip: Fall",
         "Clip: Threshold Delta",
         "Clip: Min Threshold",
-        "Clip: Detector Mode"
+        "Clip: Detector Mode",
+        "Clip: Output Detector"
     };
 
     // TODO: DRY generation of ranges and ticks from min, max and mid values
@@ -217,6 +220,8 @@ namespace Parameter
         // DClipMinThreshold:
         { -72.0f, -18.0f, 1.0f },
         // DClipDetectorMode:
+        { 0.0f, 1.0f, 1.0f },
+        // DClipOutputDetector:
         { 0.0f, 1.0f, 1.0f }
     };
 
@@ -239,7 +244,8 @@ namespace Parameter
         1200.0f,// DClipFall
         8.0f,   // DClipThresholdDelta
         -36.0f, // DClipMinThreshold
-        DClip::Gain    // DClipDetectorMode
+        DClip::Gain,   // DClipDetectorMode
+        0.0f    // DClipOutputDetector
     };
 
     inline const String Label[NumParameters]
@@ -261,7 +267,8 @@ namespace Parameter
         " ms",  // DClipFall
         " dB",  // DClipThresholdDelta
         " dB",  // DClipMinThreshold
-        ""      // DClipDetectorMode
+        "",     // DClipDetectorMode
+        ""      // DClipOutputDetector
     };
 
     inline const auto stringFromFxTypeValue = [] (float value, int /*maxStringLength*/)
@@ -319,7 +326,8 @@ namespace Parameter
         showDecimalPlaces<0>,       // DClipFall
         showDecimalPlaces<0>,       // DClipThresholdDelta
         showDecimalPlaces<0>,       // DClipMinThreshold
-        stringFromDClipMode         // DClipDetectorMode
+        stringFromDClipMode,        // DClipDetectorMode
+        stringFromToggleValue       // DClipOutputDetector
     };
 
     inline const std::initializer_list<float> majorTicks[NumParameters]
@@ -347,7 +355,7 @@ namespace Parameter
         // Stereo Spread:
         {},
         
-        {}, {}, {}, {}, {}, {}
+        {}, {}, {}, {}, {}, {}, {}
     };
 
     inline const std::initializer_list<float> minorTicks[NumParameters]
@@ -375,6 +383,6 @@ namespace Parameter
         // Stereo Spread:
         {},
         
-        {}, {}, {}, {}, {}, {}
+        {}, {}, {}, {}, {}, {}, {}
     };
 } // end namespace Parameter

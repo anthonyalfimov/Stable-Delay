@@ -413,6 +413,8 @@ void ReallyBasicDelayAudioProcessor::initialiseParameters()
     = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipMinThreshold]);
     mDClipDetectorModeValue
     = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipDetectorMode]);
+    mDClipOutputDetectorValue
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipOutputDetector]);
     
     updateParameters();
 }
@@ -425,6 +427,8 @@ void ReallyBasicDelayAudioProcessor::updateParameters()
 
     const float stereoSpread
     = (getTotalNumOutputChannels() == 2) ? mStereoSpreadValue->load() : 0.0f;
+    
+    const bool outputDetector = mDClipOutputDetectorValue->load() == Toggle::On;
     
     for (int channel = 0; channel < mFxProcessor.size(); ++channel)
         mFxProcessor[channel]->setState (mInputDriveValue->load(),
@@ -440,7 +444,8 @@ void ReallyBasicDelayAudioProcessor::updateParameters()
                                          mDClipFallValue->load(),
                                          mDClipThresholdDeltaValue->load(),
                                          mDClipMinThresholdValue->load(),
-                                         static_cast<DClip::DetectorMode> (mDClipDetectorModeValue->load()));
+                                         static_cast<DClip::DetectorMode> (mDClipDetectorModeValue->load()),
+                                         (channel == 0) && outputDetector);
 
     for (auto dryWetMixer : mDryWetMixer)
         dryWetMixer->setState (mDryWetValue->load());

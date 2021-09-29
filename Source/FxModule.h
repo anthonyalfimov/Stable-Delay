@@ -31,7 +31,7 @@ public:
                    bool shouldOffsetModulation,
                    bool dynamicClipping, float clipRise, float clipFall,
                    float clipThresholdDelta, float clipMinThreshold,
-                   DClip::DetectorMode detectorMode);
+                   DClip::DetectorMode detectorMode, bool shouldOutputDetector);
     
 //==============================================================================
     void prepare (double sampleRate, int blockSize) override;
@@ -68,6 +68,7 @@ private:
     float mClippingThreshold = 8.0f;
     float mMinThreshold = -36.0f;
     DClip::DetectorMode mDetectorMode = DClip::Gain;
+    bool mShouldOutputDetector = false;
     
     inline static constexpr float detectorRiseTime = 0.2f /*ms*/;
     inline static constexpr float detectorFallTime = 1200.0f /*ms*/;
