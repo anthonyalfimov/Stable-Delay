@@ -196,7 +196,8 @@ namespace Parameter
         // Time:
         timeRange.getNormalisableRange(),
         // Feedback:
-        createSkewedNormalisableRange (0.0f, 120.0f, 0.0f, 50.0f),
+        //createSkewedNormalisableRange (0.0f, 120.0f, 0.0f, 50.0f),
+        { 0.0f, 200.0f },
         // Invert Feedback:
         { 0.0f, 1.0f, 1.0f },
         // Dry Wet Mix:
