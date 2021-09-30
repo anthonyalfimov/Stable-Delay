@@ -110,6 +110,7 @@ private:
     std::atomic<float>* mDClipMinThresholdValue = nullptr;
     std::atomic<float>* mDClipDetectorModeValue = nullptr;
     std::atomic<float>* mDClipOutputDetectorValue = nullptr;
+    std::atomic<float>* mDClipPostCutFactorValue = nullptr;
     
     std::unique_ptr<PresetManager> mPresetManager;
     

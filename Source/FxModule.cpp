@@ -24,7 +24,8 @@ void FxModule::setState (float driveInDecibels,
                          bool shouldOffsetModulation,
                          bool dynamicClipping, float clipRise, float clipFall,
                          float clipThresholdDelta, float clipMinThreshold,
-                         DClip::DetectorMode detectorMode, bool shouldOutputDetector)
+                         DClip::DetectorMode detectorMode, bool shouldOutputDetector,
+                         float postCutFactor)
 {
     // Set delay input drive parameters
     mDriveSmoothed.setTargetValue (driveInDecibels);
@@ -34,6 +35,7 @@ void FxModule::setState (float driveInDecibels,
     mMinThreshold = clipMinThreshold;
     mDetectorMode = detectorMode;
     mShouldOutputDetector = shouldOutputDetector;
+    mPostCutFactor = postCutFactor;
     
     // Set dynamic threshold detector rise and fall time constants
     mDetector.setState (clipRise, clipFall);
@@ -181,7 +183,7 @@ void FxModule::process (const float* inAudio, float* outAudio,
 
         // Apply pre-saturator gain
         const float preBoostInDb = mDriveSmoothed.getNextValue();
-        const float postCutInDb = preBoostInDb * 0.5f;
+        const float postCutInDb = preBoostInDb * mPostCutFactor;
 
         writeSample *= Decibels::decibelsToGain (preBoostInDb);
         feedbackSample *= Decibels::decibelsToGain (postCutInDb);
