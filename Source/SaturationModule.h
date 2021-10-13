@@ -50,23 +50,20 @@ public:
                   int numSamplesToRender) override;
     void reset() override;
 
-private:
-    SaturationCurve mMode = SaturationCurve::beta;
-
 //==============================================================================
     // Saturation Curves
 
-    float saturateAlpha (float x)
+    static float saturateAlpha (float x)
     {
         return jlimit (-1.0f, 1.0f, x * (27 + x * x) / (27 + 9 * x * x));
     }
 
-    float saturateBeta (float x)
+    static float saturateBeta (float x)
     {
         return 4 * x / (x * x + 4);
     }
 
-    float saturateGamma (float x)
+    static float saturateGamma (float x)
     {
         if (x > 1.5f)
             return 1.0f;
@@ -75,6 +72,9 @@ private:
         else
             return x * (1 - x * x / 6.75f);
     }
+
+private:
+    SaturationCurve mMode = SaturationCurve::beta;
 
 //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SaturationModule)

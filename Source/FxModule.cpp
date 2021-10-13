@@ -186,6 +186,8 @@ void FxModule::process (const float* inAudio, float* outAudio,
         const float postCutInDb = preBoostInDb * mPostCutFactor;
 
         writeSample *= Decibels::decibelsToGain (preBoostInDb);
+        // Drive is applied to the feedback sample, so we need to mix it in
+        //  before the post-saturation gain is applied
         feedbackSample *= Decibels::decibelsToGain (postCutInDb);
 
         // Add feedback sample
@@ -197,12 +199,25 @@ void FxModule::process (const float* inAudio, float* outAudio,
 
         // Pass the signal through the saturator before writing it to the buffer
         mSaturator.process (&writeSample, &writeSample, 1);
-        // Apply post-saturator gain
-        writeSample *= Decibels::decibelsToGain (-postCutInDb);
 
         // Apply threshold-move cut
         if (mUseDynamicClipping)
             writeSample *= Decibels::decibelsToGain (thresholdInDb);
+
+        // Compensate the feedback decay by adding an appropriate amount of
+        //  "dry" feedback sample
+
+        const float expectedPeakGain = Decibels::decibelsToGain (preBoostInDb
+                                                                 - thresholdInDb);
+        const float postClipperGain = SaturationModule::saturateBeta (expectedPeakGain);
+        const float attenuationFactor = postClipperGain / expectedPeakGain;
+        //DBG(attenuationFactor);
+        const float compensationSample = (1.0f - attenuationFactor) * feedbackSample;
+
+        writeSample += compensationSample;
+
+        // Apply post-saturator gain
+        writeSample *= Decibels::decibelsToGain (-postCutInDb);
 
         mDelay.writeAndAdvance (writeSample);
 
