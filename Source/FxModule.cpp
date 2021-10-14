@@ -206,9 +206,8 @@ void FxModule::process (const float* inAudio, float* outAudio,
 
         // Compensate the feedback decay by adding an appropriate amount of
         //  "dry" feedback sample
-        // FIX: This threshold is not the signal position relative to clipping curve!
         const float expectedPeakGain = Decibels::decibelsToGain (preBoostInDb
-                                                                 - thresholdInDb);
+                                                                 - mClippingThreshold);
         const float postClipperGain = SaturationModule::saturateBeta (expectedPeakGain);
         const float attenuationFactor = postClipperGain / expectedPeakGain;
         //DBG(attenuationFactor);
