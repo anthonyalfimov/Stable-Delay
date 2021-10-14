@@ -206,7 +206,7 @@ void FxModule::process (const float* inAudio, float* outAudio,
 
         // Compensate the feedback decay by adding an appropriate amount of
         //  "dry" feedback sample
-        const float expectedPeakGain = Decibels::decibelsToGain (preBoostInDb
+        const float expectedPeakGain = Decibels::decibelsToGain (postCutInDb
                                                                  - mClippingThreshold);
         const float postClipperGain = SaturationModule::saturateBeta (expectedPeakGain);
         const float attenuationFactor = postClipperGain / expectedPeakGain;
