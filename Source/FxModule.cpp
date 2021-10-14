@@ -146,8 +146,10 @@ void FxModule::process (const float* inAudio, float* outAudio,
 
     // WRITE SAMPLE TO THE DELAY BUFFER AND ADVANCE THE WRITE HEAD
         float writeSample = inAudio[i];
-        float feedbackSample = readSample * mFeedbackSmoothed.getNextValue();
-        float detectorSample = std::abs (writeSample + feedbackSample);
+        const float feedbackGain = mFeedbackSmoothed.getNextValue();
+        float feedbackSample = readSample * feedbackGain;
+        // TODO: Use readSample always or only when Feedback is above 100%?
+        float detectorSample = std::abs (writeSample + readSample);
 
         const float maxThreshold = -1.0f;   // some protection against clipping?
         //const float minThreshold = -36.0f;  // TODO: what's the limit here?
@@ -213,6 +215,7 @@ void FxModule::process (const float* inAudio, float* outAudio,
         //DBG(attenuationFactor);
         const float compensationSample = (1.0f - attenuationFactor) * feedbackSample;
 
+        // FIXME: Compensation sample when Feedback > 100% can run away! Why?
         writeSample += compensationSample;
 
         // Apply post-saturator gain
