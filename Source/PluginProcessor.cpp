@@ -417,6 +417,8 @@ void ReallyBasicDelayAudioProcessor::initialiseParameters()
     = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipOutputDetector]);
     mDClipPostCutFactorValue
     = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipPostCutFactor]);
+    mDClipFbCompensationValue
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipFbCompensation]);
     
     updateParameters();
 }
@@ -448,7 +450,8 @@ void ReallyBasicDelayAudioProcessor::updateParameters()
                                          mDClipMinThresholdValue->load(),
                                          mDClipFeedbackDecayValue->load(),
                                          (channel == 0) && outputDetector,
-                                         mDClipPostCutFactorValue->load());
+                                         mDClipPostCutFactorValue->load(),
+                                         static_cast<DClip::CompensationMode> (mDClipFbCompensationValue->load()));
 
     for (auto dryWetMixer : mDryWetMixer)
         dryWetMixer->setState (mDryWetValue->load());

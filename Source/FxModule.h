@@ -32,7 +32,7 @@ public:
                    bool dynamicClipping, float clipRise, float clipFall,
                    float clipThresholdDelta, float clipMinThreshold,
                    float feedbackDecayMode, bool shouldOutputDetector,
-                   float postCutFactor);
+                   float postCutFactor, DClip::CompensationMode fbComp);
     
 //==============================================================================
     void prepare (double sampleRate, int blockSize) override;
@@ -71,6 +71,7 @@ private:
     float mFeedbackDecayMode = 0.0f;
     bool mShouldOutputDetector = false;
     float mPostCutFactor = 0.5f;
+    DClip::CompensationMode mFbComp = DClip::Dry;
     
     inline static constexpr float detectorRiseTime = 0.2f /*ms*/;
     inline static constexpr float detectorFallTime = 1200.0f /*ms*/;

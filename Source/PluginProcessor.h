@@ -112,6 +112,9 @@ private:
     std::atomic<float>* mDClipOutputDetectorValue = nullptr;
     std::atomic<float>* mDClipPostCutFactorValue = nullptr;
     
+    std::atomic<float>* mDClipFbCompensationValue = nullptr;
+    
+    
     std::unique_ptr<PresetManager> mPresetManager;
     
     //==============================================================================

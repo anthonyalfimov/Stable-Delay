@@ -52,6 +52,16 @@ namespace Toggle
 
 } // end namespace Toggle
 
+namespace DClip
+{
+    enum CompensationMode : int
+    {
+        Off = 0,
+        Dry,
+        Clipped
+    };
+}
+
 // TODO: Consider turning the Parameter namespace into a class
 //  This will allow to have direct control over the lifetime of the contained
 //  objects, which is becoming more important as these objects become more
@@ -83,6 +93,7 @@ namespace Parameter
         DClipFeedbackDecay,
         DClipOutputDetector,
         DClipPostCutFactor,
+        DClipFbCompensation,
         
         NumParameters
     };
@@ -110,7 +121,8 @@ namespace Parameter
         "DClipMinThreshold",
         "DClipFeedbackDecay",
         "DClipOutputDetector",
-        "DClipPostCutFactor"
+        "DClipPostCutFactor",
+        "DClipFbCompensation"
     };
 
     inline const String Name[NumParameters]
@@ -134,7 +146,8 @@ namespace Parameter
         "Clip: Min Threshold",
         "Clip: Feedback Decay",
         "Clip: Output Detector",
-        "Clip: Post Cut Factor"
+        "Clip: Post Cut Factor",
+        "Clip: Fb Compensation"
     };
 
     // TODO: DRY generation of ranges and ticks from min, max and mid values
@@ -219,7 +232,9 @@ namespace Parameter
         // DClipOutputDetector:
         { 0.0f, 1.0f, 1.0f },
         // DClipPostCutFactor:
-        { 0.5f, 1.0f, 0.01f }
+        { 0.5f, 1.0f, 0.01f },
+        // DClipFbCompensation:
+        { 0.0f, 2.0f, 1.0f }
     };
 
     inline const float DefaultValue[NumParameters]
@@ -243,7 +258,8 @@ namespace Parameter
         -72.0f, // DClipMinThreshold
         0.0f,   // DClipFeedbackDecay
         0.0f,   // DClipOutputDetector
-        0.5f    // DClipPostCutFactor
+        0.5f,   // DClipPostCutFactor
+        1.0f    // DClipFbCompensation
     };
 
     inline const String Label[NumParameters]
@@ -267,7 +283,8 @@ namespace Parameter
         " dB",  // DClipMinThreshold
         "",     // DClipFeedbackDecay
         "",     // DClipOutputDetector
-        "x"     // DClipPostCutFactor
+        "x",    // DClipPostCutFactor
+        ""      // DClipFbCompensation
     };
 
     inline const auto stringFromFxTypeValue = [] (float value, int /*maxStringLength*/)
@@ -282,6 +299,27 @@ namespace Parameter
         const auto toggleIndex = static_cast<Toggle::Index> (value);
 
         return Toggle::Label[toggleIndex];
+    };
+    
+    inline const auto stringFromFbCompMode = [] (float value, int /*maxStringLength*/)
+    {
+        auto mode = static_cast<DClip::CompensationMode> (value);
+        
+        switch (mode)
+        {
+            case DClip::Off:
+                return "Off";
+                
+            case DClip::Dry:
+                return "Dry";
+                
+            case DClip::Clipped:
+                return "Clipped";
+                
+            default:
+                jassertfalse;
+                return "Error";
+        }
     };
 
     using stringFromValueFunction = std::function<String(float value,
@@ -308,7 +346,8 @@ namespace Parameter
         showDecimalPlaces<0>,       // DClipMinThreshold
         showDecimalPlaces<0>,       // DClipFeedbackDecay
         stringFromToggleValue,      // DClipOutputDetector
-        showDecimalPlaces<2>        // DClipPostCutFactor
+        showDecimalPlaces<2>,       // DClipPostCutFactor
+        stringFromFbCompMode        // DClipFbCompensation
     };
 
     inline const std::initializer_list<float> majorTicks[NumParameters]
@@ -336,7 +375,7 @@ namespace Parameter
         // Stereo Spread:
         {},
         
-        {}, {}, {}, {}, {}, {}, {}, {}
+        {}, {}, {}, {}, {}, {}, {}, {}, {}
     };
 
     inline const std::initializer_list<float> minorTicks[NumParameters]
@@ -364,6 +403,6 @@ namespace Parameter
         // Stereo Spread:
         {},
         
-        {}, {}, {}, {}, {}, {}, {}, {}
+        {}, {}, {}, {}, {}, {}, {}, {}, {}
     };
 } // end namespace Parameter

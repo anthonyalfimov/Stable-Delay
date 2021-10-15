@@ -25,7 +25,7 @@ void FxModule::setState (float driveInDecibels,
                          bool dynamicClipping, float clipRise, float clipFall,
                          float clipThresholdDelta, float clipMinThreshold,
                          float feedbackDecayMode, bool shouldOutputDetector,
-                         float postCutFactor)
+                         float postCutFactor, DClip::CompensationMode fbComp)
 {
     // Set delay input drive parameters
     mDriveSmoothed.setTargetValue (driveInDecibels);
@@ -36,6 +36,7 @@ void FxModule::setState (float driveInDecibels,
     mFeedbackDecayMode = feedbackDecayMode;
     mShouldOutputDetector = shouldOutputDetector;
     mPostCutFactor = postCutFactor;
+    mFbComp = fbComp;
     
     // Set dynamic threshold detector rise and fall time constants
     mDetector.setState (clipRise, clipFall);
@@ -205,7 +206,8 @@ void FxModule::process (const float* inAudio, float* outAudio,
         const float compensationSample = (1.0f - attenuationFactor) * feedbackSample;
 
         // FIXME: Compensation sample when Feedback > 100% can run away!
-        writeSample += compensationSample;
+        if (mFbComp != DClip::Off)
+            writeSample += compensationSample;
 
         // Apply post-saturator gain
         writeSample *= Decibels::decibelsToGain (-postCutInDb);
