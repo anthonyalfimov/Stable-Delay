@@ -31,7 +31,7 @@ public:
                    bool shouldOffsetModulation,
                    bool dynamicClipping, float clipRise, float clipFall,
                    float clipThresholdDelta, float clipMinThreshold,
-                   DClip::DetectorMode detectorMode, bool shouldOutputDetector,
+                   float feedbackDecayMode, bool shouldOutputDetector,
                    float postCutFactor);
     
 //==============================================================================
@@ -68,7 +68,7 @@ private:
     bool mUseDynamicClipping = true;
     float mClippingThreshold = 8.0f;
     float mMinThreshold = -36.0f;
-    DClip::DetectorMode mDetectorMode = DClip::Gain;
+    float mFeedbackDecayMode = 0.0f;
     bool mShouldOutputDetector = false;
     float mPostCutFactor = 0.5f;
     

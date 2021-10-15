@@ -24,7 +24,7 @@ void FxModule::setState (float driveInDecibels,
                          bool shouldOffsetModulation,
                          bool dynamicClipping, float clipRise, float clipFall,
                          float clipThresholdDelta, float clipMinThreshold,
-                         DClip::DetectorMode detectorMode, bool shouldOutputDetector,
+                         float feedbackDecayMode, bool shouldOutputDetector,
                          float postCutFactor)
 {
     // Set delay input drive parameters
@@ -33,7 +33,7 @@ void FxModule::setState (float driveInDecibels,
     mUseDynamicClipping = dynamicClipping;
     mClippingThreshold = clipThresholdDelta;
     mMinThreshold = clipMinThreshold;
-    mDetectorMode = detectorMode;
+    mFeedbackDecayMode = feedbackDecayMode;
     mShouldOutputDetector = shouldOutputDetector;
     mPostCutFactor = postCutFactor;
     
@@ -146,38 +146,24 @@ void FxModule::process (const float* inAudio, float* outAudio,
 
     // WRITE SAMPLE TO THE DELAY BUFFER AND ADVANCE THE WRITE HEAD
         float writeSample = inAudio[i];
-        const float feedbackGain = mFeedbackSmoothed.getNextValue();
+        /*const*/ float feedbackGain = mFeedbackSmoothed.getNextValue();
+        // MARK: Temporarily disable runaway feedback
+        feedbackGain = jmin (feedbackGain, 1.0f);
+        
         float feedbackSample = readSample * feedbackGain;
-        // TODO: Use readSample always or only when Feedback is above 100%?
-        float detectorSample = std::abs (writeSample + readSample);
-
+        
+        float detectorSample = 0.0f;
+        
+        if (mFeedbackDecayMode == 0.0f)
+            detectorSample = std::abs (writeSample + feedbackSample);
+        else
+            detectorSample = std::abs (writeSample + readSample);
+                
         const float maxThreshold = -1.0f;   // some protection against clipping?
         //const float minThreshold = -36.0f;  // TODO: what's the limit here?
-        
-        float levelInDb = 0.0f;
-        
-        switch (mDetectorMode)
-        {
-            case DClip::Gain:
-            {
-                const float gain = mDetector.processSample (detectorSample);
-                levelInDb = Decibels::gainToDecibels (gain);
-                break;
-            }
                 
-            case DClip::Decibel:
-            {
-                const float sampleInDb = Decibels::gainToDecibels (detectorSample);
-                levelInDb = mDetector.processSample (sampleInDb);
-                break;
-            }
-                
-            default:
-            {
-                jassertfalse;
-                break;
-            }
-        }
+        const float gain = mDetector.processSample (detectorSample);
+        const float levelInDb = Decibels::gainToDecibels (gain);
         
         const float thresholdInDb = jlimit (mMinThreshold, maxThreshold,
                                             levelInDb + mClippingThreshold);
@@ -208,14 +194,17 @@ void FxModule::process (const float* inAudio, float* outAudio,
 
         // Compensate the feedback decay by adding an appropriate amount of
         //  "dry" feedback sample
-        const float expectedPeakGain = Decibels::decibelsToGain (postCutInDb
-                                                                 - mClippingThreshold);
+        /*const*/ float expectedPeakGain = Decibels::decibelsToGain (postCutInDb
+                                                                     - mClippingThreshold);
+        if (mFeedbackDecayMode != 0.0f)
+            expectedPeakGain *= feedbackGain;
+        
         const float postClipperGain = SaturationModule::saturateBeta (expectedPeakGain);
         const float attenuationFactor = postClipperGain / expectedPeakGain;
         //DBG(attenuationFactor);
         const float compensationSample = (1.0f - attenuationFactor) * feedbackSample;
 
-        // FIXME: Compensation sample when Feedback > 100% can run away! Why?
+        // FIXME: Compensation sample when Feedback > 100% can run away!
         writeSample += compensationSample;
 
         // Apply post-saturator gain

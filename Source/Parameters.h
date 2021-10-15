@@ -52,15 +52,6 @@ namespace Toggle
 
 } // end namespace Toggle
 
-namespace DClip
-{
-    enum DetectorMode : int
-    {
-        Gain = 0,
-        Decibel
-    };
-}
-
 // TODO: Consider turning the Parameter namespace into a class
 //  This will allow to have direct control over the lifetime of the contained
 //  objects, which is becoming more important as these objects become more
@@ -89,7 +80,7 @@ namespace Parameter
         DClipFall,
         DClipThresholdDelta,
         DClipMinThreshold,
-        DClipDetectorMode,
+        DClipFeedbackDecay,
         DClipOutputDetector,
         DClipPostCutFactor,
         
@@ -117,7 +108,7 @@ namespace Parameter
         "DClipFall",
         "DClipThresholdDelta",
         "DClipMinThreshold",
-        "DClipDetectorMode",
+        "DClipFeedbackDecay",
         "DClipOutputDetector",
         "DClipPostCutFactor"
     };
@@ -141,7 +132,7 @@ namespace Parameter
         "Clip: Fall",
         "Clip: Threshold Delta",
         "Clip: Min Threshold",
-        "Clip: Detector Mode",
+        "Clip: Feedback Decay",
         "Clip: Output Detector",
         "Clip: Post Cut Factor"
     };
@@ -223,7 +214,7 @@ namespace Parameter
         { 4.0f, 24.0f, 1.0f },
         // DClipMinThreshold:
         { -82.0f, -24.0f, 1.0f },
-        // DClipDetectorMode:
+        // DClipFeedbackDecay:
         { 0.0f, 1.0f, 1.0f },
         // DClipOutputDetector:
         { 0.0f, 1.0f, 1.0f },
@@ -250,7 +241,7 @@ namespace Parameter
         1200.0f,// DClipFall
         8.0f,   // DClipThresholdDelta
         -72.0f, // DClipMinThreshold
-        DClip::Gain,   // DClipDetectorMode
+        0.0f,   // DClipFeedbackDecay
         0.0f,   // DClipOutputDetector
         0.5f    // DClipPostCutFactor
     };
@@ -274,7 +265,7 @@ namespace Parameter
         " ms",  // DClipFall
         " dB",  // DClipThresholdDelta
         " dB",  // DClipMinThreshold
-        "",     // DClipDetectorMode
+        "",     // DClipFeedbackDecay
         "",     // DClipOutputDetector
         "x"     // DClipPostCutFactor
     };
@@ -291,25 +282,6 @@ namespace Parameter
         const auto toggleIndex = static_cast<Toggle::Index> (value);
 
         return Toggle::Label[toggleIndex];
-    };
-    
-    inline const auto stringFromDClipMode = [] (float value, int /*maxStringLength*/)
-    {
-        const auto type = static_cast<int> (value);
-        
-        switch (type)
-        {
-            case DClip::Gain:
-                return "Gain";
-                break;
-                
-            case DClip::Decibel:
-                return "Decibel";
-                break;
-                
-            default:
-                return "Error";
-        }
     };
 
     using stringFromValueFunction = std::function<String(float value,
@@ -334,7 +306,7 @@ namespace Parameter
         showDecimalPlaces<0>,       // DClipFall
         showDecimalPlaces<0>,       // DClipThresholdDelta
         showDecimalPlaces<0>,       // DClipMinThreshold
-        stringFromDClipMode,        // DClipDetectorMode
+        showDecimalPlaces<0>,       // DClipFeedbackDecay
         stringFromToggleValue,      // DClipOutputDetector
         showDecimalPlaces<2>        // DClipPostCutFactor
     };

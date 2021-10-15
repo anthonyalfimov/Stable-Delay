@@ -411,8 +411,8 @@ void ReallyBasicDelayAudioProcessor::initialiseParameters()
     = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipThresholdDelta]);
     mDClipMinThresholdValue
     = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipMinThreshold]);
-    mDClipDetectorModeValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipDetectorMode]);
+    mDClipFeedbackDecayValue
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipFeedbackDecay]);
     mDClipOutputDetectorValue
     = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipOutputDetector]);
     mDClipPostCutFactorValue
@@ -446,7 +446,7 @@ void ReallyBasicDelayAudioProcessor::updateParameters()
                                          mDClipFallValue->load(),
                                          mDClipThresholdDeltaValue->load(),
                                          mDClipMinThresholdValue->load(),
-                                         static_cast<DClip::DetectorMode> (mDClipDetectorModeValue->load()),
+                                         mDClipFeedbackDecayValue->load(),
                                          (channel == 0) && outputDetector,
                                          mDClipPostCutFactorValue->load());
 
