@@ -407,10 +407,8 @@ void ReallyBasicDelayAudioProcessor::initialiseParameters()
     = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipRise]);
     mDClipFallValue
     = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipFall]);
-    mDClipThresholdDeltaValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipThresholdDelta]);
-    mDClipMinThresholdValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipMinThreshold]);
+    mDClipFbHeadroomValue
+    = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipFbHeadroom]);
     mDClipFeedbackDecayValue
     = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipFeedbackDecay]);
     mDClipOutputDetectorValue
@@ -446,9 +444,8 @@ void ReallyBasicDelayAudioProcessor::updateParameters()
                                          mDClipDynamicValue->load() == Toggle::On,
                                          mDClipRiseValue->load(),
                                          mDClipFallValue->load(),
-                                         mDClipThresholdDeltaValue->load(),
-                                         mDClipMinThresholdValue->load(),
-                                         mDClipFeedbackDecayValue->load(),
+                                         mDClipFbHeadroomValue->load(),
+                                         static_cast<DClip::FeedbackDecayMode>(mDClipFeedbackDecayValue->load()),
                                          (channel == 0) && outputDetector,
                                          mDClipPostCutFactorValue->load(),
                                          static_cast<DClip::CompensationMode> (mDClipFbCompensationValue->load()));

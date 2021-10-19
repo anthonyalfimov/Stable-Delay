@@ -23,17 +23,17 @@ void FxModule::setState (float driveInDecibels,
                          float modRate, float modDepth, float stereoWidth,
                          bool shouldOffsetModulation,
                          bool dynamicClipping, float clipRise, float clipFall,
-                         float clipThresholdDelta, float clipMinThreshold,
-                         float feedbackDecayMode, bool shouldOutputDetector,
+                         float fbHeadroom,
+                         DClip::FeedbackDecayMode fbDecay, bool shouldOutputDetector,
                          float postCutFactor, DClip::CompensationMode fbComp)
 {
     // Set delay input drive parameters
     mDriveSmoothed.setTargetValue (driveInDecibels);
 
     mUseDynamicClipping = dynamicClipping;
-    mClippingThreshold = clipThresholdDelta;
-    mMinThreshold = clipMinThreshold;
-    mFeedbackDecayMode = feedbackDecayMode;
+    mFbHeadroom = fbHeadroom;
+    mMeterFallTime = clipFall;
+    mFeedbackDecayMode = fbDecay;
     mShouldOutputDetector = shouldOutputDetector;
     mPostCutFactor = postCutFactor;
     mFbComp = fbComp;
@@ -148,26 +148,29 @@ void FxModule::process (const float* inAudio, float* outAudio,
     // WRITE SAMPLE TO THE DELAY BUFFER AND ADVANCE THE WRITE HEAD
         float writeSample = inAudio[i];
         /*const*/ float feedbackGain = mFeedbackSmoothed.getNextValue();
+
+        //============================================
         // MARK: Temporarily disable runaway feedback
         feedbackGain = jmin (feedbackGain, 1.0f);
-        
+        //============================================
+
         float feedbackSample = readSample * feedbackGain;
         
         float detectorSample = 0.0f;
         
-        if (mFeedbackDecayMode == 0.0f)
+        if (mFeedbackDecayMode == DClip::Normal)
             detectorSample = std::abs (writeSample + feedbackSample);
         else
             detectorSample = std::abs (writeSample + readSample);
                 
         const float maxThreshold = -1.0f;   // some protection against clipping?
-        //const float minThreshold = -36.0f;  // TODO: what's the limit here?
+        const float minThreshold = -72.0f;
                 
         const float gain = mDetector.processSample (detectorSample);
         const float levelInDb = Decibels::gainToDecibels (gain);
         
-        const float thresholdInDb = jlimit (mMinThreshold, maxThreshold,
-                                            levelInDb + mClippingThreshold);
+        const float thresholdInDb = jlimit (minThreshold, maxThreshold,
+                                            levelInDb + clippingThreshold);
         const float detectorGain = Decibels::decibelsToGain (thresholdInDb);
 
         // Apply pre-saturator gain
@@ -196,8 +199,8 @@ void FxModule::process (const float* inAudio, float* outAudio,
         // Compensate the feedback decay by adding an appropriate amount of
         //  "dry" feedback sample
         /*const*/ float expectedPeakGain = Decibels::decibelsToGain (postCutInDb
-                                                                     - mClippingThreshold);
-        if (mFeedbackDecayMode != 0.0f)
+                                                                     - clippingThreshold);
+        if (mFeedbackDecayMode == DClip::Proportional)
             expectedPeakGain *= feedbackGain;
         
         const float postClipperGain = SaturationModule::saturateBeta (expectedPeakGain);
@@ -205,7 +208,6 @@ void FxModule::process (const float* inAudio, float* outAudio,
         //DBG(attenuationFactor);
         const float compensationSample = (1.0f - attenuationFactor) * feedbackSample;
 
-        // FIXME: Compensation sample when Feedback > 100% can run away!
         if (mFbComp != DClip::Off)
             writeSample += compensationSample;
 

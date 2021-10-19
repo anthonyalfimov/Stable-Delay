@@ -106,8 +106,7 @@ private:
     std::atomic<float>* mDClipDynamicValue = nullptr;
     std::atomic<float>* mDClipRiseValue = nullptr;
     std::atomic<float>* mDClipFallValue = nullptr;
-    std::atomic<float>* mDClipThresholdDeltaValue = nullptr;
-    std::atomic<float>* mDClipMinThresholdValue = nullptr;
+    std::atomic<float>* mDClipFbHeadroomValue = nullptr;
     std::atomic<float>* mDClipFeedbackDecayValue = nullptr;
     std::atomic<float>* mDClipOutputDetectorValue = nullptr;
     std::atomic<float>* mDClipPostCutFactorValue = nullptr;

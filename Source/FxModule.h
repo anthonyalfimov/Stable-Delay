@@ -30,8 +30,8 @@ public:
                    float modRate, float modDepth, float stereoWidth,
                    bool shouldOffsetModulation,
                    bool dynamicClipping, float clipRise, float clipFall,
-                   float clipThresholdDelta, float clipMinThreshold,
-                   float feedbackDecayMode, bool shouldOutputDetector,
+                   float fbHeadroom,
+                   DClip::FeedbackDecayMode fbDecay, bool shouldOutputDetector,
                    float postCutFactor, DClip::CompensationMode fbComp);
     
 //==============================================================================
@@ -66,13 +66,14 @@ private:
     SaturationModule mSaturator;
 
     bool mUseDynamicClipping = true;
-    float mClippingThreshold = 8.0f;
-    float mMinThreshold = -36.0f;
-    float mFeedbackDecayMode = 0.0f;
     bool mShouldOutputDetector = false;
     float mPostCutFactor = 0.5f;
-    DClip::CompensationMode mFbComp = DClip::Dry;
-    
+    float mFbHeadroom = 0.0f;
+    float mMeterFallTime = 300.0f;
+    DClip::FeedbackDecayMode mFeedbackDecayMode = DClip::Normal;
+    DClip::CompensationMode mFbComp = DClip::Simple;
+
+    inline static constexpr float clippingThreshold = 8.0f;
     inline static constexpr float detectorRiseTime = 0.2f /*ms*/;
     inline static constexpr float detectorFallTime = 1200.0f /*ms*/;
 
