@@ -63,13 +63,13 @@ private:
     // Drive
     SmoothedValue<float> mDriveSmoothed;
     SlewFilterModule mDetector;
+    SlewFilterModule mFbMeter;
     SaturationModule mSaturator;
 
     bool mUseDynamicClipping = true;
     bool mShouldOutputDetector = false;
     float mPostCutFactor = 0.5f;
-    float mFbHeadroom = 0.0f;
-    float mMeterFallTime = 300.0f;
+    float mFbHeadroomGain = 1.0f;
     DClip::FeedbackDecayMode mFeedbackDecayMode = DClip::Normal;
     DClip::CompensationMode mFbComp = DClip::Simple;
 
