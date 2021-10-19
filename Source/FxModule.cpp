@@ -188,7 +188,7 @@ void FxModule::process (const float* inAudio, float* outAudio,
         const float feedbackSampleLevel
         = Decibels::gainToDecibels (mFbMeter.processSample (std::abs(feedbackSample)));
         const float feedbackRelativeLevel
-        = jmax (minThreshold, feedbackSampleLevel) - thresholdInDb;
+        = feedbackSampleLevel - levelInDb - clippingThreshold;
         //const float feedbackRelativeGain = Decibels::decibelsToGain (feedbackRelativeLevel);
 
         // Apply pre-saturator gain
