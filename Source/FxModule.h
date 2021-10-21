@@ -12,11 +12,8 @@
 
 #include <JuceHeader.h>
 #include "DspModule.h"
-#include "GainModule.h"
 #include "SlewFilterModule.h"
 #include "SaturationModule.h"
-#include "DelayModule.h"
-#include "LfoModule.h"
 #include "Parameters.h"
 
 class FxModule  : public DspModule
@@ -25,14 +22,7 @@ public:
     FxModule();
 
 //==============================================================================
-    void setState (float driveInDecibels,
-                   float time, float feedback, float type,
-                   float modRate, float modDepth, float stereoWidth,
-                   bool shouldOffsetModulation,
-                   bool dynamicClipping, float clipRise, float clipFall,
-                   float fbHeadroom,
-                   DClip::FeedbackDecayMode fbDecay, bool shouldOutputDetector,
-                   float postCutFactor, DClip::CompensationMode fbComp);
+    void setState (float driveInDecibels, float clipRise, float clipFall);
     
 //==============================================================================
     void prepare (double sampleRate, int blockSize) override;
@@ -42,50 +32,16 @@ public:
 
 private:
 //==============================================================================
-    // Parameters
-    FxType::Index mTypeValue = FxType::Delay;
-    // MARK: Precision: time smoothing
-    SmoothedValue<double, ValueSmoothingTypes::Multiplicative> mTimeSmoothed;
-    SmoothedValue<float> mFeedbackSmoothed;
-
-//==============================================================================
-    // FX type constants
-    inline static constexpr double chorusCentreTime = 0.006;
-    inline static constexpr float chorusTimeAmplitude = 0.005f;
-    inline static constexpr double flangerCentreTime = 0.0027;
-    inline static constexpr float flangerTimeAmplitude = 0.0023f;
-    inline static constexpr float maxDelayTimeAmplitude = 0.01f;
-    inline static constexpr float minDelayTimeAmplitude = 0.0005f;
-
-    inline static constexpr float delayModRate = 0.05f;
-
-//==============================================================================
     // Drive
     SmoothedValue<float> mDriveSmoothed;
     SlewFilterModule mDetector;
-    SlewFilterModule mFbMeter;
     SaturationModule mSaturator;
 
-    bool mUseDynamicClipping = true;
-    bool mShouldOutputDetector = false;
-    float mPostCutFactor = 0.5f;
-    float mFbHeadroomGain = 1.0f;
-    DClip::FeedbackDecayMode mFeedbackDecayMode = DClip::Normal;
-    DClip::CompensationMode mFbComp = DClip::Simple;
-
     inline static constexpr float clippingThreshold = 8.0f;
-    inline static constexpr float detectorRiseTime = 0.2f /*ms*/;
-    inline static constexpr float detectorFallTime = 1200.0f /*ms*/;
+    inline static constexpr float postCutFactor = 0.65f; // cut for ~equal loudness
 
-//==============================================================================
-    // Delay
-    DelayModule mDelay { RBD::maxDelayTimeInSeconds + maxDelayTimeAmplitude };
-
-//==============================================================================
-    // Modulation
-    // MARK: Precision: modulation
-    LfoModule mLfo;
-    std::unique_ptr<float[]> mModulationBuffer;
+    inline static constexpr float maxThreshold = 5.0f;
+    inline static constexpr float minThreshold = -72.0f;
 
 //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FxModule)

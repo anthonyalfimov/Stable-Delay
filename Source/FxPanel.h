@@ -16,24 +16,12 @@
 #include "SliderLabel.h"
 #include "Parameters.h"
 
-class FxPanel  : public InterfacePanel,
-                 public ComboBox::Listener
+class FxPanel  : public InterfacePanel
 {
 public:
     explicit FxPanel (ReallyBasicDelayAudioProcessor& processor);
-
-//==============================================================================
-    void setFxPanelStyle (FxType::Index typeIndex);
-
-//==============================================================================
-    /** @internal */
-    void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
     
 private:
-    FxType::Index mTypeIndex;
-
-    std::unique_ptr<ParameterDropdown> mFxTypeDropdown;
-    
     // Use an array of pointers to allow dynamically changing number of knobs
     OwnedArray<ParameterKnob> mKnobs;
 

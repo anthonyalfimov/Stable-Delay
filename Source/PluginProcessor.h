@@ -83,7 +83,6 @@ private:
     OwnedArray<MeterProbe> mInputMeterProbe;
     OwnedArray<FxModule> mFxProcessor;
     OwnedArray<DryWetModule> mDryWetMixer;
-    OwnedArray<SaturationModule> mOutputClipper;
     OwnedArray<GainModule> mOutputGain;
     OwnedArray<MeterProbe> mOutputMeterProbe;
     
@@ -92,27 +91,11 @@ private:
     //  Lifetime of these ptrs is the same at the AudioProcessorValueTreeState that
     //  stores them, so there should be no problems
     std::atomic<float>* mInputDriveValue = nullptr;
-    std::atomic<float>* mInputBoostValue = nullptr;
-    std::atomic<float>* mDelayTimeValue = nullptr;
-    std::atomic<float>* mFeedbackValue = nullptr;
-    std::atomic<float>* mInvertFeedbackValue = nullptr;
     std::atomic<float>* mDryWetValue = nullptr;
-    std::atomic<float>* mFxTypeValue = nullptr;
     std::atomic<float>* mOutputGainValue = nullptr;
-    std::atomic<float>* mModulationRateValue = nullptr;
-    std::atomic<float>* mModulationDepthValue = nullptr;
-    std::atomic<float>* mStereoSpreadValue = nullptr;
-    
-    std::atomic<float>* mDClipDynamicValue = nullptr;
+
     std::atomic<float>* mDClipRiseValue = nullptr;
-    std::atomic<float>* mDClipFallValue = nullptr;
-    std::atomic<float>* mDClipFbHeadroomValue = nullptr;
-    std::atomic<float>* mDClipFeedbackDecayValue = nullptr;
-    std::atomic<float>* mDClipOutputDetectorValue = nullptr;
-    std::atomic<float>* mDClipPostCutFactorValue = nullptr;
-    
-    std::atomic<float>* mDClipFbCompensationValue = nullptr;
-    
+    std::atomic<float>* mDClipFallValue = nullptr;    
     
     std::unique_ptr<PresetManager> mPresetManager;
     

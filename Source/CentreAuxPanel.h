@@ -20,8 +20,6 @@ public:
     explicit CentreAuxPanel (ReallyBasicDelayAudioProcessor& processor);
     
 private:
-    std::unique_ptr<ParameterSlider> mSpreadSlider;
-    std::unique_ptr<SliderLabel> mSpreadLabel;
 
 //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CentreAuxPanel)
