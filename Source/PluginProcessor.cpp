@@ -377,42 +377,9 @@ void ReallyBasicDelayAudioProcessor::initialiseParameters()
     //  so it is preferable to retrieve them from APVTS just once.
     //  Create std::atomic<float> members (or an array of them) and initialise
     //  them once in the processor constructor.
-
-    mInputDriveValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::InputDrive]);
-    mInputBoostValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::InputBoost]);
-    mDelayTimeValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::DelayTime]);
-    mFeedbackValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::Feedback]);
-    mInvertFeedbackValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::InvertFeedback]);
-    mDryWetValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::DryWet]);
-    mFxTypeValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::FxType]);
-    mOutputGainValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::OutputGain]);
-    mModulationRateValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::ModulationRate]);
-    mModulationDepthValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::ModulationDepth]);
-    mStereoSpreadValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::StereoSpread]);
-
-    mDClipDynamicValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipDynamic]);
-    mDClipRiseValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipRise]);
-    mDClipFallValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipFall]);
-    mDClipFeedbackDecayValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipFeedbackDecay]);
-    mDClipOutputDetectorValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipOutputDetector]);
-    mDClipPostCutFactorValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipPostCutFactor]);
+    
+    for (int i = 0; i < Parameter::NumParameters; ++i)
+        mValues[i] = parameters.getRawParameterValue (Parameter::ID[i]);
     
     updateParameters();
 }
@@ -420,35 +387,38 @@ void ReallyBasicDelayAudioProcessor::initialiseParameters()
 void ReallyBasicDelayAudioProcessor::updateParameters()
 {
     const float feedbackFactor
-    = (mInvertFeedbackValue->load() == Toggle::On) ? -1.0f : 1.0f;
-    const float feedback = feedbackFactor * mFeedbackValue->load();
+    = (mValues[Parameter::InvertFeedback]->load() == Toggle::On) ? -1.0f : 1.0f;
+    const float feedback = feedbackFactor * mValues[Parameter::Feedback]->load();
 
     const float stereoSpread
-    = (getTotalNumOutputChannels() == 2) ? mStereoSpreadValue->load() : 0.0f;
+    = (getTotalNumOutputChannels() == 2) ? mValues[Parameter::StereoSpread]->load() : 0.0f;
     
-    const bool outputDetector = mDClipOutputDetectorValue->load() == Toggle::On;
+    const auto decayMode
+    = static_cast<DClip::FeedbackDecayMode> (mValues[Parameter::DClipFeedbackDecay]->load());
+    
+    const bool outputDetector = (mValues[Parameter::DClipOutputDetector]->load() == Toggle::On);
     
     for (int channel = 0; channel < mFxProcessor.size(); ++channel)
-        mFxProcessor[channel]->setState (mInputDriveValue->load(),
-                                         mDelayTimeValue->load(),
+        mFxProcessor[channel]->setState (mValues[Parameter::InputDrive]->load(),
+                                         mValues[Parameter::DelayTime]->load(),
                                          feedback,
-                                         mFxTypeValue->load(),
-                                         mModulationRateValue->load(),
-                                         mModulationDepthValue->load(),
+                                         mValues[Parameter::FxType]->load(),
+                                         mValues[Parameter::ModulationRate]->load(),
+                                         mValues[Parameter::ModulationDepth]->load(),
                                          stereoSpread,
                                          (channel != 0),
-                                         mDClipDynamicValue->load() == Toggle::On,
-                                         mDClipRiseValue->load(),
-                                         mDClipFallValue->load(),
-                                         static_cast<DClip::FeedbackDecayMode>(mDClipFeedbackDecayValue->load()),
+                                         mValues[Parameter::DClipDynamic]->load() == Toggle::On,
+                                         mValues[Parameter::DClipRise]->load(),
+                                         mValues[Parameter::DClipFall]->load(),
+                                         decayMode,
                                          (channel == 0) && outputDetector,
-                                         mDClipPostCutFactorValue->load());
+                                         mValues[Parameter::DClipPostCutFactor]->load());
 
     for (auto dryWetMixer : mDryWetMixer)
-        dryWetMixer->setState (mDryWetValue->load());
+        dryWetMixer->setState (mValues[Parameter::DryWet]->load());
 
     for (auto outputGain : mOutputGain)
-        outputGain->setState (mOutputGainValue->load());
+        outputGain->setState (mValues[Parameter::OutputGain]->load());
 }
 
 //==============================================================================
