@@ -73,7 +73,6 @@ namespace Parameter
     enum Index : int
     {
         InputDrive = 0,
-        InputBoost,
         DelayTime,
         Feedback,
         InvertFeedback,
@@ -99,7 +98,6 @@ namespace Parameter
     inline const String ID[NumParameters]
     {
         "InputDrive",
-        "InputBoost",
         "Time",
         "Feedback",
         "InvertFeedback",
@@ -121,7 +119,6 @@ namespace Parameter
     inline const String Name[NumParameters]
     {
         "Drive",
-        "Boost",
         "Time",
         "Feedback",
         "Invert",
@@ -185,8 +182,6 @@ namespace Parameter
     {
         // Input Drive:
         { 0.0f, 32.0f, 0.1f },
-        // Input Boost:
-        { 0.0f, 1.0f, 1.0f },
         // Time:
         timeRange.getNormalisableRange(),
         // Feedback:
@@ -224,7 +219,6 @@ namespace Parameter
     inline const float DefaultValue[NumParameters]
     {
         0.0f,   // Input Drive
-        0.0f,   // Input Boost
         100.0f, // Time
         50.0f,  // Feedback
         0.0f,   // Invert Feedback
@@ -246,7 +240,6 @@ namespace Parameter
     inline const String Label[NumParameters]
     {
         " dB",  // Input Drive
-        "",     // Input Boost
         " ms",  // Time
         " %",   // Feedback
         "",     // Invert Feedback
@@ -303,7 +296,6 @@ namespace Parameter
     inline const stringFromValueFunction stringFromValue[NumParameters]
     {
         nullptr,                    // Input Drive
-        stringFromToggleValue,      // Input Boost
         showDecimalPlaceBelow<100>, // Time
         showDecimalPlaces<0>,       // Feedback
         stringFromToggleValue,      // Invert Feedback
@@ -326,8 +318,6 @@ namespace Parameter
     {
         // Input Drive:
         { 0.0f, 12.0f, 24.0f },
-        // Input Boost:
-        {},
         // Time:
         { 1.0f, RBD::maxDelayTimeInMs, 10.0f, 100.0f },
         // Feedback:
@@ -354,8 +344,6 @@ namespace Parameter
     {
         // Input Drive:
         { 2, 4, 6, 8, 10, 14, 16, 18, 20, 22 },
-        // Input Boost:
-        {},
         // Time:
         { 5, 40, 70, 200, 300, 400, 500, 600, 700, 800, 900 },
         // Feedback:
