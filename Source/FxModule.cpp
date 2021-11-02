@@ -25,22 +25,17 @@ void FxModule::setState (float driveInDecibels,
                          float time, float feedback, float type,
                          float modRate, float modDepth, float stereoWidth,
                          bool shouldOffsetModulation,
-                         bool dynamicClipping, float /*clipRise*/, float clipFall,
-                         float fbHeadroomInDb,
+                         bool dynamicClipping, float /*clipRise*/, float /*clipFall*/,
                          DClip::FeedbackDecayMode fbDecay, bool shouldOutputDetector,
-                         float postCutFactor, DClip::CompensationMode fbComp)
+                         float postCutFactor)
 {
     // Set delay input drive parameters
     mDriveSmoothed.setTargetValue (driveInDecibels);
 
     mUseDynamicClipping = dynamicClipping;
-    mFbHeadroomGain = Decibels::decibelsToGain (fbHeadroomInDb);
     mFeedbackDecayMode = fbDecay;
     mShouldOutputDetector = shouldOutputDetector;
     mPostCutFactor = postCutFactor;
-    mFbComp = fbComp;
-
-    mFbMeter.setState (detectorRiseTime, clipFall);
 
     // Set delay and modulation parameters
     mTypeValue = static_cast<FxType::Index> (type);
@@ -99,7 +94,6 @@ void FxModule::prepare (double sampleRate, int blockSize)
 
     // Prepare contained modules
     mDetector.prepare (sampleRate, blockSize);
-    mFbMeter.prepare (sampleRate, blockSize);
     mSaturator.prepare (sampleRate, blockSize);
     mDelay.prepare (sampleRate, blockSize);
     mLfo.prepare (sampleRate, blockSize);
@@ -118,7 +112,6 @@ void FxModule::reset()
 
     // Reset contained modules
     mDetector.reset();
-    mFbMeter.reset();
     
     mSaturator.reset();
     mDelay.reset();
@@ -166,30 +159,17 @@ void FxModule::process (const float* inAudio, float* outAudio,
         else
             detectorFeedbackSample = readSample;
 
-        float detectorSample = 0.0f;
+        const float detectorSample = std::abs (writeSample + detectorFeedbackSample);
 
-        if (mFbComp == DClip::LowDrive)
-            detectorSample = std::abs (writeSample
-                                       + detectorFeedbackSample * mFbHeadroomGain);
-        else
-            detectorSample = std::abs (writeSample + detectorFeedbackSample);
-                
-        const float maxThreshold = -1.0f;
-        const float minThreshold = -72.0f;
-                
         const float gain = mDetector.processSample (detectorSample);
         const float levelInDb = Decibels::gainToDecibels (gain);
+        
+        const float maxThreshold = 5.0f;
+        const float minThreshold = -72.0f;
         
         const float thresholdInDb = jlimit (minThreshold, maxThreshold,
                                             levelInDb + clippingThreshold);
         const float detectorGain = Decibels::decibelsToGain (thresholdInDb);
-
-        // Measure the feedback sample level
-        const float feedbackSampleLevel
-        = Decibels::gainToDecibels (mFbMeter.processSample (std::abs(feedbackSample)));
-        const float feedbackRelativeLevel
-        = feedbackSampleLevel - levelInDb - clippingThreshold;
-        //const float feedbackRelativeGain = Decibels::decibelsToGain (feedbackRelativeLevel);
 
         // Apply pre-saturator gain
         const float preBoostInDb = mDriveSmoothed.getNextValue();
@@ -216,27 +196,15 @@ void FxModule::process (const float* inAudio, float* outAudio,
 
         // Compensate the feedback decay by adding an appropriate amount of
         //  "dry" feedback sample
-        /*const*/ float expectedPeakGain = 0.0f;
+        /*const*/ float expectedPeakGain = Decibels::decibelsToGain (postCutInDb - clippingThreshold);
 
-        if (mFbComp == DClip::Dynamic)
-            expectedPeakGain = Decibels::decibelsToGain (postCutInDb
-                                                         + feedbackRelativeLevel);
-        else
-            expectedPeakGain = Decibels::decibelsToGain (postCutInDb - clippingThreshold);
-
-        if (mFeedbackDecayMode == DClip::Proportional)
+        if (mFeedbackDecayMode == DClip::LessDrive)
             expectedPeakGain *= feedbackGain;
-
-        if (mFbComp == DClip::LowDrive)
-            expectedPeakGain /= mFbHeadroomGain;
         
         const float postClipperGain = SaturationModule::saturateBeta (expectedPeakGain);
         const float attenuationFactor = postClipperGain / expectedPeakGain;
-        //DBG(attenuationFactor);
         const float compensationSample = (1.0f - attenuationFactor) * feedbackSample;
-
-        if (mFbComp != DClip::Off)
-            writeSample += compensationSample;
+        writeSample += compensationSample;
 
         // Apply post-saturator gain
         writeSample *= Decibels::decibelsToGain (-postCutInDb);

@@ -30,9 +30,8 @@ public:
                    float modRate, float modDepth, float stereoWidth,
                    bool shouldOffsetModulation,
                    bool dynamicClipping, float clipRise, float clipFall,
-                   float fbHeadroom,
                    DClip::FeedbackDecayMode fbDecay, bool shouldOutputDetector,
-                   float postCutFactor, DClip::CompensationMode fbComp);
+                   float postCutFactor);
     
 //==============================================================================
     void prepare (double sampleRate, int blockSize) override;
@@ -63,15 +62,12 @@ private:
     // Drive
     SmoothedValue<float> mDriveSmoothed;
     SlewFilterModule mDetector;
-    SlewFilterModule mFbMeter;
     SaturationModule mSaturator;
 
     bool mUseDynamicClipping = true;
     bool mShouldOutputDetector = false;
     float mPostCutFactor = 0.5f;
-    float mFbHeadroomGain = 1.0f;
     DClip::FeedbackDecayMode mFeedbackDecayMode = DClip::Normal;
-    DClip::CompensationMode mFbComp = DClip::Simple;
 
     inline static constexpr float clippingThreshold = 8.0f;
     inline static constexpr float detectorRiseTime = 0.2f /*ms*/;

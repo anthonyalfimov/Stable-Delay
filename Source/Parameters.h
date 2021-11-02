@@ -54,18 +54,10 @@ namespace Toggle
 
 namespace DClip
 {
-    enum CompensationMode : int
-    {
-        Off = 0,
-        Simple,
-        LowDrive,
-        Dynamic
-    };
-
     enum FeedbackDecayMode : int
     {
         Normal = 0,
-        Proportional
+        LessDrive
     };
 }
 
@@ -95,11 +87,9 @@ namespace Parameter
         DClipDynamic,
         DClipRise,
         DClipFall,
-        DClipFbHeadroom,
         DClipFeedbackDecay,
         DClipOutputDetector,
         DClipPostCutFactor,
-        DClipFbCompensation,
         
         NumParameters
     };
@@ -123,11 +113,9 @@ namespace Parameter
         "DClipDynamic",
         "DClipRise",
         "DClipFall",
-        "DClipFbHeadroom",
         "DClipFeedbackDecay",
         "DClipOutputDetector",
         "DClipPostCutFactor",
-        "DClipFbCompensation"
     };
 
     inline const String Name[NumParameters]
@@ -147,11 +135,9 @@ namespace Parameter
         "Clip: Dynamic",
         "Clip: Rise",
         "Clip: Fall",
-        "Clip: Fb Headroom",
         "Clip: Feedback Decay",
         "Clip: Output Detector",
-        "Clip: Post Cut Factor",
-        "Clip: Fb Compensation"
+        "Clip: Post Cut Factor"
     };
 
     // TODO: DRY generation of ranges and ticks from min, max and mid values
@@ -227,16 +213,12 @@ namespace Parameter
         riseRange.getNormalisableRange(),
         // DClipFall:
         fallRange.getNormalisableRange(),
-        // DClipFbHeadroom:
-        { 0.0f, 6.0f, 0.1f },
         // DClipFeedbackDecay:
         { 0.0f, 1.0f, 1.0f },
         // DClipOutputDetector:
         { 0.0f, 1.0f, 1.0f },
         // DClipPostCutFactor:
-        { 0.5f, 1.0f, 0.01f },
-        // DClipFbCompensation:
-        { 0.0f, 3.0f, 1.0f }
+        { 0.5f, 1.0f, 0.01f }
     };
 
     inline const float DefaultValue[NumParameters]
@@ -256,11 +238,9 @@ namespace Parameter
         1.0f,   // DClipDynamic
         0.2f,   // DClipRise
         1200.0f,// DClipFall
-        0.0f,   // DClipFbHeadroom
         DClip::Normal,   // DClipFeedbackDecay
         0.0f,   // DClipOutputDetector
-        0.5f,   // DClipPostCutFactor
-        DClip::Simple    // DClipFbCompensation
+        0.65f   // DClipPostCutFactor
     };
 
     inline const String Label[NumParameters]
@@ -280,11 +260,9 @@ namespace Parameter
         "",     // DClipDynamic
         " ms",  // DClipRise
         " ms",  // DClipFall
-        " dB",  // DClipFbHeadroom
         "",     // DClipFeedbackDecay
         "",     // DClipOutputDetector
-        "x",    // DClipPostCutFactor
-        ""      // DClipFbCompensation
+        "x"     // DClipPostCutFactor
     };
 
     inline const auto stringFromFxTypeValue = [] (float value, int /*maxStringLength*/)
@@ -301,30 +279,6 @@ namespace Parameter
         return Toggle::Label[toggleIndex];
     };
     
-    inline const auto stringFromFbCompMode = [] (float value, int /*maxStringLength*/)
-    {
-        auto mode = static_cast<DClip::CompensationMode> (value);
-        
-        switch (mode)
-        {
-            case DClip::Off:
-                return "Off";
-                
-            case DClip::Simple:
-                return "Simple";
-                
-            case DClip::LowDrive:
-                return "Low Drive";
-
-            case DClip::Dynamic:
-                return "Dynamic";
-                
-            default:
-                jassertfalse;
-                return "Error";
-        }
-    };
-
     inline const auto stringFromFbDecayMode = [] (float value, int /*maxStringLength*/)
     {
         auto mode = static_cast<DClip::FeedbackDecayMode> (value);
@@ -334,8 +288,8 @@ namespace Parameter
             case DClip::Normal:
                 return "Normal";
 
-            case DClip::Proportional:
-                return "Proportional";
+            case DClip::LessDrive:
+                return "Less Drive";
 
             default:
                 jassertfalse;
@@ -363,11 +317,9 @@ namespace Parameter
         stringFromToggleValue,      // DClipDynamic
         showDecimalPlaces<2>,       // DClipRise
         showDecimalPlaces<0>,       // DClipFall
-        showDecimalPlaces<1>,       // DClipFbHeadroom
         stringFromFbDecayMode,      // DClipFeedbackDecay
         stringFromToggleValue,      // DClipOutputDetector
         showDecimalPlaces<2>,       // DClipPostCutFactor
-        stringFromFbCompMode        // DClipFbCompensation
     };
 
     inline const std::initializer_list<float> majorTicks[NumParameters]
@@ -395,7 +347,7 @@ namespace Parameter
         // Stereo Spread:
         {},
         
-        {}, {}, {}, {}, {}, {}, {}, {}
+        {}, {}, {}, {}, {}, {}
     };
 
     inline const std::initializer_list<float> minorTicks[NumParameters]
@@ -423,6 +375,6 @@ namespace Parameter
         // Stereo Spread:
         {},
         
-        {}, {}, {}, {}, {}, {}, {}, {}
+        {}, {}, {}, {}, {}, {}
     };
 } // end namespace Parameter

@@ -407,16 +407,12 @@ void ReallyBasicDelayAudioProcessor::initialiseParameters()
     = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipRise]);
     mDClipFallValue
     = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipFall]);
-    mDClipFbHeadroomValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipFbHeadroom]);
     mDClipFeedbackDecayValue
     = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipFeedbackDecay]);
     mDClipOutputDetectorValue
     = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipOutputDetector]);
     mDClipPostCutFactorValue
     = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipPostCutFactor]);
-    mDClipFbCompensationValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::DClipFbCompensation]);
     
     updateParameters();
 }
@@ -444,11 +440,9 @@ void ReallyBasicDelayAudioProcessor::updateParameters()
                                          mDClipDynamicValue->load() == Toggle::On,
                                          mDClipRiseValue->load(),
                                          mDClipFallValue->load(),
-                                         mDClipFbHeadroomValue->load(),
                                          static_cast<DClip::FeedbackDecayMode>(mDClipFeedbackDecayValue->load()),
                                          (channel == 0) && outputDetector,
-                                         mDClipPostCutFactorValue->load(),
-                                         static_cast<DClip::CompensationMode> (mDClipFbCompensationValue->load()));
+                                         mDClipPostCutFactorValue->load());
 
     for (auto dryWetMixer : mDryWetMixer)
         dryWetMixer->setState (mDryWetValue->load());
