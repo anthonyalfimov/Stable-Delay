@@ -23,6 +23,7 @@ public:
 
 //==============================================================================
     void setState (float riseTimeInMs, float fallTimeInMs);
+    void setHold (bool enableHold);
 
 //==============================================================================
     void prepare (double sampleRate, int blockSize) override;
@@ -70,6 +71,9 @@ public:
     void resetDenormals();
 
 private:
+    bool mEnableHold = false;
+    
+//==============================================================================
     float mPreviousValue = 0.0f;
 
 //==============================================================================
@@ -81,8 +85,6 @@ private:
     double mWeightExpFactor = getWeightExpFactor();
 
 //==============================================================================
-    // TODO: Confirm that this allows passing 20 kHz sine
-    // Set minimum time constant to a 20 kHz period duration
     inline static constexpr float minTimeInMs = 0.05f;
 
 //==============================================================================

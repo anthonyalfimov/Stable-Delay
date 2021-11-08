@@ -393,9 +393,6 @@ void ReallyBasicDelayAudioProcessor::updateParameters()
     const float stereoSpread
     = (getTotalNumOutputChannels() == 2) ? mValues[Parameter::StereoSpread]->load() : 0.0f;
     
-    const auto decayMode
-    = static_cast<DClip::FeedbackDecayMode> (mValues[Parameter::DClipFeedbackDecay]->load());
-    
     const bool outputDetector = (mValues[Parameter::DClipOutputDetector]->load() == Toggle::On);
     
     for (int channel = 0; channel < mFxProcessor.size(); ++channel)
@@ -408,9 +405,9 @@ void ReallyBasicDelayAudioProcessor::updateParameters()
                                          stereoSpread,
                                          (channel != 0),
                                          mValues[Parameter::DClipDynamic]->load() == Toggle::On,
-                                         mValues[Parameter::DClipRise]->load(),
+                                         mValues[Parameter::DDetRise]->load(),
+                                         mValues[Parameter::DDetFall]->load(),
                                          mValues[Parameter::DClipFall]->load(),
-                                         decayMode,
                                          (channel == 0) && outputDetector,
                                          mValues[Parameter::DClipPostCutFactor]->load());
 

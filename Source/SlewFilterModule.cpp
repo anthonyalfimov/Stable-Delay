@@ -25,6 +25,11 @@ void SlewFilterModule::setState (float riseTimeInMs, float fallTimeInMs)
     mFallWeight = getAveragingWeight (mFallTimeInMs);
 }
 
+void SlewFilterModule::setHold (bool enableHold)
+{
+    mEnableHold = enableHold;
+}
+
 //==============================================================================
 void SlewFilterModule::prepare (double sampleRate, int blockSize)
 {
@@ -46,8 +51,22 @@ void SlewFilterModule::reset (float initialValue)
 
 float SlewFilterModule::processSample (float inputValue)
 {
-    float weight = (inputValue > mPreviousValue) ? mRiseWeight : mFallWeight;
-    float result = inputValue + weight * (mPreviousValue - inputValue);
+    float weight = 0.0f;
+    
+    if (inputValue > mPreviousValue)
+    {
+        weight = mRiseWeight;
+    }
+    else if (mEnableHold)
+    {
+        return mPreviousValue;
+    }
+    else
+    {
+        weight = mFallWeight;
+    }
+    
+    const float result = inputValue + weight * (mPreviousValue - inputValue);
     mPreviousValue = result;
 
     return result;

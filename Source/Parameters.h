@@ -52,15 +52,6 @@ namespace Toggle
 
 } // end namespace Toggle
 
-namespace DClip
-{
-    enum FeedbackDecayMode : int
-    {
-        Normal = 0,
-        LessDrive
-    };
-}
-
 // TODO: Consider turning the Parameter namespace into a class
 //  This will allow to have direct control over the lifetime of the contained
 //  objects, which is becoming more important as these objects become more
@@ -84,9 +75,9 @@ namespace Parameter
         StereoSpread,
         
         DClipDynamic,
-        DClipRise,
+        DDetRise,
+        DDetFall,
         DClipFall,
-        DClipFeedbackDecay,
         DClipOutputDetector,
         DClipPostCutFactor,
         
@@ -109,9 +100,9 @@ namespace Parameter
         "StereoSpread",
         
         "DClipDynamic",
-        "DClipRise",
+        "DDetRise",
+        "DDetFall",
         "DClipFall",
-        "DClipFeedbackDecay",
         "DClipOutputDetector",
         "DClipPostCutFactor",
     };
@@ -130,9 +121,9 @@ namespace Parameter
         "Spread",
         
         "Clip: Dynamic",
-        "Clip: Rise",
+        "Det: Rise",
+        "Det: Fall",
         "Clip: Fall",
-        "Clip: Feedback Decay",
         "Clip: Output Detector",
         "Clip: Post Cut Factor"
     };
@@ -204,12 +195,12 @@ namespace Parameter
         
         // DClipDynamic:
         { 0.0f, 1.0f, 1.0f },
-        // DClipRise:
+        // DDetRise:
         riseRange.getNormalisableRange(),
+        // DDetFall:
+        fallRange.getNormalisableRange(),
         // DClipFall:
         fallRange.getNormalisableRange(),
-        // DClipFeedbackDecay:
-        { 0.0f, 1.0f, 1.0f },
         // DClipOutputDetector:
         { 0.0f, 1.0f, 1.0f },
         // DClipPostCutFactor:
@@ -230,9 +221,9 @@ namespace Parameter
         30.0f,  // Stereo Spread
         
         1.0f,   // DClipDynamic
-        0.2f,   // DClipRise
+        0.2f,   // DDetRise
+        1200.0f,// DDetFall
         1200.0f,// DClipFall
-        DClip::Normal,   // DClipFeedbackDecay
         0.0f,   // DClipOutputDetector
         0.65f   // DClipPostCutFactor
     };
@@ -251,9 +242,9 @@ namespace Parameter
         " %",   // Stereo Spread
         
         "",     // DClipDynamic
-        " ms",  // DClipRise
+        " ms",  // DDetRise
+        " ms",  // DDetFall
         " ms",  // DClipFall
-        "",     // DClipFeedbackDecay
         "",     // DClipOutputDetector
         "x"     // DClipPostCutFactor
     };
@@ -270,24 +261,6 @@ namespace Parameter
         const auto toggleIndex = static_cast<Toggle::Index> (value);
 
         return Toggle::Label[toggleIndex];
-    };
-    
-    inline const auto stringFromFbDecayMode = [] (float value, int /*maxStringLength*/)
-    {
-        auto mode = static_cast<DClip::FeedbackDecayMode> (value);
-
-        switch (mode)
-        {
-            case DClip::Normal:
-                return "Normal";
-
-            case DClip::LessDrive:
-                return "Less Drive";
-
-            default:
-                jassertfalse;
-                return "Error";
-        }
     };
 
     using stringFromValueFunction = std::function<String(float value,
@@ -307,9 +280,9 @@ namespace Parameter
         showDecimalPlaceBelow<10>,  // Stereo Spread
         
         stringFromToggleValue,      // DClipDynamic
-        showDecimalPlaces<2>,       // DClipRise
+        showDecimalPlaces<2>,       // DDetRise
+        showDecimalPlaces<0>,       // DDetFall
         showDecimalPlaces<0>,       // DClipFall
-        stringFromFbDecayMode,      // DClipFeedbackDecay
         stringFromToggleValue,      // DClipOutputDetector
         showDecimalPlaces<2>,       // DClipPostCutFactor
     };

@@ -13,27 +13,31 @@
 
 FxModule::FxModule()
 {
-    
     // Set the saturation curve
     mSaturator.setState (SaturationCurve::beta);
-
-    // Set dynamic threshold detector rise and fall time constants
-    mDetector.setState (detectorRiseTime, detectorFallTime);
+    
+    // Disable hold for input and feedback detectors
+    mInputDetector.setHold (false);
+    mFeedbackDetector.setHold (false);
 }
 
 void FxModule::setState (float driveInDecibels,
                          float time, float feedback, float type,
                          float modRate, float modDepth, float stereoWidth,
                          bool shouldOffsetModulation,
-                         bool dynamicClipping, float /*clipRise*/, float /*clipFall*/,
-                         DClip::FeedbackDecayMode fbDecay, bool shouldOutputDetector,
+                         bool dynamicClipping,
+                         float detRise, float detFall, float clipFall,
+                         bool shouldOutputDetector,
                          float postCutFactor)
 {
     // Set delay input drive parameters
     mDriveSmoothed.setTargetValue (driveInDecibels);
+    
+    mInputDetector.setState (detRise, detFall);
+    mFeedbackDetector.setState (detRise, detFall);
+    mThresholdDetector.setState (detectorRiseTime, clipFall);
 
     mUseDynamicClipping = dynamicClipping;
-    mFeedbackDecayMode = fbDecay;
     mShouldOutputDetector = shouldOutputDetector;
     mPostCutFactor = postCutFactor;
 
@@ -93,7 +97,9 @@ void FxModule::prepare (double sampleRate, int blockSize)
     DspModule::prepare (sampleRate, blockSize);
 
     // Prepare contained modules
-    mDetector.prepare (sampleRate, blockSize);
+    mInputDetector.prepare (sampleRate, blockSize);
+    mFeedbackDetector.prepare (sampleRate, blockSize);
+    mThresholdDetector.prepare (sampleRate, blockSize);
     mSaturator.prepare (sampleRate, blockSize);
     mDelay.prepare (sampleRate, blockSize);
     mLfo.prepare (sampleRate, blockSize);
@@ -111,7 +117,9 @@ void FxModule::reset()
         FloatVectorOperations::clear (mModulationBuffer.get(), mBlockSize);
 
     // Reset contained modules
-    mDetector.reset();
+    mInputDetector.reset();
+    mFeedbackDetector.reset();
+    mThresholdDetector.reset();
     
     mSaturator.reset();
     mDelay.reset();
@@ -147,21 +155,20 @@ void FxModule::process (const float* inAudio, float* outAudio,
 
         //============================================
         // MARK: Temporarily disable runaway feedback
-        feedbackGain = jmin (feedbackGain, 1.0f);
+        //feedbackGain = jmin (feedbackGain, 1.0f);
         //============================================
 
         float feedbackSample = readSample * feedbackGain;
 
-        float detectorFeedbackSample = 0.0f;
-
-        if (mFeedbackDecayMode == DClip::Normal)
-            detectorFeedbackSample = feedbackSample;
-        else
-            detectorFeedbackSample = readSample;
-
-        const float detectorSample = std::abs (writeSample + detectorFeedbackSample);
-
-        const float gain = mDetector.processSample (detectorSample);
+        const float inputLevelGain
+        = mInputDetector.processSample (std::abs (writeSample));
+        const float feedbackLevelGain
+        = mFeedbackDetector.processSample (std::abs (feedbackSample));
+     
+        // Enable hold when feedback level is above input level
+        mThresholdDetector.setHold (feedbackLevelGain > inputLevelGain);
+        
+        const float gain = mThresholdDetector.processSample (std::abs (writeSample));
         const float levelInDb = Decibels::gainToDecibels (gain);
         
         const float maxThreshold = 5.0f;
@@ -196,15 +203,12 @@ void FxModule::process (const float* inAudio, float* outAudio,
 
         // Compensate the feedback decay by adding an appropriate amount of
         //  "dry" feedback sample
-        /*const*/ float expectedPeakGain = Decibels::decibelsToGain (postCutInDb - clippingThreshold);
-
-        if (mFeedbackDecayMode == DClip::LessDrive)
-            expectedPeakGain *= feedbackGain;
-        
-        const float postClipperGain = SaturationModule::saturateBeta (expectedPeakGain);
-        const float attenuationFactor = postClipperGain / expectedPeakGain;
-        const float compensationSample = (1.0f - attenuationFactor) * feedbackSample;
-        writeSample += compensationSample;
+//        const float expectedPeakGain = Decibels::decibelsToGain (postCutInDb - clippingThreshold);
+//
+//        const float postClipperGain = SaturationModule::saturateBeta (expectedPeakGain);
+//        const float attenuationFactor = postClipperGain / expectedPeakGain;
+//        const float compensationSample = (1.0f - attenuationFactor) * feedbackSample;
+//        writeSample += compensationSample;
 
         // Apply post-saturator gain
         writeSample *= Decibels::decibelsToGain (-postCutInDb);

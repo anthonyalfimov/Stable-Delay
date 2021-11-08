@@ -29,8 +29,9 @@ public:
                    float time, float feedback, float type,
                    float modRate, float modDepth, float stereoWidth,
                    bool shouldOffsetModulation,
-                   bool dynamicClipping, float clipRise, float clipFall,
-                   DClip::FeedbackDecayMode fbDecay, bool shouldOutputDetector,
+                   bool dynamicClipping,
+                   float detRise, float detFall, float clipFall,
+                   bool shouldOutputDetector,
                    float postCutFactor);
     
 //==============================================================================
@@ -61,13 +62,16 @@ private:
 //==============================================================================
     // Drive
     SmoothedValue<float> mDriveSmoothed;
-    SlewFilterModule mDetector;
+    
+    SlewFilterModule mInputDetector;
+    SlewFilterModule mFeedbackDetector;
+    
+    SlewFilterModule mThresholdDetector;
     SaturationModule mSaturator;
 
     bool mUseDynamicClipping = true;
     bool mShouldOutputDetector = false;
     float mPostCutFactor = 0.5f;
-    DClip::FeedbackDecayMode mFeedbackDecayMode = DClip::Normal;
 
     inline static constexpr float clippingThreshold = 8.0f;
     inline static constexpr float detectorRiseTime = 0.2f /*ms*/;
