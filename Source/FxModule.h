@@ -73,7 +73,10 @@ private:
     bool mShouldOutputDetector = false;
     float mPostCutFactor = 0.5f;
 
-    inline static constexpr float clippingThreshold = 8.0f;
+    inline static constexpr float thresholdDelta = 8.0f;
+    inline static constexpr float maxThreshold = 5.0f;
+    inline static constexpr float minThreshold = -72.0f;
+        
     inline static constexpr float detectorRiseTime = 0.2f /*ms*/;
     inline static constexpr float detectorFallTime = 1200.0f /*ms*/;
 

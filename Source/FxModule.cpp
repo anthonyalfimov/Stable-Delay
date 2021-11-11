@@ -151,13 +151,8 @@ void FxModule::process (const float* inAudio, float* outAudio,
 
     // WRITE SAMPLE TO THE DELAY BUFFER AND ADVANCE THE WRITE HEAD
         float writeSample = inAudio[i];
-        /*const*/ float feedbackGain = mFeedbackSmoothed.getNextValue();
-
-        //============================================
-        // MARK: Temporarily disable runaway feedback
-        //feedbackGain = jmin (feedbackGain, 1.0f);
-        //============================================
-
+        
+        const float feedbackGain = mFeedbackSmoothed.getNextValue();
         float feedbackSample = readSample * feedbackGain;
 
         const float inputLevelGain
@@ -171,11 +166,8 @@ void FxModule::process (const float* inAudio, float* outAudio,
         const float gain = mThresholdDetector.processSample (std::abs (writeSample));
         const float levelInDb = Decibels::gainToDecibels (gain);
         
-        const float maxThreshold = 5.0f;
-        const float minThreshold = -72.0f;
-        
         const float thresholdInDb = jlimit (minThreshold, maxThreshold,
-                                            levelInDb + clippingThreshold);
+                                            levelInDb + thresholdDelta);
         const float detectorGain = Decibels::decibelsToGain (thresholdInDb);
 
         // Apply pre-saturator gain
@@ -183,8 +175,6 @@ void FxModule::process (const float* inAudio, float* outAudio,
         const float postCutInDb = preBoostInDb * mPostCutFactor;
 
         writeSample *= Decibels::decibelsToGain (preBoostInDb);
-        // Drive is applied to the feedback sample, so we need to mix it in
-        //  before the post-saturation gain is applied
         feedbackSample *= Decibels::decibelsToGain (postCutInDb);
 
         // Add feedback sample
@@ -201,6 +191,9 @@ void FxModule::process (const float* inAudio, float* outAudio,
         if (mUseDynamicClipping)
             writeSample *= Decibels::decibelsToGain (thresholdInDb);
 
+        // Apply post-saturator gain
+        writeSample *= Decibels::decibelsToGain (-postCutInDb);
+        
         // Compensate the feedback decay by adding an appropriate amount of
         //  "dry" feedback sample
 //        const float expectedPeakGain = Decibels::decibelsToGain (postCutInDb - clippingThreshold);
@@ -209,9 +202,6 @@ void FxModule::process (const float* inAudio, float* outAudio,
 //        const float attenuationFactor = postClipperGain / expectedPeakGain;
 //        const float compensationSample = (1.0f - attenuationFactor) * feedbackSample;
 //        writeSample += compensationSample;
-
-        // Apply post-saturator gain
-        writeSample *= Decibels::decibelsToGain (-postCutInDb);
 
         mDelay.writeAndAdvance (writeSample);
 
