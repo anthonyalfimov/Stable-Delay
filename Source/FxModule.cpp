@@ -168,7 +168,7 @@ void FxModule::process (const float* inAudio, float* outAudio,
         
         const float thresholdInDb = jlimit (minThreshold, maxThreshold,
                                             levelInDb + thresholdDelta);
-        const float detectorGain = Decibels::decibelsToGain (thresholdInDb);
+        const float thresholdGain = Decibels::decibelsToGain (thresholdInDb);
 
         // Apply pre-saturator gain
         const float preBoostInDb = mDriveSmoothed.getNextValue();
@@ -207,7 +207,7 @@ void FxModule::process (const float* inAudio, float* outAudio,
 
     // WRITE OUTPUT AUDIO
         if (mShouldOutputDetector)
-            outAudio[i] = detectorGain;
+            outAudio[i] = thresholdGain;
         else
             outAudio[i] = readSample;       // write output audio
     }
