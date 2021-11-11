@@ -151,9 +151,7 @@ void FxModule::process (const float* inAudio, float* outAudio,
 
     // WRITE SAMPLE TO THE DELAY BUFFER AND ADVANCE THE WRITE HEAD
         float writeSample = inAudio[i];
-        
-        const float feedbackGain = mFeedbackSmoothed.getNextValue();
-        float feedbackSample = readSample * feedbackGain;
+        float feedbackSample = readSample * mFeedbackSmoothed.getNextValue();
 
         const float inputLevelGain
         = mInputDetector.processSample (std::abs (writeSample));
@@ -165,10 +163,13 @@ void FxModule::process (const float* inAudio, float* outAudio,
         
         const float gain = mThresholdDetector.processSample (std::abs (writeSample));
         const float levelInDb = Decibels::gainToDecibels (gain);
-        
         const float thresholdInDb = jlimit (minThreshold, maxThreshold,
                                             levelInDb + thresholdDelta);
+        
+        //======================================================================
+        //  TMP: For threshold output
         const float thresholdGain = Decibels::decibelsToGain (thresholdInDb);
+        //======================================================================
 
         // Apply pre-saturator gain
         const float preBoostInDb = mDriveSmoothed.getNextValue();
@@ -193,15 +194,6 @@ void FxModule::process (const float* inAudio, float* outAudio,
 
         // Apply post-saturator gain
         writeSample *= Decibels::decibelsToGain (-postCutInDb);
-        
-        // Compensate the feedback decay by adding an appropriate amount of
-        //  "dry" feedback sample
-//        const float expectedPeakGain = Decibels::decibelsToGain (postCutInDb - clippingThreshold);
-//
-//        const float postClipperGain = SaturationModule::saturateBeta (expectedPeakGain);
-//        const float attenuationFactor = postClipperGain / expectedPeakGain;
-//        const float compensationSample = (1.0f - attenuationFactor) * feedbackSample;
-//        writeSample += compensationSample;
 
         mDelay.writeAndAdvance (writeSample);
 
