@@ -19,6 +19,10 @@ FxModule::FxModule()
     // Disable hold for input and feedback detectors
     mInputDetector.setHold (false);
     mFeedbackDetector.setHold (false);
+
+    // Set input and feedback detector time constants
+    mInputDetector.setState (detectorRiseTime, detectorFallTime);
+    mFeedbackDetector.setState (detectorRiseTime, detectorFallTime);
 }
 
 void FxModule::setState (float driveInDecibels,
@@ -26,16 +30,16 @@ void FxModule::setState (float driveInDecibels,
                          float modRate, float modDepth, float stereoWidth,
                          bool shouldOffsetModulation,
                          bool dynamicClipping,
-                         float detRise, float detFall, float clipFall,
+                         float limRise, float limConstFall, float limFallRange,
                          bool shouldOutputDetector,
                          float postCutFactor)
 {
     // Set delay input drive parameters
     mDriveSmoothed.setTargetValue (driveInDecibels);
-    
-    mInputDetector.setState (detRise, detFall);
-    mFeedbackDetector.setState (detRise, detFall);
-    mThresholdDetector.setState (detectorRiseTime, clipFall);
+
+    mFeedbackLimitDetectorRise = limRise;
+    mFeedbackLimitDetectorFallConst = limConstFall;
+    mFeedbackLimitDetectorFallRange = limFallRange;
 
     mUseDynamicClipping = dynamicClipping;
     mShouldOutputDetector = shouldOutputDetector;
@@ -99,7 +103,7 @@ void FxModule::prepare (double sampleRate, int blockSize)
     // Prepare contained modules
     mInputDetector.prepare (sampleRate, blockSize);
     mFeedbackDetector.prepare (sampleRate, blockSize);
-    mThresholdDetector.prepare (sampleRate, blockSize);
+    mFeedbackLimitDetector.prepare (sampleRate, blockSize);
     mSaturator.prepare (sampleRate, blockSize);
     mDelay.prepare (sampleRate, blockSize);
     mLfo.prepare (sampleRate, blockSize);
@@ -119,7 +123,7 @@ void FxModule::reset()
     // Reset contained modules
     mInputDetector.reset();
     mFeedbackDetector.reset();
-    mThresholdDetector.reset();
+    mFeedbackLimitDetector.reset();
     
     mSaturator.reset();
     mDelay.reset();
@@ -151,17 +155,37 @@ void FxModule::process (const float* inAudio, float* outAudio,
 
     // WRITE SAMPLE TO THE DELAY BUFFER AND ADVANCE THE WRITE HEAD
         float writeSample = inAudio[i];
-        float feedbackSample = readSample * mFeedbackSmoothed.getNextValue();
+        const float feedbackValue = mFeedbackSmoothed.getNextValue();
+        float feedbackSample = readSample * feedbackValue;
 
+        // Compute individual level envelopes for input and feedback
         const float inputLevelGain
         = mInputDetector.processSample (std::abs (writeSample));
-        const float feedbackLevelGain
+        const float feedbackRawLevelGain
         = mFeedbackDetector.processSample (std::abs (feedbackSample));
      
-        // Enable hold when feedback level is above input level
-        mThresholdDetector.setHold (feedbackLevelGain > inputLevelGain);
-        
-        const float gain = mThresholdDetector.processSample (std::abs (writeSample));
+        // TODO: Is there any sense in trying to use the comparison still?
+        // mFeedbackLimitDetector.setHold (feedbackRawLevelGain > inputLevelGain);
+
+        // Enable hold when feedback is set to 100% or more
+        mFeedbackLimitDetector.setHold (feedbackValue >= 1.0f);
+
+        // Update limit detector time constants
+        const float feedbackLimitDetectorFall = mFeedbackLimitDetectorFallConst
+            + mFeedbackLimitDetectorFallRange * jmin (1.0f, feedbackValue);
+        mFeedbackLimitDetector.setState (mFeedbackLimitDetectorRise,
+                                         feedbackLimitDetectorFall);
+
+        // Determine feedback level limit
+        const float feedbackLimitGain
+        = mFeedbackLimitDetector.processSample (std::abs (writeSample));
+
+        // Limit feedback level
+        const float feedbackLimitedLevelGain
+        = jmin (feedbackRawLevelGain, feedbackLimitGain);
+
+        // Calculate the final level envelope
+        const float gain = jmax (inputLevelGain, feedbackLimitedLevelGain);
         const float levelInDb = Decibels::gainToDecibels (gain);
         const float thresholdInDb = jlimit (minThreshold, maxThreshold,
                                             levelInDb + thresholdDelta);

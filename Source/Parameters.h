@@ -75,9 +75,9 @@ namespace Parameter
         StereoSpread,
         
         DClipDynamic,
-        DDetRise,
-        DDetFall,
-        DClipFall,
+        DLimRise,
+        DLimConstFall,
+        DLimFallRange,
         DClipOutputDetector,
         DClipPostCutFactor,
         
@@ -100,9 +100,9 @@ namespace Parameter
         "StereoSpread",
         
         "DClipDynamic",
-        "DDetRise",
-        "DDetFall",
-        "DClipFall",
+        "DLimRise",
+        "DLimConstFall",
+        "DLimFallRange",
         "DClipOutputDetector",
         "DClipPostCutFactor",
     };
@@ -121,9 +121,9 @@ namespace Parameter
         "Spread",
         
         "Clip: Dynamic",
-        "Det: Rise",
-        "Det: Fall",
-        "Clip: Fall",
+        "Lim: Rise",
+        "Lim: Fall Const",
+        "Lim: Fall Range",
         "Clip: Output Detector",
         "Clip: Post Cut Factor"
     };
@@ -157,16 +157,16 @@ namespace Parameter
     
     inline const PiecewiseRange<float, 3> riseRange
     {
-        { { 0.04f, 0.1f, 0.01f }, 0.2f },
-        { { 0.1f, 1.0f, 0.1f }, 0.75f },
-        { { 1.0f, 10.0f, 1.0f }, 1.0f }
+        { { 0.2f, 1.0f, 0.1f }, 0.15f },
+        { { 1.0f, 20.0f, 1.0f }, 0.4f },
+        { { 20.0f, 600.0f, 1.0f }, 1.0f }
     };
     
     inline const PiecewiseRange<float, 3> fallRange
     {
-        { { 10.0f, 100.0f, 1.0f }, 0.4f },
-        { { 100.0f, 1000.0f, 1.0f }, 0.8f },
-        { { 1000.0f, 5000.0f, 10.0f }, 1.0f }
+        { { 0.0f, 100.0f, 1.0f }, 0.2f },
+        { { 100.0f, 1000.0f, 1.0f }, 0.6f },
+        { { 1000.0f, 8000.0f, 10.0f }, 1.0f }
     };
 
     inline const NormalisableRange<float> Range[NumParameters]
@@ -195,11 +195,11 @@ namespace Parameter
         
         // DClipDynamic:
         { 0.0f, 1.0f, 1.0f },
-        // DDetRise:
+        // DLimRise:
         riseRange.getNormalisableRange(),
-        // DDetFall:
+        // DLimConstFall:
         fallRange.getNormalisableRange(),
-        // DClipFall:
+        // DLimFallRange:
         fallRange.getNormalisableRange(),
         // DClipOutputDetector:
         { 0.0f, 1.0f, 1.0f },
@@ -221,9 +221,9 @@ namespace Parameter
         30.0f,  // Stereo Spread
         
         1.0f,   // DClipDynamic
-        0.2f,   // DDetRise
-        1200.0f,// DDetFall
-        1200.0f,// DClipFall
+        20.0f,  // DLimRise
+        1200.0f,// DLimConstFall
+        2400.0f,// DLimFallRange
         0.0f,   // DClipOutputDetector
         0.65f   // DClipPostCutFactor
     };
@@ -242,9 +242,9 @@ namespace Parameter
         " %",   // Stereo Spread
         
         "",     // DClipDynamic
-        " ms",  // DDetRise
-        " ms",  // DDetFall
-        " ms",  // DClipFall
+        " ms",  // DLimRise
+        " ms",  // DLimConstFall
+        " ms",  // DLimFallRange
         "",     // DClipOutputDetector
         "x"     // DClipPostCutFactor
     };

@@ -30,7 +30,7 @@ public:
                    float modRate, float modDepth, float stereoWidth,
                    bool shouldOffsetModulation,
                    bool dynamicClipping,
-                   float detRise, float detFall, float clipFall,
+                   float limRise, float limConstFall, float limFallRange,
                    bool shouldOutputDetector,
                    float postCutFactor);
     
@@ -65,13 +65,17 @@ private:
     
     SlewFilterModule mInputDetector;
     SlewFilterModule mFeedbackDetector;
-    
-    SlewFilterModule mThresholdDetector;
+    SlewFilterModule mFeedbackLimitDetector;
+
+    float mFeedbackLimitDetectorRise = 20.0f;
+    float mFeedbackLimitDetectorFallConst = 1200.0f;
+    float mFeedbackLimitDetectorFallRange = 2400.0f;
+
     SaturationModule mSaturator;
 
     bool mUseDynamicClipping = true;
     bool mShouldOutputDetector = false;
-    float mPostCutFactor = 0.5f;
+    float mPostCutFactor = 0.65f;
 
     inline static constexpr float thresholdDelta = 8.0f;
     inline static constexpr float maxThreshold = 5.0f;

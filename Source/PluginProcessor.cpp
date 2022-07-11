@@ -405,9 +405,9 @@ void ReallyBasicDelayAudioProcessor::updateParameters()
                                          stereoSpread,
                                          (channel != 0),
                                          mValues[Parameter::DClipDynamic]->load() == Toggle::On,
-                                         mValues[Parameter::DDetRise]->load(),
-                                         mValues[Parameter::DDetFall]->load(),
-                                         mValues[Parameter::DClipFall]->load(),
+                                         mValues[Parameter::DLimRise]->load(),
+                                         mValues[Parameter::DLimConstFall]->load(),
+                                         mValues[Parameter::DLimFallRange]->load(),
                                          (channel == 0) && outputDetector,
                                          mValues[Parameter::DClipPostCutFactor]->load());
 
