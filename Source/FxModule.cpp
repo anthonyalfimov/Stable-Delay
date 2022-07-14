@@ -32,7 +32,8 @@ void FxModule::setState (float driveInDecibels,
                          bool dynamicClipping,
                          float limRise, float limConstFall, float limFallRange,
                          bool shouldOutputDetector,
-                         float postCutFactor)
+                         float postCutFactor,
+                         float fbHeadroom, float fbDriveComp)
 {
     // Set delay input drive parameters
     mDriveSmoothed.setTargetValue (driveInDecibels);
@@ -40,6 +41,9 @@ void FxModule::setState (float driveInDecibels,
     mFeedbackLimitDetectorRise = limRise;
     mFeedbackLimitDetectorFallConst = limConstFall;
     mFeedbackLimitDetectorFallRange = limFallRange;
+
+    mFeedbackHeadroom = fbHeadroom;
+    mFeedbackDriveComp = fbDriveComp;
 
     mUseDynamicClipping = dynamicClipping;
     mShouldOutputDetector = shouldOutputDetector;
@@ -174,18 +178,29 @@ void FxModule::process (const float* inAudio, float* outAudio,
         = mFeedbackDetector.processSample (std::abs (feedbackSample));
         
         // Determine feedback level limit
-        const float feedbackLimitGain
+        float feedbackLimitGain
         = mFeedbackLimitDetector.processSample (std::abs (writeSample));
 
+        // Adjust headroom for limited feedback
+        const float headroomAdjustmentInDb = mFeedbackHeadroom - clipperHeadroom;
+        feedbackLimitGain *= Decibels::decibelsToGain (headroomAdjustmentInDb);
+
         // Limit feedback level
-        const float feedbackLimitedLevelGain
-        = jmin (feedbackRawLevelGain, feedbackLimitGain);
+        float feedbackLimitedLevelGain = jmin (feedbackRawLevelGain, feedbackLimitGain);
+
+        // Calculate pre-saturation gain levels (for compensation)
+        const float preBoostInDb = mDriveSmoothed.getNextValue();
+        const float postCutInDb = preBoostInDb * mPostCutFactor;
+
+        // Compensate Drive for feedback signal
+        const float driveCompensationInDb = postCutInDb * mFeedbackDriveComp;
+        feedbackLimitedLevelGain *= Decibels::decibelsToGain (driveCompensationInDb);
 
         // Calculate the final level envelope
         const float gain = jmax (inputLevelGain, feedbackLimitedLevelGain);
         const float levelInDb = Decibels::gainToDecibels (gain);
         const float thresholdInDb = jlimit (minThreshold, maxThreshold,
-                                            levelInDb + thresholdDelta);
+                                            levelInDb + clipperHeadroom);
         
         //======================================================================
         //  TMP: For threshold output
@@ -193,9 +208,6 @@ void FxModule::process (const float* inAudio, float* outAudio,
         //======================================================================
 
         // Apply pre-saturator gain
-        const float preBoostInDb = mDriveSmoothed.getNextValue();
-        const float postCutInDb = preBoostInDb * mPostCutFactor;
-
         writeSample *= Decibels::decibelsToGain (preBoostInDb);
         feedbackSample *= Decibels::decibelsToGain (postCutInDb);
 

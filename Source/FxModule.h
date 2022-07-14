@@ -32,7 +32,8 @@ public:
                    bool dynamicClipping,
                    float limRise, float limConstFall, float limFallRange,
                    bool shouldOutputDetector,
-                   float postCutFactor);
+                   float postCutFactor,
+                   float fbHeadroom, float fbDriveComp);
     
 //==============================================================================
     void prepare (double sampleRate, int blockSize) override;
@@ -71,13 +72,16 @@ private:
     float mFeedbackLimitDetectorFallConst = 1200.0f;
     float mFeedbackLimitDetectorFallRange = 2400.0f;
 
+    float mFeedbackHeadroom = 8.0f;
+    float mFeedbackDriveComp = 0.0f;
+
     SaturationModule mSaturator;
 
     bool mUseDynamicClipping = true;
     bool mShouldOutputDetector = false;
     float mPostCutFactor = 0.65f;
 
-    inline static constexpr float thresholdDelta = 8.0f;
+    inline static constexpr float clipperHeadroom = 8.0f;
     inline static constexpr float maxThreshold = 5.0f;
     inline static constexpr float minThreshold = -72.0f;
         

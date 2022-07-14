@@ -409,7 +409,9 @@ void ReallyBasicDelayAudioProcessor::updateParameters()
                                          mValues[Parameter::DLimConstFall]->load(),
                                          mValues[Parameter::DLimFallRange]->load(),
                                          (channel == 0) && outputDetector,
-                                         mValues[Parameter::DClipPostCutFactor]->load());
+                                         mValues[Parameter::DClipPostCutFactor]->load(),
+                                         mValues[Parameter::DFbHeadroom]->load(),
+                                         mValues[Parameter::DFbDriveComp]->load());
 
     for (auto dryWetMixer : mDryWetMixer)
         dryWetMixer->setState (mValues[Parameter::DryWet]->load());

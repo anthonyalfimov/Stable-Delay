@@ -80,6 +80,9 @@ namespace Parameter
         DLimFallRange,
         DClipOutputDetector,
         DClipPostCutFactor,
+
+        DFbHeadroom,
+        DFbDriveComp,
         
         NumParameters
     };
@@ -105,6 +108,9 @@ namespace Parameter
         "DLimFallRange",
         "DClipOutputDetector",
         "DClipPostCutFactor",
+
+        "DFbHeadroom",
+        "DFbDriveComp",
     };
 
     inline const String Name[NumParameters]
@@ -125,7 +131,10 @@ namespace Parameter
         "Lim: Fall Const",
         "Lim: Fall Range",
         "Clip: Output Detector",
-        "Clip: Post Cut Factor"
+        "Clip: Post Cut Factor",
+
+        "Fb: Headroom",
+        "Fb: Drive Comp",
     };
 
     // TODO: DRY generation of ranges and ticks from min, max and mid values
@@ -204,7 +213,12 @@ namespace Parameter
         // DClipOutputDetector:
         { 0.0f, 1.0f, 1.0f },
         // DClipPostCutFactor:
-        { 0.5f, 1.0f, 0.01f }
+        { 0.5f, 1.0f, 0.01f },
+
+        // DFbHeadroom:
+        { -4.0f, 8.0f, 0.1f },
+        // DFbDriveComp:
+        { 0.0f, 1.0f, 0.1f },
     };
 
     inline const float DefaultValue[NumParameters]
@@ -225,7 +239,9 @@ namespace Parameter
         1200.0f,// DLimConstFall
         2400.0f,// DLimFallRange
         0.0f,   // DClipOutputDetector
-        0.65f   // DClipPostCutFactor
+        0.65f,  // DClipPostCutFactor
+        8.0f,   // DFbHeadroom
+        0.0f,   // DFbDriveComp
     };
 
     inline const String Label[NumParameters]
@@ -246,7 +262,10 @@ namespace Parameter
         " ms",  // DLimConstFall
         " ms",  // DLimFallRange
         "",     // DClipOutputDetector
-        "x"     // DClipPostCutFactor
+        "x",    // DClipPostCutFactor
+
+        " dB",  // DFbHeadroom
+        "",     // DFbDriveComp
     };
 
     inline const auto stringFromFxTypeValue = [] (float value, int /*maxStringLength*/)
@@ -285,6 +304,9 @@ namespace Parameter
         showDecimalPlaces<0>,       // DClipFall
         stringFromToggleValue,      // DClipOutputDetector
         showDecimalPlaces<2>,       // DClipPostCutFactor
+
+        showDecimalPlaces<1>,       // DFbHeadroom
+        showDecimalPlaces<1>,       // DFbDriveComp
     };
 
     inline const std::initializer_list<float> majorTicks[NumParameters]
@@ -310,7 +332,7 @@ namespace Parameter
         // Stereo Spread:
         {},
         
-        {}, {}, {}, {}, {}, {}
+        {}, {}, {}, {}, {}, {}, {}, {}
     };
 
     inline const std::initializer_list<float> minorTicks[NumParameters]
@@ -336,6 +358,6 @@ namespace Parameter
         // Stereo Spread:
         {},
         
-        {}, {}, {}, {}, {}, {}
+        {}, {}, {}, {}, {}, {}, {}, {}
     };
 } // end namespace Parameter
