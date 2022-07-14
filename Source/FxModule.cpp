@@ -158,24 +158,21 @@ void FxModule::process (const float* inAudio, float* outAudio,
         const float feedbackValue = mFeedbackSmoothed.getNextValue();
         float feedbackSample = readSample * feedbackValue;
 
+        // Enable hold when feedback is set to 100% or more
+        mFeedbackLimitDetector.setHold (feedbackValue >= 1.0f);
+
+        // Update limit detector time constants based on feedback
+        const float feedbackLimitDetectorFall = mFeedbackLimitDetectorFallConst
+        + mFeedbackLimitDetectorFallRange * jmin (1.0f, feedbackValue);
+        mFeedbackLimitDetector.setState (mFeedbackLimitDetectorRise,
+                                         feedbackLimitDetectorFall);
+
         // Compute individual level envelopes for input and feedback
         const float inputLevelGain
         = mInputDetector.processSample (std::abs (writeSample));
         const float feedbackRawLevelGain
         = mFeedbackDetector.processSample (std::abs (feedbackSample));
-     
-        // TODO: Is there any sense in trying to use the comparison still?
-        // mFeedbackLimitDetector.setHold (feedbackRawLevelGain > inputLevelGain);
-
-        // Enable hold when feedback is set to 100% or more
-        mFeedbackLimitDetector.setHold (feedbackValue >= 1.0f);
-
-        // Update limit detector time constants
-        const float feedbackLimitDetectorFall = mFeedbackLimitDetectorFallConst
-            + mFeedbackLimitDetectorFallRange * jmin (1.0f, feedbackValue);
-        mFeedbackLimitDetector.setState (mFeedbackLimitDetectorRise,
-                                         feedbackLimitDetectorFall);
-
+        
         // Determine feedback level limit
         const float feedbackLimitGain
         = mFeedbackLimitDetector.processSample (std::abs (writeSample));
