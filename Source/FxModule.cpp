@@ -15,10 +15,6 @@ FxModule::FxModule()
 {
     // Set the saturation curve
     mSaturator.setState (SaturationCurve::beta);
-    
-    // Disable hold for input and feedback detectors
-    mInputDetector.setHold (false);
-    mFeedbackDetector.setHold (false);
 
     // Set input and feedback detector time constants
     mInputDetector.setState (detectorRiseTime, detectorFallTime);

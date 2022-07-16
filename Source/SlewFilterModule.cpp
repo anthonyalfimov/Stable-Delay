@@ -47,6 +47,7 @@ void SlewFilterModule::reset()
 void SlewFilterModule::reset (float initialValue)
 {
     mPreviousValue = initialValue;
+    mEnableHold = false;
 }
 
 float SlewFilterModule::processSample (float inputValue)
