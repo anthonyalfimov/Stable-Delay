@@ -81,8 +81,9 @@ namespace Parameter
         DClipOutputDetector,
         DClipPostCutFactor,
 
-        DFbHeadroom,
-        DFbDriveComp,
+        DFbMaxHeadroom,
+        DFbMinHeadroom,
+        DFbOverdrive,
         
         NumParameters
     };
@@ -109,8 +110,9 @@ namespace Parameter
         "DClipOutputDetector",
         "DClipPostCutFactor",
 
-        "DFbHeadroom",
-        "DFbDriveComp",
+        "DFbMaxHeadroom",
+        "DFbMinHeadroom",
+        "DFbOverdrive",
     };
 
     inline const String Name[NumParameters]
@@ -133,8 +135,9 @@ namespace Parameter
         "Clip: Output Detector",
         "Clip: Post Cut Factor",
 
-        "Fb: Headroom",
-        "Fb: Drive Comp",
+        "Fb: Max Headroom",
+        "Fb: Min Headroom",
+        "Fb: Overdrive",
     };
 
     // TODO: DRY generation of ranges and ticks from min, max and mid values
@@ -185,8 +188,7 @@ namespace Parameter
         // Time:
         timeRange.getNormalisableRange(),
         // Feedback:
-        //createSkewedNormalisableRange (0.0f, 120.0f, 0.0f, 50.0f),
-        { 0.0f, 200.0f },
+        createSkewedNormalisableRange (0.0f, 120.0f, 0.0f, 50.0f),
         // Invert Feedback:
         { 0.0f, 1.0f, 1.0f },
         // Dry Wet Mix:
@@ -215,10 +217,12 @@ namespace Parameter
         // DClipPostCutFactor:
         { 0.5f, 1.0f, 0.01f },
 
-        // DFbHeadroom:
+        // DFbMaxHeadroom:
         { -4.0f, 8.0f, 0.1f },
-        // DFbDriveComp:
-        { 0.0f, 1.0f, 0.1f },
+        // DFbMinHeadroom:
+        { -4.0f, 8.0f, 0.1f },
+        // DFbOverdrive:
+        { 1.0f, 5.0f, 0.1f },
     };
 
     inline const float DefaultValue[NumParameters]
@@ -240,8 +244,10 @@ namespace Parameter
         2400.0f,// DLimFallRange
         0.0f,   // DClipOutputDetector
         0.65f,  // DClipPostCutFactor
-        8.0f,   // DFbHeadroom
-        0.0f,   // DFbDriveComp
+
+        8.0f,   // DFbMaxHeadroom
+        2.0f,   // DFbMinHeadroom
+        1.0f,   // DFbOverdrive
     };
 
     inline const String Label[NumParameters]
@@ -264,8 +270,9 @@ namespace Parameter
         "",     // DClipOutputDetector
         "x",    // DClipPostCutFactor
 
-        " dB",  // DFbHeadroom
-        "",     // DFbDriveComp
+        " dB",  // DFbMaxHeadroom
+        " dB",  // DFbMinHeadroom
+        "x",    // DFbOverdrive
     };
 
     inline const auto stringFromFxTypeValue = [] (float value, int /*maxStringLength*/)
@@ -305,8 +312,9 @@ namespace Parameter
         stringFromToggleValue,      // DClipOutputDetector
         showDecimalPlaces<2>,       // DClipPostCutFactor
 
-        showDecimalPlaces<1>,       // DFbHeadroom
-        showDecimalPlaces<1>,       // DFbDriveComp
+        showDecimalPlaces<1>,       // DFbMaxHeadroom
+        showDecimalPlaces<1>,       // DFbMinHeadroom
+        showDecimalPlaces<1>,       // DFbOverdrive
     };
 
     inline const std::initializer_list<float> majorTicks[NumParameters]
@@ -332,7 +340,7 @@ namespace Parameter
         // Stereo Spread:
         {},
         
-        {}, {}, {}, {}, {}, {}, {}, {}
+        {}, {}, {}, {}, {}, {}, {}, {}, {}
     };
 
     inline const std::initializer_list<float> minorTicks[NumParameters]
@@ -358,6 +366,6 @@ namespace Parameter
         // Stereo Spread:
         {},
         
-        {}, {}, {}, {}, {}, {}, {}, {}
+        {}, {}, {}, {}, {}, {}, {}, {}, {}
     };
 } // end namespace Parameter

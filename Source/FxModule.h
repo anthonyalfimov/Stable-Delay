@@ -33,7 +33,7 @@ public:
                    float limRise, float limConstFall, float limFallRange,
                    bool shouldOutputDetector,
                    float postCutFactor,
-                   float fbHeadroom, float fbDriveComp);
+                   float fbMaxHeadroom, float fbMinHeadroom, float fbOverdrive);
     
 //==============================================================================
     void prepare (double sampleRate, int blockSize) override;
@@ -72,8 +72,9 @@ private:
     float mFeedbackLimitDetectorFallConst = 1200.0f;
     float mFeedbackLimitDetectorFallRange = 2400.0f;
 
-    float mFeedbackHeadroom = 8.0f;
-    float mFeedbackDriveComp = 0.0f;
+    float mFeedbackMaxHeadroom = 8.0f;
+    float mFeedbackMinHeadroom = 2.0f;
+    float mFeedbackOverdrive = 1.0f;
 
     SaturationModule mSaturator;
 

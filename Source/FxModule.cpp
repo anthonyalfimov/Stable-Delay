@@ -29,7 +29,7 @@ void FxModule::setState (float driveInDecibels,
                          float limRise, float limConstFall, float limFallRange,
                          bool shouldOutputDetector,
                          float postCutFactor,
-                         float fbHeadroom, float fbDriveComp)
+                         float fbMaxHeadroom, float fbMinHeadroom, float fbOverdrive)
 {
     // Set delay input drive parameters
     mDriveSmoothed.setTargetValue (driveInDecibels);
@@ -38,8 +38,9 @@ void FxModule::setState (float driveInDecibels,
     mFeedbackLimitDetectorFallConst = limConstFall;
     mFeedbackLimitDetectorFallRange = limFallRange;
 
-    mFeedbackHeadroom = fbHeadroom;
-    mFeedbackDriveComp = fbDriveComp;
+    mFeedbackMaxHeadroom = fbMaxHeadroom;
+    mFeedbackMinHeadroom = fbMinHeadroom;
+    mFeedbackOverdrive = fbOverdrive;
 
     mUseDynamicClipping = dynamicClipping;
     mShouldOutputDetector = shouldOutputDetector;
@@ -155,7 +156,22 @@ void FxModule::process (const float* inAudio, float* outAudio,
 
     // WRITE SAMPLE TO THE DELAY BUFFER AND ADVANCE THE WRITE HEAD
         float writeSample = inAudio[i];
-        const float feedbackValue = mFeedbackSmoothed.getNextValue();
+        float feedbackValue = mFeedbackSmoothed.getNextValue();
+
+        float feedbackHeadroom = mFeedbackMaxHeadroom;
+        float driveCompensation = feedbackValue;
+
+        if (feedbackValue > 1.0f)
+        {
+            const float feedbackExcess = feedbackValue - 1.0f;
+            feedbackValue = 1.0f + feedbackExcess * mFeedbackOverdrive;
+
+            driveCompensation = 1.0f;
+
+            feedbackHeadroom = mFeedbackMaxHeadroom
+                - 5.0f * feedbackExcess * (mFeedbackMaxHeadroom - mFeedbackMinHeadroom);
+        }
+
         float feedbackSample = readSample * feedbackValue;
 
         // Enable hold when feedback is set to 100% or more
@@ -178,7 +194,7 @@ void FxModule::process (const float* inAudio, float* outAudio,
         = mFeedbackLimitDetector.processSample (std::abs (writeSample));
 
         // Adjust headroom for limited feedback
-        const float headroomAdjustmentInDb = mFeedbackHeadroom - clipperHeadroom;
+        const float headroomAdjustmentInDb = feedbackHeadroom - clipperHeadroom;
         feedbackLimitGain *= Decibels::decibelsToGain (headroomAdjustmentInDb);
 
         // Limit feedback level
@@ -189,7 +205,7 @@ void FxModule::process (const float* inAudio, float* outAudio,
         const float postCutInDb = preBoostInDb * mPostCutFactor;
 
         // Compensate Drive for feedback signal
-        const float driveCompensationInDb = postCutInDb * mFeedbackDriveComp;
+        const float driveCompensationInDb = postCutInDb * driveCompensation;
         feedbackLimitedLevelGain *= Decibels::decibelsToGain (driveCompensationInDb);
 
         // Calculate the final level envelope
