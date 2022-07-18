@@ -59,7 +59,7 @@ void FxModule::setState (float driveInDecibels,
         {
             // Convert from ms to s:
             mTimeSmoothed.setTargetValue (time / 1000.0);
-            // Convert from %:
+            // Convert from % (include feedback sign for smoothing):
             mFeedbackSmoothed.setTargetValue (feedbackSign * feedback / 100.0f);
 
             // TODO: Consider using PiecewiseNormalisableRange to map delay modulation
@@ -85,7 +85,7 @@ void FxModule::setState (float driveInDecibels,
         case FxType::Flanger:
         {
             mTimeSmoothed.setTargetValue (flangerCentreTime);
-            // Convert from %:
+            // Convert from % (include feedback sign for smoothing):
             mFeedbackSmoothed.setTargetValue (feedbackSign * feedback / 100.0f);
             // Convert from %:
             modAmplitude = flangerTimeAmplitude * modDepth / 100.0f;
@@ -162,15 +162,19 @@ void FxModule::process (const float* inAudio, float* outAudio,
 
     // WRITE SAMPLE TO THE DELAY BUFFER AND ADVANCE THE WRITE HEAD
         float writeSample = inAudio[i];
-        float feedbackValue = mFeedbackSmoothed.getNextValue();
+        const float feedbackParameterValue = mFeedbackSmoothed.getNextValue();
+
+        // Temporarily negate feedback value sign:
+        const float feedbackSign = (feedbackParameterValue < 0) ? -1.0f : 1.0f;
+        float feedbackAbsValue = std::abs (feedbackParameterValue);
 
         float feedbackHeadroom = mFeedbackMaxHeadroom;
-        float driveCompensation = feedbackValue;
+        float driveCompensation = feedbackAbsValue;
 
-        if (feedbackValue > 1.0f)
+        if (feedbackAbsValue > 1.0f)
         {
-            const float feedbackExcess = feedbackValue - 1.0f;
-            feedbackValue = 1.0f + feedbackExcess * mFeedbackOverdrive;
+            const float feedbackExcess = feedbackAbsValue - 1.0f;
+            feedbackAbsValue = 1.0f + feedbackExcess * mFeedbackOverdrive;
 
             driveCompensation = 1.0f;
 
@@ -178,14 +182,14 @@ void FxModule::process (const float* inAudio, float* outAudio,
                 - 5.0f * feedbackExcess * (mFeedbackMaxHeadroom - mFeedbackMinHeadroom);
         }
 
-        float feedbackSample = readSample * feedbackValue;
+        float feedbackSample = readSample * feedbackSign * feedbackAbsValue;
 
         // Enable hold when feedback is set to 100% or more
-        mFeedbackLimitDetector.setHold (feedbackValue >= 1.0f);
+        mFeedbackLimitDetector.setHold (feedbackAbsValue >= 1.0f);
 
         // Update limit detector time constants based on feedback
         const float feedbackLimitDetectorFall = mFeedbackLimitDetectorFallConst
-        + mFeedbackLimitDetectorFallRange * jmin (1.0f, feedbackValue);
+        + mFeedbackLimitDetectorFallRange * jmin (1.0f, feedbackAbsValue);
         mFeedbackLimitDetector.setState (mFeedbackLimitDetectorRise,
                                          feedbackLimitDetectorFall);
 
