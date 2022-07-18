@@ -26,7 +26,7 @@ public:
 
 //==============================================================================
     void setState (float driveInDecibels,
-                   float time, float feedback, float type,
+                   float time, float feedback, bool invert, float type,
                    float modRate, float modDepth, float stereoWidth,
                    bool shouldOffsetModulation,
                    bool dynamicClipping,

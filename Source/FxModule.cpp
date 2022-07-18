@@ -22,7 +22,7 @@ FxModule::FxModule()
 }
 
 void FxModule::setState (float driveInDecibels,
-                         float time, float feedback, float type,
+                         float time, float feedback, bool invert, float type,
                          float modRate, float modDepth, float stereoWidth,
                          bool shouldOffsetModulation,
                          bool dynamicClipping,
@@ -49,14 +49,18 @@ void FxModule::setState (float driveInDecibels,
     // Set delay and modulation parameters
     mTypeValue = static_cast<FxType::Index> (type);
 
+    const float feedbackSign = invert ? -1.0f : 1.0f;
     float modAmplitude = 0.0f;
+    
 
     switch (mTypeValue)
     {
         case FxType::Delay:
         {
-            mTimeSmoothed.setTargetValue (time / 1000.0);   // convert from ms to s
-            mFeedbackSmoothed.setTargetValue (feedback / 100.0f);    // convert from %
+            // Convert from ms to s:
+            mTimeSmoothed.setTargetValue (time / 1000.0);
+            // Convert from %:
+            mFeedbackSmoothed.setTargetValue (feedbackSign * feedback / 100.0f);
 
             // TODO: Consider using PiecewiseNormalisableRange to map delay modulation
 
@@ -81,8 +85,10 @@ void FxModule::setState (float driveInDecibels,
         case FxType::Flanger:
         {
             mTimeSmoothed.setTargetValue (flangerCentreTime);
-            mFeedbackSmoothed.setTargetValue (feedback / 100.0f); // convert from %
-            modAmplitude = flangerTimeAmplitude * modDepth / 100.0f; // convert from %
+            // Convert from %:
+            mFeedbackSmoothed.setTargetValue (feedbackSign * feedback / 100.0f);
+            // Convert from %:
+            modAmplitude = flangerTimeAmplitude * modDepth / 100.0f;
             break;
         }
 

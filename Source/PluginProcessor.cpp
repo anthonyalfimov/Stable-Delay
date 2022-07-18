@@ -386,10 +386,6 @@ void ReallyBasicDelayAudioProcessor::initialiseParameters()
 
 void ReallyBasicDelayAudioProcessor::updateParameters()
 {
-    const float feedbackFactor
-    = (mValues[Parameter::InvertFeedback]->load() == Toggle::On) ? -1.0f : 1.0f;
-    const float feedback = feedbackFactor * mValues[Parameter::Feedback]->load();
-
     const float stereoSpread
     = (getTotalNumOutputChannels() == 2) ? mValues[Parameter::StereoSpread]->load() : 0.0f;
     
@@ -398,7 +394,8 @@ void ReallyBasicDelayAudioProcessor::updateParameters()
     for (int channel = 0; channel < mFxProcessor.size(); ++channel)
         mFxProcessor[channel]->setState (mValues[Parameter::InputDrive]->load(),
                                          mValues[Parameter::DelayTime]->load(),
-                                         feedback,
+                                         mValues[Parameter::Feedback]->load(),
+                                         mValues[Parameter::InvertFeedback]->load() == Toggle::On,
                                          mValues[Parameter::FxType]->load(),
                                          mValues[Parameter::ModulationRate]->load(),
                                          mValues[Parameter::ModulationDepth]->load(),
