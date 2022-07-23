@@ -194,7 +194,7 @@ void FxModule::process (const float* inAudio, float* outAudio,
                                          feedbackLimitDetectorFall);
 
         // Compute individual level envelopes for input and feedback
-        const float inputLevelGain
+        float inputLevelGain
         = mInputDetector.processSample (std::abs (writeSample));
         const float feedbackRawLevelGain
         = mFeedbackDetector.processSample (std::abs (feedbackSample));
@@ -204,8 +204,12 @@ void FxModule::process (const float* inAudio, float* outAudio,
         = mFeedbackLimitDetector.processSample (std::abs (writeSample));
 
         // Adjust headroom for limited feedback
-        const float headroomAdjustmentInDb = feedbackHeadroom - clipperHeadroom;
-        feedbackLimitGain *= Decibels::decibelsToGain (headroomAdjustmentInDb);
+        const float headroomAdjustmentGain
+            = Decibels::decibelsToGain (feedbackHeadroom - clipperHeadroom);
+        feedbackLimitGain *= headroomAdjustmentGain;
+
+        // Adjust headroom for input signal
+        inputLevelGain *= headroomAdjustmentGain;
 
         // Limit feedback level
         float feedbackLimitedLevelGain = jmin (feedbackRawLevelGain, feedbackLimitGain);
