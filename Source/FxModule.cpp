@@ -225,8 +225,7 @@ void FxModule::process (const float* inAudio, float* outAudio,
         // Calculate the final level envelope
         const float gain = jmax (inputLevelGain, feedbackLimitedLevelGain);
         const float levelInDb = Decibels::gainToDecibels (gain);
-        const float thresholdInDb = jlimit (minThreshold, maxThreshold,
-                                            levelInDb + clipperHeadroom);
+        const float thresholdInDb = jmax (minThreshold, levelInDb + clipperHeadroom);
         
         //======================================================================
         //  TMP: For threshold output
