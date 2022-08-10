@@ -19,6 +19,9 @@ FxModule::FxModule()
     // Set input and feedback detector time constants
     mInputDetector.setState (detectorRiseTime, detectorFallTime);
     mFeedbackDetector.setState (detectorRiseTime, detectorFallTime);
+
+    // Set feedback parameter range skews:
+    mFeedbackDecayRange.setSkewForCentre (0.75f);
 }
 
 void FxModule::setState (float driveInDecibels,
@@ -29,7 +32,7 @@ void FxModule::setState (float driveInDecibels,
                          float limRise, float limConstFall, float limFallRange,
                          bool shouldOutputDetector,
                          float postCutFactor,
-                         float fbMaxHeadroom, float fbMinHeadroom, float fbOverdrive)
+                         float fbMaxHeadroom, float fbMinHeadroom, float /*fbOverdrive*/)
 {
     // Set delay input drive parameters
     mDriveSmoothed.setTargetValue (driveInDecibels);
@@ -40,7 +43,6 @@ void FxModule::setState (float driveInDecibels,
 
     mFeedbackMaxHeadroom = fbMaxHeadroom;
     mFeedbackMinHeadroom = fbMinHeadroom;
-    mFeedbackOverdrive = fbOverdrive;
 
     mUseDynamicClipping = dynamicClipping;
     mShouldOutputDetector = shouldOutputDetector;
@@ -173,13 +175,17 @@ void FxModule::process (const float* inAudio, float* outAudio,
 
         if (feedbackAbsValue > 1.0f)
         {
-            const float feedbackExcess = feedbackAbsValue - 1.0f;
-            feedbackAbsValue = 1.0f + feedbackExcess * mFeedbackOverdrive;
+            const float feedbackExcess = (feedbackAbsValue - 1.0f) * 5.0f;
+            feedbackAbsValue = mFeedbackSustainRange.convertFrom0to1 (feedbackExcess);
 
             driveCompensation = 1.0f;
 
             feedbackHeadroom = mFeedbackMaxHeadroom
-                - 5.0f * feedbackExcess * (mFeedbackMaxHeadroom - mFeedbackMinHeadroom);
+                - feedbackExcess * (mFeedbackMaxHeadroom - mFeedbackMinHeadroom);
+        }
+        else
+        {
+            feedbackAbsValue = mFeedbackDecayRange.convertFrom0to1 (feedbackAbsValue);
         }
 
         float feedbackSample = readSample * feedbackSign * feedbackAbsValue;

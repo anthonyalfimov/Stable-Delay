@@ -74,7 +74,9 @@ private:
 
     float mFeedbackMaxHeadroom = 8.0f;
     float mFeedbackMinHeadroom = 2.0f;
-    float mFeedbackOverdrive = 1.0f;
+
+    NormalisableRange<float> mFeedbackDecayRange { 0.0f, 1.04f };
+    NormalisableRange<float> mFeedbackSustainRange { 1.04f, 1.2f };
 
     SaturationModule mSaturator;
 
