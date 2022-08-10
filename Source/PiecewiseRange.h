@@ -12,6 +12,10 @@
 
 #include <JuceHeader.h>
 
+// TODO: Ideally, PiecewiseRange should inherit from NormalisableRange
+//       So that it's possible to supply a PiecewiseRange object where
+//       a NormalisableRange object is expected. 
+
 template <typename ValueType, std::size_t Size>
 class PiecewiseRange
 {
@@ -27,7 +31,7 @@ public:
         @Discussion
         NB! An object of this class contains the data necessary for the
         NormalisableRange object it generates to function. Therefore, the
-        lifespan of this object should be no less than of the generated
+        lifespan of this object should be no less than that of the generated
         NormalisableRange objects.
 
         NB! The interval of the generated range will be set to the smallest
