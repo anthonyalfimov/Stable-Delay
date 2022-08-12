@@ -19,9 +19,6 @@ FxModule::FxModule()
     // Set input and feedback detector time constants
     mInputDetector.setState (detectorRiseTime, detectorFallTime);
     mFeedbackDetector.setState (detectorRiseTime, detectorFallTime);
-
-    // Set feedback parameter range skews:
-    mFeedbackDecayRange.setSkewForCentre (0.75f);
 }
 
 void FxModule::setState (float driveInDecibels,
@@ -32,7 +29,7 @@ void FxModule::setState (float driveInDecibels,
                          float limRise, float limConstFall, float limFallRange,
                          bool shouldOutputDetector,
                          float postCutFactor,
-                         float fbMaxHeadroom, float fbMinHeadroom, float /*fbOverdrive*/)
+                         float fbHeadroom)
 {
     // Set delay input drive parameters
     mDriveSmoothed.setTargetValue (driveInDecibels);
@@ -41,8 +38,7 @@ void FxModule::setState (float driveInDecibels,
     mFeedbackLimitDetectorFallConst = limConstFall;
     mFeedbackLimitDetectorFallRange = limFallRange;
 
-    mFeedbackMaxHeadroom = fbMaxHeadroom;
-    mFeedbackMinHeadroom = fbMinHeadroom;
+    mFeedbackHeadroom = fbHeadroom;
 
     mUseDynamicClipping = dynamicClipping;
     mShouldOutputDetector = shouldOutputDetector;
@@ -170,34 +166,31 @@ void FxModule::process (const float* inAudio, float* outAudio,
         const float feedbackSign = (feedbackParameterValue < 0) ? -1.0f : 1.0f;
         float feedbackAbsValue = std::abs (feedbackParameterValue);
 
-        float feedbackHeadroom = mFeedbackMaxHeadroom;
         float driveCompensation = feedbackAbsValue;
-
-        if (feedbackAbsValue > 1.0f)
-        {
-            const float feedbackExcess = (feedbackAbsValue - 1.0f) * 5.0f;
-            feedbackAbsValue = mFeedbackSustainRange.convertFrom0to1 (feedbackExcess);
-
-            driveCompensation = 1.0f;
-
-            feedbackHeadroom = mFeedbackMaxHeadroom
-                - feedbackExcess * (mFeedbackMaxHeadroom - mFeedbackMinHeadroom);
-        }
-        else
-        {
-            feedbackAbsValue = mFeedbackDecayRange.convertFrom0to1 (feedbackAbsValue);
-        }
-
-        float feedbackSample = readSample * feedbackSign * feedbackAbsValue;
-
-        // Enable hold when feedback is set to 100% or more
-        mFeedbackLimitDetector.setHold (feedbackAbsValue >= 1.0f);
+        float headroomAdjustmentScaleFactor = 1.0f;
 
         // Update limit detector time constants based on feedback
         const float feedbackLimitDetectorFall = mFeedbackLimitDetectorFallConst
         + mFeedbackLimitDetectorFallRange * jmin (1.0f, feedbackAbsValue);
         mFeedbackLimitDetector.setState (mFeedbackLimitDetectorRise,
                                          feedbackLimitDetectorFall);
+
+        if (feedbackAbsValue >= 1.0f)
+        {
+            mFeedbackLimitDetector.setHold (true);
+            driveCompensation = 1.0f;
+            headroomAdjustmentScaleFactor = headroomFactor * feedbackAbsValue
+                / std::sqrt (feedbackAbsValue * criticalFeedback - 1.0f);
+        }
+        else
+        {
+            mFeedbackLimitDetector.setHold (false);
+        }
+
+        // Scale feedback to compensate for clipper attenuation
+        feedbackAbsValue *= criticalFeedback;
+
+        float feedbackSample = readSample * feedbackSign * feedbackAbsValue;
 
         // Compute individual level envelopes for input and feedback
         float inputLevelGain
@@ -210,8 +203,11 @@ void FxModule::process (const float* inAudio, float* outAudio,
         = mFeedbackLimitDetector.processSample (std::abs (writeSample));
 
         // Adjust headroom for limited feedback
-        const float headroomAdjustmentGain
-            = Decibels::decibelsToGain (feedbackHeadroom - clipperHeadroom);
+        float headroomAdjustmentGain
+            = Decibels::decibelsToGain (mFeedbackHeadroom - clipperHeadroom);
+
+        headroomAdjustmentGain *= headroomAdjustmentScaleFactor;
+
         feedbackLimitGain *= headroomAdjustmentGain;
 
         // Adjust headroom for input signal

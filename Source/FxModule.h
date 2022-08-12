@@ -33,7 +33,7 @@ public:
                    float limRise, float limConstFall, float limFallRange,
                    bool shouldOutputDetector,
                    float postCutFactor,
-                   float fbMaxHeadroom, float fbMinHeadroom, float fbOverdrive);
+                   float fbHeadroom);
     
 //==============================================================================
     void prepare (double sampleRate, int blockSize) override;
@@ -72,11 +72,11 @@ private:
     float mFeedbackLimitDetectorFallConst = 1200.0f;
     float mFeedbackLimitDetectorFallRange = 2400.0f;
 
-    float mFeedbackMaxHeadroom = 8.0f;
-    float mFeedbackMinHeadroom = 2.0f;
+    float mFeedbackHeadroom = 4.0f;
 
-    NormalisableRange<float> mFeedbackDecayRange { 0.0f, 1.04f };
-    NormalisableRange<float> mFeedbackSustainRange { 1.04f, 1.2f };
+    const float criticalFeedback = 1.04f;
+
+    const float headroomFactor = std::sqrt (criticalFeedback - 1.0f);
 
     SaturationModule mSaturator;
 
@@ -85,7 +85,6 @@ private:
     float mPostCutFactor = 0.65f;
 
     inline static constexpr float clipperHeadroom = 8.0f;
-    inline static constexpr float maxThreshold = 5.0f;
     inline static constexpr float minThreshold = -72.0f;
         
     inline static constexpr float detectorRiseTime = 0.2f /*ms*/;
