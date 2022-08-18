@@ -68,15 +68,13 @@ private:
     SlewFilterModule mFeedbackDetector;
     SlewFilterModule mFeedbackLimitDetector;
 
-    float mFeedbackLimitDetectorRise = 20.0f;
-    float mFeedbackLimitDetectorFallConst = 1200.0f;
-    float mFeedbackLimitDetectorFallRange = 2400.0f;
+    const float feedbackLimitDetectorRise = 20.0f;
 
     float mFeedbackHeadroom = 4.0f;
 
-    const float criticalFeedback = 1.04f;
+    const float feedbackSustainGain = 1.04f;
 
-    const float headroomFactor = std::sqrt (criticalFeedback - 1.0f);
+    const float headroomFactor = std::sqrt (feedbackSustainGain - 1.0f);
 
     SaturationModule mSaturator;
 
