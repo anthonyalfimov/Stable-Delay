@@ -75,9 +75,8 @@ namespace Parameter
         StereoSpread,
         
         DClipDynamic,
-        DLimRise,
-        DLimConstFall,
-        DLimFallRange,
+        DFbAdjStart,
+        DFbLimTan,
         DClipOutputDetector,
         DClipPostCutFactor,
 
@@ -102,9 +101,9 @@ namespace Parameter
         "StereoSpread",
         
         "DClipDynamic",
-        "DLimRise",
-        "DLimConstFall",
-        "DLimFallRange",
+        "DFbAdjStart",
+        "DFbLimTan",
+
         "DClipOutputDetector",
         "DClipPostCutFactor",
 
@@ -125,9 +124,8 @@ namespace Parameter
         "Spread",
         
         "Clip: Dynamic",
-        "Lim: Rise",
-        "Lim: Fall Const",
-        "Lim: Fall Range",
+        "Fb: AdjStart",
+        "Fb: LimTan",
         "Clip: Output Detector",
         "Clip: Post Cut Factor",
 
@@ -160,20 +158,6 @@ namespace Parameter
         { { -2.0f, 2.0f, 0.1f }, 0.67f },
         { { 2.0f, 10.0f, 0.1f }, 1.0f }
     };
-    
-    inline const PiecewiseRange<float, 3> riseRange
-    {
-        { { 0.2f, 1.0f, 0.1f }, 0.15f },
-        { { 1.0f, 20.0f, 1.0f }, 0.4f },
-        { { 20.0f, 600.0f, 1.0f }, 1.0f }
-    };
-    
-    inline const PiecewiseRange<float, 3> fallRange
-    {
-        { { 0.0f, 100.0f, 1.0f }, 0.2f },
-        { { 100.0f, 1000.0f, 1.0f }, 0.6f },
-        { { 1000.0f, 8000.0f, 10.0f }, 1.0f }
-    };
 
     inline const NormalisableRange<float> Range[NumParameters]
     {
@@ -200,12 +184,10 @@ namespace Parameter
         
         // DClipDynamic:
         { 0.0f, 1.0f, 1.0f },
-        // DLimRise:
-        riseRange.getNormalisableRange(),
-        // DLimConstFall:
-        fallRange.getNormalisableRange(),
-        // DLimFallRange:
-        fallRange.getNormalisableRange(),
+        // DFbAdjStart:
+        { 0.8f, 0.99f, 0.01f },
+        // DFbLimTan:
+        { 106.0f, 288.0f, 1.0f },
         // DClipOutputDetector:
         { 0.0f, 1.0f, 1.0f },
         // DClipPostCutFactor:
@@ -229,9 +211,8 @@ namespace Parameter
         30.0f,  // Stereo Spread
         
         1.0f,   // DClipDynamic
-        20.0f,  // DLimRise
-        1200.0f,// DLimConstFall
-        2400.0f,// DLimFallRange
+        0.9f,   // DFbAdjStart
+        106.0f, // DFbLimTan
         0.0f,   // DClipOutputDetector
         0.65f,  // DClipPostCutFactor
 
@@ -252,9 +233,8 @@ namespace Parameter
         " %",   // Stereo Spread
         
         "",     // DClipDynamic
-        " ms",  // DLimRise
-        " ms",  // DLimConstFall
-        " ms",  // DLimFallRange
+        "",     // DFbAdjStart
+        "",     // DFbLimTan
         "",     // DClipOutputDetector
         "x",    // DClipPostCutFactor
 
@@ -292,9 +272,8 @@ namespace Parameter
         showDecimalPlaceBelow<10>,  // Stereo Spread
         
         stringFromToggleValue,      // DClipDynamic
-        showDecimalPlaces<2>,       // DDetRise
-        showDecimalPlaces<0>,       // DDetFall
-        showDecimalPlaces<0>,       // DClipFall
+        showDecimalPlaces<2>,       // DFbAdjStart
+        showDecimalPlaces<0>,       // DFbLimTan
         stringFromToggleValue,      // DClipOutputDetector
         showDecimalPlaces<2>,       // DClipPostCutFactor
 
@@ -324,7 +303,7 @@ namespace Parameter
         // Stereo Spread:
         {},
         
-        {}, {}, {}, {}, {}, {}, {}
+        {}, {}, {}, {}, {}, {},
     };
 
     inline const std::initializer_list<float> minorTicks[NumParameters]
@@ -350,6 +329,6 @@ namespace Parameter
         // Stereo Spread:
         {},
         
-        {}, {}, {}, {}, {}, {}, {}
+        {}, {}, {}, {}, {}, {},
     };
 } // end namespace Parameter

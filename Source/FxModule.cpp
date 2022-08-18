@@ -26,7 +26,7 @@ void FxModule::setState (float driveInDecibels,
                          float modRate, float modDepth, float stereoWidth,
                          bool shouldOffsetModulation,
                          bool dynamicClipping,
-                         float /*limRise*/, float /*limConstFall*/, float /*limFallRange*/,
+                         float fbAdjStart, float fbLimTan,
                          bool shouldOutputDetector,
                          float postCutFactor,
                          float fbHeadroom)
@@ -35,6 +35,8 @@ void FxModule::setState (float driveInDecibels,
     mDriveSmoothed.setTargetValue (driveInDecibels);
 
     mFeedbackHeadroom = fbHeadroom;
+    mFbAdjStart = fbAdjStart;
+    mFbLimTan = fbLimTan;
 
     mUseDynamicClipping = dynamicClipping;
     mShouldOutputDetector = shouldOutputDetector;
@@ -164,22 +166,29 @@ void FxModule::process (const float* inAudio, float* outAudio,
 
         float driveCompensation = feedbackAbsValue;
         float headroomAdjustmentGain = 1.0f;
+        mFeedbackLimitDetector.setHold (false);
 
         if (feedbackAbsValue >= 1.0f)
         {
             mFeedbackLimitDetector.setHold (true);
             driveCompensation = 1.0f;
 
-            // TODO: Introduce headroom adjustment gradually before 100% feedback
+            // FIXME: Potential discontinuity b/w headroom adjustment gains
 
             headroomAdjustmentGain
-                = Decibels::decibelsToGain (mFeedbackHeadroom - clipperHeadroom);
+            = Decibels::decibelsToGain (mFeedbackHeadroom - clipperHeadroom);
+            // FIXME: Potential discontinuity b/w headroom adjustment gains
+            //  The following multiplier must be guaranteed to be 1 when
+            //  feedback is set to 1
             headroomAdjustmentGain *= headroomFactor * feedbackAbsValue
                 / std::sqrt (feedbackAbsValue * feedbackSustainGain - 1.0f);
         }
-        else
+        else if (feedbackAbsValue > mFbAdjStart)
         {
-            mFeedbackLimitDetector.setHold (false);
+            const float scale = jmap (feedbackAbsValue, mFbAdjStart, 1.0f, 0.0f, 1.0f);
+
+            headroomAdjustmentGain
+            = Decibels::decibelsToGain (scale * (mFeedbackHeadroom - clipperHeadroom));
         }
 
         // Scale feedback to compensate for clipper attenuation
@@ -195,7 +204,7 @@ void FxModule::process (const float* inAudio, float* outAudio,
         // Update limit detector time constants based on feedback
 
         const float limitDetectorFallFactor
-        = 1000.0f/*ms*/ * (5.0f + 106.0f * jmax (0.0f, feedbackAbsValue - 0.67f));
+        = 1000.0f/*ms*/ * (5.0f + mFbLimTan * jmax (0.0f, feedbackAbsValue - 0.67f));
 
         // TODO: Should we use delay time with or without modulation here?
         const float feedbackLimitDetectorFall

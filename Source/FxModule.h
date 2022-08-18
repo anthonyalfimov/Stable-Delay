@@ -30,7 +30,7 @@ public:
                    float modRate, float modDepth, float stereoWidth,
                    bool shouldOffsetModulation,
                    bool dynamicClipping,
-                   float limRise, float limConstFall, float limFallRange,
+                   float fbAdjStart, float fbLimTan,
                    bool shouldOutputDetector,
                    float postCutFactor,
                    float fbHeadroom);
@@ -71,6 +71,8 @@ private:
     const float feedbackLimitDetectorRise = 20.0f;
 
     float mFeedbackHeadroom = 4.0f;
+    float mFbAdjStart = 0.9f;
+    float mFbLimTan = 106.0f;
 
     const float feedbackSustainGain = 1.04f;
 
