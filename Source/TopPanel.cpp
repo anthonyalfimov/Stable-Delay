@@ -134,24 +134,33 @@ void TopPanel::displaySaveAsPopup()
     
     const String currentPresetName = presetManager->getCurrentPresetName();
     
-    AlertWindow saveAsDialogue ("Save As",
-                                "Please enter a name for the preset",
-                                AlertWindow::NoIcon);
+    mSaveAsDialogue = std::make_unique<AlertWindow> ("Save As",
+                                                     "Please enter a name for the preset",
+                                                     AlertWindow::NoIcon);
     
     // FIXME: Properly position the dialogue window in relation to the plugin
-    saveAsDialogue.centreAroundComponent (this, getWidth(), getHeight());
+    mSaveAsDialogue->centreAroundComponent (this, getWidth(), getHeight());
     
-    saveAsDialogue.addTextEditor ("presetName", currentPresetName, "Preset name: ");
-    saveAsDialogue.addButton ("Save", 0);
-    saveAsDialogue.addButton ("Cancel", 1);
+    mSaveAsDialogue->addTextEditor ("presetName", currentPresetName, "Preset name: ");
+    mSaveAsDialogue->addButton ("Save", 1);
+    mSaveAsDialogue->addButton ("Cancel", 0);
 
-    //  Does this apply here? Why should we avoid it? What's the alternative?
-//    if (saveAsDialogue.runModalLoop() == 0) // if exit code is 0
-//    {
-//        const String presetName = saveAsDialogue.getTextEditorContents ("presetName");
-//        presetManager->saveAsPreset (presetName);
-//        updatePresetList();
-//    }
+    mSaveAsDialogue->enterModalState(true,
+        ModalCallbackFunction::create([this, presetManager](int result)
+        {
+            mSaveAsDialogue->exitModalState (result);
+
+            if (result == 1)
+            {
+                const String presetName
+                = mSaveAsDialogue->getTextEditorContents ("presetName");
+                presetManager->saveAsPreset (presetName);
+                updatePresetList();
+            }
+
+            // Delete the Save As dialogue window
+            mSaveAsDialogue.reset();
+        }));
 }
 
 void TopPanel::updatePresetList()
