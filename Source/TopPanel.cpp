@@ -124,10 +124,8 @@ void TopPanel::displaySaveAsPopup()
 
     mSaveAsDialogue = std::make_unique<AlertWindow> ("Save As",
                                                      "Please enter a name for the preset",
-                                                     AlertWindow::NoIcon);
-    
-    // FIXME: Properly position the dialogue window in relation to the plugin
-    mSaveAsDialogue->centreAroundComponent (this, getWidth(), getHeight());
+                                                     AlertWindow::NoIcon,
+                                                     this->getTopLevelComponent());
     
     mSaveAsDialogue->addTextEditor ("presetName", currentPresetName, "Preset name: ");
     mSaveAsDialogue->addButton ("Save", 1);
