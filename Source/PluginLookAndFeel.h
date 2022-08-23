@@ -47,7 +47,7 @@ public:
     
 //= BUTTONS ====================================================================
 
-    inline static const int largeButtonMinHeight = 40;
+    inline static const int largeButtonMinHeight = 45;
 
     void drawButtonBackground (Graphics& g, Button& button,
                                const Colour& backgroundColour,

@@ -140,8 +140,8 @@ void TopPanel::displaySaveAsPopup()
                                                      this->getTopLevelComponent());
 
     mSaveAsDialogue->addTextEditor ("presetName", currentPresetName, "Preset name: ");
-    mSaveAsDialogue->addButton ("Save", 1);
-    mSaveAsDialogue->addButton ("Cancel", 0);
+    mSaveAsDialogue->addButton ("SAVE", 1);
+    mSaveAsDialogue->addButton ("CANCEL", 0);
 
     mSaveAsDialogue->enterModalState(true,
         ModalCallbackFunction::create([this, presetManager](int result)
