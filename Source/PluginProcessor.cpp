@@ -21,7 +21,7 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
     for (int i = 0; i < Parameter::NumParameters; ++i)
     {
         layout.add (std::make_unique<AudioParameterFloat>
-                                    (Parameter::ID[i],
+                                    (ParameterID (Parameter::ID[i], 1),
                                      Parameter::Name[i],
                                      Parameter::Range[i],
                                      Parameter::DefaultValue[i],
