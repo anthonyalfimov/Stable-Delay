@@ -135,12 +135,12 @@ void TopPanel::displaySaveAsPopup()
 
     #warning Jules said to always avoid modal loops in a plugin
     //  Does this apply here? Why should we avoid it? What's the alternative?
-    if (saveAsDialogue.runModalLoop() == 0) // if exit code is 0
-    {
-        const String presetName = saveAsDialogue.getTextEditorContents ("presetName");
-        presetManager->saveAsPreset (presetName);
-        updatePresetList();
-    }
+//    if (saveAsDialogue.runModalLoop() == 0) // if exit code is 0
+//    {
+//        const String presetName = saveAsDialogue.getTextEditorContents ("presetName");
+//        presetManager->saveAsPreset (presetName);
+//        updatePresetList();
+//    }
 }
 
 void TopPanel::updatePresetList()
