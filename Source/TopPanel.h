@@ -28,13 +28,13 @@ public:
     void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
     
 private:
-    void displaySaveAsPopup();
-    void updatePresetList();
-
     MouseEventInvoker mPresetListMouseEventInvoker;
     std::unique_ptr<ComboBox> mPresetList;
+    void updatePresetList();
 
     std::unique_ptr<TextButton> mNewPreset, mSavePreset, mSaveAsPreset;
+    std::unique_ptr<AlertWindow> mSaveAsDialogue;
+    void displaySaveAsPopup();
 
     std::unique_ptr<TitleLogo> mTitleLogo;
 

@@ -29,11 +29,11 @@ TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor)
     updatePresetList();
 
     // Set up Preset List mouse event callbacks
-    WeakReference<Component> presetListWeakReference (mPresetList.get());
-    auto repaintPresetList = [presetListWeakReference] (const MouseEvent& /*event*/)
+    auto repaintPresetList
+    = [presetList = WeakReference<Component> (mPresetList.get())] (const MouseEvent&)
     {
-        if (presetListWeakReference != nullptr)
-            presetListWeakReference->repaint();
+        if (presetList != nullptr)
+            presetList->repaint();
     };
 
     mPresetListMouseEventInvoker.onMouseEnter = repaintPresetList;
@@ -121,26 +121,33 @@ void TopPanel::displaySaveAsPopup()
     PresetManager* presetManager = mProcessor.getPresetManager();
     
     const String currentPresetName = presetManager->getCurrentPresetName();
-    
-    AlertWindow saveAsDialogue ("Save As",
-                                "Please enter a name for the preset",
-                                AlertWindow::NoIcon);
+
+    mSaveAsDialogue = std::make_unique<AlertWindow> ("Save As",
+                                                     "Please enter a name for the preset",
+                                                     AlertWindow::NoIcon);
     
     // FIXME: Properly position the dialogue window in relation to the plugin
-    saveAsDialogue.centreAroundComponent (this, getWidth(), getHeight());
+    mSaveAsDialogue->centreAroundComponent (this, getWidth(), getHeight());
     
-    saveAsDialogue.addTextEditor ("presetName", currentPresetName, "Preset name: ");
-    saveAsDialogue.addButton ("Save", 0);
-    saveAsDialogue.addButton ("Cancel", 1);
+    mSaveAsDialogue->addTextEditor ("presetName", currentPresetName, "Preset name: ");
+    mSaveAsDialogue->addButton ("Save", 1);
+    mSaveAsDialogue->addButton ("Cancel", 0);
 
-    #warning Jules said to always avoid modal loops in a plugin
-    //  Does this apply here? Why should we avoid it? What's the alternative?
-//    if (saveAsDialogue.runModalLoop() == 0) // if exit code is 0
-//    {
-//        const String presetName = saveAsDialogue.getTextEditorContents ("presetName");
-//        presetManager->saveAsPreset (presetName);
-//        updatePresetList();
-//    }
+    mSaveAsDialogue->enterModalState(true,
+        ModalCallbackFunction::create([this, presetManager](int result)
+        {
+            mSaveAsDialogue->exitModalState (result);
+
+            if (result == 1)
+            {
+                const String presetName
+                = mSaveAsDialogue->getTextEditorContents ("presetName");
+                presetManager->saveAsPreset (presetName);
+                updatePresetList();
+            }
+
+            mSaveAsDialogue.reset();
+        }));
 }
 
 void TopPanel::updatePresetList()
