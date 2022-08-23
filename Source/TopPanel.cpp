@@ -32,11 +32,11 @@ TopPanel::TopPanel (ReallyBasicDelayAudioProcessor& processor)
     mPresetList->setWantsKeyboardFocus (false);
 
     // Set up Preset List mouse event callbacks
-    WeakReference<Component> presetListWeakReference (mPresetList.get());
-    auto repaintPresetList = [presetListWeakReference] (const MouseEvent& /*event*/)
+    auto repaintPresetList
+    = [presetList = WeakReference<Component> (mPresetList.get())] (const MouseEvent&)
     {
-        if (presetListWeakReference != nullptr)
-            presetListWeakReference->repaint();
+        if (presetList != nullptr)
+            presetList->repaint();
     };
 
     mPresetListMouseEventInvoker.onMouseEnter = repaintPresetList;
