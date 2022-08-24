@@ -70,9 +70,9 @@ private:
 
     const float feedbackLimitDetectorRise = 20.0f;
 
-    float mFeedbackHeadroom = 4.0f;
+    float mFeedbackHeadroom = 2.0f;
     float mFbAdjStart = 0.9f;
-    float mFbLimTan = 106.0f;
+    float mFbLimTan = 455.0f;
 
     const float feedbackSustainGain = 1.04f;
 

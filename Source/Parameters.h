@@ -187,7 +187,7 @@ namespace Parameter
         // DFbAdjStart:
         { 0.8f, 0.99f, 0.01f },
         // DFbLimTan:
-        { 106.0f, 288.0f, 1.0f },
+        { 160.0f, 455.0f, 5.0f },
         // DClipOutputDetector:
         { 0.0f, 1.0f, 1.0f },
         // DClipPostCutFactor:
@@ -212,7 +212,7 @@ namespace Parameter
         
         1.0f,   // DClipDynamic
         0.9f,   // DFbAdjStart
-        106.0f, // DFbLimTan
+        455.0f, // DFbLimTan
         0.0f,   // DClipOutputDetector
         0.65f,  // DClipPostCutFactor
 

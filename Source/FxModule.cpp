@@ -202,9 +202,11 @@ void FxModule::process (const float* inAudio, float* outAudio,
         = mFeedbackDetector.processSample (std::abs (feedbackSample));
 
         // Update limit detector time constants based on feedback
+        // Factor of proportionality between limit detector fall time and delay time:
+        // -> https://www.desmos.com/calculator/fjchnutydr
 
         const float limitDetectorFallFactor
-        = 1000.0f/*ms*/ * (5.0f + mFbLimTan * jmax (0.0f, feedbackAbsValue - 0.67f));
+        = 1000.0f/*ms*/ * (9.0f + mFbLimTan * jmax (0.0f, feedbackAbsValue - 0.8f));
 
         // TODO: Should we use delay time with or without modulation here?
         const float feedbackLimitDetectorFall
