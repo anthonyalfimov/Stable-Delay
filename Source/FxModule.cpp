@@ -173,8 +173,6 @@ void FxModule::process (const float* inAudio, float* outAudio,
             mFeedbackLimitDetector.setHold (true);
             driveCompensation = 1.0f;
 
-            // FIXME: Potential discontinuity b/w headroom adjustment gains
-
             headroomAdjustmentGain
             = Decibels::decibelsToGain (mFeedbackHeadroom - clipperHeadroom);
             // FIXME: Potential discontinuity b/w headroom adjustment gains

@@ -187,7 +187,7 @@ namespace Parameter
         // DFbAdjStart:
         { 0.8f, 0.99f, 0.01f },
         // DFbLimTan:
-        { 160.0f, 455.0f, 5.0f },
+        { 455.0f, 1000.0f, 5.0f },
         // DClipOutputDetector:
         { 0.0f, 1.0f, 1.0f },
         // DClipPostCutFactor:
