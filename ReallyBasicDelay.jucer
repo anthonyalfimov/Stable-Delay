@@ -6,21 +6,23 @@
               pluginCode="Rbd2" cppLanguageStandard="17" pluginManufacturer="Weird Numbers"
               pluginManufacturerCode="Wenu" companyName="Weird Numbers" version="0.1.0">
   <MAINGROUP id="xBPHQW" name="ReallyBasicDelay">
-    <GROUP id="{5289F700-E4EF-5ABA-1C4B-03009BE23305}" name="Utilities">
+    <GROUP id="{31B9DB19-3F49-8710-948F-553DC234E031}" name="Configuration">
       <FILE id="kRVvrT" name="AudioConstants.h" compile="0" resource="0"
             file="Source/AudioConstants.h"/>
       <FILE id="FJ9rx4" name="InterfaceConstants.h" compile="0" resource="0"
             file="Source/InterfaceConstants.h"/>
-      <FILE id="LGGGXw" name="Utilities.h" compile="0" resource="0" file="Source/Utilities.h"/>
-      <FILE id="Me2ZnU" name="PiecewiseRange.h" compile="0" resource="0"
-            file="Source/PiecewiseRange.h"/>
-      <FILE id="KkwirM" name="MouseEventInvoker.h" compile="0" resource="0"
-            file="Source/MouseEventInvoker.h"/>
       <FILE id="aMTu9K" name="PluginLookAndFeel.cpp" compile="1" resource="0"
             file="Source/PluginLookAndFeel.cpp"/>
       <FILE id="GRKCGg" name="PluginLookAndFeel.h" compile="0" resource="0"
             file="Source/PluginLookAndFeel.h"/>
       <FILE id="fjYt20" name="Parameters.h" compile="0" resource="0" file="Source/Parameters.h"/>
+    </GROUP>
+    <GROUP id="{5289F700-E4EF-5ABA-1C4B-03009BE23305}" name="Utilities">
+      <FILE id="LGGGXw" name="Utilities.h" compile="0" resource="0" file="Source/Utilities.h"/>
+      <FILE id="Me2ZnU" name="PiecewiseRange.h" compile="0" resource="0"
+            file="Source/PiecewiseRange.h"/>
+      <FILE id="KkwirM" name="MouseEventInvoker.h" compile="0" resource="0"
+            file="Source/MouseEventInvoker.h"/>
     </GROUP>
     <GROUP id="{6FDFCE5E-A25F-B71C-4766-D652B9DE2C74}" name="Managers">
       <FILE id="Qr8RHf" name="PresetManager.cpp" compile="1" resource="0"
