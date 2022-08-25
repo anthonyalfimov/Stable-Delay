@@ -86,20 +86,7 @@ private:
     OwnedArray<MeterProbe> mOutputMeterProbe;
     
     // Parameter Values
-    // TODO: Is there a better option than storing raw ptrs to parameter values?
-    //  Lifetime of these ptrs is the same at the AudioProcessorValueTreeState that
-    //  stores them, so there should be no problems
-    std::atomic<float>* mInputDriveValue = nullptr;
-    std::atomic<float>* mInputBoostValue = nullptr;
-    std::atomic<float>* mDelayTimeValue = nullptr;
-    std::atomic<float>* mFeedbackValue = nullptr;
-    std::atomic<float>* mInvertFeedbackValue = nullptr;
-    std::atomic<float>* mDryWetValue = nullptr;
-    std::atomic<float>* mFxTypeValue = nullptr;
-    std::atomic<float>* mOutputGainValue = nullptr;
-    std::atomic<float>* mModulationRateValue = nullptr;
-    std::atomic<float>* mModulationDepthValue = nullptr;
-    std::atomic<float>* mStereoSpreadValue = nullptr;
+    std::atomic<float>* mValues[Parameter::NumParameters];
     
     std::unique_ptr<PresetManager> mPresetManager;
     

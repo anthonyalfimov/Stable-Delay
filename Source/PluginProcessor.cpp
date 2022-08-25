@@ -360,35 +360,13 @@ void ReallyBasicDelayAudioProcessor::initialiseDSP()
 
 void ReallyBasicDelayAudioProcessor::initialiseParameters()
 {
-    // MARK: Retrieving parameter pointers from APVTS uses string search
+    // Retrieving parameter pointers from APVTS uses string search
     //  String search is slow, so better keep this off the processBlock.
     //  Pointers to the parameter atomic values do not change during execution,
     //  so it is preferable to retrieve them from APVTS just once.
-    //  Create std::atomic<float> members (or an array of them) and initialise
-    //  them once in the processor constructor.
 
-    mInputDriveValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::InputDrive]);
-    mInputBoostValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::InputBoost]);
-    mDelayTimeValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::DelayTime]);
-    mFeedbackValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::Feedback]);
-    mInvertFeedbackValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::InvertFeedback]);
-    mDryWetValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::DryWet]);
-    mFxTypeValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::FxType]);
-    mOutputGainValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::OutputGain]);
-    mModulationRateValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::ModulationRate]);
-    mModulationDepthValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::ModulationDepth]);
-    mStereoSpreadValue
-    = parameters.getRawParameterValue (Parameter::ID[Parameter::StereoSpread]);
+    for (int i = 0; i < Parameter::NumParameters; ++i)
+        mValues[i] = parameters.getRawParameterValue (Parameter::ID[i]);
 
     updateParameters();
 }
@@ -396,28 +374,28 @@ void ReallyBasicDelayAudioProcessor::initialiseParameters()
 void ReallyBasicDelayAudioProcessor::updateParameters()
 {
     const float feedbackFactor
-    = (mInvertFeedbackValue->load() == Toggle::On) ? -1.0f : 1.0f;
-    const float feedback = feedbackFactor * mFeedbackValue->load();
+    = (mValues[Parameter::InvertFeedback]->load() == Toggle::On) ? -1.0f : 1.0f;
+    const float feedback = feedbackFactor * mValues[Parameter::Feedback]->load();
 
     const float stereoSpread
-    = (getTotalNumOutputChannels() == 2) ? mStereoSpreadValue->load() : 0.0f;
+    = (getTotalNumOutputChannels() == 2) ? mValues[Parameter::StereoSpread]->load() : 0.0f;
 
     for (int channel = 0; channel < mFxProcessor.size(); ++channel)
-        mFxProcessor[channel]->setState (mInputDriveValue->load(),
-                                         mInputBoostValue->load() == Toggle::On,
-                                         mDelayTimeValue->load(),
+        mFxProcessor[channel]->setState (mValues[Parameter::InputDrive]->load(),
+                                         mValues[Parameter::InputBoost]->load() == Toggle::On,
+                                         mValues[Parameter::DelayTime]->load(),
                                          feedback,
-                                         mFxTypeValue->load(),
-                                         mModulationRateValue->load(),
-                                         mModulationDepthValue->load(),
+                                         mValues[Parameter::FxType]->load(),
+                                         mValues[Parameter::ModulationRate]->load(),
+                                         mValues[Parameter::ModulationDepth]->load(),
                                          stereoSpread,
                                          (channel != 0));
 
     for (auto dryWetMixer : mDryWetMixer)
-        dryWetMixer->setState (mDryWetValue->load());
+        dryWetMixer->setState (mValues[Parameter::DryWet]->load());
 
     for (auto outputGain : mOutputGain)
-        outputGain->setState (mOutputGainValue->load());
+        outputGain->setState (mValues[Parameter::OutputGain]->load());
 }
 
 //==============================================================================
