@@ -15,6 +15,8 @@
             file="Source/PluginLookAndFeel.cpp"/>
       <FILE id="GRKCGg" name="PluginLookAndFeel.h" compile="0" resource="0"
             file="Source/PluginLookAndFeel.h"/>
+      <FILE id="dDIe4K" name="ParameterTags.h" compile="0" resource="0" file="Source/ParameterTags.h"/>
+      <FILE id="UgW9gc" name="ParameterData.h" compile="0" resource="0" file="Source/ParameterData.h"/>
       <FILE id="fjYt20" name="Parameters.h" compile="0" resource="0" file="Source/Parameters.h"/>
     </GROUP>
     <GROUP id="{5289F700-E4EF-5ABA-1C4B-03009BE23305}" name="Utilities">

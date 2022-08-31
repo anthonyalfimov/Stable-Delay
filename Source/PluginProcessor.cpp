@@ -8,7 +8,10 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+
 #include "Parameters.h"
+
+#include "ParameterData.h"
 
 //==============================================================================
 // This creates the plugin parameter layout

@@ -46,6 +46,8 @@ void DelayModule::prepare (double sampleRate, int blockSize)
 {
     DspModule::prepare (sampleRate, blockSize);
 
+    // TODO: Should we round up before converting to int?
+
     // At max delay time the read position coincides with the write position.
     //  This is ok, since this delay design enforces reading before writing.
     mAudioBufferSize = static_cast<int> (mMaxDelayInSeconds * mSampleRate);

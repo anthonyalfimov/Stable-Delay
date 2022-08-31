@@ -15,6 +15,8 @@
 
 #include <JuceHeader.h>
 
+// TODO: Move all utilities into `weir` namespace
+
 //==============================================================================
 // NormalisableRange Utilities
 
@@ -37,6 +39,7 @@ NormalisableRange<Type> createSkewedNormalisableRange (Type rangeStart,
 
 //==============================================================================
 // Value-to-String conversion utilities
+// TODO: comply with passed `maxStringLength`
 
 // C++14 template variable
 template <int places>
@@ -56,3 +59,18 @@ const auto showDecimalPlaceBelow = [] (float value, int /*maxStringLength*/)
     else
         return String (roundToInt (value));
 };
+
+//==============================================================================
+// Constexpr Utilities
+
+namespace weir
+{
+    /**
+        constexpr utility function that returns the number of its arguments
+    */
+    template <typename... Args>
+    constexpr auto countArguments (const Args&... args)
+    {
+        return sizeof... (args);
+    }
+}

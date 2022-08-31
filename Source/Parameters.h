@@ -19,6 +19,8 @@
 //  Current solution is to put a plain enum in a namespace to have name scope
 //  but keep automatic casting to int.
 
+// TODO: Consider converting these namespaces to classes
+
 namespace FxType
 {
     enum Index : int
@@ -52,13 +54,6 @@ namespace Toggle
 
 } // end namespace Toggle
 
-// TODO: Consider turning the Parameter namespace into a class
-//  This will allow to have direct control over the lifetime of the contained
-//  objects, which is becoming more important as these objects become more
-//  complex.
-//  This class would contain the ParameterLayout generating method, and would be
-//  instantiated in the PluginProcessor.
-
 namespace Parameter
 {
     enum Index : int
@@ -77,9 +72,7 @@ namespace Parameter
         NumParameters
     };
 
-    // TODO: Consider switching to StringArray objects
-
-    inline const String ID[NumParameters]
+    inline const StringRef ID[NumParameters]
     {
         "InputDrive",
         "InputBoost",
